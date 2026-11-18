@@ -184,6 +184,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .confchip.c-low{border-color:var(--bad);color:var(--bad)}
 .kj{font-size:15px;font-style:italic;border-left:3px solid var(--ink);padding-left:10px}
 .msg.pt{border-left-color:var(--accent)}
+.msg.tip{border-left-color:var(--accent);background:var(--accent-soft)}
 .dq{display:grid;gap:6px}
 textarea.short{min-height:48px}
 .chip.rflag[aria-pressed="true"]{border-color:var(--bad)}
@@ -335,7 +336,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -772,7 +773,13 @@ function briefView(d){
   let groups = '<div class="evigroup"><h4>Today</h4>' + items.map(eviBtn).join('') + '</div>';
   for (let x = d-1; x >= 1; x--) groups += '<details><summary><span>Day ' + x + ' items</span></summary><div class="inner evigroup">' + reportsFor(x).map(eviBtn).join('') + '</div></details>';
   const ready = dr.hyp && dr.lik;
-  return '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
+  const tip = S.tipsSeen.brief ? '' : '<div class="msg tip"><span class="from">How the brief works · shown once</span>'
+    + '<p><b>1. Your judgment.</b> Pick the hypothesis you think is true today.</p>'
+    + '<p><b>2. How likely it is.</b> Use the standard estimative terms. Each has a probability range, so say what you actually believe.</p>'
+    + '<p><b>3. Your evidence.</b> Cite up to 3 items. Your <b>confidence</b> isn\'t chosen: it comes from this evidence, meaning how many different sources and disciplines you cite and how they were graded. Items you doubted don\'t count. The label next to the evidence list updates as you pick.</p>'
+    + '<p><b>Halvorsen acts on both.</b> A strong likelihood on solid confidence gets the full move. Anything weaker gets a partial one.</p>'
+    + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="brief">Got it</button></div></div>';
+  return tip + '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
     + '<div class="msg"><span class="from">Tasking · ' + esc(C.customer.callsign) + '</span><p>' + esc(C.customer.wants) + '</p>'
     + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p></div>'
     + '<fieldset><legend>Judgment</legend>' + C.hypotheses.map(h => '<button class="opt" data-act="hyp" data-v="' + h.id + '" aria-pressed="' + (dr.hyp === h.id) + '"><span class="k">' + h.id + '</span><span class="t">' + esc(h.short) + '</span><span class="d">' + esc(h.text) + '</span></button>').join('') + '</fieldset>'
@@ -1026,6 +1033,7 @@ function onClick(e){
     }
     case 'hyp': draft(d).hyp = el.dataset.v; save(); render(); break;
     case 'lik': draft(d).lik = el.dataset.v; save(); render(); break;
+    case 'tipseen': S.tipsSeen[el.dataset.v] = true; save(); render(); break;
     case 'ev': {
       const dr = draft(d), id = el.dataset.id, i = dr.evidence.indexOf(id);
       if (i >= 0) dr.evidence.splice(i, 1); else if (dr.evidence.length < C.scoring.maxEvidence) dr.evidence.push(id);
