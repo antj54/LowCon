@@ -6,6 +6,10 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 45 | 2026-11-18 | Phase 2 build order starts by retrofitting collection tasking into Crisis 01 (3 PIRs and a few collection results), tuned there before Crisis 02 is written | Tune the new system on known content first |
+| 44 | 2026-11-18 | Crisis 02 seed: **defector walk-in**. Hypotheses: genuine defector, dangle feeding deception, fabricator. The customer is a senior policy official, the second member of the recurring cast. | Punishes "always trust HUMINT," Crisis 01's known weak spot. Collection is used to verify his claims, so it plays differently from Crisis 01. |
+| 43 | 2026-11-18 | Credibility moves only on consequences the customer can see: reversed moves, repeated hedging (roughly even day after day) and the crisis outcome. Low credibility trims the next day's collection budget and makes the customer act one step more cautiously. | Tracking correctness mid-crisis would leak the hidden truth. Supports "the world remembers." |
+| 42 | 2026-11-18 | Hypotheses board: **pin and mark, unscored**. Pin up to 3 items a day and mark each consistent, inconsistent or neither for each hypothesis. The board ranks hypotheses by how much evidence contradicts them and greys out items that fit every hypothesis. | ACH as a real, optional tool. Scoring it would make it a quiz with an arbitrary key, the problem the old per-item grading had. |
 | 41 | 2026-11-18 | The call is a **hypothesis plus a likelihood** only. No confidence level is chosen or derived. Cited evidence affects points only (true +1, noise 0, clutter −1, planted −2), not the call or the customer. The customer acts on hypothesis and likelihood: H2 Very likely or Almost certain moves the battalion, H2 Likely the company, H2 Roughly even raises readiness. Supersedes the derived-confidence half of #38 and the confidence rule in #40. | Anthony's call: simpler for an 8-minute turn, and evidence choice still matters through scoring. Tradeoff accepted: the confidence half of ICD 203 is gone, and doubting everything costs points only. |
 | 40 | 2026-11-18 | Built #37–#39. Likelihood scoring: Roughly even +1/0, Likely +2/−1, Very likely +3/−5, Almost certain +4/−12. Confidence rule: High = 3 items from 2+ disciplines with 2+ sources graded A–B and information 1–2; Moderate = 2+ sources with 1+ graded A–C and information 1–3; Low otherwise. Items the player doubted or marked not relevant don't count toward confidence. | Each likelihood step pays off once belief reaches its range. Excluding doubted items makes "doubt everything" cost in the story (only a company moves), not just in points. All values checked with `tools/simulate.js`. |
 | 39 | 2026-11-18 | Remove the free-text "Reasoning" box from the brief. The brief instead writes a key-judgment line from the player's picks. **Build with #38 after the playtest.** | It affected nothing and both players left it empty every day. The cited evidence already is the reasoning, in structured form. |
@@ -50,7 +54,6 @@
 
 ## Open questions
 
-- [ ] Which seed should Crisis 02 use? (It has to prove the Phase 2 systems generalize. The defector walk-in would punish "always trust HUMINT.")
 - [ ] Does Crisis 01 get a named real region, or stay unnamed?
 
 ## Queued after playtest

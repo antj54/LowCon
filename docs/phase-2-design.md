@@ -1,6 +1,6 @@
 # Phase 2 design (paper) · Low Confidence
 
-*Status: paper design only, nothing built. Written 2026-11-18 while the Phase 1 playtest runs. Phase 2 starts when the Phase 1 gate passes.*
+*Status: paper design, nothing built. Decisions settled 2026-11-18 (#42–#45 in the log). Phase 2 starts when the Phase 1 gate passes.*
 
 **Phase 2 scope:** collection tasking, the hypotheses board, credibility, and a second crisis to prove the systems generalize.
 **Gate to Phase 3:** the second crisis plays differently from the first.
@@ -24,7 +24,7 @@ The turn grows by about 2 minutes. Syd's turns ran about 2 minutes and were rate
 
 - **PIRs.** Each crisis defines 3–4 Priority Intelligence Requirements, shown to the player as questions. For Crisis 01 they might be: *PIR 1: Are 4th Army units moving toward the border outside the exercise area? PIR 2: Has Kordav's leadership authorized action against Tarsk? PIR 3: Is Kordav preparing to cross the Veyl (bridging, medical, fuel)?*
 - **Targets.** Each PIR lists the named areas or targets that could answer it (Dolan crossing, Ostrel, Varn depot, 4th Army nets, the defence ministry). Targets are also map areas, so the player can task by tapping the map, which brings in the parking-lot idea.
-- **Budget.** A daily allowance of collection points (start: 4). Disciplines cost what the design doc's table says: OSINT 1, Liaison 0, IMINT 2, SIGINT 3, HUMINT 3. Results arrive the next morning, or in 2 days for HUMINT.
+- **Budget.** A daily allowance of collection points (start: 4; trimmed when credibility is low, #43). Disciplines cost what the design doc's table says: OSINT 1, Liaison 0, IMINT 2, SIGINT 3, HUMINT 3. Results arrive the next morning, or in 2 days for HUMINT.
 - **Resolution.** Each tasking (discipline × target) resolves overnight to an authored report if the crisis has one for that combination and day range. If not, it returns "nothing significant," which is true and tells you something too.
 - **Risks, deterministic and authored.** No dice, so every outcome can be explained in the postmortem:
   - **HUMINT:** tasking the same source on consecutive days can burn it. The crisis marks which taskings are risky, and the source goes quiet.
@@ -52,7 +52,7 @@ A new section, **The collection you didn't do**. For each day, it shows what the
 
 ## 2. Hypotheses board (ACH-lite)
 
-**Decision needed.** Options:
+**Decided: A (#42).** Options considered:
 
 | Option | How it works | Tradeoff |
 | --- | --- | --- |
@@ -64,7 +64,7 @@ A new section, **The collection you didn't do**. For each day, it shows what the
 
 **Key constraint:** credibility can't move on whether you're right during a crisis, because that would leak the hidden truth. It can only move on consequences the customer can see.
 
-**Decision needed.** Options:
+**Decided: A (#43).** Options considered:
 
 | Option | How it works | Tradeoff |
 | --- | --- | --- |
@@ -74,7 +74,7 @@ A new section, **The collection you didn't do**. For each day, it shows what the
 
 ## 4. Crisis 02 seed
 
-**Decision needed.** The gate needs Crisis 02 to play differently from Crisis 01. Options:
+**Decided: defector walk-in (#44).** The gate needs Crisis 02 to play differently from Crisis 01. Options considered:
 
 | Seed | Core question | Why it plays differently | Tradeoff |
 | --- | --- | --- | --- |
@@ -94,9 +94,9 @@ Each step is playable on its own.
 4. **Crisis 02 on paper** (player packet and key, Phase 0 style), then as data.
 5. **Playtest** Crisis 02 blind, and replay Crisis 01 with collection.
 
-## Decisions needed
+## Decisions (settled 2026-11-18)
 
-1. Hypotheses board: **A**, B or C
-2. Credibility: **A**, B or C
-3. Crisis 02 seed: **Defector**, Missing shipment or Ransomware
-4. Retrofit collection into Crisis 01 first: **yes** or no
+1. Hypotheses board: **A, pin and mark, unscored** (#42)
+2. Credibility: **A, visible consequences only** (#43)
+3. Crisis 02 seed: **defector walk-in** (#44)
+4. Retrofit collection into Crisis 01 first: **yes** (#45)
