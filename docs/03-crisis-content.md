@@ -53,6 +53,7 @@ Each crisis is one JSON file. The working example is `crises/border-buildup.json
 | `collection` | `budget` per day, `costs` per discipline, `delays` (e.g. HUMINT 2 days), `sources` (which source answers each discipline), `fallback` text, `burnRules` (source, discipline, `consecutiveDays`, text, postmortem note), `burnPoints` |
 | `collectionResults` | `id`, `discipline`, `target`, `from`, `to` (the tasking days that produce it). The result is the report with the same `id`, marked `via: "collection"` and left out of the base stream. Tasked again after it's been collected, or outside its window, the tasking returns the fallback. |
 | `postmortem.missedCollection` | Per day: the tasking that would have mattered most |
+| `board` | Optional. `pinsPerDay` for the hypotheses board (default 3). The board needs no other content: it works from `hypotheses` and the items the player pins. |
 
 ## Scripted crises
 

@@ -195,6 +195,8 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 | --- | --- | --- |
 | Best play with collection (imagery on Dolan Days 1, 3, 4; SIGINT on HQ Day 2) | Deterred | **+32** (+38 doubting only the plants) |
 | Best play, no collection | Deterred | **+31** |
+| Best play with collection, using the board | Deterred | **+32** (unscored: same as without) |
+| Best play with collection, page reloaded after every day | Deterred | **+32** (save check) |
 | Burning KESTREL (HUMINT two days running) | Deterred | **+25** (−2 burn, R-5-04 lost) |
 | High from Day 3, with collection | Deterred | **+33** |
 | Best calls, citing no evidence on Days 4–5 | Deterred | **+26** |

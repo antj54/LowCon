@@ -88,8 +88,8 @@ The customer would be the second member of the recurring cast. For the defector:
 
 Each step is playable on its own.
 
-1. **Collection tasking**, retrofitted into Crisis 01 with 3 PIRs and a handful of collection results, so it can be tuned on known content. One existing item, such as the Day 4 imagery, becomes reachable earlier through tasking.
-2. **Hypotheses board.**
+1. **Collection tasking** *(built, #48)*, retrofitted into Crisis 01 with 3 PIRs and a handful of collection results, so it can be tuned on known content. One existing item, such as the Day 4 imagery, becomes reachable earlier through tasking.
+2. **Hypotheses board** *(built, #49)*.
 3. **Credibility meter.**
 4. **Crisis 02 on paper** (player packet and key, Phase 0 style), then as data.
 5. **Playtest** Crisis 02 blind, and replay Crisis 01 with collection.

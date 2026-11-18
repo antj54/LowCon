@@ -73,10 +73,10 @@ h2{font-size:24px;text-transform:uppercase}
 h3{font-size:19px;text-transform:uppercase}
 .status-line{display:flex;flex-wrap:wrap;gap:6px 14px;font:12px/1.4 var(--f-mono);color:var(--muted)}
 .status-line b{color:var(--ink);font-weight:600}
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);position:sticky;top:21px;background:var(--paper);z-index:4;padding-top:6px}
-.tab{flex:1;white-space:nowrap;background:none;border:0;border-bottom:3px solid transparent;padding:10px 2px 8px;font:600 15px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);position:sticky;top:21px;background:var(--paper);z-index:4;padding-top:6px}
+.tab{flex:1 0 auto;white-space:nowrap;background:none;border:0;border-bottom:3px solid transparent;padding:10px 3px 8px;font:600 13px/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase;color:var(--muted);cursor:pointer}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
-.tab .badge{display:inline-block;min-width:18px;margin-left:4px;padding:2px 5px;border-radius:9px;background:var(--accent-soft);color:var(--ink);font:600 11px/1 var(--f-mono)}
+.tab .badge{display:inline-block;min-width:16px;margin-left:3px;padding:2px 4px;border-radius:9px;background:var(--accent-soft);color:var(--ink);font:600 11px/1 var(--f-mono)}
 main{display:grid;gap:14px;padding:16px 0 8px}
 .stack{display:grid;gap:12px}
 p{margin:0}
@@ -96,6 +96,27 @@ p{margin:0}
 .chip{min-height:40px;padding:0 12px;border:1px solid var(--line);background:var(--paper);border-radius:3px;font:500 13px/1 var(--f-body);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
 .chip.flag[aria-pressed="true"]{border-color:var(--warn)}
+.board{display:grid;gap:0;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.brow{display:grid;gap:6px;align-items:center;padding:8px 10px;border-top:1px solid var(--line)}
+.brow:first-child{border-top:0}
+.brow.dim .bitem{opacity:.55}
+.bhead,.bfoot{padding-top:6px;padding-bottom:6px}
+.bfoot{background:var(--paper)}
+.bitem{display:grid;gap:3px;min-width:0}
+.btext{font-size:13px;line-height:1.35}
+.btags{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.bh,.bt{text-align:center;font:600 13px/1 var(--f-mono)}
+.bt.lead{color:var(--c-high)}
+.bt.lead::after{content:" \2713"}
+.bcell{width:44px;height:44px;border:1px solid var(--line);border-radius:3px;background:var(--paper);font:700 16px/1 var(--f-mono);color:var(--muted);cursor:pointer}
+.bcell.m-c{background:var(--c-high-soft);border-color:var(--c-high);color:var(--ink)}
+.bcell.m-i{background:var(--c-low-soft);border-color:var(--c-low);color:var(--ink)}
+.bcell.m-n{color:var(--ink)}
+.bcell:disabled{cursor:default}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--muted)}
+.legend b{color:var(--ink);font-family:var(--f-mono)}
+.nudge{border-left:3px solid var(--accent);padding:4px 0 4px 10px;font-size:14px}
+.linkbtn{background:none;border:0;padding:4px 0;color:var(--accent);font:600 13px/1.2 var(--f-body);text-decoration:underline;cursor:pointer;min-height:32px}
 .yourgrade{font:12.5px/1.4 var(--f-mono);color:var(--muted)}
 .yourgrade b{color:var(--ink)}
 .msg,.readin{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--banner);border-radius:4px;padding:12px 14px;display:grid;gap:6px}
@@ -302,7 +323,7 @@ function keyJudgment(b){
   if (!h || !l) return '';
   return 'We assess with ' + l.label.toLowerCase() + ' confidence that ' + (h.claim || h.text) + (b.evidence.length ? ', based on ' + b.evidence.join(', ') : '') + '.';
 }
-const callLabel = b => b.hyp + ', ' + confLabel(b.conf);
+const callLabel = b => b.hyp + ', ' + confLabel(b.conf) + (b.confLost ? '?' : '');
 const burnedOn = sid => (S.burned || {})[sid];
 const collectedFor = d => (S.collected || []).filter(c => c.arrive === d).map(c => c.fallback ? fallbackReport(c) : Object.assign({}, C.reports.find(r => r.id === c.id), {day:d, collected:true, task:c}));
 const reportsFor = d => C.reports.filter(r => !r.via && r.day === d && !(burnedOn(r.sourceId) && d >= burnedOn(r.sourceId))).concat(collectedFor(d));
@@ -347,6 +368,46 @@ function resolveCollection(d){
       text:(COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
   });
 }
+/* ---------- Hypotheses board (ACH-lite, unscored) ---------- */
+const MARKS = ['', 'c', 'i', 'n'];
+const MARK_TXT = {'':'·', c:'C', i:'I', n:'–'};
+const MARK_WORD = {'':'not marked', c:'consistent', i:'inconsistent', n:'doesn\'t apply'};
+const pinsPerDay = () => (C.board && C.board.pinsPerDay) || 3;
+const onBoard = id => !!(S.board || {})[id];
+const itemDay = id => { const c = (S.collected || []).find(x => x.id === id); return c ? c.arrive : (rep(id) || {}).day; };
+const boardIds = () => Object.keys(S.board || {}).filter(id => rep(id)).sort((a, b) => (itemDay(b) - itemDay(a)) || (a < b ? -1 : 1));
+const pinnedOn = d => boardIds().filter(id => S.board[id].day === d);
+const setAside = id => !!(S.grades[id] || {}).f;
+function togglePin(d, id){
+  if (S.board[id]){
+    if (S.board[id].day !== d){ toast('Pinned on an earlier day. It stays on the board.'); return; }
+    delete S.board[id]; return;
+  }
+  if (pinnedOn(d).length >= pinsPerDay()){ toast('Board is full for today: ' + pinsPerDay() + ' pins a day.'); return; }
+  S.board[id] = {day:d, m:{}};
+}
+function cycleMark(id, h){
+  const b = S.board[id]; if (!b) return;
+  const nx = MARKS[(MARKS.indexOf(b.m[h] || '') + 1) % MARKS.length];
+  if (nx) b.m[h] = nx; else delete b.m[h];
+}
+function nonDiagnostic(id){
+  const v = C.hypotheses.map(h => S.board[id].m[h.id] || '');
+  return v.every(x => x) && v.every(x => x === v[0]);
+}
+function boardTally(){
+  const t = {}; C.hypotheses.forEach(h => { t[h.id] = 0; });
+  boardIds().forEach(id => { if (setAside(id)) return; C.hypotheses.forEach(h => { if (S.board[id].m[h.id] === 'i') t[h.id]++; }); });
+  return t;
+}
+function boardLead(){
+  const t = boardTally(), vals = Object.values(t);
+  if (!vals.some(n => n > 0)) return null;
+  const min = Math.min(...vals);
+  return C.hypotheses.filter(h => t[h.id] === min).map(h => h.id);
+}
+const leadText = lead => lead.length === 1 ? lead[0] : lead.slice(0, -1).join(', ') + ' and ' + lead[lead.length - 1];
+
 function burnPoints(){ return Object.keys(S.burned || {}).length * ((COLL() || {}).burnPoints || 0); }
 const dayLabel = d => C.dayLabels[d-1] || ('Day ' + d);
 const briefCount = () => Object.keys(S.briefs).length;
@@ -363,16 +424,25 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
   const s = Object.assign(fresh(), clone(st));
   if (s.asset === 'forward') s.asset = 'battalion';
   const TO_CONF = {even:'low', likely:'medium', very:'high', almost:'high', low:'low', moderate:'medium', medium:'medium', high:'high'};
-  Object.values(s.briefs || {}).forEach(b => { b.conf = TO_CONF[b.conf] || TO_CONF[b.conf] || 'medium'; delete b.conf; });
-  Object.values(s.drafts || {}).forEach(dr => { if (dr.conf || dr.conf) dr.conf = TO_CONF[dr.conf] || TO_CONF[dr.conf] || null; delete dr.conf; delete dr.note; });
+  Object.keys(s.briefs || {}).forEach(k => {
+    const b = s.briefs[k], c = TO_CONF[b.conf] || TO_CONF[b.lik];
+    delete b.lik;
+    if (c){ b.conf = c; return; }
+    // Saves from #46 to #49 lost the confidence on reload. Rebuild it from the customer's recorded reply where only one level fits.
+    const fits = CONF.map(x => x.id).filter(cf => policyFor({hyp:b.hyp, conf:cf}, (s.posture || {})[k] || 'home', (s.frozenBriefDays || []).includes(Number(k))).reply === b.reply);
+    b.conf = fits.length === 1 ? fits[0] : 'medium';
+    if (fits.length !== 1) b.confLost = true;
+  });
+  Object.values(s.drafts || {}).forEach(dr => { dr.conf = TO_CONF[dr.conf] || TO_CONF[dr.lik] || null; delete dr.lik; delete dr.note; });
   if (!C.asset.levels[s.asset]) s.asset = 'home';
+  if (!s.board || typeof s.board !== 'object') s.board = {};
   return s;
 }
 
@@ -383,9 +453,8 @@ function matchCond(cond, brief, asset){
   if (cond.assetAt && ![].concat(cond.assetAt).includes(asset)) return false;
   return true;
 }
-function resolvePolicy(day, brief){
-  const asset = S.asset;
-  const frozen = S.frozenBriefDays.includes(day);
+function resolvePolicy(day, brief){ return policyFor(brief, S.asset, S.frozenBriefDays.includes(day)); }
+function policyFor(brief, asset, frozen){
   const rule = C.customerPolicy.find(r => matchCond(r.if, brief, asset));
   const action = rule ? rule.action : 'hold';
   if (action === 'deploy'){
@@ -444,6 +513,7 @@ function sendBrief(d){
   if (res.deployed) S.deployDays.push(d);
   brief.reply = res.reply;
   brief.tasks = clone(tasksFor(d));
+  brief.board = {pins:pinnedOn(d).length, lead:boardLead()};
   S.briefs[d] = brief;
   delete S.drafts[d];
   resolveCollection(d);
@@ -652,6 +722,7 @@ function render(){
   else if (!open) body = lockedView(d);
   else if (ui.tab === 'brief') body = briefView(d);
   else if (ui.tab === 'collect') body = collectView(d);
+  else if (ui.tab === 'board') body = boardView(d, false);
   else body = inboxView(d);
   app.innerHTML = headerView(d, open) + '<main id="main">' + body + '</main>';
   renderLayer();
@@ -660,7 +731,7 @@ function render(){
 function headerView(d, open){
   const tabs = S.done
     ? [['postmortem','Postmortem'],['files','Files']]
-    : [['inbox','Inbox' + (open ? '<span class="badge">' + reportsFor(d).length + '</span>' : '')]].concat(COLL() ? [['collect','Collect' + (open ? '<span class="badge">' + (budgetFor(d) - spentOn(d)) + '</span>' : '')]] : []).concat([['brief','Brief'],['files','Files']]);
+    : [['inbox','Inbox' + (open ? '<span class="badge">' + reportsFor(d).length + '</span>' : '')]].concat(COLL() ? [['collect','Collect' + (open ? '<span class="badge">' + (budgetFor(d) - spentOn(d)) + '</span>' : '')]] : []).concat([['board','Board'],['brief','Brief'],['files','Files']]);
   if (CFG.playtest && ui.isOwner) tabs.push(['playtests','Testers']);
   const dayText = S.done ? 'Crisis closed' : ('Day ' + d + ' · ' + esc(dayLabel(d)));
   return '<header class="top">'
@@ -717,7 +788,11 @@ function readInCard(d){
     + '<ul class="facts">' + facts.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul></section>';
 }
 
-function itemCard(r, editable){
+function pinChip(r){
+  const on = onBoard(r.id);
+  return '<button class="chip bpin" data-act="bpin" data-id="' + r.id + '" aria-pressed="' + on + '">' + (on ? 'On the board' : 'Pin to board') + '</button>';
+}
+function itemCard(r, editable, pinnable){
   const g = S.grades[r.id] || {};
   const s = src(r.sourceId);
   const cls = 'card' + (g.f ? ' flagged' : '') + (g.n ? ' nr' : '') + (ui.pin === r.id ? ' hl' : '');
@@ -725,12 +800,13 @@ function itemCard(r, editable){
     + '<header class="cable-h"><span class="rid">' + r.id + '</span><span class="src">' + esc(s.codeName) + '</span><span>' + esc(r.discipline) + '</span>' + (r.collected ? '<span class="pill tasked">Your tasking</span>' : '') + '<span class="recv" title="' + esc(recvTitle(r)) + '">' + received(r) + '</span></header>'
     + '<p class="cable-t">' + esc(r.text) + '</p>';
   if (editable){
-    html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button>'
+    html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button>' + pinChip(r)
       + (CFG.playtest ? '<button class="chip rflag" data-act="realism" data-id="' + r.id + '" aria-pressed="' + !!S.realism[r.id] + '" title="Playtest: tell the designer this item doesn\'t ring true">' + (S.realism[r.id] ? 'Flagged as unrealistic' : 'Not realistic?') + '</button>' : '')
       + '</div>'
       + (CFG.playtest && S.realism[r.id] ? '<label class="lab" for="rn-' + r.id + '">What\'s off? (optional)</label><textarea id="rn-' + r.id + '" class="short" data-input="realism" data-id="' + r.id + '" maxlength="400" placeholder="e.g. a clerk wouldn\'t see that">' + esc(S.realism[r.id].note || '') + '</textarea>' : '');
   } else {
-    html += '<p class="yourgrade">' + gradeSummary(g) + '</p>';
+    html += '<p class="yourgrade">' + gradeSummary(g) + (onBoard(r.id) ? ' · on the board' : '') + '</p>'
+      + (pinnable && !onBoard(r.id) ? '<div class="toggles">' + pinChip(r) + '</div>' : '');
   }
   return html + '</article>';
 }
@@ -762,7 +838,7 @@ function earlierDays(upTo){
     const b = S.briefs[d];
     html += '<details><summary><span>Day ' + d + ' · ' + esc(dayLabel(d)) + '</span><span class="mono small muted">' + (b ? callLabel(b) : '') + '</span></summary><div class="inner">'
       + (b ? briefRecord(d) : '')
-      + reportsFor(d).map(r => itemCard(r, false)).join('')
+      + reportsFor(d).map(r => itemCard(r, false, true)).join('')
       + '</div></details>';
   }
   return html ? '<div class="stack"><div class="section-h"><h3>Earlier days</h3></div>' + html + '</div>' : '';
@@ -819,6 +895,7 @@ function briefView(d){
   return tip + '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
     + '<div class="msg"><span class="from">Tasking · ' + esc(C.customer.callsign) + '</span><p>' + esc(C.customer.wants) + '</p>'
     + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p></div>'
+    + boardNudge()
     + '<fieldset><legend>Judgment</legend>' + C.hypotheses.map(h => '<button class="opt" data-act="hyp" data-v="' + h.id + '" aria-pressed="' + (dr.hyp === h.id) + '"><span class="k">' + h.id + '</span><span class="t">' + esc(h.short) + '</span><span class="d">' + esc(h.text) + '</span></button>').join('') + '</fieldset>'
     + '<fieldset><legend>Confidence</legend><div class="confs">' + CONF.map(c => '<button class="conf c-' + c.id + '" data-act="conf" data-v="' + c.id + '" aria-pressed="' + (dr.conf === c.id) + '"><b>' + c.label + '</b></button>').join('') + '</div></fieldset>'
     + '<fieldset><legend>Key evidence · ' + dr.evidence.length + ' of ' + C.scoring.maxEvidence + '</legend>' + groups + '</fieldset>'
@@ -826,6 +903,50 @@ function briefView(d){
     + predict
     + '<div class="btnrow"><button class="btn" data-act="send"' + (ready ? '' : ' disabled') + '>Send brief</button></div>'
     + (ready ? '' : '<p class="small muted">Pick a judgment and a confidence level to send.</p>');
+}
+
+function boardNudge(){
+  const lead = boardLead();
+  if (!lead) return '';
+  const t = boardTally();
+  return '<p class="nudge"><span class="mono small muted">Your board</span> ' + (lead.length === 1 ? '<b>' + lead[0] + '</b> is the least contradicted' : '<b>' + leadText(lead) + '</b> tie as least contradicted')
+    + '. <span class="mono small muted">Inconsistent: ' + C.hypotheses.map(h => h.id + ' ' + t[h.id]).join(' · ') + '</span> <button class="linkbtn" data-act="tab" data-v="board">Open board</button></p>';
+}
+function boardRow(id, d, done, cols){
+  const r = rep(id), b = S.board[id], aside = setAside(id), nd = !aside && nonDiagnostic(id);
+  const cells = C.hypotheses.map(h => {
+    const m = b.m[h.id] || '';
+    return '<button class="bcell m-' + (m || 'none') + '" data-act="mark" data-id="' + id + '" data-h="' + h.id + '"' + (done ? ' disabled' : '') + ' aria-label="' + esc(id + ' against ' + h.id + ': ' + MARK_WORD[m]) + '">' + MARK_TXT[m] + '</button>';
+  }).join('');
+  const tags = (aside ? '<span class="pill">Doubted · set aside</span>' : '') + (nd ? '<span class="pill">Fits everything</span>' : '')
+    + (done ? '<span class="pill k-' + r.kind + '">' + KIND_LABEL[r.kind] + '</span>' : '');
+  const unpin = !done && b.day === d ? '<button class="linkbtn" data-act="bpin" data-id="' + id + '">Unpin</button>' : '';
+  return '<div class="brow' + (aside || nd ? ' dim' : '') + '" style="' + cols + '"><div class="bitem"><span class="mono small"><b>' + id + '</b> · ' + esc(src(r.sourceId).codeName) + ' · Day ' + itemDay(id) + '</span>'
+    + '<span class="btext">' + esc(r.text.length > 110 ? r.text.slice(0, 108) + '…' : r.text) + '</span>' + (tags || unpin ? '<span class="btags">' + tags + unpin + '</span>' : '') + '</div>' + cells + '</div>';
+}
+function boardTable(d, done){
+  const ids = boardIds(), t = boardTally(), lead = boardLead() || [];
+  const cols = 'grid-template-columns:minmax(0,1fr) repeat(' + C.hypotheses.length + ',44px)';
+  return '<div class="board" style="--bcols:' + C.hypotheses.length + '">'
+    + '<div class="brow bhead" style="' + cols + '"><span class="mono small muted">Item</span>' + C.hypotheses.map(h => '<span class="bh" title="' + esc(h.short) + '">' + h.id + '</span>').join('') + '</div>'
+    + ids.map(id => boardRow(id, d, done, cols)).join('')
+    + '<div class="brow bfoot" style="' + cols + '"><span class="mono small muted">Inconsistent</span>' + C.hypotheses.map(h => '<span class="bt' + (lead.includes(h.id) ? ' lead' : '') + '">' + t[h.id] + '</span>').join('') + '</div>'
+    + '</div>';
+}
+function boardView(d, done){
+  const ids = boardIds(), lead = boardLead();
+  const tip = done || S.tipsSeen.board ? '' : '<div class="msg tip"><span class="from">How the board works · shown once</span>'
+    + '<p>A light version of Analysis of Competing Hypotheses. Pin up to ' + pinsPerDay() + ' items a day from the Inbox. Then tap each cell to mark the item against each hypothesis: <b>C</b> consistent, <b>I</b> inconsistent, <b>–</b> doesn\'t apply.</p>'
+    + '<p>Count what contradicts, not what fits. The hypothesis with the fewest inconsistencies is the one still standing. An item that fits every hypothesis can\'t tell them apart, so the board greys it out. Items you\'ve doubted are set aside.</p>'
+    + '<p>The board isn\'t scored. It\'s there to help you make the call.</p>'
+    + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="board">Got it</button></div></div>';
+  let html = tip + (done ? '' : '<div class="section-h"><h2>Hypotheses board</h2><span class="mono small">' + pinnedOn(d).length + '/' + pinsPerDay() + ' pins today</span></div>');
+  if (!ids.length) return html + '<p class="small muted">Nothing pinned yet. Use <b>Pin to board</b> on any item in the Inbox.</p><div class="btnrow"><button class="btn ghost" data-act="tab" data-v="inbox">Back to the Inbox</button></div>';
+  html += '<div class="legend small">' + C.hypotheses.map(h => '<span><b>' + h.id + '</b> ' + esc(h.short) + '</span>').join('') + '</div>'
+    + boardTable(d, done)
+    + '<p class="small">' + (lead ? (lead.length === 1 ? '<b>' + lead[0] + '</b> is the least contradicted.' : '<b>' + leadText(lead) + '</b> tie as least contradicted.') : 'Mark items <b>I</b> where they don\'t fit a hypothesis to see which one survives.') + '</p>';
+  if (done) return html;
+  return html + '<div class="btnrow"><button class="btn" data-act="tab" data-v="brief">Write the brief</button></div>';
 }
 
 function collectView(d){
@@ -941,6 +1062,11 @@ function postmortemView(){
     const rule = ((COLL() || {}).burnRules || []).find(b => b.sourceId === k);
     html += '<div class="reveal"><div class="head"><b>' + esc((C.sources.find(x => x.id === k) || {codeName:k}).codeName) + '</b><span class="pill k-planted">Source burned</span><span class="missed">' + (COLL().burnPoints || 0) + '</span></div><p class="what">' + esc(rule ? rule.postmortem : '') + '</p></div>';
   });
+  if (boardIds().length){
+    const last = C.groundTruth.find(g => g.day === C.days);
+    html += '<div class="stack"><div class="section-h"><h3>Your board</h3></div>' + boardView(C.days, true)
+      + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as Kordav intended.</p></div>';
+  }
   html += '<div class="stack"><h3>Lessons</h3><ul>' + C.postmortem.lessons.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
     + '<div class="stack"><h3>Your sources, revealed</h3>' + C.sources.filter(s => !s.rosterHidden).map(s => '<p class="small"><span class="mono"><b>' + esc(s.codeName) + '</b></span> ' + (s.controlledByAdversary === true ? '<span class="pill k-planted">Adversary channel</span> ' : '') + esc(s.postmortemNote || '') + '</p>').join('') + '</div>'
     + '<div class="btnrow"><button class="btn" data-act="restart">Play again</button></div>';
@@ -969,12 +1095,13 @@ function revealItem(r, brief){
 
 function playtestLog(){
   const ending = C.endings.find(e => e.id === S.ending) || evalEnding();
-  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Confidence | Truth | Call pts | Evidence | Evid pts | Halvorsen | Tasked'];
+  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Confidence | Truth | Call pts | Evidence | Evid pts | Halvorsen | Tasked | Board'];
   let total = ending.points;
   for (let d = 1; d <= C.days; d++){
     const b = S.briefs[d]; if (!b) continue;
     const sc = scoreDay(d); total += sc.call + sc.ev;
-    lines.push([d, b.minutes, b.hyp, confLabel(b.conf), sc.truth.trueHypothesis, sc.call, b.evidence.join(' ') || '-', sc.ev, b.reply, (b.tasks || []).map(x => x.disc + ':' + x.target).join(' ') || '-'].join(' | '));
+    lines.push([d, b.minutes, b.hyp, confLabel(b.conf) + (b.confLost ? ' (lost on reload, guessed)' : ''), sc.truth.trueHypothesis, sc.call, b.evidence.join(' ') || '-', sc.ev, b.reply, (b.tasks || []).map(x => x.disc + ':' + x.target).join(' ') || '-',
+      b.board ? (b.board.lead ? b.board.lead.join('/') + ' least contradicted' : 'no lead') + ', ' + b.board.pins + ' pinned' : '-'].join(' | '));
   }
   const seenAll = seenReports();
   const planted = seenAll.filter(r => r.kind === 'planted');
@@ -982,6 +1109,8 @@ function playtestLog(){
   const bp = burnPoints(); total += bp;
   if (bp) lines.push('Burned sources: ' + Object.keys(S.burned).join(' ') + ' (' + bp + ')');
   lines.push('Doubts: ' + dp);
+  const bIds = boardIds();
+  lines.push('Board: ' + (bIds.length ? bIds.length + ' pinned, ' + bIds.filter(id => Object.keys(S.board[id].m).length).length + ' marked (' + bIds.map(id => id + ' ' + C.hypotheses.map(h => S.board[id].m[h.id] || '.').join('')).join(', ') + ')' : 'not used'));
   if (S.done) lines.push('Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total);
   else lines.push('In progress: ' + Object.keys(S.briefs).length + ' of ' + C.days + ' briefs sent');
   lines.push(
@@ -1107,6 +1236,8 @@ function onClick(e){
     case 'conf': draft(d).conf = el.dataset.v; save(); render(); break;
     case 'tipseen': S.tipsSeen[el.dataset.v] = true; save(); render(); break;
     case 'task': toggleTask(d, el.dataset.disc, el.dataset.target); save(); render(); break;
+    case 'bpin': if (!S.done){ togglePin(d, el.dataset.id); save(); render(); } break;
+    case 'mark': if (!S.done){ cycleMark(el.dataset.id, el.dataset.h); save(); render(); } break;
     case 'ev': {
       const dr = draft(d), id = el.dataset.id, i = dr.evidence.indexOf(id);
       if (i >= 0) dr.evidence.splice(i, 1); else if (dr.evidence.length < C.scoring.maxEvidence) dr.evidence.push(id);

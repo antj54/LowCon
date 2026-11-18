@@ -71,7 +71,7 @@ All costs and timings are starting values to tune in playtesting.
 
 ### Hypotheses board (Phase 2)
 
-Each crisis opens with 2 to 4 competing hypotheses. You mark each item as consistent or inconsistent with each one, which is a lightweight version of ACH. The board highlights which items actually tell the hypotheses apart, and which ones fit all of them and so don't help.
+Each crisis opens with 2 to 4 competing hypotheses. Pin up to 3 items a day to the board and mark each one consistent (C), inconsistent (I) or doesn't apply (–) for each hypothesis, a lightweight version of ACH. The board counts what contradicts each hypothesis and names the least contradicted; it greys out items that fit every hypothesis, because they can't tell them apart, and sets aside items you've doubted. The brief shows the board's lead as a nudge. The board isn't scored (#42, #49).
 
 ### Deception
 
@@ -109,7 +109,7 @@ The crisis data format is in `03-crisis-content.md`.
 
 The game is a single-page web app that Claude builds and publishes as a claude.ai page. You open it from a link on your phone or laptop.
 
-- **Phone first:** items are cards, and you judge one with a tap. The hypotheses board collapses into a list on small screens.
+- **Phone first:** items are cards, and you judge one with a tap. The hypotheses board is a compact table: one row per pinned item, one 44 px tap cell per hypothesis.
 - **Situation map:** plots reporting as it arrives, planted items included, plus your own forces. The real positions appear only in the postmortem.
 - **Engine and content kept separate:** crises live in JSON data files, so we can add new ones without touching the game code.
 - **Saving:** progress saves to the player's claude.ai account, so phone and laptop share one game, with a copy on the device as a fallback.
