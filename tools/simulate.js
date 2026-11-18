@@ -15,7 +15,7 @@ if (!engine) { console.error('No inline engine script found in index.html'); pro
 const crisis = JSON.parse(fs.readFileSync(crisisPath, 'utf8'));
 let lastHtml = '', lastLayer = '';
 
-// A plan is one entry per day: [hypothesis, likelihood, [evidence ids]].
+// A plan is one entry per day: [hypothesis, likelihood, [evidence ids]]. Evidence affects points only.
 function run(plan, doubt, cfg) {
   const handlers = {};
   const els = { app: { innerHTML: '' }, layer: { innerHTML: '' } };
@@ -37,8 +37,7 @@ function run(plan, doubt, cfg) {
       click('tab', { v: 'brief' });
       click('hyp', { v: h }); click('lik', { v: lik });
       (ev || []).forEach(id => click('ev', { id }));
-      const conf = ((els.app.innerHTML.match(/Confidence, from your evidence<\/span><b>([^<]+)</) || [])[1] || '?');
-      calls.push(`${h} ${lik} (${conf})`);
+      calls.push(`${h} ${lik}`);
       click('confirmsend');
       if (cfg && cfg.playtest) {
         if (!/How was Day/.test(els.layer.innerHTML)) throw new Error('Playtest reaction sheet missing on day ' + (i + 1));
@@ -67,7 +66,7 @@ const STRATEGIES = [
   ['Best play, doubt plants', BEST, plants],
   ['Best play, doubt everything', BEST, all],
   ['Very likely from Day 3', [BEST[0], BEST[1], ['H2', 'very', ['R-3-02', 'R-3-04', 'R-3-01']], BEST[3], BEST[4]], none],
-  ['Very likely, thin evidence', [BEST[0], BEST[1], BEST[2], ['H2', 'very', ['R-4-01']], ['H2', 'very', ['R-5-03']]], none],
+  ['Very likely, no evidence', [BEST[0], BEST[1], BEST[2], ['H2', 'very', []], ['H2', 'very', []]], none],
   ['Never above Likely', [BEST[0], BEST[1], BEST[2], ['H2', 'likely', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'likely', ['R-5-03', 'R-5-04']]], none],
   ['Always worst case', [['H2', 'almost', ['R-1-03', 'R-1-01']], ['H2', 'almost', ['R-2-01', 'R-2-03']], ['H2', 'almost', ['R-3-02', 'R-3-04']], ['H2', 'almost', ['R-4-01', 'R-4-04']], ['H2', 'almost', ['R-5-03', 'R-5-04']]], none],
   ['Trust the official line', Array(5).fill(['H1', 'likely', []]), none],

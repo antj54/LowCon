@@ -44,7 +44,7 @@ Testers need write access to save: Contributor if they're in the owner's organiz
 node tools/simulate.js
 ```
 
-Expected for Crisis 01: best play ends **Deterred**. "Very likely" on thin evidence, "never above Likely", doubting everything and "always worst case" end in **Standoff**. Trusting the official line, "just signaling" and always hedging end **Seized**. Add `--calls` to see each day's likelihood and derived confidence. The last line runs the playtest build and checks the reaction sheet and debrief appear.
+Expected for Crisis 01: best play ends **Deterred**, and so does skipping evidence, at a lower score. "Never above Likely" and "always worst case" end in **Standoff**. Trusting the official line, "just signaling" and always hedging end **Seized**. Doubting everything scores below doubting nothing. Add `--calls` to see each day's call. The last line runs the playtest build and checks the reaction sheet and debrief appear.
 
 ## Setting
 

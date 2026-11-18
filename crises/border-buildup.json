@@ -1,6 +1,6 @@
 {
   "id": "border-buildup",
-  "formatVersion": "0.4",
+  "formatVersion": "0.5",
   "title": "Exercise or Operation?",
   "crisisNumber": "01",
   "days": 5,
@@ -24,7 +24,7 @@
     "name": "Gen. R. Halvorsen",
     "role": "Commander, Task Force VEYL",
     "callsign": "CDR TF VEYL",
-    "wants": "Does he move 2nd Battalion to the Tarsk sector? He commits as much as your judgment and its basis support.",
+    "wants": "Does he move 2nd Battalion to the Tarsk sector? He commits as much as your judgment supports.",
     "context": "An early move is visible, and Kordav will call it provocation in the middle of talks. A late move might not arrive in time. A company can watch the crossing. Only the full battalion can hold the dam."
   },
   "asset": {
@@ -52,10 +52,6 @@
         "likelihood": [
           "very",
           "almost"
-        ],
-        "confidence": [
-          "moderate",
-          "high"
         ]
       },
       "action": "deploy",
@@ -65,9 +61,7 @@
       "if": {
         "hypothesis": "H2",
         "likelihood": [
-          "likely",
-          "very",
-          "almost"
+          "likely"
         ]
       },
       "action": "deploy",
@@ -115,11 +109,11 @@
   ],
   "policySummary": [
     {
-      "brief": "H2, Very likely or Almost certain, on Moderate or High confidence",
+      "brief": "H2, Very likely or Almost certain",
       "action": "Moves all of 2nd Battalion to Tarsk"
     },
     {
-      "brief": "H2, Likely (or a stronger call on Low confidence)",
+      "brief": "H2, Likely",
       "action": "Sends a reinforced lead company to Tarsk. The rest stays in garrison."
     },
     {
@@ -152,10 +146,10 @@
     "withdraw": "Pulls everyone back to garrison"
   },
   "replies": {
-    "deploy_company": "Sending 2nd Battalion's lead company to Tarsk, reinforced. It can watch the crossing. It can't hold the dam on its own. If you want the rest of the battalion, give me a stronger call on solid sourcing.",
+    "deploy_company": "Sending 2nd Battalion's lead company to Tarsk, reinforced. It can watch the crossing. It can't hold the dam on its own. If you want the rest of the battalion, give me something firmer than 'likely.'",
     "deploy_battalion": "Moving all of 2nd Battalion to Tarsk. If this turns out to be an exercise, I'll be explaining myself to a lot of people. Make sure it isn't.",
     "upgrade_battalion": "Sending the rest of 2nd Battalion to join the lead company at Tarsk. That's everything I have in the sector.",
-    "hold_company": "The lead company is holding at Tarsk. The rest of the battalion stays put until you give me a stronger call on solid sourcing.",
+    "hold_company": "The lead company is holding at Tarsk. The rest of the battalion stays put until you're surer than 'likely.'",
     "hold_battalion": "Battalion's dug in at Tarsk. Keep them earning their per diem.",
     "readiness": "Readiness is up. I'm not moving anyone on a coin flip. Come back with something I can act on.",
     "hold": "Understood. Posturing is the diplomats' problem. Holding.",
@@ -278,7 +272,7 @@
     {
       "day": 4,
       "trueHypothesis": "H2",
-      "bestCall": "H2, very likely, on moderate or high confidence",
+      "bestCall": "H2, very likely",
       "state": "12th Brigade's lead elements and 77th Engineer Regiment (bridging) leave Ostrel for a hidden staging area near the Dolan crossing. 31st Brigade stays behind at Ostrel as the visible \"exercise.\"",
       "units": [
         {
@@ -311,7 +305,7 @@
     {
       "day": 5,
       "trueHypothesis": "H2",
-      "bestCall": "H2, very likely, on moderate or high confidence",
+      "bestCall": "H2, very likely",
       "state": "Final preparations. The bridging moves forward and the field hospital expands. The incursion is set for dawn on the 20th, the same day as the closing ceremony.",
       "units": [
         {
@@ -1180,7 +1174,7 @@
         "days": [
           4
         ],
-        "text": "Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, that was three disciplines pointing the same way: a day to say very likely, on solid confidence. \"Likely\" got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
+        "text": "Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, three disciplines pointed the same way: a day to say very likely. \"Likely\" got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
       },
       {
         "days": [
@@ -1193,7 +1187,7 @@
       "Plans aren't intent.",
       "Grade the information, not just the source.",
       "When a coercer suddenly goes quiet, the threat may have become an operation.",
-      "Likelihood and its basis move forces. Under-calling a clear, well-sourced warning has a cost too.",
+      "Likelihood moves forces. Under-calling a clear warning has a cost too.",
       "Count origins, not reports.",
       "Look for what's missing as well as what's there."
     ]
