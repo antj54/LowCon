@@ -174,6 +174,11 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .switch button{min-width:64px;min-height:36px;border-radius:18px;border:1px solid var(--line);background:var(--paper);font:600 13px/1 var(--f-mono);cursor:pointer}
 .switch button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
 .loading{padding:40px 0;font-family:var(--f-mono);color:var(--muted)}
+.msg.pt{border-left-color:var(--accent)}
+.dq{display:grid;gap:6px}
+textarea.short{min-height:48px}
+.chip.rflag[aria-pressed="true"]{border-color:var(--bad)}
+pre.log{white-space:pre-wrap;word-break:break-word;font:12px/1.5 var(--f-mono);background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:10px;margin:0;overflow-x:auto}
 /* Map */
 .map{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:8px;display:grid;gap:6px}
 .map svg{display:block;width:100%;height:auto;border-radius:2px}
@@ -243,10 +248,20 @@ const CONF = [
 ];
 const KIND_LABEL = {'true':'True','noise':'Noise','planted':'Planted','clutter':'Clutter'};
 const IDLE_MS = 120000, TICK_MS = 15000;
+const CONFIG_URL = 'config.json';
+const REACTIONS = [['engaging','Engaging'],['fine','Fine'],['slog','A slog']];
+const DEBRIEF = [
+  {id:'sixth', q:'Would you have wanted a sixth day?', a:[['yes','Yes'],['no','No'],['unsure','Not sure']]},
+  {id:'fair', q:'The planted items were…', a:[['easy','Too easy'],['fair','Fair'],['hard','Too hard'],['unfair','Unfair']]},
+  {id:'realism', q:'Tradecraft realism', a:[['real','Realistic'],['mostly','Mostly'],['places','Off in places'],['off','Off']]},
+  {id:'pace', q:'Length of a daily turn', a:[['short','Too short'],['right','About right'],['long','Too long']]}
+];
+let CFG = {playtest:false};
 
 let C = null;          // crisis data
 let S = null;          // player state (plain JSON)
-const ui = {tab:'inbox', sheet:null, toast:'', pin:null, pmDay:5};
+const ui = {tab:'inbox', sheet:null, toast:'', pin:null, pmDay:5, reactDay:null, isOwner:false, pt:{loaded:false, loading:false, docs:[], names:{}, err:''}};
+let USER = null, DB = null, ptRef = null;
 let store = {mode:'local', ref:null, ok:false};
 const app = document.getElementById('app');
 const layer = document.getElementById('layer');
@@ -275,7 +290,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:false, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -392,7 +407,20 @@ function save(){
   S.savedAt = new Date().toISOString();
   try { localStorage.setItem(LS_PREFIX + C.id, JSON.stringify(S)); } catch(e) {}
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(flush, 500);
+  saveTimer = setTimeout(() => { flush(); ptSync(); }, 500);
+}
+let ptWriting = false, ptAgain = false;
+async function ptSync(){
+  if (!CFG.playtest || !ptRef || !S.started) return;
+  if (ptWriting){ ptAgain = true; return; }
+  ptWriting = true;
+  try {
+    await ptRef.set({crisisId:C.id, updatedAt:S.savedAt, day:curDay(), done:S.done, ending:S.ending || null,
+      log:playtestLog(), briefs:clone(S.briefs), grades:clone(S.grades), feedback:clone(S.feedback),
+      realism:clone(S.realism), debrief:clone(S.debrief), activeMs:clone(S.activeMs)});
+  } catch(e) { /* the local save still has everything */ }
+  ptWriting = false;
+  if (ptAgain){ ptAgain = false; ptSync(); }
 }
 async function flush(){
   if (store.mode !== 'db' || !store.ref) return;
@@ -420,8 +448,11 @@ async function connectAccount(){
     const both = await Promise.all([cl.use('user'), cl.use('db')]);
     const user = both[0], db = both[1];
     if (!user || !db) { updateSaveStatus(); return; }
+    USER = user; DB = db;
+    try { ui.isOwner = !!(await Promise.resolve(user.isOwner && user.isOwner())); } catch(e) { ui.isOwner = false; }
     const uid = await user.id();
     if (!uid) { updateSaveStatus(); return; }
+    if (CFG.playtest) ptRef = db.doc('playtests/' + uid);
     const ref = db.collection('data/users/' + uid).doc('save-' + C.id);
     const snap = await Promise.race([ref.get(), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 10000))]);
     store = {mode:'db', ref, ok:true};
@@ -435,6 +466,8 @@ async function connectAccount(){
     }
   } catch(e) { /* stay on device storage */ }
   updateSaveStatus();
+  if (CFG.playtest && ptRef && S.started) ptSync();
+  if (ui.isOwner && CFG.playtest) render();
 }
 function saveStatusText(){
   if (store.mode === 'db') return store.ok ? 'Saved to your account' : 'Saving…';
@@ -521,12 +554,13 @@ function mapCard(d){
 function render(){
   if (!C || !S) return;
   if (!S.started){ app.innerHTML = introView(); renderLayer(); return; }
-  if (S.done && ui.tab !== 'files') ui.tab = 'postmortem';
+  if (S.done && ui.tab !== 'files' && ui.tab !== 'playtests') ui.tab = 'postmortem';
   if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
   const d = curDay();
   const open = isOpen(d);
   let body = '';
   if (ui.tab === 'files') body = filesView();
+  else if (ui.tab === 'playtests') body = playtestsView();
   else if (ui.tab === 'postmortem') body = postmortemView();
   else if (!open) body = lockedView(d);
   else if (ui.tab === 'brief') body = briefView(d);
@@ -539,12 +573,14 @@ function headerView(d, open){
   const tabs = S.done
     ? [['postmortem','Postmortem'],['files','Files']]
     : [['inbox','Inbox' + (open ? '<span class="badge">' + reportsFor(d).length + '</span>' : '')],['brief','Brief'],['files','Files']];
+  if (CFG.playtest && ui.isOwner) tabs.push(['playtests','Testers']);
   const dayText = S.done ? 'Crisis closed' : ('Day ' + d + ' of ' + C.days + ' · ' + esc(dayLabel(d)));
   return '<header class="top">'
     + '<span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + esc(C.title) + '</span>'
     + '<h1>' + dayText + '</h1>'
     + '<div class="status-line"><span>' + esc(C.asset.name) + ': <b>' + esc(assetLabel()) + '</b></span>'
     + (S.playAhead ? '<span><b>Play ahead on</b></span>' : '')
+    + (CFG.playtest ? '<span><b>Playtest build</b></span>' : '')
     + '<span id="savestatus">' + esc(saveStatusText()) + '</span></div>'
     + '</header>'
     + '<nav class="tabs" role="tablist">' + tabs.map(t => '<button class="tab" role="tab" data-act="tab" data-v="' + t[0] + '" aria-selected="' + (ui.tab === t[0]) + '">' + t[1] + '</button>').join('') + '</nav>';
@@ -568,6 +604,7 @@ function introView(){
     + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
     + '<p class="small muted">Each day: read the inbox, doubt anything you think is false or planted, then send one brief with a judgment, a confidence level and up to 3 pieces of key evidence. The next day opens tomorrow. Sources and scoring are under Files.</p>'
     + '<p class="small muted">' + esc(C.placeholderNote) + '</p>'
+    + (CFG.playtest ? playtestNote() : '')
     + '<div class="btnrow"><button class="btn" data-act="start">Open Day 1</button></div>'
     + '</main>';
 }
@@ -596,7 +633,10 @@ function itemCard(r, editable){
     + '<header class="cable-h"><span class="rid">' + r.id + '</span><span class="src">' + esc(s.codeName) + '</span><span>' + esc(r.discipline) + '</span><span class="recv" title="' + esc(recvTitle(r)) + '">' + received(r) + '</span></header>'
     + '<p class="cable-t">' + esc(r.text) + '</p>';
   if (editable){
-    html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button></div>';
+    html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button>'
+      + (CFG.playtest ? '<button class="chip rflag" data-act="realism" data-id="' + r.id + '" aria-pressed="' + !!S.realism[r.id] + '" title="Playtest: tell the designer this item doesn\'t ring true">' + (S.realism[r.id] ? 'Flagged as unrealistic' : 'Not realistic?') + '</button>' : '')
+      + '</div>'
+      + (CFG.playtest && S.realism[r.id] ? '<label class="lab" for="rn-' + r.id + '">What\'s off? (optional)</label><textarea id="rn-' + r.id + '" class="short" data-input="realism" data-id="' + r.id + '" maxlength="400" placeholder="e.g. a clerk wouldn\'t see that">' + esc(S.realism[r.id].note || '') + '</textarea>' : '');
   } else {
     html += '<p class="yourgrade">' + gradeSummary(g) + '</p>';
   }
@@ -746,6 +786,7 @@ function postmortemView(){
     + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
     + '</tbody></table></div>'
     + '<p class="small">Planted items you doubted: <b>' + caught + ' of ' + planted.length + '</b>. True items you doubted: <b>' + falseAlarms + '</b>. Clutter you marked not relevant: <b>' + clutterSpotted + ' of ' + clutter.length + '</b>.</p>'
+    + (CFG.playtest ? debriefCard() : '')
     + '<div class="btnrow"><button class="btn ghost" data-act="copylog">Copy playtest log</button></div>'
     + '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
     + '<div class="daypick" role="group" aria-label="Day">' + [1,2,3,4,5].map(x => '<button data-act="pmday" data-v="' + x + '" aria-pressed="' + (pd === x) + '">Day ' + x + '</button>').join('') + '</div>'
@@ -803,7 +844,59 @@ function playtestLog(){
   lines.push('Doubts: ' + dp, 'Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total,
     'Planted doubted: ' + planted.filter(r => (S.grades[r.id] || {}).f).length + '/' + planted.length + ' (' + planted.filter(r => (S.grades[r.id] || {}).f).map(r => r.id).join(' ') + ')',
     'True items doubted: ' + C.reports.filter(r => r.kind === 'true' && (S.grades[r.id] || {}).f).map(r => r.id).join(' '));
+  for (let d = 1; d <= C.days; d++){
+    const f = S.feedback[d];
+    if (f && (f.r || f.note)) lines.push('Day ' + d + ' reaction: ' + (f.r || '-') + (f.note ? ' | ' + f.note : ''));
+  }
+  Object.keys(S.realism || {}).forEach(id => lines.push('Realism flag ' + id + (S.realism[id].note ? ': ' + S.realism[id].note : '')));
+  const db0 = S.debrief || {};
+  if (Object.keys(db0).length) lines.push('Debrief: ' + DEBRIEF.map(q => q.id + '=' + (db0[q.id] || '-')).join(', ') + (db0.note ? ' | ' + db0.note : ''));
   return lines.join('\n');
+}
+
+function playtestNote(){
+  return '<div class="msg pt"><span class="from">Playtest build</span>'
+    + '<p>Thanks for testing. Just play: one day per real day, about 8 minutes each. Your calls, timing and doubts are recorded automatically and sent to the designer. You don\'t need to write anything down.</p>'
+    + '<p class="small">Optional, one tap each: a quick reaction after each brief, a <b>Not realistic?</b> button on any item that doesn\'t ring true, and four questions at the end.</p>'
+    + '<p class="small muted">Please don\'t look at the game\'s GitHub repo until you\'ve finished. It has the answers.</p></div>';
+}
+function debriefCard(){
+  const db0 = S.debrief || {};
+  return '<div class="msg pt"><span class="from">Playtest debrief · optional, one tap each</span>'
+    + DEBRIEF.map(q => '<div class="dq"><p class="small"><b>' + esc(q.q) + '</b></p><div class="toggles">' + q.a.map(a => '<button class="chip" data-act="debrief" data-q="' + q.id + '" data-v="' + a[0] + '" aria-pressed="' + (db0[q.id] === a[0]) + '">' + esc(a[1]) + '</button>').join('') + '</div></div>').join('')
+    + '<label class="lab" for="debrief-note">Anything else? (optional)</label><textarea id="debrief-note" class="short" data-input="debrief" maxlength="800">' + esc(db0.note || '') + '</textarea>'
+    + '<p class="small muted">Saved and sent automatically.</p></div>';
+}
+async function loadPlaytests(){
+  if (!DB || ui.pt.loading) return;
+  ui.pt.loading = true; ui.pt.err = ''; render();
+  try {
+    const snap = await Promise.race([DB.collection('playtests').get(), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 10000))]);
+    ui.pt.docs = snap.docs.map(x => Object.assign({id:x.id}, clone(x.data() || {}))).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+    try {
+      const ps = await USER.profiles(ui.pt.docs.map(x => x.id));
+      ui.pt.names = {}; ui.pt.docs.forEach(x => { ui.pt.names[x.id] = (ps && ps[x.id] && ps[x.id].name) || ''; });
+    } catch(e) {}
+    ui.pt.loaded = true;
+  } catch(e) { ui.pt.err = 'Couldn\'t load playtest results. Try again in a moment.'; }
+  ui.pt.loading = false; render();
+}
+function playtestsView(){
+  if (!ui.pt.loaded && !ui.pt.loading && !ui.pt.err) setTimeout(loadPlaytests, 0);
+  let html = '<div class="section-h"><h2>Testers</h2><button class="chip" data-act="ptload">Refresh</button></div>'
+    + '<p class="small muted">Only you see this tab. Each tester\'s results update every time they save.</p>';
+  if (ui.pt.loading) html += '<p class="mono small muted">Loading…</p>';
+  if (ui.pt.err) html += '<p class="small">' + esc(ui.pt.err) + '</p>';
+  if (ui.pt.loaded && !ui.pt.docs.length) html += '<p class="small">No results yet. They appear once a tester opens Day 1.</p>';
+  ui.pt.docs.forEach((x, i) => {
+    const name = ui.pt.names[x.id] || ('Tester ' + (i + 1));
+    const status = x.done ? 'Finished · ' + (x.ending || '') : 'On Day ' + (x.day || 1) + ' of ' + C.days;
+    html += '<details' + (i === 0 ? ' open' : '') + '><summary><span>' + esc(name) + '</span><span class="mono small muted">' + esc(status) + '</span></summary><div class="inner">'
+      + '<p class="small muted">Last update ' + esc((x.updatedAt || '').replace('T', ' ').slice(0, 16)) + ' UTC</p>'
+      + '<pre class="log">' + esc(x.log || '') + '</pre>'
+      + '<div class="btnrow"><button class="btn ghost" data-act="ptcopy" data-i="' + i + '">Copy log</button></div></div></details>';
+  });
+  return html;
 }
 
 function renderLayer(){
@@ -816,6 +909,13 @@ function renderLayer(){
       + '<p class="small">Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>'
       + '<p class="small muted">Once it\'s sent you can\'t change it. Halvorsen acts on it tonight.</p>'
       + '<div class="btnrow"><button class="btn" data-act="confirmsend">Send</button><button class="btn ghost" data-act="cancel">Keep editing</button></div></div></div>';
+  } else if (ui.sheet === 'react'){
+    const k = ui.reactDay, f = S.feedback[k] || {};
+    html = '<div class="overlay"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Brief sent. How was Day ' + k + '?</h3>'
+      + '<p class="small muted">Optional. One tap is plenty.</p>'
+      + '<div class="toggles">' + REACTIONS.map(r => '<button class="chip" data-act="react" data-v="' + r[0] + '" aria-pressed="' + (f.r === r[0]) + '">' + r[1] + '</button>').join('') + '</div>'
+      + '<label class="lab" for="react-note">What stood out? (optional)</label><textarea id="react-note" class="short" data-input="react" maxlength="400">' + esc(f.note || '') + '</textarea>'
+      + '<div class="btnrow"><button class="btn" data-act="reactdone">' + (f.r || f.note ? 'Done' : 'Skip') + '</button></div></div></div>';
   } else if (ui.sheet === 'restart'){
     html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Start this crisis over?</h3><p>All your doubts and briefs for this crisis will be wiped.</p>'
       + '<div class="btnrow"><button class="btn" data-act="confirmrestart">Start over</button><button class="btn ghost" data-act="cancel">Cancel</button></div></div></div>';
@@ -850,6 +950,16 @@ function onClick(e){
       break;
     }
     case 'pmday': ui.pmDay = Number(el.dataset.v); ui.pin = null; render(); break;
+    case 'realism': { const id = el.dataset.id; if (S.realism[id]) delete S.realism[id]; else S.realism[id] = {note:''}; save(); render(); break; }
+    case 'react': { const k = ui.reactDay; S.feedback[k] = Object.assign(S.feedback[k] || {}, {r:el.dataset.v}); save(); renderLayer(); break; }
+    case 'reactdone': ui.sheet = null; ui.reactDay = null; renderLayer(); break;
+    case 'debrief': { const q = el.dataset.q; S.debrief[q] = S.debrief[q] === el.dataset.v ? null : el.dataset.v; save(); render(); break; }
+    case 'ptload': ui.pt.loaded = false; loadPlaytests(); break;
+    case 'ptcopy': {
+      const x = ui.pt.docs[Number(el.dataset.i)]; const text = (x && x.log) || '';
+      try { navigator.clipboard.writeText(text).then(() => toast('Log copied.'), () => toast('Copy failed. Select the text instead.')); } catch(err) { toast('Copy failed. Select the text instead.'); }
+      break;
+    }
     case 'hyp': draft(d).hyp = el.dataset.v; save(); render(); break;
     case 'conf': draft(d).conf = el.dataset.v; save(); render(); break;
     case 'ev': {
@@ -858,7 +968,10 @@ function onClick(e){
       save(); render(); break;
     }
     case 'send': ui.sheet = 'send'; renderLayer(); break;
-    case 'confirmsend': ui.sheet = null; sendBrief(d); render(); toast('Brief sent to ' + C.customer.name + '.'); break;
+    case 'confirmsend':
+      ui.sheet = null; sendBrief(d); render();
+      if (CFG.playtest){ ui.reactDay = d; ui.sheet = 'react'; renderLayer(); } else toast('Brief sent to ' + C.customer.name + '.');
+      break;
     case 'cancel': ui.sheet = null; renderLayer(); break;
     case 'playahead': S.playAhead = !S.playAhead; save(); render(); break;
     case 'restart': ui.sheet = 'restart'; renderLayer(); break;
@@ -876,12 +989,16 @@ function onClick(e){
 }
 function onInput(e){
   const el = e.target;
-  if (el.dataset && el.dataset.input === 'note'){ draft(curDay()).note = el.value; save(); }
+  if (!el.dataset) return;
+  if (el.dataset.input === 'note'){ draft(curDay()).note = el.value; save(); }
+  else if (el.dataset.input === 'realism' && S.realism[el.dataset.id]){ S.realism[el.dataset.id].note = el.value; save(); }
+  else if (el.dataset.input === 'react' && ui.reactDay){ S.feedback[ui.reactDay] = Object.assign(S.feedback[ui.reactDay] || {}, {note:el.value}); save(); }
+  else if (el.dataset.input === 'debrief'){ S.debrief.note = el.value; save(); }
 }
 document.addEventListener('click', onClick);
 document.addEventListener('input', onInput);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && ui.sheet){ ui.sheet = null; renderLayer(); }
+  if (e.key === 'Escape' && ui.sheet){ ui.sheet = null; ui.reactDay = null; renderLayer(); }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('.m-pin')){ e.preventDefault(); onClick(e); }
 });
 
@@ -899,6 +1016,10 @@ document.addEventListener('visibilitychange', () => {
 
 /* ---------- Boot ---------- */
 async function start(hotData){
+  try {
+    const cr = await fetch(CONFIG_URL, {cache:'no-cache'});
+    if (cr.ok){ const cfg = await cr.json(); if (cfg && typeof cfg.playtest === 'boolean') CFG = Object.assign(CFG, cfg); }
+  } catch(e) { /* no config: normal build */ }
   try {
     const res = await fetch(CRISIS_URL, {cache:'no-cache'});
     if (!res.ok) throw new Error('HTTP ' + res.status);

@@ -14,7 +14,7 @@ const engine = (html.match(/<script>([\s\S]*)<\/script>/) || [])[1];
 if (!engine) { console.error('No inline engine script found in index.html'); process.exit(1); }
 const crisis = JSON.parse(fs.readFileSync(crisisPath, 'utf8'));
 
-function run(plan, doubt) {
+function run(plan, doubt, cfg) {
   const handlers = {};
   const els = { app: { innerHTML: '' }, layer: { innerHTML: '' } };
   global.document = { getElementById: id => els[id] || null, addEventListener: (t, f) => { handlers[t] = f; }, hidden: false };
@@ -22,7 +22,9 @@ function run(plan, doubt) {
   global.localStorage = { getItem: () => null, setItem() {} };
   global.setInterval = () => 0;
   Object.defineProperty(globalThis, 'navigator', { value: {}, configurable: true, writable: true });
-  global.fetch = async () => ({ ok: true, json: async () => JSON.parse(JSON.stringify(crisis)) });
+  global.fetch = async url => /config\.json$/.test(url)
+    ? (cfg ? { ok: true, json: async () => cfg } : { ok: false, json: async () => ({}) })
+    : { ok: true, json: async () => JSON.parse(JSON.stringify(crisis)) };
   eval(engine);
   const click = (act, ds = {}) => handlers.click({ target: { closest: () => ({ dataset: Object.assign({ act }, ds), classList: { contains: () => false } }) } });
   return new Promise(resolve => setTimeout(() => {
@@ -30,8 +32,16 @@ function run(plan, doubt) {
     plan.forEach(([h, c], i) => {
       crisis.reports.filter(r => r.day === i + 1 && doubt(r)).forEach(r => click('flag', { id: r.id }));
       click('hyp', { v: h }); click('conf', { v: c }); click('confirmsend');
+      if (cfg && cfg.playtest) {
+        if (!/How was Day/.test(els.layer.innerHTML)) throw new Error('Playtest reaction sheet missing on day ' + (i + 1));
+        click('react', { v: 'engaging' }); click('reactdone');
+      }
     });
-    const out = els.app.innerHTML;
+    if (cfg && cfg.playtest) {
+      click('realism', { id: 'R-3-03' });
+      click('debrief', { q: 'sixth', v: 'yes' });
+    }
+    const out = els.app.innerHTML; lastHtml = out;
     const ending = (out.match(/<h2>([^<]+)<\/h2>/) || [])[1];
     const total = (out.match(/class="n">([^<]+)</) || [])[1];
     const parts = (out.match(/calls[^<]+/) || [])[0];
@@ -39,6 +49,7 @@ function run(plan, doubt) {
   }, 50));
 }
 
+let lastHtml = '';
 const none = () => false, plants = r => r.kind === 'planted', all = () => true;
 const STRATEGIES = [
   ['Best play', [['H3','moderate'],['H3','moderate'],['H2','moderate'],['H2','high'],['H2','high']], none],
@@ -54,4 +65,6 @@ const STRATEGIES = [
 (async () => {
   console.log(`Crisis: ${crisis.title} (${path.relative(root, crisisPath)})`);
   for (const [name, plan, doubt] of STRATEGIES) console.log(name.padEnd(30), await run(plan, doubt));
+  const pt = await run(STRATEGIES[0][1], none, { playtest: true });
+  console.log('Playtest build'.padEnd(30), pt, /Playtest debrief/.test(lastHtml) ? '| debrief shown' : '| DEBRIEF MISSING');
 })();
