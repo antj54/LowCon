@@ -1,0 +1,1333 @@
+{
+  "id": "border-buildup",
+  "formatVersion": "0.3",
+  "title": "Exercise or Operation?",
+  "crisisNumber": "01",
+  "days": 5,
+  "dayLabels": [
+    "the 15th",
+    "the 16th",
+    "the 17th",
+    "the 18th",
+    "the 19th"
+  ],
+  "placeholderNote": "Kordav, Elsin, the Veyl, Tarsk, Ostrel, Dolan and Varn are stand-in names until the countries question is settled.",
+  "briefing": {
+    "dateLine": "Day 1 is the 15th, early 2030s.",
+    "situation": [
+      "You lead the analysis cell supporting Task Force VEYL, a multinational reassurance force based in Elsin.",
+      "Kordav and Elsin have been arguing over the Veyl River for ten years. The river starts in Elsin's highlands and feeds Kordav's farmland. Elsin's Tarsk Dam, 6 km inside the border, controls the flow. Water talks open tomorrow in a neutral capital.",
+      "Two days ago Kordav's 4th Army started its annual autumn exercise, IRON HARVEST, at the Ostrel training area, 40 km from the border. The announced end date is the 20th, the day after Day 5."
+    ]
+  },
+  "customer": {
+    "name": "Gen. R. Halvorsen",
+    "role": "Commander, Task Force VEYL",
+    "callsign": "CDR TF VEYL",
+    "wants": "Does he move 2nd Battalion to the Tarsk sector? He commits as much as your confidence supports.",
+    "context": "An early move is visible, and Kordav will call it provocation in the middle of talks. A late move might not arrive in time. A company can watch the crossing. Only the full battalion can hold the dam."
+  },
+  "asset": {
+    "id": "2bn",
+    "name": "2nd Battalion",
+    "levels": {
+      "home": {
+        "label": "in garrison",
+        "rank": 0
+      },
+      "company": {
+        "label": "lead company at Tarsk",
+        "rank": 1
+      },
+      "battalion": {
+        "label": "at Tarsk in full",
+        "rank": 2
+      }
+    }
+  },
+  "customerPolicy": [
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "high"
+        ]
+      },
+      "action": "deploy",
+      "level": "battalion"
+    },
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "moderate"
+        ]
+      },
+      "action": "deploy",
+      "level": "company"
+    },
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "low"
+        ]
+      },
+      "action": "readiness"
+    },
+    {
+      "if": {
+        "hypothesis": [
+          "H1",
+          "H3"
+        ],
+        "confidence": [
+          "moderate",
+          "high"
+        ],
+        "assetAt": [
+          "company",
+          "battalion"
+        ]
+      },
+      "action": "withdraw"
+    },
+    {
+      "if": {
+        "hypothesis": "H3"
+      },
+      "action": "hold"
+    },
+    {
+      "if": {
+        "hypothesis": "H1"
+      },
+      "action": "relax"
+    }
+  ],
+  "policySummary": [
+    {
+      "brief": "H2 at High",
+      "action": "Moves all of 2nd Battalion to Tarsk"
+    },
+    {
+      "brief": "H2 at Moderate",
+      "action": "Sends a reinforced lead company to Tarsk. The rest stays in garrison."
+    },
+    {
+      "brief": "H2 at Low",
+      "action": "Raises readiness but doesn't move"
+    },
+    {
+      "brief": "H3 (any confidence)",
+      "action": "Holds position and leaves it to the diplomats"
+    },
+    {
+      "brief": "H1 (any confidence)",
+      "action": "Relaxes posture and releases the reserve company to training"
+    },
+    {
+      "brief": "H1 or H3 at Moderate+ with troops at Tarsk",
+      "action": "Pulls everyone back to garrison"
+    }
+  ],
+  "replyLabels": {
+    "deploy_company": "Sends a reinforced lead company to Tarsk",
+    "deploy_battalion": "Moves all of 2nd Battalion to Tarsk",
+    "upgrade_battalion": "Sends the rest of the battalion to Tarsk",
+    "hold_company": "Keeps the lead company at Tarsk and sends no more",
+    "hold_battalion": "Keeps 2nd Battalion at Tarsk",
+    "frozen": "Can't move while frozen. Raises readiness",
+    "readiness": "Raises readiness, doesn't move",
+    "hold": "Holds position",
+    "relax": "Relaxes posture and releases the reserve company",
+    "withdraw": "Pulls everyone back to garrison"
+  },
+  "replies": {
+    "deploy_company": "Sending 2nd Battalion's lead company to Tarsk, reinforced. It can watch the crossing. It can't hold the dam on its own. If you want the rest of the battalion, give me something firmer than 'likely.'",
+    "deploy_battalion": "Moving all of 2nd Battalion to Tarsk. If this turns out to be an exercise, I'll be explaining myself to a lot of people. Make sure it isn't.",
+    "upgrade_battalion": "Sending the rest of 2nd Battalion to join the lead company at Tarsk. That's everything I have in the sector.",
+    "hold_company": "The lead company is holding at Tarsk. The rest of the battalion stays put until you're surer than 'likely.'",
+    "hold_battalion": "Battalion's dug in at Tarsk. Keep them earning their per diem.",
+    "readiness": "Readiness is up. I'm not moving anyone on a 'might.' Come back with something I can act on.",
+    "hold": "Understood. Posturing is the diplomats' problem. Holding.",
+    "relax": "Good. The reserve company is released to the training rotation. Enjoy the quiet.",
+    "withdraw": "Pulling everyone back to garrison. I'd rather not do this twice.",
+    "frozen": "I can't move anything until the freeze lifts. Readiness is up, and your brief is on file.",
+    "freeze": "Kordav's delegation put photos of my troops at Tarsk on the table before they walked out. Higher HQ has ordered everyone back to garrison and frozen any move for 48 hours. Next time you tell me the wolf is here, I'd like it to be here."
+  },
+  "events": [
+    {
+      "id": "early-move-freeze",
+      "atStartOfDay": 3,
+      "if": {
+        "deployedOnAnyDay": [
+          1,
+          2
+        ]
+      },
+      "effect": {
+        "assetTo": "home",
+        "freezeBriefDays": [
+          3,
+          4
+        ]
+      },
+      "replyId": "freeze",
+      "note": "Your Day 3 and Day 4 briefs can't move the battalion. Your Day 5 brief can."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "short": "Routine exercise",
+      "text": "Units go home on the 20th."
+    },
+    {
+      "id": "H2",
+      "short": "Cover for an operation",
+      "text": "The exercise hides preparations to seize Tarsk Dam."
+    },
+    {
+      "id": "H3",
+      "short": "Coercion",
+      "text": "A show of force to pressure Elsin at the talks, with no intent to cross."
+    }
+  ],
+  "groundTruth": [
+    {
+      "day": 1,
+      "trueHypothesis": "H3",
+      "bestCall": "H3 at Moderate",
+      "state": "The exercise is real. Leadership enlarged it by 40% to gain leverage at the talks. 4th Army has drafted a contingency plan to seize Tarsk Dam (the \"northern option\"), but nobody has authorized it.",
+      "units": [
+        {
+          "label": "12 Mech Bde",
+          "x": 188,
+          "y": 140
+        },
+        {
+          "label": "31 Mech Bde",
+          "x": 226,
+          "y": 160
+        },
+        {
+          "label": "77 Eng Regt",
+          "x": 206,
+          "y": 172
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "trueHypothesis": "H3",
+      "bestCall": "H3 at Moderate (H2 at Low is a defensible early warning)",
+      "state": "The talks go badly. Contingency planning continues and is still not authorized. The delegation walks out that evening, after your brief.",
+      "units": [
+        {
+          "label": "12 Mech Bde",
+          "x": 188,
+          "y": 140
+        },
+        {
+          "label": "31 Mech Bde",
+          "x": 226,
+          "y": 160
+        },
+        {
+          "label": "77 Eng Regt",
+          "x": 206,
+          "y": 172
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "trueHypothesis": "H2",
+      "bestCall": "H2 at Moderate",
+      "state": "Leadership authorized the northern option overnight. Orders go out at 0400: medical support and fuel move to operational accounts, comms security tightens and the cover story starts.",
+      "units": [
+        {
+          "label": "12 Mech Bde",
+          "x": 188,
+          "y": 140
+        },
+        {
+          "label": "31 Mech Bde",
+          "x": 226,
+          "y": 160
+        },
+        {
+          "label": "77 Eng Regt",
+          "x": 206,
+          "y": 172
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "trueHypothesis": "H2",
+      "bestCall": "H2 at High",
+      "state": "12th Brigade's lead elements and 77th Engineer Regiment (bridging) leave Ostrel for a hidden staging area near the Dolan crossing. 31st Brigade stays behind at Ostrel as the visible \"exercise.\"",
+      "units": [
+        {
+          "label": "12 Bde (lead)",
+          "x": 338,
+          "y": 188
+        },
+        {
+          "label": "77 Eng Regt",
+          "x": 326,
+          "y": 204
+        },
+        {
+          "label": "Field hospital",
+          "x": 356,
+          "y": 184
+        },
+        {
+          "label": "12 Bde (rest)",
+          "x": 188,
+          "y": 140
+        },
+        {
+          "label": "31 Mech Bde",
+          "x": 226,
+          "y": 160
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "trueHypothesis": "H2",
+      "bestCall": "H2 at High",
+      "state": "Final preparations. The bridging moves forward and the field hospital expands. The incursion is set for dawn on the 20th, the same day as the closing ceremony.",
+      "units": [
+        {
+          "label": "12 Mech Bde",
+          "x": 338,
+          "y": 188
+        },
+        {
+          "label": "77 Eng (bridging)",
+          "x": 364,
+          "y": 212
+        },
+        {
+          "label": "Field hospital",
+          "x": 352,
+          "y": 182
+        },
+        {
+          "label": "31 Mech Bde",
+          "x": 226,
+          "y": 160
+        }
+      ]
+    }
+  ],
+  "adversaryPlan": [
+    {
+      "phase": "Signal",
+      "days": [
+        1,
+        2
+      ],
+      "wantsYouToBelieve": "H3",
+      "summary": "A coercer wants to be seen. The threat is real messaging.",
+      "channels": [
+        "S-KSB"
+      ]
+    },
+    {
+      "phase": "Conceal",
+      "days": [
+        3,
+        4,
+        5
+      ],
+      "wantsYouToBelieve": "H1",
+      "summary": "Once the operation is authorized, a visible threat only invites a defense, so Kordav switches to \"routine.\"",
+      "channels": [
+        "S-KSB",
+        "S-MERIDIAN",
+        "S-SOCIAL",
+        "S-CWS"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "S-KESTREL",
+      "codeName": "KESTREL",
+      "discipline": "HUMINT",
+      "access": "Clerk at the 4th Army fuel and supply depot in Varn. Sees allocations, issue orders and accounting codes, not unit plans. Recruited 8 months ago.",
+      "startingGrade": "C",
+      "trueReliability": 0.85,
+      "controlledByAdversary": false,
+      "postmortemNote": "A straight arrow who stays within his access. His one bad item was gossip he labeled as gossip."
+    },
+    {
+      "id": "S-MERIDIAN",
+      "codeName": "MERIDIAN",
+      "discipline": "SIGINT",
+      "access": "Standing coverage of 4th Army logistics nets and some brigade voice nets.",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "postmortemNote": "The channel is reliable, but Kordav knew it was covered and staged one item on it."
+    },
+    {
+      "id": "S-CIRRANE",
+      "codeName": "CIRRANE",
+      "discipline": "IMINT",
+      "access": "Commercial imagery tasked daily over Ostrel and the border. Depends on the weather.",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "postmortemNote": "Shows what's there and what isn't. Can't show intent on its own."
+    },
+    {
+      "id": "S-WREN",
+      "codeName": "WREN",
+      "discipline": "Liaison",
+      "access": "Elsin military intelligence. Long relationship. Elsin has asked for months to have the task force at Tarsk.",
+      "startingGrade": "B",
+      "trueReliability": 0.6,
+      "controlledByAdversary": false,
+      "postmortemNote": "Raises the alarm every day to get the battalion moved. Wrong on Days 1 and 2, right on Day 4."
+    },
+    {
+      "id": "S-KSB",
+      "codeName": "KSB",
+      "discipline": "OSINT",
+      "access": "Kordav State Broadcaster and official ministry channels.",
+      "startingGrade": "D",
+      "trueReliability": null,
+      "controlledByAdversary": true,
+      "postmortemNote": "Accurate about what the state wants said."
+    },
+    {
+      "id": "S-CWS",
+      "codeName": "CWS",
+      "discipline": "OSINT",
+      "access": "Continental Wire Service, an international news agency.",
+      "startingGrade": "B",
+      "trueReliability": 0.85,
+      "controlledByAdversary": false,
+      "postmortemNote": "An honest outlet that went circular on Day 5."
+    },
+    {
+      "id": "S-SOCIAL",
+      "codeName": "SOCIAL",
+      "discipline": "OSINT",
+      "access": "Social media monitoring. Individual accounts are unvetted.",
+      "startingGrade": "F",
+      "trueReliability": 0.3,
+      "controlledByAdversary": "partly",
+      "postmortemNote": "Real noise mixed with sockpuppets."
+    },
+    {
+      "id": "S-EMBASSY",
+      "codeName": "Embassy cable",
+      "discipline": "Cable",
+      "access": "Routine diplomatic traffic.",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "rosterHidden": true
+    },
+    {
+      "id": "S-SECURITY",
+      "codeName": "Security office",
+      "discipline": "Admin",
+      "access": "Task force security office.",
+      "startingGrade": "A",
+      "trueReliability": 1,
+      "controlledByAdversary": false,
+      "rosterHidden": true
+    }
+  ],
+  "reports": [
+    {
+      "id": "R-1-01",
+      "day": 1,
+      "sourceId": "S-KESTREL",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 3,
+      "text": "The depot's fuel allocation for IRON HARVEST is about 40% higher than last year's. Depot staff were told the increase came \"from Army level\" and weren't given a reason. The allocation is booked to the standard exercise account.",
+      "kind": "true",
+      "supports": [
+        "H2",
+        "H3"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "The scale-up was ordered for leverage. The exercise account code is the baseline that changes on Day 3.",
+      "pin": {
+        "x": 96,
+        "y": 256,
+        "label": "Fuel allocation up 40%"
+      }
+    },
+    {
+      "id": "R-1-02",
+      "day": 1,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 1,
+      "text": "On the eve of the Veyl talks, Kordav's defence minister told state TV that IRON HARVEST \"shows Elsin that Kordav's patience has limits.\"",
+      "kind": "true",
+      "supports": [
+        "H3",
+        "H2"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "The minister links the exercise to the talks in public. That's coercive signaling working as designed."
+    },
+    {
+      "id": "R-1-03",
+      "day": 1,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Elsin's service assesses that Kordav will try to seize Tarsk Dam \"within days.\" No sourcing is given. Elsin asks that the task force move its forward battalion to the Tarsk sector immediately.",
+      "kind": "noise",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [
+        "no-sourcing",
+        "agenda-aligned"
+      ],
+      "postmortemNote": "Elsin's standing request dressed up as an assessment. It turns out roughly right later, for no reason anyone had on Day 1."
+    },
+    {
+      "id": "R-1-04",
+      "day": 1,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Ostrel training area: about two mechanized brigades in field positions, a layout consistent with previous IRON HARVEST years. No bridging equipment seen. No activity at the Dolan river crossing.",
+      "kind": "true",
+      "supports": [
+        "H1",
+        "H2",
+        "H3"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Fits every hypothesis, so it can't tell them apart. It's the baseline: note where things aren't (Dolan).",
+      "pin": {
+        "x": 205,
+        "y": 150,
+        "label": "Two brigades in field positions"
+      }
+    },
+    {
+      "id": "R-1-05",
+      "day": 1,
+      "sourceId": "S-SOCIAL",
+      "discipline": "OSINT",
+      "sourceGrade": "F",
+      "credibility": 4,
+      "text": "Posts from Kordav's capital describe long fuel queues. Several blame \"military requisition.\" One mentions an outage at the Brenk refinery.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "different-cause"
+      ],
+      "postmortemNote": "The refinery outage caused the queues. Military fuel comes from depot stocks, not the capital's pumps."
+    },
+    {
+      "id": "R-2-01",
+      "day": 2,
+      "sourceId": "S-MERIDIAN",
+      "discipline": "SIGINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "4th Army logistics net: routine exercise traffic. One reference to a \"northern option\" planning cell meeting at 4th Army HQ. The context isn't clear.",
+      "kind": "true",
+      "supports": [
+        "H2",
+        "H3"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The contingency plan exists. Plans aren't intent: militaries draft options all the time."
+    },
+    {
+      "id": "R-2-02",
+      "day": 2,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 1,
+      "text": "Kordav's delegation arrives at the talks. Its head tells reporters: \"We came to listen. We did not come to wait forever.\"",
+      "kind": "true",
+      "supports": [
+        "H3"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Pressure rhetoric aimed at the table."
+    },
+    {
+      "id": "R-2-03",
+      "day": 2,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "Elsin border posts report Kordavan reconnaissance patrols near Dolan. Elsin repeats its request for the task force to move to Tarsk.",
+      "kind": "noise",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [
+        "no-corroboration",
+        "agenda-aligned"
+      ],
+      "postmortemNote": "Routine Kordavan border-guard patrols, misidentified.",
+      "pin": {
+        "x": 372,
+        "y": 210,
+        "label": "Patrols reported near Dolan"
+      }
+    },
+    {
+      "id": "R-2-04",
+      "day": 2,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": null,
+      "text": "Heavy cloud over Ostrel and the border. No usable imagery today.",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "A collection gap. Not knowing is not evidence.",
+      "pin": {
+        "x": 290,
+        "y": 190,
+        "label": "No imagery: cloud"
+      }
+    },
+    {
+      "id": "R-2-05",
+      "day": 2,
+      "sourceId": "S-KESTREL",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 5,
+      "text": "Depot staff are saying \"we're going across this time.\" The source adds that people say this every year.",
+      "kind": "noise",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [
+        "source-caveat"
+      ],
+      "postmortemNote": "Reliable source, worthless item. Grade the information, not just the source.",
+      "pin": {
+        "x": 96,
+        "y": 256,
+        "label": "Depot gossip"
+      }
+    },
+    {
+      "id": "R-2-06",
+      "day": 2,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Cable",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "A fisheries delegation from a third country requests a meeting with the task force about trawler licensing. The embassy asks who, exactly, it should forward this to.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Fish."
+    },
+    {
+      "id": "R-3-01",
+      "day": 3,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "The Veyl talks have collapsed. Kordav's delegation walked out late last night after Elsin rejected a flow-sharing proposal.",
+      "kind": "true",
+      "supports": [
+        "H2",
+        "H3"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "The trigger. The northern option was authorized within hours."
+    },
+    {
+      "id": "R-3-02",
+      "day": 3,
+      "sourceId": "S-KESTREL",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "This morning the depot was ordered to (a) send blood products and surgical supplies forward to a \"field medical point\" (the depot wasn't told where), and (b) move all IRON HARVEST fuel issues from the exercise account to a \"contingency\" account, effective 0400.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1",
+        "H3"
+      ],
+      "tells": [],
+      "postmortemNote": "The best item of the day, and squarely within KESTREL's access. Exercises rarely push blood products forward, and operations are funded from different accounts than training.",
+      "pin": {
+        "x": 96,
+        "y": 256,
+        "label": "Blood products sent forward"
+      }
+    },
+    {
+      "id": "R-3-03",
+      "day": 3,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 1,
+      "text": "Defence ministry statement: IRON HARVEST is \"a routine, scheduled training event\" that \"will conclude as planned on the 20th.\" Kordav \"remains committed to dialogue.\"",
+      "kind": "planted",
+      "supports": [
+        "H1"
+      ],
+      "contradicts": [
+        "H3"
+      ],
+      "tells": [
+        "tone-shift",
+        "convenient-timing"
+      ],
+      "reveal": {
+        "tell": "Two days running, Kordav tied IRON HARVEST to the talks: \"patience has limits\" (R-1-02) and \"we did not come to wait forever\" (R-2-02). The morning after the walkout, the same ministry calls it routine. A coercer whose talks just failed has every reason to turn the pressure up, not down.",
+        "crossCheck": {
+          "ids": [
+            "R-3-02",
+            "R-3-04"
+          ],
+          "text": "The same morning, KESTREL's depot pushed blood products forward and moved fuel to a \"contingency\" account at 0400 (R-3-02), and the logistics net went quiet at 0400 (R-3-04). A routine exercise needs neither."
+        },
+        "motive": "Once the operation was authorized, a visible threat only invited a defense. Kordav needed you to stop worrying, so it swapped the threat for \"routine.\""
+      },
+      "postmortemNote": "Compare with R-1-02 and R-2-02. The threat went quiet the morning after the walkout."
+    },
+    {
+      "id": "R-3-04",
+      "day": 3,
+      "sourceId": "S-MERIDIAN",
+      "discipline": "SIGINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Traffic on the 4th Army logistics net dropped sharply after 0400. Several stations moved to a net that hasn't been seen during this exercise.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "Comms security tightened at 0400, the same time as KESTREL's account change. Two independent sources line up on the timing."
+    },
+    {
+      "id": "R-3-05",
+      "day": 3,
+      "sourceId": "S-SOCIAL",
+      "discipline": "OSINT",
+      "sourceGrade": "F",
+      "credibility": 3,
+      "text": "A viral video claims to show Kordavan tanks heading for the border. It geolocates to the ring road around Kordav's capital, 300 km from the border. National Day is the 28th.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "location-mismatch"
+      ],
+      "postmortemNote": "National Day parade rehearsal."
+    },
+    {
+      "id": "R-4-01",
+      "day": 4,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "diagnostic": true,
+      "text": "Ostrel: about half of 12th Mechanized Brigade's vehicles are gone. There's a new vehicle concentration in a forest staging area 8 km from the Dolan crossing, including about 30 bridging vehicles (77th Engineer Regiment) and a tented facility consistent with a field medical unit. 31st Mechanized Brigade is still at Ostrel.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1",
+        "H3"
+      ],
+      "tells": [],
+      "postmortemNote": "The diagnostic item. Bridging equipment hidden near a real crossing, with medical support forward. A show of force is meant to be seen, and nobody hides one in a forest. It also finds the \"field medical point\" from R-3-02, so two independent sources converge.",
+      "pin": {
+        "x": 342,
+        "y": 194,
+        "label": "Bridging and medical tents in forest"
+      }
+    },
+    {
+      "id": "R-4-02",
+      "day": 4,
+      "sourceId": "S-MERIDIAN",
+      "discipline": "SIGINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Unencrypted voice on a 12th Brigade net: a company commander talks about \"loading for return to garrison on the 20th.\" The brigade has used encrypted voice for the whole exercise.",
+      "kind": "planted",
+      "supports": [
+        "H1"
+      ],
+      "contradicts": [],
+      "tells": [
+        "out-of-pattern",
+        "too-on-message"
+      ],
+      "reveal": {
+        "tell": "12th Brigade has used encrypted voice for the whole exercise. The one time it talks in the clear, it announces the cover story word for word. Real slips happen on routine chatter, not on the exact message the other side would want overheard.",
+        "crossCheck": {
+          "ids": [
+            "R-4-01"
+          ],
+          "text": "The same day, imagery shows half of 12th Brigade gone from Ostrel and a new concentration 8 km from the Dolan crossing (R-4-01). That's not a brigade loading for garrison."
+        },
+        "motive": "Kordav knew the net was covered. A reliable channel is the best place for a lie, because you trust the channel."
+      },
+      "postmortemNote": "Staged for MERIDIAN. Reliable channel, planted content."
+    },
+    {
+      "id": "R-4-03",
+      "day": 4,
+      "sourceId": "S-SOCIAL",
+      "discipline": "OSINT",
+      "sourceGrade": "F",
+      "credibility": 3,
+      "text": "A post from an account claiming to be a 31st Brigade conscript: \"Brigade-wide order today, exercise over, back to barracks on the 20th. Finally!\" A photo shows soldiers packing. The account was created three weeks ago and only posts about IRON HARVEST.",
+      "kind": "planted",
+      "supports": [
+        "H1"
+      ],
+      "contradicts": [],
+      "tells": [
+        "access-mismatch",
+        "new-account"
+      ],
+      "reveal": {
+        "tell": "A conscript wouldn't know a brigade-wide order with an exact date. The account is three weeks old and posts only about IRON HARVEST, which fits an account set up before the exercise for this job.",
+        "crossCheck": {
+          "ids": [
+            "R-4-01"
+          ],
+          "text": "The post is about 31st Brigade, which imagery shows still at Ostrel (R-4-01). Even if 31st really does go home on the 20th, that tells you nothing about 12th Brigade, the one moving toward Dolan."
+        },
+        "motive": "Fill open sources with \"going home\" so the story seems to be everywhere."
+      },
+      "postmortemNote": "A sockpuppet. A conscript doesn't know brigade-wide orders and dates. It's also about 31st Brigade, the one that isn't moving.",
+      "pin": {
+        "x": 205,
+        "y": 150,
+        "label": "\"Conscript\": brigade going home"
+      }
+    },
+    {
+      "id": "R-4-04",
+      "day": 4,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Elsin's service reports Kordavan engineers seen near Dolan. Elsin says it will \"act alone\" if the task force doesn't move.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The same alarmist source as Days 1 and 2, but now imagery corroborates it. Corroboration should move you, not tone.",
+      "pin": {
+        "x": 372,
+        "y": 210,
+        "label": "Engineers seen near Dolan"
+      }
+    },
+    {
+      "id": "R-4-05",
+      "day": 4,
+      "sourceId": "S-SECURITY",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "Phishing emails pretending to be from the task force travel office are going around. Do not open \"Updated_Per_Diem_Rates.xlsm\". Yes, even if the rates have gone up.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Don't open the spreadsheet."
+    },
+    {
+      "id": "R-5-01",
+      "day": 5,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Wire report: \"Kordavan forces will begin an orderly return to permanent bases by the 20th, defence sources say.\"",
+      "kind": "planted",
+      "supports": [
+        "H1"
+      ],
+      "contradicts": [],
+      "tells": [
+        "circular-origin"
+      ],
+      "reveal": {
+        "tell": "Its key phrase, \"orderly return to permanent bases by the 20th,\" matches the ministry press release word for word. Unnamed \"defence sources\" repeating a press release are the press release.",
+        "crossCheck": {
+          "ids": [
+            "R-5-02"
+          ],
+          "text": "Read it next to the KSB release the same day (R-5-02): one origin, two items."
+        },
+        "motive": "CWS isn't lying. It repeated the ministry line, and Kordav got a second, more trusted voice for free."
+      },
+      "postmortemNote": "Uses the exact wording of R-5-02 (\"orderly return to permanent bases by the 20th\"). The \"defence sources\" are the press release. Two items, one origin."
+    },
+    {
+      "id": "R-5-02",
+      "day": 5,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 1,
+      "text": "Defence ministry press release: units will make \"an orderly return to permanent bases by the 20th.\" The defence minister will attend a closing ceremony at Ostrel.",
+      "kind": "planted",
+      "supports": [
+        "H1"
+      ],
+      "contradicts": [],
+      "tells": [
+        "only-one-chain"
+      ],
+      "reveal": {
+        "tell": "Every \"going home\" item in this crisis comes through a channel Kordav controls or can feed: its ministry (R-3-03, R-5-02), an unencrypted call on a net it knows is covered (R-4-02), a new social media account (R-4-03) and a wire report quoting the ministry (R-5-01). Nothing independent backs it.",
+        "crossCheck": {
+          "ids": [
+            "R-5-03"
+          ],
+          "text": "The same day, imagery shows bridging vehicles within 2 km of the river and the field hospital growing (R-5-03). Units heading back to base don't push bridging toward a border river."
+        },
+        "motive": "The closing ceremony is real (R-5-03 shows the stands going up). Kordav wrapped the lie around a true event so it would check out."
+      },
+      "postmortemNote": "Every \"going home\" item traces back to channels Kordav controls. Imagery says otherwise.",
+      "pin": {
+        "x": 205,
+        "y": 150,
+        "label": "Closing ceremony announced"
+      }
+    },
+    {
+      "id": "R-5-03",
+      "day": 5,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Dolan staging area: about 40% more vehicles than yesterday. The bridging vehicles have moved to within 2 km of the river, and the field medical facility has grown. At Ostrel, 31st Brigade is still in place and stands and flags are going up for a ceremony. No snow cover anywhere in the area.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1",
+        "H3"
+      ],
+      "tells": [],
+      "postmortemNote": "Real preparations. The ceremony at Ostrel is real too: good deception wraps itself in true details.",
+      "pin": {
+        "x": 366,
+        "y": 214,
+        "label": "Bridging within 2 km of the river"
+      }
+    },
+    {
+      "id": "R-5-04",
+      "day": 5,
+      "sourceId": "S-KESTREL",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "The depot has been ordered to stop all fuel issues to 12th Brigade \"until further notice.\" The source understands 12th Brigade is now supplied \"from somewhere else,\" and has been told not to discuss it.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "12th Brigade is on a separate operational supply chain and has been compartmented. KESTREL reports the limits of what he knows honestly.",
+      "pin": {
+        "x": 96,
+        "y": 256,
+        "label": "Fuel to 12th Bde stopped"
+      }
+    },
+    {
+      "id": "R-5-05",
+      "day": 5,
+      "sourceId": "S-SOCIAL",
+      "discipline": "OSINT",
+      "sourceGrade": "F",
+      "credibility": 3,
+      "text": "A widely shared photo shows Kordavan tanks on rail flatcars at the Ostrel railhead, captioned \"Going home!\" There's snow on the vehicles and the ground.",
+      "kind": "planted",
+      "supports": [
+        "H1"
+      ],
+      "contradicts": [],
+      "tells": [
+        "recycled-media"
+      ],
+      "reveal": {
+        "tell": "There's snow on the vehicles and on the ground.",
+        "crossCheck": {
+          "ids": [
+            "R-5-03"
+          ],
+          "text": "The same day, imagery reports no snow cover anywhere in the area (R-5-03). The photo isn't from this week."
+        },
+        "motive": "An old photo costs nothing and spreads faster than any statement. This one is from last year's end of exercise."
+      },
+      "postmortemNote": "Last year's post-exercise photo.",
+      "pin": {
+        "x": 166,
+        "y": 186,
+        "label": "Photo: tanks on flatcars"
+      }
+    },
+    {
+      "id": "R-5-06",
+      "day": 5,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Kordav's central bank raises interest rates by 50 basis points, citing inflation.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Economics."
+    }
+  ],
+  "tellLabels": {
+    "no-sourcing": "No sourcing given",
+    "agenda-aligned": "Lines up with the reporter's own agenda",
+    "different-cause": "The item itself names a different cause",
+    "no-corroboration": "Nothing else backs it up",
+    "source-caveat": "The source labels it as gossip",
+    "tone-shift": "Sudden change of tone from the same speaker",
+    "convenient-timing": "Timing that's too convenient",
+    "location-mismatch": "The location doesn't fit the claim",
+    "out-of-pattern": "Breaks the unit's own pattern",
+    "access-mismatch": "The reporter couldn't have known this",
+    "new-account": "New account that posts on one topic",
+    "circular-origin": "Same wording as another item: one origin",
+    "only-one-chain": "Only adversary-controlled channels carry it",
+    "recycled-media": "Old media: snow that isn't there",
+    "too-on-message": "Says exactly what the adversary wants you to hear"
+  },
+  "scoring": {
+    "call": {
+      "low": [
+        1,
+        -1
+      ],
+      "moderate": [
+        2,
+        -2
+      ],
+      "high": [
+        3,
+        -4
+      ]
+    },
+    "evidence": {
+      "true": 1,
+      "noise": 0,
+      "clutter": -1,
+      "planted": -2
+    },
+    "challenge": {
+      "true": -1,
+      "noise": 0,
+      "clutter": 0,
+      "planted": 1
+    },
+    "maxEvidence": 3
+  },
+  "endings": [
+    {
+      "id": "deterred",
+      "tone": "good",
+      "title": "Deterred",
+      "points": 5,
+      "if": {
+        "assetAt": "battalion",
+        "since": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "text": "Kordavan lead elements reach Dolan at dawn and find a full battalion dug in on the far bank. They halt. By noon KSB announces that IRON HARVEST \"concluded successfully.\" The ceremony goes ahead with the minister smiling through it. Nobody will ever credit you with a war that didn't happen. Halvorsen does."
+    },
+    {
+      "id": "standoff-late",
+      "tone": "warn",
+      "title": "Standoff",
+      "points": 1,
+      "if": {
+        "assetAt": "battalion",
+        "since": [
+          5
+        ]
+      },
+      "text": "2nd Battalion is still deploying when Kordavan engineers bridge the river. They take the dam's access road but not the dam. A tense week of negotiation follows under a much worse map."
+    },
+    {
+      "id": "standoff-thin",
+      "tone": "warn",
+      "title": "Standoff",
+      "points": 1,
+      "if": {
+        "assetAt": "company"
+      },
+      "text": "The lead company holds the dam itself, but Kordavan engineers bridge the river at Dolan and take the access road behind it. The company is cut off but still on the dam when the talking starts again. A tense week of negotiation follows under a much worse map."
+    },
+    {
+      "id": "seized",
+      "tone": "bad",
+      "title": "Seized",
+      "points": -5,
+      "default": true,
+      "text": "Kordav holds Tarsk Dam by 0900 and frames it as \"securing critical water infrastructure.\" The closing ceremony goes ahead."
+    }
+  ],
+  "postmortem": {
+    "script": [
+      {
+        "days": [
+          1,
+          2
+        ],
+        "text": "Kordav wanted you to see a threat, and the threat was real: a coercion campaign for the talks. The \"northern option\" existed as a plan, but nobody had authorized it. Elsin was raising the alarm for its own reasons. If you warned at Low confidence, that's what warning is for. If you moved the battalion, Kordav got photos to wave at the table."
+      },
+      {
+        "days": [
+          3
+        ],
+        "text": "The walkout changed the answer overnight. KESTREL's account codes and blood products were the tell, and the comms going quiet matched his timing. The ministry calling the exercise \"routine\" the morning after talks collapsed was the loudest signal of the day, and it pointed the opposite way from what it said."
+      },
+      {
+        "days": [
+          4
+        ],
+        "text": "Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. This was the day for High confidence: Moderate got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
+      },
+      {
+        "days": [
+          5
+        ],
+        "text": "Three \"going home\" items, all from one origin. The snow in the photo was last year's."
+      }
+    ],
+    "lessons": [
+      "Plans aren't intent.",
+      "Grade the information, not just the source.",
+      "When a coercer suddenly goes quiet, the threat may have become an operation.",
+      "Confidence moves forces. Under-calling a clear warning has a cost too.",
+      "Count origins, not reports.",
+      "Look for what's missing as well as what's there."
+    ]
+  },
+  "collectionResults": [],
+  "policyNote": "A company can watch the crossing. Only the full battalion can hold the dam.",
+  "countdown": {
+    "toDay": 6,
+    "label": "the announced end of IRON HARVEST (the 20th)"
+  },
+  "dailyUpdates": [
+    {
+      "day": 1,
+      "text": "IRON HARVEST is under way at Ostrel. Water talks open tomorrow in a neutral capital."
+    },
+    {
+      "day": 2,
+      "text": "The talks open this morning. IRON HARVEST continues at Ostrel."
+    },
+    {
+      "day": 3,
+      "text": "The talks broke up overnight. Both delegations have gone home, and no new date has been set."
+    },
+    {
+      "day": 4,
+      "text": "No talks are scheduled. Elsin has put its border police on alert along the Veyl."
+    },
+    {
+      "day": 5,
+      "text": "Kordavan state media is covering preparations for the end of IRON HARVEST. This is your last brief before the announced end date."
+    }
+  ],
+  "map": {
+    "viewBox": [
+      0,
+      0,
+      600,
+      420
+    ],
+    "scaleKm": 10,
+    "scaleUnits": 50,
+    "river": {
+      "name": "Veyl",
+      "d": "M592,412 C560,372 520,330 470,300 C445,284 425,262 408,247 C396,238 388,231 380,225 C350,236 310,244 270,238 C220,230 170,222 120,220 C80,218 45,228 10,236"
+    },
+    "reservoir": "M410,252 C425,262 450,278 468,296 C478,306 470,318 455,312 C438,304 420,284 404,262 Z",
+    "border": "M235,420 L268,372 L300,338 L322,300 L352,268 L380,225 L401,196 L438,160 L462,118 L498,74 L522,30 L530,0",
+    "forests": [
+      {
+        "d": "M318,176 C330,166 356,168 368,180 C376,192 368,210 352,214 C336,218 318,208 314,196 C311,188 312,182 318,176 Z",
+        "label": "Dolan forest",
+        "lx": 300,
+        "ly": 168
+      }
+    ],
+    "training": {
+      "cx": 205,
+      "cy": 150,
+      "rx": 62,
+      "ry": 32,
+      "label": "Ostrel training area"
+    },
+    "highlands": [
+      {
+        "cx": 548,
+        "cy": 390,
+        "r": [
+          18,
+          32,
+          46
+        ]
+      }
+    ],
+    "regions": [
+      {
+        "name": "KORDAV",
+        "x": 70,
+        "y": 330
+      },
+      {
+        "name": "ELSIN",
+        "x": 470,
+        "y": 215
+      }
+    ],
+    "places": [
+      {
+        "id": "tarsk",
+        "name": "Tarsk Dam",
+        "x": 408,
+        "y": 247,
+        "type": "dam",
+        "lx": 414,
+        "ly": 238
+      },
+      {
+        "id": "dolan",
+        "name": "Dolan crossing",
+        "x": 380,
+        "y": 225,
+        "type": "crossing",
+        "lx": 286,
+        "ly": 238
+      },
+      {
+        "id": "varn",
+        "name": "Varn depot",
+        "x": 96,
+        "y": 256,
+        "type": "depot",
+        "lx": 106,
+        "ly": 276
+      },
+      {
+        "id": "railhead",
+        "name": "Ostrel railhead",
+        "x": 166,
+        "y": 186,
+        "type": "rail",
+        "lx": 96,
+        "ly": 202
+      },
+      {
+        "id": "garrison",
+        "name": "TF VEYL garrison",
+        "x": 528,
+        "y": 352,
+        "type": "town",
+        "lx": 444,
+        "ly": 378
+      }
+    ],
+    "offmap": [
+      {
+        "text": "Kordav capital 300 km",
+        "x": 14,
+        "y": 20
+      }
+    ],
+    "friendly": {
+      "home": {
+        "x": 528,
+        "y": 352
+      },
+      "forward": {
+        "x": 452,
+        "y": 205
+      }
+    },
+    "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted."
+  }
+}

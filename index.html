@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intel Cell Sim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one narrow column of message traffic under a sticky
+   EXERCISE banner; a hand-drawn-feeling situation map at the top of each
+   day; mono metadata like a cable header, sans body, condensed caps for
+   headings; the only flourish is the brief's stamp. */
+:root{
+  --paper:#e6eae8;
+  --card:#f6f7f5;
+  --ink:#151a1e;
+  --muted:#56616a;
+  --line:#c5ccc9;
+  --accent:#9a5d00;
+  --accent-soft:#f1e2c6;
+  --banner:#3d6a4a;
+  --banner-ink:#f2f6f2;
+  --good:#2b7a4b;
+  --bad:#b0281f;
+  --warn:#a86a00;
+  --stamp:#b0281f;
+  --m-land:#efeadc;
+  --m-elsin:#e4e7d8;
+  --m-water:#5b8fb0;
+  --m-forest:#a9bf98;
+  --m-ink:#3a4148;
+  --friendly:#2f62a8;
+  --hostile:#b0281f;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101417;--card:#181e22;--ink:#e3e8e6;--muted:#93a0a8;--line:#2b353b;
+    --accent:#e2a33c;--accent-soft:#3a2d16;--banner:#2c5537;--banner-ink:#e6f0e8;
+    --good:#5cbf84;--bad:#ec6a5e;--warn:#e2a33c;--stamp:#ec6a5e;
+    --m-land:#232823;--m-elsin:#1e2420;--m-water:#5f93b5;--m-forest:#3c5236;--m-ink:#c9d0cc;
+    --friendly:#6f9be0;--hostile:#ec6a5e;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101417;--card:#181e22;--ink:#e3e8e6;--muted:#93a0a8;--line:#2b353b;
+  --accent:#e2a33c;--accent-soft:#3a2d16;--banner:#2c5537;--banner-ink:#e6f0e8;
+  --good:#5cbf84;--bad:#ec6a5e;--warn:#e2a33c;--stamp:#ec6a5e;
+  --m-land:#232823;--m-elsin:#1e2420;--m-water:#5f93b5;--m-forest:#3c5236;--m-ink:#c9d0cc;
+  --friendly:#6f9be0;--hostile:#ec6a5e;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--f-body);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.banner{position:sticky;top:0;z-index:5;background:var(--banner);color:var(--banner-ink);font:600 11px/1 var(--f-mono);letter-spacing:.18em;text-align:center;padding:5px 8px;text-transform:uppercase}
+.banner.bottom{position:static;margin-top:32px}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+.top{display:grid;gap:2px;padding:16px 0 10px}
+.eyebrow{font:500 12px/1.3 var(--f-mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;letter-spacing:.02em;text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:30px;text-transform:uppercase}
+h2{font-size:24px;text-transform:uppercase}
+h3{font-size:19px;text-transform:uppercase}
+.status-line{display:flex;flex-wrap:wrap;gap:6px 14px;font:12px/1.4 var(--f-mono);color:var(--muted)}
+.status-line b{color:var(--ink);font-weight:600}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);position:sticky;top:21px;background:var(--paper);z-index:4;padding-top:6px}
+.tab{flex:1;background:none;border:0;border-bottom:3px solid transparent;padding:10px 4px 8px;font:600 15px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .badge{display:inline-block;min-width:18px;margin-left:4px;padding:2px 5px;border-radius:9px;background:var(--accent-soft);color:var(--ink);font:600 11px/1 var(--f-mono)}
+main{display:grid;gap:14px;padding:16px 0 8px}
+.stack{display:grid;gap:12px}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.mono{font-family:var(--f-mono)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:12px 14px;display:grid;gap:10px}
+.card.flagged{border-left:4px solid var(--warn)}
+.card.nr{opacity:.72}
+.card.hl{box-shadow:0 0 0 2px var(--accent)}
+.cable-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font:500 12.5px/1.3 var(--f-mono);color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:8px}
+.cable-h .rid{color:var(--ink);font-weight:600}
+.cable-h .src{color:var(--ink)}
+.cable-h .recv{margin-left:auto;font-weight:600;color:var(--ink);border:1px solid var(--line);padding:1px 6px;border-radius:3px}
+.cable-t{font-size:16px;line-height:1.55}
+.toggles{display:flex;gap:6px;flex-wrap:wrap}
+.chip{min-height:40px;padding:0 12px;border:1px solid var(--line);background:var(--paper);border-radius:3px;font:500 13px/1 var(--f-body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.chip.flag[aria-pressed="true"]{border-color:var(--warn)}
+.yourgrade{font:12.5px/1.4 var(--f-mono);color:var(--muted)}
+.yourgrade b{color:var(--ink)}
+.msg,.readin{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--banner);border-radius:4px;padding:12px 14px;display:grid;gap:6px}
+.readin{border-left-color:var(--ink)}
+.from{font:500 12px/1.3 var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.msg q{font-style:italic;quotes:"\201C" "\201D"}
+.facts{list-style:none;padding:0;margin:0;display:grid;gap:2px;font:13px/1.45 var(--f-mono);color:var(--muted)}
+.facts li::before{content:"\25B8 ";color:var(--ink)}
+.note{font-size:14px;border-top:1px dashed var(--line);padding-top:6px;color:var(--muted)}
+.section-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:4px}
+details{border:1px solid var(--line);border-radius:4px;background:var(--card)}
+details>summary{cursor:pointer;padding:10px 14px;font:600 16px/1.2 var(--f-display);text-transform:uppercase;letter-spacing:.06em;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+details[open]>summary::after{content:"\2212"}
+details .inner{padding:0 14px 14px;display:grid;gap:10px}
+details .card{background:var(--paper)}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:8px}
+legend{font:600 13px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;padding:0}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;text-align:left;padding:11px 12px;border:1px solid var(--line);background:var(--card);border-radius:4px;cursor:pointer}
+.opt .k{font:600 15px/1.4 var(--f-mono);grid-row:span 2}
+.opt .t{font-weight:600}
+.opt .d{font-size:14px;color:var(--muted)}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.confs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.conf{padding:10px 6px;border:1px solid var(--line);background:var(--card);border-radius:4px;cursor:pointer;display:grid;gap:2px;text-align:center}
+.conf b{font:600 16px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+.conf span{font-size:12.5px;color:var(--muted)}
+.conf[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.predict{font-size:14.5px;padding:10px 12px;border:1px dashed var(--line);border-radius:4px}
+.predict b{font-weight:600}
+.evi{display:grid;grid-template-columns:76px 1fr;gap:8px;text-align:left;padding:9px 10px;border:1px solid var(--line);background:var(--card);border-radius:4px;cursor:pointer;font-size:14px}
+.evi .id{font:600 12.5px/1.5 var(--f-mono)}
+.evi[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.evi:disabled{opacity:.45;cursor:not-allowed}
+.evigroup{display:grid;gap:6px}
+.evigroup h4{margin:6px 0 0;font:600 12px/1 var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+textarea{width:100%;min-height:72px;font:15px/1.45 var(--f-body);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:4px;padding:10px}
+label.lab{font:600 13px/1 var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.btn{min-height:48px;padding:0 18px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:600 17px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.stamp{justify-self:start;display:inline-grid;gap:2px;border:3px double var(--stamp);color:var(--stamp);padding:6px 12px;transform:rotate(-2.5deg);font:700 18px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase}
+.stamp small{font:500 11px/1.2 var(--f-mono);letter-spacing:.06em}
+.record{display:grid;gap:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px/1.2 var(--f-mono);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+.tablewrap{overflow-x:auto}
+.pill{display:inline-block;padding:2px 7px;border-radius:3px;font:600 11px/1.4 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;border:1px solid currentColor}
+.k-true{color:var(--good)}
+.k-planted{color:var(--bad)}
+.k-noise,.k-clutter{color:var(--muted)}
+.right{color:var(--good);font-weight:600}
+.wrong{color:var(--bad);font-weight:600}
+.ending{border:1px solid var(--line);border-top:5px solid var(--ink);background:var(--card);border-radius:4px;padding:14px;display:grid;gap:8px}
+.ending.good{border-top-color:var(--good)}
+.ending.warn{border-top-color:var(--warn)}
+.ending.bad{border-top-color:var(--bad)}
+.score{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.score .n{font:700 52px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.reveal{display:grid;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--paper)}
+.reveal .head{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;font:12.5px/1.4 var(--f-mono)}
+.reveal .txt{font-size:14px;color:var(--muted)}
+.reveal .what{font-size:15px}
+.tells{font-size:13.5px;color:var(--muted)}
+.why{display:grid;gap:8px;border-left:3px solid var(--bad);padding-left:10px}
+.why p{font-size:15px}
+.whyk{display:block;font:600 11.5px/1.4 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.caught{color:var(--good);font:600 12px/1 var(--f-mono)}
+.missed{color:var(--bad);font:600 12px/1 var(--f-mono)}
+ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.overlay{position:fixed;inset:0;background:rgba(10,14,16,.55);display:grid;place-items:end center;z-index:10;padding:16px}
+.sheet{width:100%;max-width:560px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:12px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:4px;font-size:14px;z-index:11;max-width:90vw}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.switch button{min-width:64px;min-height:36px;border-radius:18px;border:1px solid var(--line);background:var(--paper);font:600 13px/1 var(--f-mono);cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.loading{padding:40px 0;font-family:var(--f-mono);color:var(--muted)}
+/* Map */
+.map{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:8px;display:grid;gap:6px}
+.map svg{display:block;width:100%;height:auto;border-radius:2px}
+.m-land{fill:var(--m-land)}
+.m-elsin{fill:var(--m-elsin)}
+.m-hill{fill:none;stroke:var(--m-ink);stroke-opacity:.22;stroke-width:1}
+.m-forest{fill:var(--m-forest);stroke:var(--m-ink);stroke-opacity:.25}
+.m-train{fill:url(#hatch);stroke:var(--m-ink);stroke-opacity:.45;stroke-dasharray:4 3}
+.m-hatch{stroke:var(--m-ink);stroke-opacity:.25;stroke-width:1.2}
+.m-river{fill:none;stroke:var(--m-water);stroke-width:4;stroke-linecap:round}
+.m-res{fill:var(--m-water);fill-opacity:.85}
+.m-border{fill:none;stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:9 4 2 4}
+.m-place{fill:var(--card);stroke:var(--m-ink);stroke-width:1.5}
+.m-dam{stroke:var(--m-ink);stroke-width:4;stroke-linecap:square}
+.m-lab{font:500 10.5px/1 var(--f-mono);fill:var(--m-ink)}
+.m-region{font:700 22px/1 var(--f-display);letter-spacing:.35em;fill:var(--m-ink);fill-opacity:.28}
+.m-rivlab{font:italic 500 11px/1 var(--f-body);fill:var(--m-water)}
+.m-off{font:500 10px/1 var(--f-mono);fill:var(--muted)}
+.m-scale{stroke:var(--m-ink);stroke-width:2}
+.m-fr rect{fill:var(--card);stroke:var(--friendly);stroke-width:2}
+.m-fr line{stroke:var(--friendly);stroke-width:1.4}
+.m-fr text{font:600 9.5px/1 var(--f-mono);fill:var(--friendly)}
+.m-hu path{fill:var(--card);stroke:var(--hostile);stroke-width:2}
+.m-hu text{font:600 9.5px/1 var(--f-mono);fill:var(--hostile)}
+.m-pin{cursor:pointer}
+.m-pin circle.dot{fill:var(--card);stroke:var(--m-ink);stroke-width:1.6}
+.m-pin.today circle.dot{fill:var(--accent);stroke:var(--accent)}
+.m-pin.doubted circle.dot{stroke-dasharray:2 2;fill-opacity:.4}
+.m-pin.sel circle.dot{stroke:var(--ink);stroke-width:3}
+.m-pin text{font:600 9px/1 var(--f-mono);fill:var(--ink)}
+.m-pin .hit{fill:transparent}
+.mapcap{font-size:13.5px;color:var(--muted);min-height:1.4em}
+.mapcap b{color:var(--ink);font-family:var(--f-mono);font-weight:600}
+.daypick{display:flex;gap:4px;flex-wrap:wrap}
+.daypick button{min-width:44px;min-height:36px;border:1px solid var(--line);background:var(--paper);border-radius:3px;font:600 13px/1 var(--f-mono);cursor:pointer}
+.daypick button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media (prefers-reduced-motion:no-preference){
+  .stamp{animation:stamp .28s ease-out}
+  @keyframes stamp{from{transform:rotate(-2.5deg) scale(1.25);opacity:0}to{transform:rotate(-2.5deg) scale(1);opacity:1}}
+  .m-pin.today circle.dot{animation:ping 1.6s ease-out 2}
+  @keyframes ping{0%{stroke-width:1.6}40%{stroke-width:6}100%{stroke-width:1.6}}
+}
+@media (max-width:400px){
+  h1{font-size:26px}
+  .evi{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="banner" aria-hidden="true">Exercise · Exercise · Exercise</div>
+<div class="wrap"><div id="app"><p class="loading">Loading the crisis file…</p></div></div>
+<div class="banner bottom" aria-hidden="true">Exercise · Exercise · Exercise</div>
+<div id="layer"></div>
+<script>
+(function(){
+'use strict';
+
+/* ---------- Engine constants (doctrine, not crisis content) ---------- */
+const CRISIS_URL = 'crises/border-buildup.json';
+const LS_PREFIX = 'intel-cell-sim:';
+const SOURCE_SCALE = {A:'Completely reliable',B:'Usually reliable',C:'Fairly reliable',D:'Not usually reliable',E:'Unreliable',F:'Reliability cannot be judged'};
+const INFO_SCALE = {1:'Confirmed by other sources',2:'Probably true',3:'Possibly true',4:'Doubtful',5:'Improbable',6:'Truth cannot be judged'};
+const CONF = [
+  {id:'low', label:'Low', words:'might / could'},
+  {id:'moderate', label:'Moderate', words:'likely'},
+  {id:'high', label:'High', words:'almost certainly'}
+];
+const KIND_LABEL = {'true':'True','noise':'Noise','planted':'Planted','clutter':'Clutter'};
+const IDLE_MS = 120000, TICK_MS = 15000;
+
+let C = null;          // crisis data
+let S = null;          // player state (plain JSON)
+const ui = {tab:'inbox', sheet:null, toast:'', pin:null, pmDay:5};
+let store = {mode:'local', ref:null, ok:false};
+const app = document.getElementById('app');
+const layer = document.getElementById('layer');
+
+/* ---------- Helpers ---------- */
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+const rep = id => C.reports.find(r => r.id === id);
+const src = id => C.sources.find(s => s.id === id) || {codeName:id, discipline:''};
+const hyp = id => C.hypotheses.find(h => h.id === id);
+const confLabel = id => (CONF.find(c => c.id === id) || {}).label || id;
+const reportsFor = d => C.reports.filter(r => r.day === d);
+const dayLabel = d => C.dayLabels[d-1] || ('Day ' + d);
+const briefCount = () => Object.keys(S.briefs).length;
+const curDay = () => Math.min(briefCount() + 1, C.days);
+const rank = lvl => (C.asset.levels[lvl] || {rank:0}).rank;
+function unlocked(d){
+  if (d === 1 || S.playAhead) return true;
+  const prev = S.briefs[d-1];
+  return !!prev && todayStr() > prev.date;
+}
+function received(r){ return (r.sourceGrade || '?') + (r.credibility == null ? '–' : r.credibility); }
+function assetLabel(){ return (C.asset.levels[S.asset] || C.asset.levels.home).label; }
+const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
+
+function fresh(){
+  return {v:2, crisisId:C.id, started:false, playAhead:false, grades:{}, drafts:{}, briefs:{}, replies:{},
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, done:false, ending:null, savedAt:null};
+}
+function normalize(st){
+  if (!st || st.crisisId !== C.id) return null;
+  const s = Object.assign(fresh(), clone(st));
+  if (s.asset === 'forward') s.asset = 'battalion';
+  if (!C.asset.levels[s.asset]) s.asset = 'home';
+  return s;
+}
+
+/* ---------- Customer policy, events, endings, scoring ---------- */
+function matchCond(cond, brief, asset){
+  if (cond.hypothesis && ![].concat(cond.hypothesis).includes(brief.hyp)) return false;
+  if (cond.confidence && !cond.confidence.includes(brief.conf)) return false;
+  if (cond.assetAt && ![].concat(cond.assetAt).includes(asset)) return false;
+  return true;
+}
+function resolvePolicy(day, brief){
+  const asset = S.asset;
+  const frozen = S.frozenBriefDays.includes(day);
+  const rule = C.customerPolicy.find(r => matchCond(r.if, brief, asset));
+  const action = rule ? rule.action : 'hold';
+  if (action === 'deploy'){
+    const target = rule.level || 'battalion';
+    if (rank(asset) >= rank(target)) return {reply:'hold_' + asset, asset};
+    if (frozen) return {reply:'frozen', asset};
+    return {reply:(asset === 'home' ? 'deploy_' : 'upgrade_') + target, asset:target, deployed:true};
+  }
+  if (action === 'withdraw') return {reply:'withdraw', asset:'home'};
+  return {reply:action, asset};
+}
+function eventFires(cond){
+  if (cond.deployedOnAnyDay && !S.deployDays.some(d => cond.deployedOnAnyDay.includes(d))) return false;
+  return true;
+}
+function applyEffect(eff, day){
+  if (eff.assetTo && eff.assetTo !== S.asset){ S.asset = C.asset.levels[eff.assetTo] ? eff.assetTo : 'home'; S.assetSince = day; }
+  if (eff.freezeBriefDays) eff.freezeBriefDays.forEach(d => { if (!S.frozenBriefDays.includes(d)) S.frozenBriefDays.push(d); });
+}
+function evalEnding(){
+  for (const e of C.endings){
+    if (e.default) return e;
+    const c = e.if || {};
+    if (c.assetAt && ![].concat(c.assetAt).includes(S.asset)) continue;
+    if (c.since && !c.since.includes(S.assetSince)) continue;
+    return e;
+  }
+  return C.endings[C.endings.length-1];
+}
+function scoreDay(d){
+  const b = S.briefs[d];
+  const t = C.groundTruth.find(g => g.day === d);
+  const right = b.hyp === t.trueHypothesis;
+  const pay = C.scoring.call[b.conf];
+  const call = right ? pay[0] : pay[1];
+  const ev = b.evidence.reduce((s, id) => s + (C.scoring.evidence[rep(id).kind] || 0), 0);
+  return {right, call, ev, truth:t};
+}
+function doubtPoints(){
+  return C.reports.reduce((s, r) => s + ((S.grades[r.id] || {}).f ? (C.scoring.challenge[r.kind] || 0) : 0), 0);
+}
+
+/* ---------- Actions ---------- */
+function draft(d){
+  if (!S.drafts[d]) S.drafts[d] = {hyp:null, conf:null, evidence:[], note:''};
+  return S.drafts[d];
+}
+function sendBrief(d){
+  tick();
+  const dr = draft(d);
+  const brief = {hyp:dr.hyp, conf:dr.conf, evidence:dr.evidence.slice(0, C.scoring.maxEvidence), note:(dr.note||'').trim(),
+    date:todayStr(), sentAt:new Date().toISOString(), minutes:Math.max(1, Math.round((S.activeMs[d] || 0)/60000))};
+  const res = resolvePolicy(d, brief);
+  if (res.asset !== S.asset){ S.asset = res.asset; S.assetSince = d; }
+  if (res.deployed) S.deployDays.push(d);
+  brief.reply = res.reply;
+  S.briefs[d] = brief;
+  delete S.drafts[d];
+  if (d < C.days){
+    S.replies[d+1] = {key:res.reply};
+    C.events.filter(e => e.atStartOfDay === d+1 && !S.firedEvents.includes(e.id)).forEach(e => {
+      if (eventFires(e.if || {})){
+        applyEffect(e.effect || {}, d+1);
+        S.firedEvents.push(e.id);
+        S.replies[d+1] = {key:e.replyId, note:e.note || ''};
+      }
+    });
+    S.posture[d+1] = S.asset;
+    ui.tab = 'inbox';
+  } else {
+    S.done = true;
+    S.ending = evalEnding().id;
+    ui.tab = 'postmortem';
+  }
+  ui.pin = null;
+  save();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Active-time clock: visible page, input in the last 2 min ---------- */
+let lastAct = Date.now(), lastTick = Date.now();
+function tick(){
+  const now = Date.now(), dt = Math.min(now - lastTick, TICK_MS);
+  lastTick = now;
+  if (!C || !S || !S.started || S.done || document.hidden || now - lastAct > IDLE_MS) return;
+  const d = curDay();
+  if (!isOpen(d)) return;
+  S.activeMs[d] = (S.activeMs[d] || 0) + dt;
+}
+['pointerdown','keydown','input','scroll','touchstart'].forEach(t => document.addEventListener(t, () => { lastAct = Date.now(); }, {passive:true}));
+
+/* ---------- Persistence: account storage with a local fallback ---------- */
+let saveTimer = null, writing = false, again = false;
+function save(){
+  S.savedAt = new Date().toISOString();
+  try { localStorage.setItem(LS_PREFIX + C.id, JSON.stringify(S)); } catch(e) {}
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flush, 500);
+}
+async function flush(){
+  if (store.mode !== 'db' || !store.ref) return;
+  if (writing){ again = true; return; }
+  writing = true;
+  try {
+    await store.ref.set({state:clone(S), savedAt:S.savedAt});
+    store.ok = true;
+  } catch(e) {
+    store.ok = false;
+    const code = e && e.code;
+    if (['invalid_argument','revoked','not_granted','capability_disabled','capability_removed'].includes(code)) store.mode = 'local';
+  }
+  writing = false;
+  updateSaveStatus();
+  if (again){ again = false; flush(); }
+}
+function loadLocal(){
+  try { const raw = localStorage.getItem(LS_PREFIX + C.id); return raw ? JSON.parse(raw) : null; } catch(e) { return null; }
+}
+async function connectAccount(){
+  const cl = window.claude;
+  if (!cl || typeof cl.use !== 'function') { updateSaveStatus(); return; }
+  try {
+    const both = await Promise.all([cl.use('user'), cl.use('db')]);
+    const user = both[0], db = both[1];
+    if (!user || !db) { updateSaveStatus(); return; }
+    const uid = await user.id();
+    if (!uid) { updateSaveStatus(); return; }
+    const ref = db.collection('data/users/' + uid).doc('save-' + C.id);
+    const snap = await Promise.race([ref.get(), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 10000))]);
+    store = {mode:'db', ref, ok:true};
+    const remote = snap.exists ? normalize((snap.data() || {}).state) : null;
+    if (remote && (!S.savedAt || (remote.savedAt || '') > S.savedAt)) {
+      S = remote;
+      try { localStorage.setItem(LS_PREFIX + C.id, JSON.stringify(S)); } catch(e) {}
+      render();
+    } else if (S.savedAt) {
+      flush();
+    }
+  } catch(e) { /* stay on device storage */ }
+  updateSaveStatus();
+}
+function saveStatusText(){
+  if (store.mode === 'db') return store.ok ? 'Saved to your account' : 'Saving…';
+  return 'Saved on this device only';
+}
+function updateSaveStatus(){
+  const el = document.getElementById('savestatus');
+  if (el) el.textContent = saveStatusText();
+}
+
+/* ---------- Map ---------- */
+function friendlySym(x, y, label, small){
+  const w = small ? 26 : 34, h = small ? 17 : 22;
+  return '<g class="m-fr" transform="translate(' + (x - w/2) + ',' + (y - h/2) + ')"><rect width="' + w + '" height="' + h + '" rx="1"/>'
+    + '<line x1="0" y1="0" x2="' + w + '" y2="' + h + '"/><line x1="' + w + '" y1="0" x2="0" y2="' + h + '"/>'
+    + '<text x="' + (w/2) + '" y="' + (h + 11) + '" text-anchor="middle">' + esc(label) + '</text></g>';
+}
+function hostileSym(x, y, label){
+  return '<g class="m-hu" transform="translate(' + x + ',' + y + ')"><path d="M0,-11 L11,0 L0,11 L-11,0 Z"/>'
+    + '<text x="0" y="23" text-anchor="middle">' + esc(label) + '</text></g>';
+}
+function mapSVG(opt){
+  const M = C.map;
+  const vb = M.viewBox;
+  let g = '<defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="m-hatch"/></pattern></defs>';
+  g += '<rect x="0" y="0" width="' + vb[2] + '" height="' + vb[3] + '" class="m-land"/>';
+  g += '<path class="m-elsin" d="' + M.border + ' L' + vb[2] + ',0 L' + vb[2] + ',' + vb[3] + ' Z"/>';
+  (M.highlands || []).forEach(h => h.r.forEach(r => { g += '<circle class="m-hill" cx="' + h.cx + '" cy="' + h.cy + '" r="' + r + '"/>'; }));
+  (M.forests || []).forEach(f => { g += '<path class="m-forest" d="' + f.d + '"/><text class="m-lab" x="' + f.lx + '" y="' + f.ly + '">' + esc(f.label) + '</text>'; });
+  const t = M.training;
+  g += '<ellipse class="m-train" cx="' + t.cx + '" cy="' + t.cy + '" rx="' + t.rx + '" ry="' + t.ry + '"/><text class="m-lab" x="' + (t.cx - t.rx) + '" y="' + (t.cy - t.ry - 6) + '">' + esc(t.label) + '</text>';
+  g += '<path class="m-res" d="' + M.reservoir + '"/><path class="m-river" d="' + M.river.d + '"/>';
+  g += '<text class="m-rivlab" x="470" y="324" transform="rotate(34 470 324)">' + esc(M.river.name) + '</text>';
+  g += '<path class="m-border" d="' + M.border + '"/>';
+  (M.regions || []).forEach(r => { g += '<text class="m-region" x="' + r.x + '" y="' + r.y + '">' + esc(r.name) + '</text>'; });
+  (M.places || []).forEach(p => {
+    if (p.type === 'dam') g += '<line class="m-dam" x1="' + (p.x - 6) + '" y1="' + (p.y + 6) + '" x2="' + (p.x + 6) + '" y2="' + (p.y - 6) + '"/>';
+    else if (p.type === 'crossing') g += '<path d="M' + (p.x-5) + ',' + (p.y-5) + ' L' + (p.x+5) + ',' + (p.y+5) + ' M' + (p.x+5) + ',' + (p.y-5) + ' L' + (p.x-5) + ',' + (p.y+5) + '" class="m-dam" style="stroke-width:2"/>';
+    else if (p.type === 'depot') g += '<rect class="m-place" x="' + (p.x-5) + '" y="' + (p.y-5) + '" width="10" height="10"/>';
+    else if (p.type === 'rail') g += '<path class="m-dam" style="stroke-width:1.5" d="M' + (p.x-10) + ',' + p.y + ' L' + (p.x+10) + ',' + p.y + ' M' + (p.x-6) + ',' + (p.y-3) + ' L' + (p.x-6) + ',' + (p.y+3) + ' M' + p.x + ',' + (p.y-3) + ' L' + p.x + ',' + (p.y+3) + ' M' + (p.x+6) + ',' + (p.y-3) + ' L' + (p.x+6) + ',' + (p.y+3) + '"/>';
+    else g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="4"/>';
+    g += '<text class="m-lab" x="' + p.lx + '" y="' + p.ly + '">' + esc(p.name) + '</text>';
+  });
+  (M.offmap || []).forEach(o => { g += '<text class="m-off" x="' + o.x + '" y="' + o.y + '">↖ ' + esc(o.text) + '</text>'; });
+  g += '<line class="m-scale" x1="' + (vb[2] - 80) + '" y1="' + (vb[3] - 14) + '" x2="' + (vb[2] - 80 + M.scaleUnits) + '" y2="' + (vb[3] - 14) + '"/><text class="m-off" x="' + (vb[2] - 80) + '" y="' + (vb[3] - 20) + '">' + M.scaleKm + ' km</text>';
+
+  // Ground truth (postmortem only)
+  if (opt.truthDay){
+    const gt = C.groundTruth.find(x => x.day === opt.truthDay);
+    (gt.units || []).forEach(u => { g += hostileSym(u.x, u.y, u.label); });
+  }
+  // Own forces
+  const fr = M.friendly, a = opt.asset || 'home';
+  if (a === 'battalion') g += friendlySym(fr.forward.x, fr.forward.y, '2 Bn');
+  else if (a === 'company'){ g += friendlySym(fr.forward.x, fr.forward.y, 'A Coy (+)', true); g += friendlySym(fr.home.x, fr.home.y - 22, '2 Bn (-)'); }
+  else g += friendlySym(fr.home.x, fr.home.y - 22, '2 Bn');
+
+  // Reporting pins
+  const pins = C.reports.filter(r => r.pin && (opt.onlyDay ? r.day === opt.onlyDay : r.day <= opt.uptoDay));
+  const slot = {};
+  pins.forEach(r => {
+    const key = r.pin.x + ',' + r.pin.y; const i = slot[key] = (slot[key] || 0) + 1;
+    const x = r.pin.x + (i - 1) * 11, y = r.pin.y - (i - 1) * 4;
+    const g0 = S.grades[r.id] || {};
+    const cls = 'm-pin' + (r.day === opt.today ? ' today' : '') + (g0.f ? ' doubted' : '') + (ui.pin === r.id ? ' sel' : '');
+    g += '<g class="' + cls + '" data-act="pin" data-id="' + r.id + '" role="button" tabindex="0" aria-label="' + esc(r.id + ': ' + r.pin.label) + '">'
+      + '<circle class="hit" cx="' + x + '" cy="' + y + '" r="13"/><circle class="dot" cx="' + x + '" cy="' + y + '" r="6"/>'
+      + (r.day === opt.today || ui.pin === r.id ? '<text x="' + (x + 8) + '" y="' + (y - 6) + '">' + r.id.slice(2) + '</text>' : '')
+      + '<title>' + esc(r.id + ': ' + r.pin.label) + '</title></g>';
+  });
+  return '<svg viewBox="' + vb.join(' ') + '" role="img" aria-label="Situation map of the Veyl border">' + g + '</svg>';
+}
+function mapCaption(dayScope){
+  const r = ui.pin ? rep(ui.pin) : null;
+  if (r && r.pin && (!dayScope || dayScope(r))) return '<b>' + r.id + '</b> · ' + esc(src(r.sourceId).codeName) + ' · Day ' + r.day + ': ' + esc(r.pin.label) + (S.grades[r.id] && S.grades[r.id].f ? ' (you doubted it)' : '');
+  return esc(C.map.legend) + ' Tap a pin for its item.';
+}
+function mapCard(d){
+  return '<figure class="map" style="margin:0">' + mapSVG({uptoDay:d, today:d, asset:S.asset})
+    + '<figcaption class="mapcap" id="mapcap">' + mapCaption(r => r.day <= d) + '</figcaption></figure>';
+}
+
+/* ---------- Rendering ---------- */
+function render(){
+  if (!C || !S) return;
+  if (!S.started){ app.innerHTML = introView(); renderLayer(); return; }
+  if (S.done && ui.tab !== 'files') ui.tab = 'postmortem';
+  if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
+  const d = curDay();
+  const open = isOpen(d);
+  let body = '';
+  if (ui.tab === 'files') body = filesView();
+  else if (ui.tab === 'postmortem') body = postmortemView();
+  else if (!open) body = lockedView(d);
+  else if (ui.tab === 'brief') body = briefView(d);
+  else body = inboxView(d);
+  app.innerHTML = headerView(d, open) + '<main id="main">' + body + '</main>';
+  renderLayer();
+}
+
+function headerView(d, open){
+  const tabs = S.done
+    ? [['postmortem','Postmortem'],['files','Files']]
+    : [['inbox','Inbox' + (open ? '<span class="badge">' + reportsFor(d).length + '</span>' : '')],['brief','Brief'],['files','Files']];
+  const dayText = S.done ? 'Crisis closed' : ('Day ' + d + ' of ' + C.days + ' · ' + esc(dayLabel(d)));
+  return '<header class="top">'
+    + '<span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + esc(C.title) + '</span>'
+    + '<h1>' + dayText + '</h1>'
+    + '<div class="status-line"><span>' + esc(C.asset.name) + ': <b>' + esc(assetLabel()) + '</b></span>'
+    + (S.playAhead ? '<span><b>Play ahead on</b></span>' : '')
+    + '<span id="savestatus">' + esc(saveStatusText()) + '</span></div>'
+    + '</header>'
+    + '<nav class="tabs" role="tablist">' + tabs.map(t => '<button class="tab" role="tab" data-act="tab" data-v="' + t[0] + '" aria-selected="' + (ui.tab === t[0]) + '">' + t[1] + '</button>').join('') + '</nav>';
+}
+
+function policyTable(){
+  return '<div class="tablewrap"><table><thead><tr><th>Your brief</th><th>What Halvorsen does</th></tr></thead><tbody>'
+    + C.policySummary.map(p => '<tr><td>' + esc(p.brief) + '</td><td>' + esc(p.action) + '</td></tr>').join('') + '</tbody></table></div>'
+    + (C.policyNote ? '<p class="small"><b>' + esc(C.policyNote) + '</b></p>' : '');
+}
+
+function introView(){
+  const b = C.briefing;
+  return '<header class="top"><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + C.days + '-day arc</span><h1>' + esc(C.title) + '</h1></header>'
+    + '<main class="stack">'
+    + '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">The Veyl border. Reporting will be plotted here as it arrives.</figcaption></figure>'
+    + '<p class="mono small muted">' + esc(b.dateLine) + '</p>'
+    + b.situation.map(p => '<p>' + esc(p) + '</p>').join('')
+    + '<div class="msg"><span class="from">Your customer</span><p><b>' + esc(C.customer.name) + '</b>, ' + esc(C.customer.role) + '.</p><p>' + esc(C.customer.wants) + ' ' + esc(C.customer.context) + '</p></div>'
+    + '<div class="stack"><h3>Halvorsen\'s habits</h3>' + policyTable() + '</div>'
+    + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
+    + '<p class="small muted">Each day: read the inbox, doubt anything you think is false or planted, then send one brief with a judgment, a confidence level and up to 3 pieces of key evidence. The next day opens tomorrow. Sources and scoring are under Files.</p>'
+    + '<p class="small muted">' + esc(C.placeholderNote) + '</p>'
+    + '<div class="btnrow"><button class="btn" data-act="start">Open Day 1</button></div>'
+    + '</main>';
+}
+
+function readInCard(d){
+  const u = (C.dailyUpdates || []).find(x => x.day === d);
+  const facts = [];
+  if (C.countdown){
+    const left = C.countdown.toDay - d;
+    facts.push(left === 1 ? 'Tomorrow is ' + C.countdown.label + '.' : left + ' days to ' + C.countdown.label + '.');
+  }
+  facts.push(C.asset.name + ': ' + assetLabel() + '.');
+  const prev = S.briefs[d-1];
+  if (prev) facts.push('Your line yesterday: ' + prev.hyp + ' at ' + confLabel(prev.conf) + '.');
+  if (S.frozenBriefDays.includes(d)) facts.push('Troop moves are frozen today.');
+  return '<section class="readin"><span class="from">Morning read-in · Day ' + d + ' · ' + esc(dayLabel(d)) + '</span>'
+    + (u ? '<p>' + esc(u.text) + '</p>' : '')
+    + '<ul class="facts">' + facts.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul></section>';
+}
+
+function itemCard(r, editable){
+  const g = S.grades[r.id] || {};
+  const s = src(r.sourceId);
+  const cls = 'card' + (g.f ? ' flagged' : '') + (g.n ? ' nr' : '') + (ui.pin === r.id ? ' hl' : '');
+  let html = '<article class="' + cls + '" id="card-' + r.id + '">'
+    + '<header class="cable-h"><span class="rid">' + r.id + '</span><span class="src">' + esc(s.codeName) + '</span><span>' + esc(r.discipline) + '</span><span class="recv" title="' + esc(recvTitle(r)) + '">' + received(r) + '</span></header>'
+    + '<p class="cable-t">' + esc(r.text) + '</p>';
+  if (editable){
+    html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button></div>';
+  } else {
+    html += '<p class="yourgrade">' + gradeSummary(g) + '</p>';
+  }
+  return html + '</article>';
+}
+function recvTitle(r){
+  const s = SOURCE_SCALE[r.sourceGrade] || 'Unknown source';
+  const i = r.credibility == null ? 'no information to rate' : INFO_SCALE[r.credibility];
+  return 'Received grade: ' + s + ', ' + i;
+}
+function gradeSummary(g){
+  const parts = [];
+  if (g && g.f) parts.push('<b>You doubted it</b>');
+  if (g && g.n) parts.push('<b>marked not relevant</b>');
+  return parts.length ? parts.join(' · ') : 'Accepted as received';
+}
+
+function replyCard(d){
+  const r = S.replies[d];
+  if (!r) return '';
+  const prev = S.briefs[d-1];
+  return '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + ' · re your Day ' + (d-1) + ' brief' + (prev ? ' (' + prev.hyp + ', ' + confLabel(prev.conf) + ')' : '') + '</span>'
+    + '<p><q>' + esc(C.replies[r.key] || '') + '</q></p>'
+    + (r.note ? '<p class="note">' + esc(r.note) + '</p>' : '')
+    + '</div>';
+}
+
+function earlierDays(upTo){
+  let html = '';
+  for (let d = upTo; d >= 1; d--){
+    const b = S.briefs[d];
+    html += '<details><summary><span>Day ' + d + ' · ' + esc(dayLabel(d)) + '</span><span class="mono small muted">' + (b ? b.hyp + ' · ' + confLabel(b.conf) : '') + '</span></summary><div class="inner">'
+      + (b ? briefRecord(d) : '')
+      + reportsFor(d).map(r => itemCard(r, false)).join('')
+      + '</div></details>';
+  }
+  return html ? '<div class="stack"><div class="section-h"><h3>Earlier days</h3></div>' + html + '</div>' : '';
+}
+
+function inboxView(d){
+  const items = reportsFor(d);
+  const doubted = items.filter(r => (S.grades[r.id] || {}).f).length;
+  return readInCard(d)
+    + mapCard(d)
+    + replyCard(d)
+    + '<div class="section-h"><h2>Inbox</h2><span class="mono small muted">' + doubted + ' doubted</span></div>'
+    + '<p class="small muted">Each item arrives graded by its collector: the letter is the source\'s track record, the number is how credible the information looks. A good source can still carry a bad report. If you think an item is false or deliberately misleading, doubt it. Doubts are scored in the postmortem.</p>'
+    + '<div class="stack">' + items.map(r => itemCard(r, true)).join('') + '</div>'
+    + '<div class="btnrow"><button class="btn" data-act="tab" data-v="brief">Write the brief</button></div>'
+    + earlierDays(d-1);
+}
+
+function briefRecord(d){
+  const b = S.briefs[d];
+  if (!b) return '';
+  const h = hyp(b.hyp);
+  return '<div class="record"><span class="stamp">' + b.hyp + ' · ' + confLabel(b.conf) + ' confidence<small>Day ' + d + ' brief · sent</small></span>'
+    + '<p><b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>'
+    + '<p class="small"><span class="muted">Key evidence:</span> <span class="mono">' + (b.evidence.length ? b.evidence.join(', ') : 'none') + '</span></p>'
+    + (b.note ? '<p class="small"><span class="muted">Reasoning:</span> ' + esc(b.note) + '</p>' : '')
+    + '<p class="small"><span class="muted">Halvorsen:</span> ' + esc(C.replyLabels[b.reply] || '') + '</p>'
+    + '</div>';
+}
+
+function briefView(d){
+  const dr = draft(d);
+  const items = reportsFor(d);
+  const frozen = S.frozenBriefDays.includes(d);
+  let predict = '';
+  if (dr.hyp && dr.conf){
+    const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
+    predict = '<p class="predict">If you send this, Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>';
+  }
+  const full = dr.evidence.length >= C.scoring.maxEvidence;
+  const eviBtn = r => {
+    const on = dr.evidence.includes(r.id);
+    return '<button class="evi" data-act="ev" data-id="' + r.id + '" aria-pressed="' + on + '"' + (!on && full ? ' disabled' : '') + '><span class="id">' + r.id + '</span><span>' + esc(src(r.sourceId).codeName) + ': ' + esc(r.text.length > 90 ? r.text.slice(0, 88) + '…' : r.text) + '</span></button>';
+  };
+  let groups = '<div class="evigroup"><h4>Today</h4>' + items.map(eviBtn).join('') + '</div>';
+  for (let x = d-1; x >= 1; x--) groups += '<details><summary><span>Day ' + x + ' items</span></summary><div class="inner evigroup">' + reportsFor(x).map(eviBtn).join('') + '</div></details>';
+  const ready = dr.hyp && dr.conf;
+  return '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
+    + '<div class="msg"><span class="from">Tasking · ' + esc(C.customer.callsign) + '</span><p>' + esc(C.customer.wants) + '</p>'
+    + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p></div>'
+    + '<fieldset><legend>Judgment</legend>' + C.hypotheses.map(h => '<button class="opt" data-act="hyp" data-v="' + h.id + '" aria-pressed="' + (dr.hyp === h.id) + '"><span class="k">' + h.id + '</span><span class="t">' + esc(h.short) + '</span><span class="d">' + esc(h.text) + '</span></button>').join('') + '</fieldset>'
+    + '<fieldset><legend>Confidence</legend><div class="confs">' + CONF.map(c => '<button class="conf" data-act="conf" data-v="' + c.id + '" aria-pressed="' + (dr.conf === c.id) + '"><b>' + c.label + '</b><span>' + c.words + '</span></button>').join('') + '</div></fieldset>'
+    + predict
+    + '<fieldset><legend>Key evidence · ' + dr.evidence.length + ' of ' + C.scoring.maxEvidence + '</legend>' + groups + '</fieldset>'
+    + '<label class="lab" for="brief-note">Reasoning (one sentence, optional)</label>'
+    + '<textarea id="brief-note" data-input="note" maxlength="280" placeholder="We assess…">' + esc(dr.note) + '</textarea>'
+    + '<div class="btnrow"><button class="btn" data-act="send"' + (ready ? '' : ' disabled') + '>Send brief</button></div>'
+    + (ready ? '' : '<p class="small muted">Pick a judgment and a confidence level to send.</p>');
+}
+
+function msToMidnight(){ const n = new Date(); const m = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1); return m - n; }
+function countdownText(){ const ms = msToMidnight(); const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000); return 'Opens in ' + h + ' h ' + m + ' min.'; }
+
+function lockedView(d){
+  return '<div class="card"><h2>Day ' + d + ' opens tomorrow</h2>'
+    + '<p>Your brief is with Halvorsen. His reply and the new inbox arrive at midnight. <span id="countdown" class="mono small">' + countdownText() + '</span></p>'
+    + briefRecord(d-1)
+    + '<p class="small muted">To play the next day now, turn on Play ahead under Files.</p></div>'
+    + mapCard(d-1)
+    + earlierDays(d-1);
+}
+
+function filesView(){
+  const roster = C.sources.filter(s => !s.rosterHidden);
+  return '<div class="stack"><h2>Situation</h2><p class="mono small muted">' + esc(C.briefing.dateLine) + '</p>' + C.briefing.situation.map(p => '<p>' + esc(p) + '</p>').join('') + '</div>'
+    + '<div class="stack"><h3>Halvorsen\'s habits</h3>' + policyTable() + '</div>'
+    + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
+    + '<div class="stack"><h3>Sources on file</h3><div class="tablewrap"><table><thead><tr><th>Code name</th><th>Access</th><th>File</th></tr></thead><tbody>'
+    + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(s.startingGrade) + '</b></td></tr>').join('') + '</tbody></table></div></div>'
+    + '<div class="stack"><h3>Grading scale</h3><p class="small">Collectors grade each item as it arrives: the letter is the source\'s reliability, the number is the information\'s credibility. The letter belongs to the source and doesn\'t change from report to report. Your call on each item is whether to believe it.</p><div class="tablewrap"><table><thead><tr><th>Source</th><th>Information</th></tr></thead><tbody>'
+    + [0,1,2,3,4,5].map(i => { const k = 'ABCDEF'[i]; return '<tr><td class="small"><span class="mono"><b>' + k + '</b></span> ' + SOURCE_SCALE[k] + '</td><td class="small"><span class="mono"><b>' + (i+1) + '</b></span> ' + INFO_SCALE[i+1] + '</td></tr>'; }).join('') + '</tbody></table></div></div>'
+    + '<div class="stack"><h3>Scoring</h3><p class="small">Each daily call is scored against what was actually true that day.</p><div class="tablewrap"><table><thead><tr><th>Confidence</th><th class="num">Right</th><th class="num">Wrong</th></tr></thead><tbody>'
+    + CONF.map(c => { const p = C.scoring.call[c.id]; return '<tr><td>' + c.label + '</td><td class="num">+' + p[0] + '</td><td class="num">' + p[1] + '</td></tr>'; }).join('') + '</tbody></table></div>'
+    + '<p class="small">Cited evidence: true +' + C.scoring.evidence.true + ', noise ' + C.scoring.evidence.noise + ', clutter ' + C.scoring.evidence.clutter + ', planted ' + C.scoring.evidence.planted + '. Doubting a report: planted item +' + C.scoring.challenge.planted + ', true item ' + C.scoring.challenge.true + ', anything else 0. The ending adds a bonus or a penalty. High pays off if you\'re about two-thirds sure. Moderate pays off if you\'re better than even.</p></div>'
+    + '<div class="stack"><h3>Settings</h3>'
+    + '<div class="switch"><span><b>Play ahead</b><br><span class="small muted">Open the next day without waiting for midnight.</span></span><button data-act="playahead" aria-pressed="' + S.playAhead + '">' + (S.playAhead ? 'On' : 'Off') + '</button></div>'
+    + '<div class="switch"><span><b>Start over</b><br><span class="small muted">Wipes this crisis and opens the situation briefing again.</span></span><button data-act="restart">Reset</button></div>'
+    + '<p class="small muted">' + esc(C.placeholderNote) + '</p></div>';
+}
+
+function postmortemView(){
+  const ending = C.endings.find(e => e.id === S.ending) || evalEnding();
+  let callTotal = 0, evTotal = 0;
+  const rows = [];
+  for (let d = 1; d <= C.days; d++){
+    if (!S.briefs[d]) continue;
+    const sc = scoreDay(d); callTotal += sc.call; evTotal += sc.ev;
+    rows.push({d, sc, b:S.briefs[d]});
+  }
+  const dTotal = doubtPoints();
+  const total = callTotal + evTotal + dTotal + ending.points;
+  const planted = C.reports.filter(r => r.kind === 'planted');
+  const caught = planted.filter(r => (S.grades[r.id] || {}).f).length;
+  const falseAlarms = C.reports.filter(r => r.kind === 'true' && (S.grades[r.id] || {}).f).length;
+  const clutter = C.reports.filter(r => r.kind === 'clutter');
+  const clutterSpotted = clutter.filter(r => (S.grades[r.id] || {}).n).length;
+  const sign = n => (n > 0 ? '+' : '') + n;
+  const pd = ui.pmDay;
+
+  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">Dawn, the 20th</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
+    + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + ' · ending ' + sign(ending.points) + '</span></div>'
+    + '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Your call</th><th>Truth</th><th class="num">Call</th><th class="num">Evid.</th><th class="num">Min</th></tr></thead><tbody>'
+    + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
+    + '</tbody></table></div>'
+    + '<p class="small">Planted items you doubted: <b>' + caught + ' of ' + planted.length + '</b>. True items you doubted: <b>' + falseAlarms + '</b>. Clutter you marked not relevant: <b>' + clutterSpotted + ' of ' + clutter.length + '</b>.</p>'
+    + '<div class="btnrow"><button class="btn ghost" data-act="copylog">Copy playtest log</button></div>'
+    + '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
+    + '<div class="daypick" role="group" aria-label="Day">' + [1,2,3,4,5].map(x => '<button data-act="pmday" data-v="' + x + '" aria-pressed="' + (pd === x) + '">Day ' + x + '</button>').join('') + '</div>'
+    + '<figure class="map" style="margin:0">' + mapSVG({onlyDay:pd, today:pd, truthDay:pd, asset:assetOnDay(pd)})
+    + '<figcaption class="mapcap" id="mapcap">Red diamonds are where Kordav\'s units really were on Day ' + pd + '. Pins are that day\'s reporting. ' + (ui.pin && rep(ui.pin).day === pd ? mapCaption() : 'Tap a pin for its item.') + '</figcaption></figure></div>';
+
+  for (let d = 1; d <= C.days; d++){
+    const t = C.groundTruth.find(g => g.day === d);
+    const b = S.briefs[d];
+    const script = C.postmortem.script.find(s => s.days[0] === d);
+    html += '<details' + (d === 1 ? ' open' : '') + '><summary><span>Day ' + d + ' · truth ' + t.trueHypothesis + '</span><span class="mono small muted">' + (b ? 'you: ' + b.hyp + ' ' + confLabel(b.conf) : '') + '</span></summary><div class="inner">'
+      + (script ? '<p>' + esc(script.text) + '</p>' : '')
+      + '<p class="small"><span class="muted">What was happening:</span> ' + esc(t.state) + '</p>'
+      + '<p class="small"><span class="muted">Best call:</span> ' + esc(t.bestCall) + '</p>'
+      + reportsFor(d).map(r => revealItem(r, b)).join('')
+      + '</div></details>';
+  }
+  html += '<div class="stack"><h3>Lessons</h3><ul>' + C.postmortem.lessons.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
+    + '<div class="stack"><h3>Your sources, revealed</h3>' + C.sources.filter(s => !s.rosterHidden).map(s => '<p class="small"><span class="mono"><b>' + esc(s.codeName) + '</b></span> ' + (s.controlledByAdversary === true ? '<span class="pill k-planted">Adversary channel</span> ' : '') + esc(s.postmortemNote || '') + '</p>').join('') + '</div>'
+    + '<div class="btnrow"><button class="btn" data-act="restart">Play again</button></div>';
+  return html;
+}
+function assetOnDay(d){ return (S.posture && S.posture[d]) || 'home'; }
+
+function revealItem(r, brief){
+  const g = S.grades[r.id] || {};
+  const cited = brief && brief.evidence.includes(r.id);
+  let mark = '';
+  if (r.kind === 'planted') mark = g.f ? '<span class="caught">Doubted +' + C.scoring.challenge.planted + '</span>' : '<span class="missed">Not doubted</span>';
+  else if (r.kind === 'true' && g.f) mark = '<span class="missed">Doubted a true item ' + C.scoring.challenge.true + '</span>';
+  else if (r.kind === 'clutter' && g.n) mark = '<span class="caught">Marked not relevant</span>';
+  const tells = (r.tells || []).map(t => C.tellLabels[t] || t);
+  return '<div class="reveal"><div class="head"><b>' + r.id + '</b><span>' + esc(src(r.sourceId).codeName) + '</span><span class="pill k-' + r.kind + '">' + KIND_LABEL[r.kind] + '</span>' + (r.diagnostic ? '<span class="pill k-true">Diagnostic</span>' : '') + (cited ? '<span class="pill">Cited ' + ((C.scoring.evidence[r.kind] > 0 ? '+' : '') + C.scoring.evidence[r.kind]) + '</span>' : '') + mark + '</div>'
+    + '<p class="txt">' + esc(r.text) + '</p>'
+    + (r.reveal
+      ? '<div class="why"><p><span class="whyk">What gave it away</span>' + esc(r.reveal.tell) + '</p>'
+        + '<p><span class="whyk">Check it against ' + r.reveal.crossCheck.ids.join(', ') + '</span>' + esc(r.reveal.crossCheck.text) + '</p>'
+        + '<p><span class="whyk">Why Kordav planted it</span>' + esc(r.reveal.motive) + '</p></div>'
+      : '<p class="what">' + esc(r.postmortemNote) + '</p>')
+    + (tells.length ? '<p class="tells">Tells: ' + tells.map(esc).join(' · ') + '</p>' : '')
+    + '<p class="yourgrade">' + gradeSummary(g) + '</p></div>';
+}
+
+function playtestLog(){
+  const ending = C.endings.find(e => e.id === S.ending) || evalEnding();
+  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Truth | Call pts | Evidence | Evid pts | Halvorsen | Note'];
+  let total = ending.points;
+  for (let d = 1; d <= C.days; d++){
+    const b = S.briefs[d]; if (!b) continue;
+    const sc = scoreDay(d); total += sc.call + sc.ev;
+    lines.push([d, b.minutes, b.hyp + ' ' + confLabel(b.conf), sc.truth.trueHypothesis, sc.call, b.evidence.join(' ') || '-', sc.ev, b.reply, b.note || '-'].join(' | '));
+  }
+  const planted = C.reports.filter(r => r.kind === 'planted');
+  const dp = doubtPoints(); total += dp;
+  lines.push('Doubts: ' + dp, 'Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total,
+    'Planted doubted: ' + planted.filter(r => (S.grades[r.id] || {}).f).length + '/' + planted.length + ' (' + planted.filter(r => (S.grades[r.id] || {}).f).map(r => r.id).join(' ') + ')',
+    'True items doubted: ' + C.reports.filter(r => r.kind === 'true' && (S.grades[r.id] || {}).f).map(r => r.id).join(' '));
+  return lines.join('\n');
+}
+
+function renderLayer(){
+  let html = '';
+  if (ui.sheet === 'send'){
+    const d = curDay(), dr = draft(d);
+    const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
+    html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Send the Day ' + d + ' brief?</h3>'
+      + '<p><b>' + dr.hyp + ', ' + confLabel(dr.conf) + ' confidence.</b> ' + (dr.evidence.length ? 'Key evidence: <span class="mono">' + dr.evidence.join(', ') + '</span>.' : 'No key evidence attached.') + '</p>'
+      + '<p class="small">Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>'
+      + '<p class="small muted">Once it\'s sent you can\'t change it. Halvorsen acts on it tonight.</p>'
+      + '<div class="btnrow"><button class="btn" data-act="confirmsend">Send</button><button class="btn ghost" data-act="cancel">Keep editing</button></div></div></div>';
+  } else if (ui.sheet === 'restart'){
+    html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Start this crisis over?</h3><p>All your doubts and briefs for this crisis will be wiped.</p>'
+      + '<div class="btnrow"><button class="btn" data-act="confirmrestart">Start over</button><button class="btn ghost" data-act="cancel">Cancel</button></div></div></div>';
+  } else if (ui.sheet === 'log'){
+    html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Playtest log</h3><p class="small muted">Select the text and copy it.</p><textarea id="logtext" readonly style="min-height:200px;font-family:var(--f-mono);font-size:12.5px">' + esc(playtestLog()) + '</textarea><div class="btnrow"><button class="btn ghost" data-act="cancel">Close</button></div></div></div>';
+  }
+  if (ui.toast) html += '<div class="toast" role="status">' + esc(ui.toast) + '</div>';
+  layer.innerHTML = html;
+}
+function toast(msg){ ui.toast = msg; renderLayer(); setTimeout(() => { ui.toast = ''; renderLayer(); }, 2200); }
+
+/* ---------- Events ---------- */
+function onClick(e){
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === 'cancel' && el.classList.contains('overlay') && e.target !== el) return;
+  const d = curDay();
+  switch (act){
+    case 'start': S.started = true; ui.tab = 'inbox'; save(); render(); window.scrollTo(0,0); break;
+    case 'tab': ui.tab = el.dataset.v; render(); window.scrollTo(0,0); break;
+    case 'flag': case 'nr': {
+      const g = S.grades[el.dataset.id] || (S.grades[el.dataset.id] = {});
+      const k = act === 'flag' ? 'f' : 'n'; g[k] = !g[k]; save(); render(); break;
+    }
+    case 'pin': {
+      const id = el.dataset.id;
+      ui.pin = ui.pin === id ? null : id;
+      render();
+      const card = ui.pin && document.getElementById('card-' + ui.pin);
+      if (card && !S.done && rep(ui.pin).day === d) card.scrollIntoView({behavior:'smooth', block:'center'});
+      break;
+    }
+    case 'pmday': ui.pmDay = Number(el.dataset.v); ui.pin = null; render(); break;
+    case 'hyp': draft(d).hyp = el.dataset.v; save(); render(); break;
+    case 'conf': draft(d).conf = el.dataset.v; save(); render(); break;
+    case 'ev': {
+      const dr = draft(d), id = el.dataset.id, i = dr.evidence.indexOf(id);
+      if (i >= 0) dr.evidence.splice(i, 1); else if (dr.evidence.length < C.scoring.maxEvidence) dr.evidence.push(id);
+      save(); render(); break;
+    }
+    case 'send': ui.sheet = 'send'; renderLayer(); break;
+    case 'confirmsend': ui.sheet = null; sendBrief(d); render(); toast('Brief sent to ' + C.customer.name + '.'); break;
+    case 'cancel': ui.sheet = null; renderLayer(); break;
+    case 'playahead': S.playAhead = !S.playAhead; save(); render(); break;
+    case 'restart': ui.sheet = 'restart'; renderLayer(); break;
+    case 'confirmrestart': { const pa = S.playAhead; S = fresh(); S.playAhead = pa; ui.sheet = null; ui.tab = 'inbox'; ui.pin = null; save(); render(); window.scrollTo(0,0); break; }
+    case 'copylog': {
+      const text = playtestLog();
+      const fallback = () => { ui.sheet = 'log'; renderLayer(); };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => toast('Playtest log copied.'), fallback);
+        else fallback();
+      } catch(err) { fallback(); }
+      break;
+    }
+  }
+}
+function onInput(e){
+  const el = e.target;
+  if (el.dataset && el.dataset.input === 'note'){ draft(curDay()).note = el.value; save(); }
+}
+document.addEventListener('click', onClick);
+document.addEventListener('input', onInput);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && ui.sheet){ ui.sheet = null; renderLayer(); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('.m-pin')){ e.preventDefault(); onClick(e); }
+});
+
+setInterval(() => {
+  tick();
+  const el = document.getElementById('countdown');
+  if (!el || !S || S.done) return;
+  if (unlocked(curDay())) render(); else el.textContent = countdownText();
+}, TICK_MS);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden){ tick(); if (S && S.started) save(); return; }
+  lastTick = Date.now();
+  if (S && S.started && !S.done && document.getElementById('countdown') && unlocked(curDay())) render();
+});
+
+/* ---------- Boot ---------- */
+async function start(hotData){
+  try {
+    const res = await fetch(CRISIS_URL, {cache:'no-cache'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    C = await res.json();
+  } catch(e) {
+    app.innerHTML = '<p class="loading">Couldn\'t load the crisis file (' + esc(CRISIS_URL) + '). Reload the page to try again.</p>';
+    return;
+  }
+  S = normalize(hotData && hotData.S) || normalize(loadLocal()) || fresh();
+  if (hotData && hotData.tab) ui.tab = hotData.tab;
+  render();
+  connectAccount();
+}
+const hot = window.claude && window.claude.hot;
+if (hot && typeof hot.snapshot === 'function') hot.snapshot(() => ({S:S, tab:ui.tab}));
+if (hot && typeof hot.ready === 'function') hot.ready(start); else start((hot && hot.data) || {});
+})();
+</script>
+</body>
+</html>
