@@ -12,5 +12,6 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | `crisis-01-collection-retrofit.md` | **Spoilers.** Phase 2 paper design adding collection tasking to Crisis 01 |
 | `crisis-02-player-packet.md` | Crisis 02 (The Walk-in) paper script, no spoilers |
 | `crisis-02-gm-key.md` | **Spoilers.** Crisis 02 ground truth, item key, reasoning for every plant, endings, balance notes |
-| `phase-2-design.md` | Paper design for Phase 2: collection tasking, hypotheses board, credibility, Crisis 02 seed. Not built yet. |
+| `phase-2-design.md` | Design for Phase 2: collection tasking, hypotheses board, credibility, Crisis 02. Built. |
+| `phase-3-design.md` | Paper design for Phase 3: service record, carry-over, analysts, Scenario 03. Not built; decisions open. |
 | `crisis-01-gm-key.md` | **Spoilers.** Crisis 01 ground truth, item key, reasoning for every planted item, endings, balance notes |
