@@ -6,6 +6,7 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 38 | 2026-11-18 | Split the call into **likelihood** (chosen by the player) and **confidence** (derived from the evidence they cite), following ICD 203 and the UK PHIA framework. The customer acts on both. Replaces the single "confidence" dial. **Build after the playtest.** See "Queued after playtest." | The single dial used likelihood words under a confidence label, the combination ICD 203 warns against. Both intel-trained players stayed at Moderate, which is sound tradecraft the game punished. Deriving confidence from cited evidence keeps it to one tap and makes choosing evidence matter more. |
 | 37 | 2026-11-18 | Don't tell the player how many days a crisis lasts. In-world deadlines (like the exercise's announced end date) stay. **Change after the playtest.** See "Queued after playtest" below. | Real analysts don't know when a crisis ends. A visible day count lets players play the calendar instead of the evidence, especially on the last day. |
 | 36 | 2026-11-18 | Keep the company outcome: a Moderate brief sends a company that holds the dam but doesn't deter the invasion. Kordav crosses at Dolan and isolates it (Standoff). The tripwire and "eyes forward" alternatives are rejected for now. | Anthony's SME judgment: a company wouldn't deter in this situation. Partial commitment is a real consequence of under-calling a clear warning. |
 | 35 | 2026-11-18 | The playtest build has Play ahead on by default, so testers can play all 5 days in one sitting. The main build keeps the daily lock. | Removes the 5-day wait for feedback. Time per day is still measured, so turn length stays testable. |
@@ -54,6 +55,14 @@
 Changes already decided, held until the Crisis 01 playtest results are in so the test runs on one version.
 
 - **Hide the crisis length (#37).** Remove the day count everywhere the player sees it: the header ("Day 2 of 5" becomes "Day 2"), the opening screen ("5-day arc"), the playtest note ("all 5 in one sitting") and the playtest invite text. Keep the countdown to the exercise's announced end, which is in-world. On Day 5, drop "This is your last brief before the announced end date" from the read-in; the countdown line already says "Tomorrow is the announced end of IRON HARVEST (the 20th)," which gives the deadline without saying the game ends there.
+
+- **Likelihood plus derived confidence (#38).** Starting sketch, all values to tune with `tools/simulate.js`:
+  - **Likelihood (one tap):** Roughly even (≈50%), Likely (55–80%), Very likely (80–95%), Almost certain (95–99%), using ICD 203 wording. Scored as a probability call, so over-claiming costs more than under-claiming.
+  - **Confidence (shown, not chosen):** worked out only from what the player can see in the evidence they cite: how many distinct sources, how many disciplines, and the grades they arrived with. Draft: High = 3 items from at least 2 disciplines with at least 2 sources graded A–B. Moderate = at least 2 sources with at least 1 graded A–C. Low = anything less. Never uses hidden truth, so a cited plant still counts toward confidence; the evidence score is where that costs you.
+  - **Coherence check:** the brief warns about an incoherent pairing (for example "almost certain" with Low confidence) before you send.
+  - **Customer policy:** full battalion = Very likely or Almost certain with at least Moderate confidence. Lead company = Likely, or a higher likelihood with Low confidence. Readiness = Roughly even. Pull-back rules as now.
+  - **Words in the game:** the brief reads like a real key judgment: "We assess it is very likely… (moderate confidence)."
+  - **Docs to update when built:** design doc core loop step 4 and calibration scoring, crisis content `scoring` and `customerPolicy` fields, Crisis 01 key and postmortem lesson 4.
 
 ## Parking lot
 
