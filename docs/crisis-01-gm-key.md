@@ -41,7 +41,7 @@
 
 Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full reasoning for each planted item is in the next section.
 
-### Day 1 (truth H3). Best call: H3, likely
+### Day 1 (truth H3). Best call: H3 at Medium
 
 | ID | Kind | Supports | Contradicts | Tells | What it really was |
 | --- | --- | --- | --- | --- | --- |
@@ -51,7 +51,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full rea
 | R-1-04 | T | H1, H2, H3 | — | — | Fits every hypothesis, so it can't tell them apart. It's the baseline: note where things *aren't* (Dolan). |
 | R-1-05 | C | — | — | different cause named in item | The refinery outage caused the queues. Military fuel comes from depot stocks, not the capital's pumps. |
 
-### Day 2 (truth H3). Best call: H3, likely (H2 at roughly even is a defensible early warning)
+### Day 2 (truth H3). Best call: H3 at Medium (H2 at Low is a defensible early warning)
 
 | ID | Kind | Supports | Contradicts | Tells | What it really was |
 | --- | --- | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full rea
 | R-2-05 | N | H2 | — | source labels it as gossip | Reliable source, worthless item. **Grade the information, not just the source.** |
 | R-2-06 | C | — | — | — | Fish. |
 
-### Day 3 (truth H2). Best call: H2, likely or very likely
+### Day 3 (truth H2). Best call: H2 at Medium or High
 
 | ID | Kind | Supports | Contradicts | Tells | What it really was |
 | --- | --- | --- | --- | --- | --- |
@@ -72,7 +72,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full rea
 | R-3-04 | T | H2 | H1 | — | Comms security tightened at 0400, the same time as KESTREL's account change. Two independent sources line up on the timing. |
 | R-3-05 | C | — | — | location, National Day date | National Day parade rehearsal. |
 
-### Day 4 (truth H2). Best call: H2, very likely. **Diagnostic day.**
+### Day 4 (truth H2). Best call: H2 at High. **Diagnostic day.**
 
 | ID | Kind | Supports | Contradicts | Tells | What it really was |
 | --- | --- | --- | --- | --- | --- |
@@ -82,7 +82,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full rea
 | R-4-04 | T | H2 | — | — | The same alarmist source as Days 1–2, but now imagery corroborates it. Corroboration should move you, not tone. |
 | R-4-05 | C | — | — | — | Don't open the spreadsheet. |
 
-### Day 5 (truth H2). Best call: H2, very likely
+### Day 5 (truth H2). Best call: H2 at High
 
 | ID | Kind | Supports | Contradicts | Tells | What it really was |
 | --- | --- | --- | --- | --- | --- |
@@ -137,18 +137,18 @@ Each planted item has a tell in its own text and at least one check against an i
 
 ---
 
-## Halvorsen's commitment (Phase 1 rules, v0.5)
+## Halvorsen's commitment (Phase 1 rules, v0.6)
 
-He acts on hypothesis and likelihood only. Evidence affects points, not what he does.
+He acts on hypothesis and confidence only. Evidence affects points, not what he does.
 
 
 | Your brief | What he does |
 | --- | --- |
-| H2, Very likely or Almost certain | Moves all of 2nd Battalion to Tarsk (or sends the rest, if the lead company is already there) |
-| H2, Likely | Sends a reinforced lead company to Tarsk |
-| H2, Roughly even | Raises readiness, no move |
+| H2 at High | Moves all of 2nd Battalion to Tarsk (or sends the rest, if the lead company is already there) |
+| H2 at Medium | Sends a reinforced lead company to Tarsk |
+| H2 at Low | Raises readiness, no move |
 | H3 / H1 | Holds / relaxes |
-| H1 or H3, Likely or stronger, with troops at Tarsk | Pulls everyone back |
+| H1 or H3 at Medium or High, with troops at Tarsk | Pulls everyone back |
 | Any move on Day 1 or 2 | Day 3: everyone ordered back and moves frozen for the Day 3 and Day 4 briefs |
 
 A company can watch the crossing. Only the full battalion can hold the dam.
@@ -172,7 +172,7 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 >
 > **Day 3.** The walkout changed the answer overnight. KESTREL's account codes and blood products were the tell, and the comms going quiet matched his timing. The ministry calling the exercise "routine" the morning after talks collapsed was the loudest signal of the day, and it pointed the opposite way from what it said.
 >
-> **Day 4.** Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, three disciplines pointed the same way: a day to say very likely. "Likely" got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you.
+> **Day 4.** Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, three disciplines pointed the same way: a day for high confidence. Medium got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you.
 >
 > **Day 5.** Three "going home" items, all from one origin. The snow in the photo was last year's.
 
@@ -181,7 +181,7 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 1. Plans aren't intent.
 2. Grade the information, not just the source.
 3. When a coercer suddenly goes quiet, the threat may have become an operation.
-4. Likelihood moves forces. Under-calling a clear warning has a cost too.
+4. Confidence moves forces. Under-calling a clear warning has a cost too.
 5. Count origins, not reports.
 6. Look for what's missing (Dolan on Day 1) as well as what's there.
 
@@ -189,19 +189,19 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 
 ## Designer notes (critic hat)
 
-**Dominant-strategy check** (v0.5 engine, `node tools/simulate.js --calls`; totals include evidence, doubts and ending):
+**Dominant-strategy check** (v0.6 engine, `node tools/simulate.js --calls`; totals include evidence, doubts and ending):
 
 | Strategy | Ending | Total |
 | --- | --- | --- |
-| Best play: H3 likely, H3 likely, H2 likely, H2 very likely, H2 very likely, with good evidence | Deterred | **+31** (+37 doubting only the plants) |
-| Very likely from Day 3 | Deterred | **+32** |
+| Best play: H3 Medium, H3 Medium, H2 Medium, H2 High, H2 High, with good evidence | Deterred | **+31** (+37 doubting only the plants) |
+| High from Day 3 | Deterred | **+32** |
 | Best calls, citing no evidence on Days 4–5 | Deterred | **+25** |
 | Best calls, but doubting everything | Deterred | **+25** |
-| Never above Likely | Standoff (thin) | **+24** |
-| Always worst case (H2 almost certain every day) | Standoff (late) | **−3** |
-| Trust the official line (H1 likely every day) | Seized | **−10** |
-| "It's just signaling" (H3 likely every day) | Seized | **−4** |
-| Always hedge (roughly even) | Seized | **0** |
+| Never above Medium | Standoff (thin) | **+24** |
+| Always worst case (H2 High every day) | Standoff (late) | **+10** |
+| Trust the official line (H1 Medium every day) | Seized | **−15** |
+| "It's just signaling" (H3 Medium every day) | Seized | **−7** |
+| Always hedge (Low every day) | Seized | **0** |
 
 **Playtest 1 (Anthony, not blind, had read this key):** right hypothesis every day, never called High, doubted 2 of 6 plants (both on Day 4), cited clutter once (R-1-05). Day 5 took 1 minute with no Day 5 plants doubted. The Day 1 time (28 min) was a timer bug, now fixed.
 
@@ -216,4 +216,4 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 
 **Playtest 2 (Syd, blind, v0.3 rules):** H2 Low, H1 Moderate, then H2 Moderate on Days 3–5, never High: Standoff (thin), +7. Doubted 1 of 6 plants (the snow photo), cited none. Engaging on Days 2–5, plants fair, realism off in places (flagged R-2-05, R-2-06, R-5-04, kept as is), turn length about right at ~2 min a day, unsure about a sixth day. Led to #38: likelihood plus derived confidence.
 
-**Data format:** v0.5 is built in the game (`crises/border-buildup.json`). v0.5 drops `confidence` from `customerPolicy` (#41). v0.4 added `hypotheses[].claim`, `likelihood` in `customerPolicy` conditions and likelihood-keyed `scoring.call`. New in v0.3: `asset.levels`, `customerPolicy[].level`, `policyNote`, `countdown`, `dailyUpdates`, `endings[].tone` and `endings[].if.since`, `map`, `reports[].pin`, and `groundTruth[].units` (shown only in the postmortem map).
+**Data format:** v0.6 is built in the game (`crises/border-buildup.json`). v0.6 keys `customerPolicy` and `scoring.call` on the player's confidence (`low`, `medium`, `high`), #46. v0.5 dropped derived confidence (#41). v0.4 added `hypotheses[].claim`, `likelihood` in `customerPolicy` conditions and likelihood-keyed `scoring.call`. New in v0.3: `asset.levels`, `customerPolicy[].level`, `policyNote`, `countdown`, `dailyUpdates`, `endings[].tone` and `endings[].if.since`, `map`, `reports[].pin`, and `groundTruth[].units` (shown only in the postmortem map).

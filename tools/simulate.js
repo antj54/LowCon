@@ -15,7 +15,7 @@ if (!engine) { console.error('No inline engine script found in index.html'); pro
 const crisis = JSON.parse(fs.readFileSync(crisisPath, 'utf8'));
 let lastHtml = '', lastLayer = '';
 
-// A plan is one entry per day: [hypothesis, likelihood, [evidence ids]]. Evidence affects points only.
+// A plan is one entry per day: [hypothesis, confidence, [evidence ids]]. Evidence affects points only.
 function run(plan, doubt, cfg) {
   const handlers = {};
   const els = { app: { innerHTML: '' }, layer: { innerHTML: '' } };
@@ -32,12 +32,12 @@ function run(plan, doubt, cfg) {
   return new Promise(resolve => setTimeout(() => {
     click('start'); click('playahead');
     const calls = [];
-    plan.forEach(([h, lik, ev], i) => {
+    plan.forEach(([h, conf, ev], i) => {
       crisis.reports.filter(r => r.day === i + 1 && doubt(r)).forEach(r => click('flag', { id: r.id }));
       click('tab', { v: 'brief' });
-      click('hyp', { v: h }); click('lik', { v: lik });
+      click('hyp', { v: h }); click('conf', { v: conf });
       (ev || []).forEach(id => click('ev', { id }));
-      calls.push(`${h} ${lik}`);
+      calls.push(`${h} ${conf}`);
       click('confirmsend');
       if (cfg && cfg.playtest) {
         if (!/How was Day/.test(els.layer.innerHTML)) throw new Error('Playtest reaction sheet missing on day ' + (i + 1));
@@ -55,23 +55,23 @@ function run(plan, doubt, cfg) {
 
 const none = () => false, plants = r => r.kind === 'planted', all = () => true;
 const BEST = [
-  ['H3', 'likely', ['R-1-01', 'R-1-02', 'R-1-04']],
-  ['H3', 'likely', ['R-2-01', 'R-2-02']],
-  ['H2', 'likely', ['R-3-02', 'R-3-04', 'R-3-01']],
-  ['H2', 'very', ['R-4-01', 'R-3-02', 'R-4-04']],
-  ['H2', 'very', ['R-5-03', 'R-5-04', 'R-4-01']],
+  ['H3', 'medium', ['R-1-01', 'R-1-02', 'R-1-04']],
+  ['H3', 'medium', ['R-2-01', 'R-2-02']],
+  ['H2', 'medium', ['R-3-02', 'R-3-04', 'R-3-01']],
+  ['H2', 'high', ['R-4-01', 'R-3-02', 'R-4-04']],
+  ['H2', 'high', ['R-5-03', 'R-5-04', 'R-4-01']],
 ];
 const STRATEGIES = [
   ['Best play', BEST, none],
   ['Best play, doubt plants', BEST, plants],
   ['Best play, doubt everything', BEST, all],
-  ['Very likely from Day 3', [BEST[0], BEST[1], ['H2', 'very', ['R-3-02', 'R-3-04', 'R-3-01']], BEST[3], BEST[4]], none],
-  ['Very likely, no evidence', [BEST[0], BEST[1], BEST[2], ['H2', 'very', []], ['H2', 'very', []]], none],
-  ['Never above Likely', [BEST[0], BEST[1], BEST[2], ['H2', 'likely', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'likely', ['R-5-03', 'R-5-04']]], none],
-  ['Always worst case', [['H2', 'almost', ['R-1-03', 'R-1-01']], ['H2', 'almost', ['R-2-01', 'R-2-03']], ['H2', 'almost', ['R-3-02', 'R-3-04']], ['H2', 'almost', ['R-4-01', 'R-4-04']], ['H2', 'almost', ['R-5-03', 'R-5-04']]], none],
-  ['Trust the official line', Array(5).fill(['H1', 'likely', []]), none],
-  ['"Just signaling"', Array(5).fill(['H3', 'likely', []]), none],
-  ['Always hedge (roughly even)', [['H3', 'even', []], ['H3', 'even', []], ['H2', 'even', []], ['H2', 'even', []], ['H2', 'even', []]], none],
+  ['High from Day 3', [BEST[0], BEST[1], ['H2', 'high', ['R-3-02', 'R-3-04', 'R-3-01']], BEST[3], BEST[4]], none],
+  ['High, no evidence', [BEST[0], BEST[1], BEST[2], ['H2', 'high', []], ['H2', 'high', []]], none],
+  ['Never above Medium', [BEST[0], BEST[1], BEST[2], ['H2', 'medium', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'medium', ['R-5-03', 'R-5-04']]], none],
+  ['Always worst case', [['H2', 'high', ['R-1-03', 'R-1-01']], ['H2', 'high', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+  ['Trust the official line', Array(5).fill(['H1', 'medium', []]), none],
+  ['"Just signaling"', Array(5).fill(['H3', 'medium', []]), none],
+  ['Always hedge (Low)', [['H3', 'low', []], ['H3', 'low', []], ['H2', 'low', []], ['H2', 'low', []], ['H2', 'low', []]], none],
 ];
 
 (async () => {

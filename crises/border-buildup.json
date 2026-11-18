@@ -1,6 +1,6 @@
 {
   "id": "border-buildup",
-  "formatVersion": "0.5",
+  "formatVersion": "0.6",
   "title": "Exercise or Operation?",
   "crisisNumber": "01",
   "days": 5,
@@ -24,7 +24,7 @@
     "name": "Gen. R. Halvorsen",
     "role": "Commander, Task Force VEYL",
     "callsign": "CDR TF VEYL",
-    "wants": "Does he move 2nd Battalion to the Tarsk sector? He commits as much as your judgment supports.",
+    "wants": "Does he move 2nd Battalion to the Tarsk sector? He commits as much as your confidence supports.",
     "context": "An early move is visible, and Kordav will call it provocation in the middle of talks. A late move might not arrive in time. A company can watch the crossing. Only the full battalion can hold the dam."
   },
   "asset": {
@@ -49,9 +49,8 @@
     {
       "if": {
         "hypothesis": "H2",
-        "likelihood": [
-          "very",
-          "almost"
+        "confidence": [
+          "high"
         ]
       },
       "action": "deploy",
@@ -60,8 +59,8 @@
     {
       "if": {
         "hypothesis": "H2",
-        "likelihood": [
-          "likely"
+        "confidence": [
+          "medium"
         ]
       },
       "action": "deploy",
@@ -70,8 +69,8 @@
     {
       "if": {
         "hypothesis": "H2",
-        "likelihood": [
-          "even"
+        "confidence": [
+          "low"
         ]
       },
       "action": "readiness"
@@ -82,10 +81,9 @@
           "H1",
           "H3"
         ],
-        "likelihood": [
-          "likely",
-          "very",
-          "almost"
+        "confidence": [
+          "medium",
+          "high"
         ],
         "assetAt": [
           "company",
@@ -109,27 +107,27 @@
   ],
   "policySummary": [
     {
-      "brief": "H2, Very likely or Almost certain",
+      "brief": "H2 at High",
       "action": "Moves all of 2nd Battalion to Tarsk"
     },
     {
-      "brief": "H2, Likely",
+      "brief": "H2 at Medium",
       "action": "Sends a reinforced lead company to Tarsk. The rest stays in garrison."
     },
     {
-      "brief": "H2, Roughly even",
+      "brief": "H2 at Low",
       "action": "Raises readiness but doesn't move"
     },
     {
-      "brief": "H3 (any likelihood)",
+      "brief": "H3 (any confidence)",
       "action": "Holds position and leaves it to the diplomats"
     },
     {
-      "brief": "H1 (any likelihood)",
+      "brief": "H1 (any confidence)",
       "action": "Relaxes posture and releases the reserve company to training"
     },
     {
-      "brief": "H1 or H3, Likely or stronger, with troops at Tarsk",
+      "brief": "H1 or H3 at Medium or High with troops at Tarsk",
       "action": "Pulls everyone back to garrison"
     }
   ],
@@ -146,12 +144,12 @@
     "withdraw": "Pulls everyone back to garrison"
   },
   "replies": {
-    "deploy_company": "Sending 2nd Battalion's lead company to Tarsk, reinforced. It can watch the crossing. It can't hold the dam on its own. If you want the rest of the battalion, give me something firmer than 'likely.'",
+    "deploy_company": "Sending 2nd Battalion's lead company to Tarsk, reinforced. It can watch the crossing. It can't hold the dam on its own. If you want the rest of the battalion, give me more than medium confidence.",
     "deploy_battalion": "Moving all of 2nd Battalion to Tarsk. If this turns out to be an exercise, I'll be explaining myself to a lot of people. Make sure it isn't.",
     "upgrade_battalion": "Sending the rest of 2nd Battalion to join the lead company at Tarsk. That's everything I have in the sector.",
-    "hold_company": "The lead company is holding at Tarsk. The rest of the battalion stays put until you're surer than 'likely.'",
+    "hold_company": "The lead company is holding at Tarsk. The rest of the battalion stays put until you're more than medium-sure.",
     "hold_battalion": "Battalion's dug in at Tarsk. Keep them earning their per diem.",
-    "readiness": "Readiness is up. I'm not moving anyone on a coin flip. Come back with something I can act on.",
+    "readiness": "Readiness is up. I'm not moving anyone on low confidence. Come back with something I can act on.",
     "hold": "Understood. Posturing is the diplomats' problem. Holding.",
     "relax": "Good. The reserve company is released to the training rotation. Enjoy the quiet.",
     "withdraw": "Pulling everyone back to garrison. I'd rather not do this twice.",
@@ -203,7 +201,7 @@
     {
       "day": 1,
       "trueHypothesis": "H3",
-      "bestCall": "H3, likely",
+      "bestCall": "H3 at Medium",
       "state": "The exercise is real. Leadership enlarged it by 40% to gain leverage at the talks. 4th Army has drafted a contingency plan to seize Tarsk Dam (the \"northern option\"), but nobody has authorized it.",
       "units": [
         {
@@ -226,7 +224,7 @@
     {
       "day": 2,
       "trueHypothesis": "H3",
-      "bestCall": "H3, likely (H2 at roughly even is a defensible early warning)",
+      "bestCall": "H3 at Medium (H2 at Low is a defensible early warning)",
       "state": "The talks go badly. Contingency planning continues and is still not authorized. The delegation walks out that evening, after your brief.",
       "units": [
         {
@@ -249,7 +247,7 @@
     {
       "day": 3,
       "trueHypothesis": "H2",
-      "bestCall": "H2, likely or very likely",
+      "bestCall": "H2 at Medium or High",
       "state": "Leadership authorized the northern option overnight. Orders go out at 0400: medical support and fuel move to operational accounts, comms security tightens and the cover story starts.",
       "units": [
         {
@@ -272,7 +270,7 @@
     {
       "day": 4,
       "trueHypothesis": "H2",
-      "bestCall": "H2, very likely",
+      "bestCall": "H2 at High",
       "state": "12th Brigade's lead elements and 77th Engineer Regiment (bridging) leave Ostrel for a hidden staging area near the Dolan crossing. 31st Brigade stays behind at Ostrel as the visible \"exercise.\"",
       "units": [
         {
@@ -305,7 +303,7 @@
     {
       "day": 5,
       "trueHypothesis": "H2",
-      "bestCall": "H2, very likely",
+      "bestCall": "H2 at High",
       "state": "Final preparations. The bridging moves forward and the field hospital expands. The incursion is set for dawn on the 20th, the same day as the closing ceremony.",
       "units": [
         {
@@ -1075,21 +1073,17 @@
   },
   "scoring": {
     "call": {
-      "even": [
+      "low": [
         1,
-        0
-      ],
-      "likely": [
-        2,
         -1
       ],
-      "very": [
-        3,
-        -5
+      "medium": [
+        2,
+        -2
       ],
-      "almost": [
-        4,
-        -12
+      "high": [
+        3,
+        -4
       ]
     },
     "evidence": {
@@ -1174,7 +1168,7 @@
         "days": [
           4
         ],
-        "text": "Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, three disciplines pointed the same way: a day to say very likely. \"Likely\" got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
+        "text": "Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, three disciplines pointed the same way: a day for high confidence. Medium got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
       },
       {
         "days": [
@@ -1187,7 +1181,7 @@
       "Plans aren't intent.",
       "Grade the information, not just the source.",
       "When a coercer suddenly goes quiet, the threat may have become an operation.",
-      "Likelihood moves forces. Under-calling a clear warning has a cost too.",
+      "Confidence moves forces. Under-calling a clear warning has a cost too.",
       "Count origins, not reports.",
       "Look for what's missing as well as what's there."
     ]
