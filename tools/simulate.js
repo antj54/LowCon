@@ -15,7 +15,8 @@ if (!engine) { console.error('No inline engine script found in index.html'); pro
 const crisis = JSON.parse(fs.readFileSync(crisisPath, 'utf8'));
 let lastHtml = '', lastLayer = '';
 
-// A plan is one entry per day: [hypothesis, confidence, [evidence ids]]. Evidence affects points only.
+// A plan is one entry per day: [hypothesis, confidence, [evidence ids], [[discipline, target] taskings]].
+// Evidence affects points only. Taskings resolve overnight like the real game.
 function run(plan, doubt, cfg) {
   const handlers = {};
   const els = { app: { innerHTML: '' }, layer: { innerHTML: '' } };
@@ -32,8 +33,9 @@ function run(plan, doubt, cfg) {
   return new Promise(resolve => setTimeout(() => {
     click('start'); click('playahead');
     const calls = [];
-    plan.forEach(([h, conf, ev], i) => {
+    plan.forEach(([h, conf, ev, tasks], i) => {
       crisis.reports.filter(r => r.day === i + 1 && doubt(r)).forEach(r => click('flag', { id: r.id }));
+      (tasks || []).forEach(([disc, target]) => click('task', { disc, target }));
       click('tab', { v: 'brief' });
       click('hyp', { v: h }); click('conf', { v: conf });
       (ev || []).forEach(id => click('ev', { id }));
@@ -61,13 +63,21 @@ const BEST = [
   ['H2', 'high', ['R-4-01', 'R-3-02', 'R-4-04']],
   ['H2', 'high', ['R-5-03', 'R-5-04', 'R-4-01']],
 ];
+const COLLECT = [
+  ['H3', 'medium', ['R-1-01', 'R-1-02', 'R-1-04'], [['IMINT', 'dolan']]],
+  ['H3', 'medium', ['R-2-01', 'R-2-02', 'C-01'], [['SIGINT', 'hq'], ['OSINT', 'railhead']]],
+  ['H2', 'medium', ['R-3-02', 'R-3-04', 'C-05'], [['IMINT', 'dolan'], ['IMINT', 'railhead']]],
+  ['H2', 'high', ['C-02', 'R-3-02', 'R-4-04'], [['IMINT', 'dolan']]],
+  ['H2', 'high', ['C-03', 'C-04', 'R-5-04']],
+];
 const STRATEGIES = [
-  ['Best play', BEST, none],
-  ['Best play, doubt plants', BEST, plants],
-  ['Best play, doubt everything', BEST, all],
-  ['High from Day 3', [BEST[0], BEST[1], ['H2', 'high', ['R-3-02', 'R-3-04', 'R-3-01']], BEST[3], BEST[4]], none],
-  ['High, no evidence', [BEST[0], BEST[1], BEST[2], ['H2', 'high', []], ['H2', 'high', []]], none],
-  ['Never above Medium', [BEST[0], BEST[1], BEST[2], ['H2', 'medium', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'medium', ['R-5-03', 'R-5-04']]], none],
+  ['Best play, no collection', BEST, none],
+  ['Best play with collection', COLLECT, none],
+  ['Collection, doubt plants', COLLECT, plants],
+  ['Collection, doubt everything', COLLECT, all],
+  ['High from Day 3, with collection', [COLLECT[0], COLLECT[1], ['H2', 'high', ['R-3-02', 'R-3-04', 'C-05'], [['IMINT', 'dolan']]], COLLECT[3], COLLECT[4]], none],
+  ['Burn KESTREL (HUMINT twice)', [['H3', 'medium', ['R-1-01'], [['HUMINT', 'depot']]], ['H3', 'medium', ['R-2-01'], [['HUMINT', 'depot']]], BEST[2], BEST[3], ['H2', 'high', ['R-5-03', 'R-4-01']]], none],
+  ['Never above Medium', [COLLECT[0], COLLECT[1], COLLECT[2], ['H2', 'medium', ['C-02', 'R-3-02', 'R-4-04'], [['IMINT', 'dolan']]], ['H2', 'medium', ['C-03', 'C-04']]], none],
   ['Always worst case', [['H2', 'high', ['R-1-03', 'R-1-01']], ['H2', 'high', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
   ['Trust the official line', Array(5).fill(['H1', 'medium', []]), none],
   ['"Just signaling"', Array(5).fill(['H3', 'medium', []]), none],
@@ -81,6 +91,6 @@ const STRATEGIES = [
     console.log(name.padEnd(30), r.line);
     if (process.argv.includes('--calls')) console.log(' '.repeat(31) + r.calls.join(' · '));
   }
-  const pt = await run(BEST, none, { playtest: true });
+  const pt = await run(COLLECT, none, { playtest: true });
   console.log('Playtest build'.padEnd(30), pt.line, /Playtest debrief/.test(lastHtml) ? '| debrief shown' : '| DEBRIEF MISSING');
 })();

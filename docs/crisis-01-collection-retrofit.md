@@ -1,6 +1,6 @@
 # Crisis 01 · Collection retrofit (Phase 2, paper)
 
-*SPOILERS. Paper design for adding collection tasking to Crisis 01 (#45). Nothing built. Uses the Phase 2 rules in `claude/phase-2-design.md` and the v0.6 call (hypothesis plus Low, Medium or High confidence).*
+*SPOILERS. **Built 2026-11-18 (#48)** in `crises/border-buildup.json` v0.7, with two changes from this paper: KESTREL goes quiet from his next meeting rather than at once (so R-3-02 survives, R-5-04 is lost), and the Liaison result is split into C-12 (Days 1–3) and C-13 (Days 4–5). Uses the Phase 2 rules in `claude/phase-2-design.md` and the v0.6 call (hypothesis plus Low, Medium or High confidence).*
 
 ## What changes in the crisis
 

@@ -1,6 +1,6 @@
 {
   "id": "border-buildup",
-  "formatVersion": "0.6",
+  "formatVersion": "0.7",
   "title": "Exercise or Operation?",
   "crisisNumber": "01",
   "days": 5,
@@ -364,7 +364,7 @@
       "id": "S-KESTREL",
       "codeName": "KESTREL",
       "discipline": "HUMINT",
-      "access": "Clerk at the 4th Army fuel and supply depot in Varn. Sees allocations, issue orders and accounting codes, not unit plans. Recruited 8 months ago.",
+      "access": "Clerk at the 4th Army fuel and supply depot in Varn. Sees allocations, issue orders and accounting codes, not unit plans. Recruited 8 months ago. Every meeting is a risk: don't task him two days running.",
       "startingGrade": "C",
       "trueReliability": 0.85,
       "controlledByAdversary": false,
@@ -447,6 +447,16 @@
       "access": "Task force security office.",
       "startingGrade": "A",
       "trueReliability": 1,
+      "controlledByAdversary": false,
+      "rosterHidden": true
+    },
+    {
+      "id": "S-OSINT",
+      "codeName": "OSINT cell",
+      "discipline": "OSINT",
+      "access": "Our own open-source team. Searches what you task it to.",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
       "controlledByAdversary": false,
       "rosterHidden": true
     }
@@ -782,8 +792,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "diagnostic": true,
-      "text": "Ostrel: about half of 12th Mechanized Brigade's vehicles are gone. There's a new vehicle concentration in a forest staging area 8 km from the Dolan crossing, including about 30 bridging vehicles (77th Engineer Regiment) and a tented facility consistent with a field medical unit. 31st Mechanized Brigade is still at Ostrel.",
+      "text": "Ostrel: about half of 12th Mechanized Brigade's vehicles are gone. 31st Mechanized Brigade is still at Ostrel.",
       "kind": "true",
       "supports": [
         "H2"
@@ -793,11 +802,11 @@
         "H3"
       ],
       "tells": [],
-      "postmortemNote": "The diagnostic item. Bridging equipment hidden near a real crossing, with medical support forward. A show of force is meant to be seen, and nobody hides one in a forest. It also finds the \"field medical point\" from R-3-02, so two independent sources converge.",
+      "postmortemNote": "Something big left Ostrel two days before the exercise was due to end. Where it went was only visible if you tasked imagery on Dolan (C-02).",
       "pin": {
-        "x": 342,
-        "y": 194,
-        "label": "Bridging and medical tents in forest"
+        "x": 205,
+        "y": 150,
+        "label": "Half of 12th Bde gone from Ostrel"
       }
     },
     {
@@ -821,9 +830,10 @@
         "tell": "12th Brigade has used encrypted voice for the whole exercise. The one time it talks in the clear, it announces the cover story word for word. Real slips happen on routine chatter, not on the exact message the other side would want overheard.",
         "crossCheck": {
           "ids": [
+            "R-3-04",
             "R-4-01"
           ],
-          "text": "The same day, imagery shows half of 12th Brigade gone from Ostrel and a new concentration 8 km from the Dolan crossing (R-4-01). That's not a brigade loading for garrison."
+          "text": "The brigade's logistics nets went dark at 0400 on Day 3 (R-3-04), the opposite of an exercise winding down, and half of it has already left Ostrel (R-4-01), days before it's supposed to be 'loading for garrison.' Imagery of Dolan (C-02), if you tasked it, shows where it went."
         },
         "motive": "Kordav knew the net was covered. A reliable channel is the best place for a lie, because you trust the channel."
       },
@@ -852,7 +862,7 @@
           "ids": [
             "R-4-01"
           ],
-          "text": "The post is about 31st Brigade, which imagery shows still at Ostrel (R-4-01). Even if 31st really does go home on the 20th, that tells you nothing about 12th Brigade, the one moving toward Dolan."
+          "text": "The post is about 31st Brigade, which imagery shows still at Ostrel (R-4-01). Even if 31st really does go home on the 20th, that tells you nothing about 12th Brigade, the half that has already left."
         },
         "motive": "Fill open sources with \"going home\" so the story seems to be everywhere."
       },
@@ -946,9 +956,10 @@
         "tell": "Every \"going home\" item in this crisis comes through a channel Kordav controls or can feed: its ministry (R-3-03, R-5-02), an unencrypted call on a net it knows is covered (R-4-02), a new social media account (R-4-03) and a wire report quoting the ministry (R-5-01). Nothing independent backs it.",
         "crossCheck": {
           "ids": [
-            "R-5-03"
+            "R-3-02",
+            "R-4-01"
           ],
-          "text": "The same day, imagery shows bridging vehicles within 2 km of the river and the field hospital growing (R-5-03). Units heading back to base don't push bridging toward a border river."
+          "text": "Units going home don't need blood products pushed forward on a contingency account (R-3-02), and half of 12th Brigade left Ostrel two days ago without going home (R-4-01). If you tasked imagery on Dolan (C-03), the bridging was 2 km from the river."
         },
         "motive": "The closing ceremony is real (R-5-03 shows the stands going up). Kordav wrapped the lie around a true event so it would check out."
       },
@@ -966,7 +977,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Dolan staging area: about 40% more vehicles than yesterday. The bridging vehicles have moved to within 2 km of the river, and the field medical facility has grown. At Ostrel, 31st Brigade is still in place and stands and flags are going up for a ceremony. No snow cover anywhere in the area.",
+      "text": "Ostrel: 31st Brigade is still in place, and stands and flags are going up for a ceremony. No snow cover anywhere in the area.",
       "kind": "true",
       "supports": [
         "H2"
@@ -976,11 +987,11 @@
         "H3"
       ],
       "tells": [],
-      "postmortemNote": "Real preparations. The ceremony at Ostrel is real too: good deception wraps itself in true details.",
+      "postmortemNote": "The ceremony is real: good deception wraps itself in true details. The bridging at the river was only visible if you tasked imagery on Dolan (C-03).",
       "pin": {
-        "x": 366,
-        "y": 214,
-        "label": "Bridging within 2 km of the river"
+        "x": 205,
+        "y": 150,
+        "label": "Ceremony stands; 31st Bde in place"
       }
     },
     {
@@ -1052,6 +1063,275 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "Economics."
+    },
+    {
+      "id": "C-01",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Dolan forest: fresh vehicle tracks and a cleared strip along the treeline. No vehicles present.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The staging area being prepared. Nothing in the standing reporting showed it.",
+      "pin": {
+        "x": 342,
+        "y": 194,
+        "label": "Tracks and cleared strip, no vehicles"
+      }
+    },
+    {
+      "id": "C-02",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Dolan forest: about 30 bridging vehicles (77th Engineer Regiment) and a tented facility consistent with a field medical unit, 8 km from the crossing.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1",
+        "H3"
+      ],
+      "tells": [],
+      "postmortemNote": "The diagnostic item. Bridging hidden near a real crossing, with medical support forward. A show of force is meant to be seen, and nobody hides one in a forest. It also finds KESTREL's 'field medical point' (R-3-02).",
+      "diagnostic": true,
+      "pin": {
+        "x": 342,
+        "y": 194,
+        "label": "Bridging and medical tents in forest"
+      }
+    },
+    {
+      "id": "C-03",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Dolan staging area: about 40% more vehicles than yesterday. Bridging vehicles have moved to within 2 km of the river. The field medical facility has grown.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1",
+        "H3"
+      ],
+      "tells": [],
+      "postmortemNote": "Final preparations for a crossing at dawn on the 20th.",
+      "diagnostic": true,
+      "pin": {
+        "x": 366,
+        "y": 214,
+        "label": "Bridging within 2 km of the river"
+      }
+    },
+    {
+      "id": "C-04",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-CIRRANE",
+      "discipline": "IMINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Ostrel railhead: no rail cars staged and no loading activity.",
+      "kind": "true",
+      "supports": [
+        "H2",
+        "H3"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "Nobody was going home on the 20th. A cross-check against every 'going home' item.",
+      "pin": {
+        "x": 166,
+        "y": 186,
+        "label": "No loading at the railhead"
+      }
+    },
+    {
+      "id": "C-05",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-MERIDIAN",
+      "discipline": "SIGINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "4th Army HQ net: the 'northern option' planning cell has moved to 24-hour manning.",
+      "kind": "true",
+      "supports": [
+        "H2",
+        "H3"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Planning intensifying before anyone had authorized it. On its own it doesn't separate H2 from H3: militaries plan hard for options they hope not to use.",
+      "pin": {
+        "x": 230,
+        "y": 110,
+        "label": "Planning cell on 24-hour manning"
+      }
+    },
+    {
+      "id": "C-06",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-MERIDIAN",
+      "discipline": "SIGINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "The HQ nets we were watching have gone quiet. Traffic has moved to a net we don't cover.",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The target went dark after the 0400 switch. Three points for a confirmation of R-3-04.",
+      "pin": {
+        "x": 230,
+        "y": 110,
+        "label": "HQ nets gone quiet"
+      }
+    },
+    {
+      "id": "C-07",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-OSINT",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "The defence ministry has quietly cancelled the minister's foreign trip planned for the 21st.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The minister expected to be busy after the 20th."
+    },
+    {
+      "id": "C-08",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-OSINT",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "Rail enthusiast forums: no military trains timetabled out of Ostrel before the 23rd.",
+      "kind": "true",
+      "supports": [
+        "H2",
+        "H3"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "A cheap cross-check against 'home by the 20th.'",
+      "pin": {
+        "x": 166,
+        "y": 186,
+        "label": "No military trains before the 23rd"
+      }
+    },
+    {
+      "id": "C-09",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-KESTREL",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 3,
+      "text": "KESTREL: two officers asked the depot for fuel for 'heavy vehicles' at a site the depot doesn't supply, north of Ostrel.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Fuel for the bridging column.",
+      "pin": {
+        "x": 96,
+        "y": 256,
+        "label": "Fuel asked for 'heavy vehicles'"
+      }
+    },
+    {
+      "id": "C-10",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-KESTREL",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "KESTREL: the 'contingency' account now covers rations for 3,000 people for 10 days.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [
+        "H1"
+      ],
+      "tells": [],
+      "postmortemNote": "Sustainment for an operation, not an exercise ending on the 20th.",
+      "pin": {
+        "x": 96,
+        "y": 256,
+        "label": "Rations for 3,000 for 10 days"
+      }
+    },
+    {
+      "id": "C-12",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "Elsin's service is certain an attack is imminent and asks again for the battalion. It offers no new sourcing.",
+      "kind": "noise",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Elsin's standing agenda, free of charge and free of evidence."
+    },
+    {
+      "id": "C-13",
+      "via": "collection",
+      "day": null,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Elsin's border police report engineers at the riverbank opposite Dolan.",
+      "kind": "true",
+      "supports": [
+        "H2"
+      ],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Elsin is right once the facts catch up with it.",
+      "pin": {
+        "x": 372,
+        "y": 210,
+        "label": "Engineers at the riverbank"
+      }
     }
   ],
   "tellLabels": {
@@ -1168,7 +1448,7 @@
         "days": [
           4
         ],
-        "text": "Imagery found the bridging vehicles and the field hospital in a forest 8 km from Dolan. With KESTREL's Day 3 report and Elsin's sighting, three disciplines pointed the same way: a day for high confidence. Medium got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
+        "text": "Standing imagery showed half of 12th Brigade gone from Ostrel. If you tasked imagery on Dolan, it found where they went: bridging vehicles and a field hospital in a forest 8 km from the crossing. With KESTREL's Day 3 report, that was a day for high confidence; without the Dolan imagery it was a harder call. Medium got you a company, and a company can't hold a dam. The unencrypted radio call and the conscript post were staged for you."
       },
       {
         "days": [
@@ -1183,10 +1463,103 @@
       "When a coercer suddenly goes quiet, the threat may have become an operation.",
       "Confidence moves forces. Under-calling a clear warning has a cost too.",
       "Count origins, not reports.",
-      "Look for what's missing as well as what's there."
-    ]
+      "Look for what's missing as well as what's there.",
+      "Collection is a choice: the gap you don't task stays open."
+    ],
+    "missedCollection": {
+      "1": "Imagery of Dolan forest would have shown a cleared strip with no vehicles yet: somewhere being prepared.",
+      "2": "SIGINT on 4th Army HQ would have shown the 'northern option' cell going to 24-hour manning.",
+      "3": "Imagery of Dolan forest would have found the bridging vehicles and the field hospital (C-02).",
+      "4": "Imagery of the Ostrel railhead would have shown nothing loading: nobody was going home on the 20th.",
+      "5": "Imagery of Dolan would have shown the bridging within 2 km of the river."
+    }
   },
-  "collectionResults": [],
+  "collectionResults": [
+    {
+      "id": "C-01",
+      "discipline": "IMINT",
+      "target": "dolan",
+      "from": 1,
+      "to": 2
+    },
+    {
+      "id": "C-02",
+      "discipline": "IMINT",
+      "target": "dolan",
+      "from": 3,
+      "to": 3
+    },
+    {
+      "id": "C-03",
+      "discipline": "IMINT",
+      "target": "dolan",
+      "from": 4,
+      "to": 5
+    },
+    {
+      "id": "C-04",
+      "discipline": "IMINT",
+      "target": "railhead",
+      "from": 3,
+      "to": 5
+    },
+    {
+      "id": "C-05",
+      "discipline": "SIGINT",
+      "target": "hq",
+      "from": 1,
+      "to": 2
+    },
+    {
+      "id": "C-06",
+      "discipline": "SIGINT",
+      "target": "hq",
+      "from": 3,
+      "to": 5
+    },
+    {
+      "id": "C-07",
+      "discipline": "OSINT",
+      "target": "ministry",
+      "from": 2,
+      "to": 5
+    },
+    {
+      "id": "C-08",
+      "discipline": "OSINT",
+      "target": "railhead",
+      "from": 2,
+      "to": 5
+    },
+    {
+      "id": "C-09",
+      "discipline": "HUMINT",
+      "target": "depot",
+      "from": 1,
+      "to": 1
+    },
+    {
+      "id": "C-10",
+      "discipline": "HUMINT",
+      "target": "depot",
+      "from": 2,
+      "to": 3
+    },
+    {
+      "id": "C-12",
+      "discipline": "Liaison",
+      "target": "dolan",
+      "from": 1,
+      "to": 3
+    },
+    {
+      "id": "C-13",
+      "discipline": "Liaison",
+      "target": "dolan",
+      "from": 4,
+      "to": 5
+    }
+  ],
   "policyNote": "A company can watch the crossing. Only the full battalion can hold the dam.",
   "countdown": {
     "toDay": 6,
@@ -1332,5 +1705,125 @@
       }
     },
     "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted."
-  }
+  },
+  "collection": {
+    "budget": 4,
+    "costs": {
+      "OSINT": 1,
+      "Liaison": 0,
+      "IMINT": 2,
+      "SIGINT": 3,
+      "HUMINT": 3
+    },
+    "delays": {
+      "HUMINT": 2
+    },
+    "sources": {
+      "IMINT": "S-CIRRANE",
+      "SIGINT": "S-MERIDIAN",
+      "OSINT": "S-OSINT",
+      "HUMINT": "S-KESTREL",
+      "Liaison": "S-WREN"
+    },
+    "fallback": "Nothing significant at {target}.",
+    "burnRules": [
+      {
+        "sourceId": "S-KESTREL",
+        "discipline": "HUMINT",
+        "consecutiveDays": 2,
+        "text": "KESTREL missed the meeting. Our officer waited an hour; nobody came.",
+        "postmortem": "KESTREL was tasked two days running. A depot clerk asking questions two days in a row gets noticed, and he went quiet."
+      }
+    ],
+    "burnPoints": -2
+  },
+  "pirs": [
+    {
+      "id": "PIR 1",
+      "question": "Are 4th Army units moving toward the border outside the exercise area?",
+      "targets": [
+        "dolan",
+        "railhead"
+      ]
+    },
+    {
+      "id": "PIR 2",
+      "question": "Has Kordav's leadership authorized action against Tarsk?",
+      "targets": [
+        "hq",
+        "ministry"
+      ]
+    },
+    {
+      "id": "PIR 3",
+      "question": "Is Kordav preparing to cross the Veyl (bridging, medical, fuel)?",
+      "targets": [
+        "dolan",
+        "depot"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "id": "dolan",
+      "name": "Dolan crossing and forest",
+      "pin": {
+        "x": 345,
+        "y": 200
+      },
+      "disciplines": [
+        "IMINT",
+        "OSINT",
+        "Liaison"
+      ]
+    },
+    {
+      "id": "railhead",
+      "name": "Ostrel railhead",
+      "pin": {
+        "x": 166,
+        "y": 186
+      },
+      "disciplines": [
+        "IMINT",
+        "OSINT"
+      ]
+    },
+    {
+      "id": "hq",
+      "name": "4th Army HQ",
+      "pin": {
+        "x": 230,
+        "y": 110
+      },
+      "disciplines": [
+        "SIGINT",
+        "OSINT"
+      ]
+    },
+    {
+      "id": "ministry",
+      "name": "Kordav defence ministry",
+      "pin": {
+        "x": 24,
+        "y": 40
+      },
+      "disciplines": [
+        "SIGINT",
+        "OSINT"
+      ]
+    },
+    {
+      "id": "depot",
+      "name": "Varn depot (KESTREL)",
+      "pin": {
+        "x": 96,
+        "y": 256
+      },
+      "disciplines": [
+        "HUMINT",
+        "OSINT"
+      ]
+    }
+  ]
 }

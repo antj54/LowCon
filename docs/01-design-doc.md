@@ -24,7 +24,7 @@ Each in-game day is one turn of about 8 minutes, and it always runs in the same 
 0. **Morning read-in (about 15 sec).** What's changed in public, the countdown, your forces' posture and the situation map.
 1. **Read the inbox (about 1 min).** 4 to 6 new items arrive: HUMINT reports, intercepts, imagery, OSINT posts and liaison cables. Each one shows its source code name and the grade it came in with, and the ones with a location are plotted on the map.
 2. **Assess (3 to 4 min).** Decide whether to believe each item: doubt anything you judge false or deliberately misleading, and flag clutter as not relevant. From Phase 2, link items to hypotheses on the board. This is the puzzle: a timestamp that's off, a source reporting on something it couldn't have seen, two "independent" reports that trace back to the same origin.
-3. **Task collection (about 1 min, from Phase 2).** Spend a limited number of collection points on your biggest intelligence gaps. The results show up in tomorrow's inbox.
+3. **Task collection (about 1 min).** Spend a limited number of collection points on your biggest intelligence gaps. The results show up in tomorrow's inbox.
 4. **Write the brief (about 2 min).** Pick a judgment and a confidence level (Low, Medium or High, color-coded), then attach up to 3 pieces of key evidence. Evidence is scored by what it really was; it doesn't change the call or what the customer does. The brief then writes your key judgment: "We assess with high confidence that…, based on…". One judgment a day keeps the turn short and the stakes clear.
 5. **Overnight.** The hidden world state moves forward. Your customer acts on your brief, and tomorrow opens with their reaction and the consequences.
 
@@ -55,7 +55,7 @@ Five systems drive the game. Each one maps to a real analytic discipline, simpli
 
 Every source has a code name, a level of access and a reliability grade from A to F. Every report also gets an information credibility rating from 1 to 6, the same scheme as the Admiralty system. Each item arrives with the collector's grade, and your call is whether to believe the report: a good source can still carry a bad one. A source's file grade belongs to the source and updates between crises as it builds a track record. Each source also has a hidden true reliability, and a few are controlled by the adversary.
 
-### Collection (Phase 2)
+### Collection
 
 Each day you spend collection points on your intelligence gaps. Disciplines trade off speed, cost and risk:
 
@@ -124,8 +124,8 @@ The MVP is Phase 1: a single 5-day crisis you can actually play. Each phase afte
 | Phase | Scope | Gate to move on |
 | --- | --- | --- |
 | 0 · Paper prototype | This doc plus one crisis scripted as a day-by-day table; play it through by hand | The crisis is fun to reason through on paper |
-| **1 · First playable (MVP)** *(current)* | One 5-day crisis: read-in and map, inbox with doubting, daily brief, postmortem. No collection or team yet | A blind playtester plays all 5 days and wants a sixth |
-| **2 · Core systems** | Collection tasking, hypotheses board, credibility; a second crisis to prove the systems generalize | The second crisis plays differently from the first |
+| 1 · First playable (MVP) | One 5-day crisis: read-in and map, inbox with doubting, daily brief, postmortem. No collection or team yet | A blind playtester plays all 5 days and wants a sixth |
+| **2 · Core systems** *(current)* | Collection tasking, hypotheses board, credibility; a second crisis to prove the systems generalize | The second crisis plays differently from the first |
 | **3 · Campaign** | 3 linked crises, analysts with traits, unlocks, the recurring customer cast, reassignment; sources and deception that carry across crises | A full campaign holds up over weeks of daily play |
 | **4 · Living world** | Crisis templates with Claude-written report text; streaks, an archive of past crises | — |
 

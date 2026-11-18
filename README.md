@@ -6,7 +6,7 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 
 ## Status
 
-**Phase 1 · First playable.** One 5-day crisis (Crisis 01, *Exercise or Operation?*) with a morning read-in, a situation map, an inbox with accept-or-doubt grading, a daily brief, and a postmortem with the real unit positions.
+**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Next: the hypotheses board and credibility.
 
 ## Layout
 
@@ -44,7 +44,7 @@ Testers need write access to save: Contributor if they're in the owner's organiz
 node tools/simulate.js
 ```
 
-Expected for Crisis 01: best play ends **Deterred**, and so does skipping evidence, at a lower score. "Never above Medium" and "always worst case" end in **Standoff**. Trusting the official line, "just signaling" and always hedging end **Seized**. Doubting everything scores below doubting nothing. Add `--calls` to see each day's call. The last line runs the playtest build and checks the reaction sheet and debrief appear.
+Expected for Crisis 01: best play ends **Deterred**, with or without collection. Burning KESTREL costs a source and points. "Never above Medium" and "always worst case" end in **Standoff**. Trusting the official line, "just signaling" and always hedging end **Seized**. Doubting everything scores below doubting nothing. Add `--calls` to see each day's call. The last line runs the playtest build and checks the reaction sheet and debrief appear.
 
 ## Setting
 

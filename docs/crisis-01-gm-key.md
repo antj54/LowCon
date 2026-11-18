@@ -76,7 +76,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full rea
 
 | ID | Kind | Supports | Contradicts | Tells | What it really was |
 | --- | --- | --- | --- | --- | --- |
-| R-4-01 | T | **H2** | H1, H3 | — | **The diagnostic item.** Bridging equipment hidden near a real crossing, with medical support forward. A show of force is meant to be seen, and nobody hides one in a forest. It also finds the "field medical point" from R-3-02, so two independent sources converge. |
+| R-4-01 | T | H2 | H1 | — | Standing imagery now covers Ostrel only (v0.7): half of 12th Brigade is gone. **The diagnostic moved to collection:** C-02, imagery tasked on Dolan forest on Day 3, finds the bridging vehicles and field hospital 8 km from the crossing, and confirms KESTREL's "field medical point" (R-3-02). |
 | R-4-02 | P | H1 | — | out-of-pattern (unencrypted), too on-message | See the reasoning below. |
 | R-4-03 | P | H1 | — | access-mismatch, new-account | See the reasoning below. |
 | R-4-04 | T | H2 | — | — | The same alarmist source as Days 1–2, but now imagery corroborates it. Corroboration should move you, not tone. |
@@ -88,7 +88,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter. The full rea
 | --- | --- | --- | --- | --- | --- |
 | R-5-01 | P | H1 | — | circular-origin | See the reasoning below. |
 | R-5-02 | P | H1 | — | only-one-chain | See the reasoning below. |
-| R-5-03 | T | **H2** | H1, H3 | — | Real preparations. The ceremony at Ostrel is real too: good deception wraps itself in true details. |
+| R-5-03 | T | H2 | H1 | — | Ostrel only (v0.7): the ceremony is real, and good deception wraps itself in true details. The bridging within 2 km of the river is collection-only (C-03). |
 | R-5-04 | T | H2 | H1 | — | 12th Brigade is on a separate operational supply chain and has been compartmented. KESTREL reports the limits of what he knows honestly. |
 | R-5-05 | P | H1 | — | recycled-media | See the reasoning below. |
 | R-5-06 | C | — | — | — | Economics. |
@@ -189,15 +189,17 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 
 ## Designer notes (critic hat)
 
-**Dominant-strategy check** (v0.6 engine, `node tools/simulate.js --calls`; totals include evidence, doubts and ending):
+**Dominant-strategy check** (v0.7 engine with collection, `node tools/simulate.js --calls`; totals include evidence, doubts, burned sources and ending). Collection is the full plan in the retrofit doc; the simulator assumes perfect calls, so it understates what collection is worth to a human player:
 
 | Strategy | Ending | Total |
 | --- | --- | --- |
-| Best play: H3 Medium, H3 Medium, H2 Medium, H2 High, H2 High, with good evidence | Deterred | **+31** (+37 doubting only the plants) |
-| High from Day 3 | Deterred | **+32** |
-| Best calls, citing no evidence on Days 4–5 | Deterred | **+25** |
-| Best calls, but doubting everything | Deterred | **+25** |
-| Never above Medium | Standoff (thin) | **+24** |
+| Best play with collection (imagery on Dolan Days 1, 3, 4; SIGINT on HQ Day 2) | Deterred | **+32** (+38 doubting only the plants) |
+| Best play, no collection | Deterred | **+31** |
+| Burning KESTREL (HUMINT two days running) | Deterred | **+25** (−2 burn, R-5-04 lost) |
+| High from Day 3, with collection | Deterred | **+33** |
+| Best calls, citing no evidence on Days 4–5 | Deterred | **+26** |
+| Best calls with collection, doubting everything | Deterred | **+26** |
+| Never above Medium | Standoff (thin) | **+25** |
 | Always worst case (H2 High every day) | Standoff (late) | **+10** |
 | Trust the official line (H1 Medium every day) | Seized | **−15** |
 | "It's just signaling" (H3 Medium every day) | Seized | **−7** |
