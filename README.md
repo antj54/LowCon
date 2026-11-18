@@ -14,6 +14,7 @@ Working title options: *Low Confidence*, *The Daily Brief*, *Indications & Warni
 | --- | --- |
 | `index.html` | The engine: one self-contained page (markup, styles, script). Holds no crisis content. |
 | `crises/*.json` | Crisis data files. The engine loads one at start. Format v0.3. |
+| `docs/` | Design doc, decisions log, crisis content and the Crisis 01 packet and answer key (spoilers), mirrored from the claude.ai project. |
 | `tools/simulate.js` | Runs the real engine headlessly and prints the ending and score for a set of fixed strategies. Use it after any change to scoring, policy or content. |
 
 ## Run it
