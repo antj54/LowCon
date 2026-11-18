@@ -13,5 +13,6 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | `crisis-02-player-packet.md` | Crisis 02 (The Walk-in) paper script, no spoilers |
 | `crisis-02-gm-key.md` | **Spoilers.** Crisis 02 ground truth, item key, reasoning for every plant, endings, balance notes |
 | `phase-2-design.md` | Design for Phase 2: collection tasking, hypotheses board, credibility, Crisis 02. Built. |
+| `crisis-03-player-packet.md`, `crisis-03-gm-key.md` | Crisis 03 (*The Southern Line*) on paper. The key has spoilers. Not built. |
 | `phase-3-design.md` | Paper design for Phase 3: service record, carry-over, analysts, Scenario 03. Not built; decisions open. |
 | `crisis-01-gm-key.md` | **Spoilers.** Crisis 01 ground truth, item key, reasoning for every planted item, endings, balance notes |
