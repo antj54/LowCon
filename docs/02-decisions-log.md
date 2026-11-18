@@ -6,6 +6,7 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 39 | 2026-11-18 | Remove the free-text "Reasoning" box from the brief. The brief instead writes a key-judgment line from the player's picks. **Build with #38 after the playtest.** | It affected nothing and both players left it empty every day. The cited evidence already is the reasoning, in structured form. |
 | 38 | 2026-11-18 | Split the call into **likelihood** (chosen by the player) and **confidence** (derived from the evidence they cite), following ICD 203 and the UK PHIA framework. The customer acts on both. Replaces the single "confidence" dial. **Build after the playtest.** See "Queued after playtest." | The single dial used likelihood words under a confidence label, the combination ICD 203 warns against. Both intel-trained players stayed at Moderate, which is sound tradecraft the game punished. Deriving confidence from cited evidence keeps it to one tap and makes choosing evidence matter more. |
 | 37 | 2026-11-18 | Don't tell the player how many days a crisis lasts. In-world deadlines (like the exercise's announced end date) stay. **Change after the playtest.** See "Queued after playtest" below. | Real analysts don't know when a crisis ends. A visible day count lets players play the calendar instead of the evidence, especially on the last day. |
 | 36 | 2026-11-18 | Keep the company outcome: a Moderate brief sends a company that holds the dam but doesn't deter the invasion. Kordav crosses at Dolan and isolates it (Standoff). The tripwire and "eyes forward" alternatives are rejected for now. | Anthony's SME judgment: a company wouldn't deter in this situation. Partial commitment is a real consequence of under-calling a clear warning. |
@@ -63,9 +64,11 @@ Changes already decided, held until the Crisis 01 playtest results are in so the
   - **Customer policy:** full battalion = Very likely or Almost certain with at least Moderate confidence. Lead company = Likely, or a higher likelihood with Low confidence. Readiness = Roughly even. Pull-back rules as now.
   - **Words in the game:** the brief reads like a real key judgment: "We assess it is very likely… (moderate confidence)."
   - **Docs to update when built:** design doc core loop step 4 and calibration scoring, crisis content `scoring` and `customerPolicy` fields, Crisis 01 key and postmortem lesson 4.
+- **Remove the Reasoning box (#39).** Build with #38: drop the textarea from the brief and the Note column from the playtest log, and show the generated key-judgment line ("We assess it is very likely… (moderate confidence), based on R-4-01, R-3-02") in the brief, the send confirmation, the earlier-days record and the postmortem.
 
 ## Parking lot
 
+- Free-text reasoning that matters: Claude reads the player's reasoning and the customer reacts to it (for example, spotting a weak basis). Phase 4.
 - Variable crisis length: a crisis ends early or runs on depending on the truth and the player's calls. Phase 3–4.
 
 - The adversary reacts to the customer's moves (for example switching crossings if forces move early). Phase 3–4.
