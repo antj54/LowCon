@@ -6,6 +6,7 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 40 | 2026-11-18 | Built #37–#39. Likelihood scoring: Roughly even +1/0, Likely +2/−1, Very likely +3/−5, Almost certain +4/−12. Confidence rule: High = 3 items from 2+ disciplines with 2+ sources graded A–B and information 1–2; Moderate = 2+ sources with 1+ graded A–C and information 1–3; Low otherwise. Items the player doubted or marked not relevant don't count toward confidence. | Each likelihood step pays off once belief reaches its range. Excluding doubted items makes "doubt everything" cost in the story (only a company moves), not just in points. All values checked with `tools/simulate.js`. |
 | 39 | 2026-11-18 | Remove the free-text "Reasoning" box from the brief. The brief instead writes a key-judgment line from the player's picks. **Build with #38 after the playtest.** | It affected nothing and both players left it empty every day. The cited evidence already is the reasoning, in structured form. |
 | 38 | 2026-11-18 | Split the call into **likelihood** (chosen by the player) and **confidence** (derived from the evidence they cite), following ICD 203 and the UK PHIA framework. The customer acts on both. Replaces the single "confidence" dial. **Build after the playtest.** See "Queued after playtest." | The single dial used likelihood words under a confidence label, the combination ICD 203 warns against. Both intel-trained players stayed at Moderate, which is sound tradecraft the game punished. Deriving confidence from cited evidence keeps it to one tap and makes choosing evidence matter more. |
 | 37 | 2026-11-18 | Don't tell the player how many days a crisis lasts. In-world deadlines (like the exercise's announced end date) stay. **Change after the playtest.** See "Queued after playtest" below. | Real analysts don't know when a crisis ends. A visible day count lets players play the calendar instead of the evidence, especially on the last day. |
@@ -53,7 +54,7 @@
 
 ## Queued after playtest
 
-Changes already decided, held until the Crisis 01 playtest results are in so the test runs on one version.
+*Built 2026-11-18 (#40). Kept for reference.*
 
 - **Hide the crisis length (#37).** Remove the day count everywhere the player sees it: the header ("Day 2 of 5" becomes "Day 2"), the opening screen ("5-day arc"), the playtest note ("all 5 in one sitting") and the playtest invite text. Keep the countdown to the exercise's announced end, which is in-world. On Day 5, drop "This is your last brief before the announced end date" from the read-in; the countdown line already says "Tomorrow is the announced end of IRON HARVEST (the 20th)," which gives the deadline without saying the game ends there.
 
@@ -79,4 +80,4 @@ Changes already decided, held until the Crisis 01 playtest results are in so the
 
 ## Status
 
-**Phase 1 · First playable.** Crisis 01 is built and published. Blind playtest out to testers on 2026-11-18; the Phase 1 gate waits on their results.
+**Phase 1 · First playable.** Crisis 01 is built and published. One blind playtest in (Syd: engaging, plants fair, realism off in places, unsure about a sixth day). #37–#39 built on 2026-11-18 in response; testers who play from now on get the new version. Revisit the gate as more results arrive.

@@ -44,7 +44,7 @@ Testers need write access to save: Contributor if they're in the owner's organiz
 node tools/simulate.js
 ```
 
-Expected for Crisis 01: best play ends **Deterred**, "always worst case" and "never above Moderate" end in **Standoff**, and trusting the official line, "just signaling" and always hedging end **Seized**. Doubting everything should score below doubting nothing. The last line runs the playtest build and checks the reaction sheet and debrief appear.
+Expected for Crisis 01: best play ends **Deterred**. "Very likely" on thin evidence, "never above Likely", doubting everything and "always worst case" end in **Standoff**. Trusting the official line, "just signaling" and always hedging end **Seized**. Add `--calls` to see each day's likelihood and derived confidence. The last line runs the playtest build and checks the reaction sheet and debrief appear.
 
 ## Setting
 

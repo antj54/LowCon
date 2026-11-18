@@ -12,7 +12,7 @@ Working title: **Low Confidence**.
 
 Every feature has to serve at least one of these pillars:
 
-1. **Judgment under uncertainty.** There's no answer key during play. You commit to a call and a confidence level, and the truth only comes out later.
+1. **Judgment under uncertainty.** There's no answer key during play. You commit to a call, how likely it is and the evidence behind it, and the truth only comes out later.
 2. **Every day counts.** A full turn fits in one short session on a phone. Each day has one important decision, not twenty small ones.
 3. **Authentic tradecraft.** Source grading, confidence language, collection priorities and competing hypotheses are the actual mechanics, not just flavor text.
 4. **The world remembers.** Your briefs shape what your customer does. Sources you burn stay burned, and deception that fools you once can come back.
@@ -25,7 +25,7 @@ Each in-game day is one turn of about 8 minutes, and it always runs in the same 
 1. **Read the inbox (about 1 min).** 4 to 6 new items arrive: HUMINT reports, intercepts, imagery, OSINT posts and liaison cables. Each one shows its source code name and the grade it came in with, and the ones with a location are plotted on the map.
 2. **Assess (3 to 4 min).** Decide whether to believe each item: doubt anything you judge false or deliberately misleading, and flag clutter as not relevant. From Phase 2, link items to hypotheses on the board. This is the puzzle: a timestamp that's off, a source reporting on something it couldn't have seen, two "independent" reports that trace back to the same origin.
 3. **Task collection (about 1 min, from Phase 2).** Spend a limited number of collection points on your biggest intelligence gaps. The results show up in tomorrow's inbox.
-4. **Write the brief (about 2 min).** Pick a judgment, set a confidence level (low, moderate or high) and attach up to 3 pieces of key evidence. One judgment a day keeps the turn short and the stakes clear.
+4. **Write the brief (about 2 min).** Pick a judgment and how likely it is (roughly even, likely, very likely or almost certain, in ICD 203 terms), then attach up to 3 pieces of key evidence. Your confidence isn't chosen: it comes from the evidence you cite (how many sources and disciplines, and how they were graded). The brief then writes your key judgment: "We assess it is very likely… (moderate confidence), based on…". One judgment a day keeps the turn short and the stakes clear.
 5. **Overnight.** The hidden world state moves forward. Your customer acts on your brief, and tomorrow opens with their reaction and the consequences.
 
 At the end of a crisis there's a **postmortem**: the ground truth is revealed next to your daily calls, including which items were planted, what gave each one away and what you missed. A map shows where the adversary's units really were each day. That payoff is what turns a series of guesses into learning.
@@ -36,7 +36,7 @@ You play the cell lead: hands-on with the material, but answerable to a customer
 
 - **Your team.** You start with 2 analysts and can grow to 4. Each one adds a short note to the items in their specialty (regional, technical or OSINT). Their notes are usually helpful but not always right, and each analyst has a trait such as overconfident, slow but careful, or prone to anchoring on the first theory. Learning who to trust is part of the game.
 - **Credibility.** High credibility gets you more collection points and a bigger team, and your customer acts on your briefs. If it drops, your budget gets cut and the customer starts ignoring you, even when you're right. You can't be fired: at rock-bottom credibility you're reassigned to a new cell, losing your team and unlocks but keeping your track record.
-- **Calibration scoring.** A high-confidence call that's right pays the most, and a high-confidence call that's wrong costs the most: Low +1/−1, Moderate +2/−2, High +3/−4. High pays off above about two-thirds certainty. Cited evidence scores by what it really was (true +1, noise 0, clutter −1, planted −2), and doubting a report scores planted +1, true −1. "Always hedge" loses because the customer won't act on a Low call.
+- **Calibration scoring.** A strong likelihood that's right pays the most, and a strong likelihood that's wrong costs the most: Roughly even +1/0, Likely +2/−1, Very likely +3/−5, Almost certain +4/−12. Each step up pays off only once your real belief reaches its range. Cited evidence scores by what it really was (true +1, noise 0, clutter −1, planted −2), and doubting a report scores planted +1, true −1. "Always hedge" loses because the customer won't act on a roughly-even call.
 - **Unlocks.** Over the course of the campaign you gain collection disciplines (imagery, SIGINT), new regions, new analysts and a higher clearance tier that opens more sensitive (and riskier) sources.
 
 ## Setting
@@ -85,7 +85,7 @@ The adversary plants items that are consistent with each other but false. Every 
 
 ### Customer and consequences
 
-Your daily brief drives a decision by your customer, who commits in proportion to your confidence: a Moderate brief buys a partial move, and a High brief buys the full one. Moving too early has a cost too. The true world state evolves out of sight, and outcomes show up a day or two later. That delay is deliberate: you have to live with a call before you find out how it turned out.
+Your daily brief drives a decision by your customer, who commits in proportion to your call: a strong likelihood on at least moderate confidence buys the full move, and anything less buys a partial one. Moving too early has a cost too. The true world state evolves out of sight, and outcomes show up a day or two later. That delay is deliberate: you have to live with a call before you find out how it turned out.
 
 ## Content: crises and reports
 
@@ -101,7 +101,7 @@ How it gets built over time:
 2. Turn the patterns that work into crisis templates with variables (region, adversary type, truth branch).
 3. Have Claude write the report text inside each template's structure, so the wording varies while the truth and the tells stay controlled by the engine.
 
-The default cadence is one in-game day per real day. A Play ahead switch lets you open the next day straight away.
+The player isn't told how many days a crisis lasts; in-world deadlines (an announced end date, a vote, a deadline) are fine. The default cadence is one in-game day per real day. A Play ahead switch lets you open the next day straight away.
 
 The crisis data format is in `03-crisis-content.md`.
 

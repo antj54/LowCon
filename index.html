@@ -174,6 +174,15 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .switch button{min-width:64px;min-height:36px;border-radius:18px;border:1px solid var(--line);background:var(--paper);font:600 13px/1 var(--f-mono);cursor:pointer}
 .switch button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
 .loading{padding:40px 0;font-family:var(--f-mono);color:var(--muted)}
+.confs.liks{grid-template-columns:repeat(4,1fr)}
+@media (max-width:420px){.confs.liks{grid-template-columns:repeat(2,1fr)}}
+.confbox{border:1px solid var(--line);border-radius:4px;padding:10px 12px;display:grid;gap:4px;background:var(--card)}
+.confbox b{font:600 18px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+.warnline{font-size:14px;color:var(--bad);font-weight:600}
+.confchip{display:inline-block;padding:1px 7px;border-radius:3px;border:1px solid var(--line);color:var(--ink);text-transform:none;letter-spacing:0}
+.confchip.c-high{border-color:var(--good);color:var(--good)}
+.confchip.c-low{border-color:var(--bad);color:var(--bad)}
+.kj{font-size:15px;font-style:italic;border-left:3px solid var(--ink);padding-left:10px}
 .msg.pt{border-left-color:var(--accent)}
 .dq{display:grid;gap:6px}
 textarea.short{min-height:48px}
@@ -241,11 +250,20 @@ const CRISIS_URL = 'crises/border-buildup.json';
 const LS_PREFIX = 'intel-cell-sim:';
 const SOURCE_SCALE = {A:'Completely reliable',B:'Usually reliable',C:'Fairly reliable',D:'Not usually reliable',E:'Unreliable',F:'Reliability cannot be judged'};
 const INFO_SCALE = {1:'Confirmed by other sources',2:'Probably true',3:'Possibly true',4:'Doubtful',5:'Improbable',6:'Truth cannot be judged'};
-const CONF = [
-  {id:'low', label:'Low', words:'might / could'},
-  {id:'moderate', label:'Moderate', words:'likely'},
-  {id:'high', label:'High', words:'almost certainly'}
+// Likelihood: ICD 203 terms and ranges. The player chooses this.
+const LIK = [
+  {id:'even', label:'Roughly even', range:'45–55%', phrase:'there is a roughly even chance'},
+  {id:'likely', label:'Likely', range:'55–80%', phrase:'it is likely'},
+  {id:'very', label:'Very likely', range:'80–95%', phrase:'it is very likely'},
+  {id:'almost', label:'Almost certain', range:'95–99%', phrase:'it is almost certain'}
 ];
+// Confidence: derived from the cited evidence, using only what the player can see.
+const CONF = [
+  {id:'low', label:'Low'},
+  {id:'moderate', label:'Moderate'},
+  {id:'high', label:'High'}
+];
+const STRONG_GRADES = 'AB', SOLID_GRADES = 'ABC';
 const KIND_LABEL = {'true':'True','noise':'Noise','planted':'Planted','clutter':'Clutter'};
 const IDLE_MS = 120000, TICK_MS = 15000;
 const CONFIG_URL = 'config.json';
@@ -274,6 +292,33 @@ const rep = id => C.reports.find(r => r.id === id);
 const src = id => C.sources.find(s => s.id === id) || {codeName:id, discipline:''};
 const hyp = id => C.hypotheses.find(h => h.id === id);
 const confLabel = id => (CONF.find(c => c.id === id) || {}).label || id;
+const likLabel = id => (LIK.find(c => c.id === id) || {}).label || id;
+function deriveConfidence(ids){
+  // Excludes items the player doubted or marked not relevant: you can't rest a judgment on them.
+  const items = ids.map(rep).filter(r => r && !(S.grades[r.id] || {}).f && !(S.grades[r.id] || {}).n);
+  const sources = new Set(items.map(r => r.sourceId));
+  const disciplines = new Set(items.map(r => r.discipline));
+  const strongSources = new Set(items.filter(r => STRONG_GRADES.includes(r.sourceGrade) && r.credibility != null && r.credibility <= 2).map(r => r.sourceId));
+  const solid = items.filter(r => SOLID_GRADES.includes(r.sourceGrade) && r.credibility != null && r.credibility <= 3).length;
+  let level = 'low';
+  if (items.length >= 3 && disciplines.size >= 2 && strongSources.size >= 2) level = 'high';
+  else if (sources.size >= 2 && solid >= 1) level = 'moderate';
+  return {level, items:items.length, excluded:ids.length - items.length, sources:sources.size, disciplines:disciplines.size, strong:strongSources.size};
+}
+function confExplain(c){
+  const parts = [c.sources + (c.sources === 1 ? ' source' : ' sources'), c.disciplines + (c.disciplines === 1 ? ' discipline' : ' disciplines'), c.strong + ' strongly graded'];
+  let next = '';
+  if (c.level === 'low') next = 'Moderate needs at least 2 different sources, one graded A–C with information rated 1–3.';
+  else if (c.level === 'moderate') next = 'High needs 3 items from at least 2 disciplines, with at least 2 sources graded A–B and information rated 1–2.';
+  return parts.join(' · ') + (c.excluded ? ' · ' + c.excluded + ' doubted or not-relevant item' + (c.excluded > 1 ? 's' : '') + ' not counted' : '') + (next ? '. ' + next : '.');
+}
+function incoherent(lik, conf){ return conf === 'low' && (lik === 'very' || lik === 'almost'); }
+function keyJudgment(b){
+  const h = hyp(b.hyp), l = LIK.find(x => x.id === b.lik);
+  if (!h || !l) return '';
+  return 'We assess ' + l.phrase + ' that ' + (h.claim || h.text) + ' (' + confLabel(b.conf).toLowerCase() + ' confidence)' + (b.evidence.length ? ', based on ' + b.evidence.join(', ') : '') + '.';
+}
+const callLabel = b => b.hyp + ', ' + likLabel(b.lik) + ' (' + confLabel(b.conf) + ')';
 const reportsFor = d => C.reports.filter(r => r.day === d);
 const dayLabel = d => C.dayLabels[d-1] || ('Day ' + d);
 const briefCount = () => Object.keys(S.briefs).length;
@@ -296,6 +341,9 @@ function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
   const s = Object.assign(fresh(), clone(st));
   if (s.asset === 'forward') s.asset = 'battalion';
+  const LEGACY = {low:'even', moderate:'likely', high:'very'};
+  Object.values(s.briefs || {}).forEach(b => { if (!b.lik){ b.lik = LEGACY[b.conf] || 'likely'; b.conf = null; } });
+  Object.values(s.drafts || {}).forEach(dr => { if (!dr.lik && dr.conf){ dr.lik = LEGACY[dr.conf]; } delete dr.conf; delete dr.note; });
   if (!C.asset.levels[s.asset]) s.asset = 'home';
   return s;
 }
@@ -303,6 +351,7 @@ function normalize(st){
 /* ---------- Customer policy, events, endings, scoring ---------- */
 function matchCond(cond, brief, asset){
   if (cond.hypothesis && ![].concat(cond.hypothesis).includes(brief.hyp)) return false;
+  if (cond.likelihood && !cond.likelihood.includes(brief.lik)) return false;
   if (cond.confidence && !cond.confidence.includes(brief.conf)) return false;
   if (cond.assetAt && ![].concat(cond.assetAt).includes(asset)) return false;
   return true;
@@ -343,7 +392,7 @@ function scoreDay(d){
   const b = S.briefs[d];
   const t = C.groundTruth.find(g => g.day === d);
   const right = b.hyp === t.trueHypothesis;
-  const pay = C.scoring.call[b.conf];
+  const pay = C.scoring.call[b.lik];
   const call = right ? pay[0] : pay[1];
   const ev = b.evidence.reduce((s, id) => s + (C.scoring.evidence[rep(id).kind] || 0), 0);
   return {right, call, ev, truth:t};
@@ -354,13 +403,14 @@ function doubtPoints(){
 
 /* ---------- Actions ---------- */
 function draft(d){
-  if (!S.drafts[d]) S.drafts[d] = {hyp:null, conf:null, evidence:[], note:''};
+  if (!S.drafts[d]) S.drafts[d] = {hyp:null, lik:null, evidence:[]};
   return S.drafts[d];
 }
 function sendBrief(d){
   tick();
   const dr = draft(d);
-  const brief = {hyp:dr.hyp, conf:dr.conf, evidence:dr.evidence.slice(0, C.scoring.maxEvidence), note:(dr.note||'').trim(),
+  const ev = dr.evidence.slice(0, C.scoring.maxEvidence);
+  const brief = {hyp:dr.hyp, lik:dr.lik, conf:deriveConfidence(ev).level, evidence:ev,
     date:todayStr(), sentAt:new Date().toISOString(), minutes:Math.max(1, Math.round((S.activeMs[d] || 0)/60000))};
   const res = resolvePolicy(d, brief);
   if (res.asset !== S.asset){ S.asset = res.asset; S.assetSince = d; }
@@ -577,7 +627,7 @@ function headerView(d, open){
     ? [['postmortem','Postmortem'],['files','Files']]
     : [['inbox','Inbox' + (open ? '<span class="badge">' + reportsFor(d).length + '</span>' : '')],['brief','Brief'],['files','Files']];
   if (CFG.playtest && ui.isOwner) tabs.push(['playtests','Testers']);
-  const dayText = S.done ? 'Crisis closed' : ('Day ' + d + ' of ' + C.days + ' · ' + esc(dayLabel(d)));
+  const dayText = S.done ? 'Crisis closed' : ('Day ' + d + ' · ' + esc(dayLabel(d)));
   return '<header class="top">'
     + '<span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + esc(C.title) + '</span>'
     + '<h1>' + dayText + '</h1>'
@@ -597,7 +647,7 @@ function policyTable(){
 
 function introView(){
   const b = C.briefing;
-  return '<header class="top"><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + C.days + '-day arc</span><h1>' + esc(C.title) + '</h1></header>'
+  return '<header class="top"><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + '</span><h1>' + esc(C.title) + '</h1></header>'
     + '<main class="stack">'
     + '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">The Veyl border. Reporting will be plotted here as it arrives.</figcaption></figure>'
     + '<p class="mono small muted">' + esc(b.dateLine) + '</p>'
@@ -621,7 +671,7 @@ function readInCard(d){
   }
   facts.push(C.asset.name + ': ' + assetLabel() + '.');
   const prev = S.briefs[d-1];
-  if (prev) facts.push('Your line yesterday: ' + prev.hyp + ' at ' + confLabel(prev.conf) + '.');
+  if (prev) facts.push('Your line yesterday: ' + callLabel(prev) + '.');
   if (S.frozenBriefDays.includes(d)) facts.push('Troop moves are frozen today.');
   return '<section class="readin"><span class="from">Morning read-in · Day ' + d + ' · ' + esc(dayLabel(d)) + '</span>'
     + (u ? '<p>' + esc(u.text) + '</p>' : '')
@@ -661,7 +711,7 @@ function replyCard(d){
   const r = S.replies[d];
   if (!r) return '';
   const prev = S.briefs[d-1];
-  return '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + ' · re your Day ' + (d-1) + ' brief' + (prev ? ' (' + prev.hyp + ', ' + confLabel(prev.conf) + ')' : '') + '</span>'
+  return '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + ' · re your Day ' + (d-1) + ' brief' + (prev ? ' (' + callLabel(prev) + ')' : '') + '</span>'
     + '<p><q>' + esc(C.replies[r.key] || '') + '</q></p>'
     + (r.note ? '<p class="note">' + esc(r.note) + '</p>' : '')
     + '</div>';
@@ -671,7 +721,7 @@ function earlierDays(upTo){
   let html = '';
   for (let d = upTo; d >= 1; d--){
     const b = S.briefs[d];
-    html += '<details><summary><span>Day ' + d + ' · ' + esc(dayLabel(d)) + '</span><span class="mono small muted">' + (b ? b.hyp + ' · ' + confLabel(b.conf) : '') + '</span></summary><div class="inner">'
+    html += '<details><summary><span>Day ' + d + ' · ' + esc(dayLabel(d)) + '</span><span class="mono small muted">' + (b ? callLabel(b) : '') + '</span></summary><div class="inner">'
       + (b ? briefRecord(d) : '')
       + reportsFor(d).map(r => itemCard(r, false)).join('')
       + '</div></details>';
@@ -696,10 +746,10 @@ function briefRecord(d){
   const b = S.briefs[d];
   if (!b) return '';
   const h = hyp(b.hyp);
-  return '<div class="record"><span class="stamp">' + b.hyp + ' · ' + confLabel(b.conf) + ' confidence<small>Day ' + d + ' brief · sent</small></span>'
+  return '<div class="record"><span class="stamp">' + b.hyp + ' · ' + likLabel(b.lik) + '<small>' + confLabel(b.conf) + ' confidence · Day ' + d + ' brief · sent</small></span>'
+    + '<p class="kj">' + esc(keyJudgment(b)) + '</p>'
     + '<p><b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>'
     + '<p class="small"><span class="muted">Key evidence:</span> <span class="mono">' + (b.evidence.length ? b.evidence.join(', ') : 'none') + '</span></p>'
-    + (b.note ? '<p class="small"><span class="muted">Reasoning:</span> ' + esc(b.note) + '</p>' : '')
     + '<p class="small"><span class="muted">Halvorsen:</span> ' + esc(C.replyLabels[b.reply] || '') + '</p>'
     + '</div>';
 }
@@ -709,8 +759,9 @@ function briefView(d){
   const items = reportsFor(d);
   const frozen = S.frozenBriefDays.includes(d);
   let predict = '';
-  if (dr.hyp && dr.conf){
-    const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
+  const cf = deriveConfidence(dr.evidence);
+  if (dr.hyp && dr.lik){
+    const res = resolvePolicy(d, {hyp:dr.hyp, lik:dr.lik, conf:cf.level});
     predict = '<p class="predict">If you send this, Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>';
   }
   const full = dr.evidence.length >= C.scoring.maxEvidence;
@@ -720,18 +771,20 @@ function briefView(d){
   };
   let groups = '<div class="evigroup"><h4>Today</h4>' + items.map(eviBtn).join('') + '</div>';
   for (let x = d-1; x >= 1; x--) groups += '<details><summary><span>Day ' + x + ' items</span></summary><div class="inner evigroup">' + reportsFor(x).map(eviBtn).join('') + '</div></details>';
-  const ready = dr.hyp && dr.conf;
+  const ready = dr.hyp && dr.lik;
   return '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
     + '<div class="msg"><span class="from">Tasking · ' + esc(C.customer.callsign) + '</span><p>' + esc(C.customer.wants) + '</p>'
     + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p></div>'
     + '<fieldset><legend>Judgment</legend>' + C.hypotheses.map(h => '<button class="opt" data-act="hyp" data-v="' + h.id + '" aria-pressed="' + (dr.hyp === h.id) + '"><span class="k">' + h.id + '</span><span class="t">' + esc(h.short) + '</span><span class="d">' + esc(h.text) + '</span></button>').join('') + '</fieldset>'
-    + '<fieldset><legend>Confidence</legend><div class="confs">' + CONF.map(c => '<button class="conf" data-act="conf" data-v="' + c.id + '" aria-pressed="' + (dr.conf === c.id) + '"><b>' + c.label + '</b><span>' + c.words + '</span></button>').join('') + '</div></fieldset>'
+    + '<fieldset><legend>Likelihood</legend><div class="confs liks">' + LIK.map(c => '<button class="conf" data-act="lik" data-v="' + c.id + '" aria-pressed="' + (dr.lik === c.id) + '"><b>' + c.label + '</b><span>' + c.range + '</span></button>').join('') + '</div></fieldset>'
+    + '<fieldset><legend>Key evidence · ' + dr.evidence.length + ' of ' + C.scoring.maxEvidence + ' · <span class="confchip c-' + cf.level + '">' + confLabel(cf.level) + ' confidence</span></legend>' + groups + '</fieldset>'
+    + '<div class="confbox"><p><span class="whyk">Confidence, from your evidence</span><b>' + confLabel(cf.level) + '</b></p><p class="small muted">' + esc(confExplain(cf)) + '</p>'
+    + (dr.lik && incoherent(dr.lik, cf.level) ? '<p class="warnline">' + esc(likLabel(dr.lik)) + ' on low confidence doesn\'t hold together. Soften the likelihood or cite stronger evidence.</p>' : '')
+    + '</div>'
+    + (ready ? '<p class="kj">' + esc(keyJudgment({hyp:dr.hyp, lik:dr.lik, conf:cf.level, evidence:dr.evidence})) + '</p>' : '')
     + predict
-    + '<fieldset><legend>Key evidence · ' + dr.evidence.length + ' of ' + C.scoring.maxEvidence + '</legend>' + groups + '</fieldset>'
-    + '<label class="lab" for="brief-note">Reasoning (one sentence, optional)</label>'
-    + '<textarea id="brief-note" data-input="note" maxlength="280" placeholder="We assess…">' + esc(dr.note) + '</textarea>'
     + '<div class="btnrow"><button class="btn" data-act="send"' + (ready ? '' : ' disabled') + '>Send brief</button></div>'
-    + (ready ? '' : '<p class="small muted">Pick a judgment and a confidence level to send.</p>');
+    + (ready ? '' : '<p class="small muted">Pick a judgment and a likelihood to send.</p>');
 }
 
 function msToMidnight(){ const n = new Date(); const m = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1); return m - n; }
@@ -755,9 +808,11 @@ function filesView(){
     + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(s.startingGrade) + '</b></td></tr>').join('') + '</tbody></table></div></div>'
     + '<div class="stack"><h3>Grading scale</h3><p class="small">Collectors grade each item as it arrives: the letter is the source\'s reliability, the number is the information\'s credibility. The letter belongs to the source and doesn\'t change from report to report. Your call on each item is whether to believe it.</p><div class="tablewrap"><table><thead><tr><th>Source</th><th>Information</th></tr></thead><tbody>'
     + [0,1,2,3,4,5].map(i => { const k = 'ABCDEF'[i]; return '<tr><td class="small"><span class="mono"><b>' + k + '</b></span> ' + SOURCE_SCALE[k] + '</td><td class="small"><span class="mono"><b>' + (i+1) + '</b></span> ' + INFO_SCALE[i+1] + '</td></tr>'; }).join('') + '</tbody></table></div></div>'
-    + '<div class="stack"><h3>Scoring</h3><p class="small">Each daily call is scored against what was actually true that day.</p><div class="tablewrap"><table><thead><tr><th>Confidence</th><th class="num">Right</th><th class="num">Wrong</th></tr></thead><tbody>'
-    + CONF.map(c => { const p = C.scoring.call[c.id]; return '<tr><td>' + c.label + '</td><td class="num">+' + p[0] + '</td><td class="num">' + p[1] + '</td></tr>'; }).join('') + '</tbody></table></div>'
-    + '<p class="small">Cited evidence: true +' + C.scoring.evidence.true + ', noise ' + C.scoring.evidence.noise + ', clutter ' + C.scoring.evidence.clutter + ', planted ' + C.scoring.evidence.planted + '. Doubting a report: planted item +' + C.scoring.challenge.planted + ', true item ' + C.scoring.challenge.true + ', anything else 0. The ending adds a bonus or a penalty. High pays off if you\'re about two-thirds sure. Moderate pays off if you\'re better than even.</p></div>'
+    + '<div class="stack"><h3>Likelihood and confidence</h3><p class="small">You choose how likely your judgment is, using the standard estimative terms. Confidence isn\'t chosen: it comes from the evidence you cite. It counts only items you haven\'t doubted or marked not relevant, and uses only what you can see: how many sources, how many disciplines and how they were graded.</p>'
+    + '<ul class="small"><li><b>High:</b> 3 items from at least 2 disciplines, with at least 2 sources graded A–B and information rated 1–2.</li><li><b>Moderate:</b> at least 2 different sources, one graded A–C with information rated 1–3.</li><li><b>Low:</b> anything less.</li></ul></div>'
+    + '<div class="stack"><h3>Scoring</h3><p class="small">Each daily call is scored against what was actually true that day.</p><div class="tablewrap"><table><thead><tr><th>Likelihood</th><th class="num">Right</th><th class="num">Wrong</th></tr></thead><tbody>'
+    + LIK.map(c => { const p = C.scoring.call[c.id]; return '<tr><td>' + c.label + ' <span class="muted small">' + c.range + '</span></td><td class="num">+' + p[0] + '</td><td class="num">' + p[1] + '</td></tr>'; }).join('') + '</tbody></table></div>'
+    + '<p class="small">Cited evidence: true +' + C.scoring.evidence.true + ', noise ' + C.scoring.evidence.noise + ', clutter ' + C.scoring.evidence.clutter + ', planted ' + C.scoring.evidence.planted + '. Doubting a report: planted item +' + C.scoring.challenge.planted + ', true item ' + C.scoring.challenge.true + ', anything else 0. The ending adds a bonus or a penalty. Each step up pays off only when your real belief reaches that range, so call what you actually think.</p></div>'
     + '<div class="stack"><h3>Settings</h3>'
     + '<div class="switch"><span><b>Play ahead</b><br><span class="small muted">Open the next day without waiting for midnight.</span></span><button data-act="playahead" aria-pressed="' + S.playAhead + '">' + (S.playAhead ? 'On' : 'Off') + '</button></div>'
     + '<div class="switch"><span><b>Start over</b><br><span class="small muted">Wipes this crisis and opens the situation briefing again.</span></span><button data-act="restart">Reset</button></div>'
@@ -786,7 +841,7 @@ function postmortemView(){
   let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">Dawn, the 20th</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
     + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + ' · ending ' + sign(ending.points) + '</span></div>'
     + '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Your call</th><th>Truth</th><th class="num">Call</th><th class="num">Evid.</th><th class="num">Min</th></tr></thead><tbody>'
-    + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
+    + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + likLabel(x.b.lik) + (x.b.conf ? ' <span class="muted">(' + confLabel(x.b.conf) + ')</span>' : '') + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
     + '</tbody></table></div>'
     + '<p class="small">Planted items you doubted: <b>' + caught + ' of ' + planted.length + '</b>. True items you doubted: <b>' + falseAlarms + '</b>. Clutter you marked not relevant: <b>' + clutterSpotted + ' of ' + clutter.length + '</b>.</p>'
     + (CFG.playtest ? debriefCard() : '')
@@ -800,8 +855,9 @@ function postmortemView(){
     const t = C.groundTruth.find(g => g.day === d);
     const b = S.briefs[d];
     const script = C.postmortem.script.find(s => s.days[0] === d);
-    html += '<details' + (d === 1 ? ' open' : '') + '><summary><span>Day ' + d + ' · truth ' + t.trueHypothesis + '</span><span class="mono small muted">' + (b ? 'you: ' + b.hyp + ' ' + confLabel(b.conf) : '') + '</span></summary><div class="inner">'
+    html += '<details' + (d === 1 ? ' open' : '') + '><summary><span>Day ' + d + ' · truth ' + t.trueHypothesis + '</span><span class="mono small muted">' + (b ? 'you: ' + b.hyp + ' ' + likLabel(b.lik) : '') + '</span></summary><div class="inner">'
       + (script ? '<p>' + esc(script.text) + '</p>' : '')
+      + (b && b.conf ? '<p class="kj">' + esc(keyJudgment(b)) + '</p>' : '')
       + '<p class="small"><span class="muted">What was happening:</span> ' + esc(t.state) + '</p>'
       + '<p class="small"><span class="muted">Best call:</span> ' + esc(t.bestCall) + '</p>'
       + reportsFor(d).map(r => revealItem(r, b)).join('')
@@ -835,12 +891,12 @@ function revealItem(r, brief){
 
 function playtestLog(){
   const ending = C.endings.find(e => e.id === S.ending) || evalEnding();
-  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Truth | Call pts | Evidence | Evid pts | Halvorsen | Note'];
+  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Likelihood | Confidence | Truth | Call pts | Evidence | Evid pts | Halvorsen'];
   let total = ending.points;
   for (let d = 1; d <= C.days; d++){
     const b = S.briefs[d]; if (!b) continue;
     const sc = scoreDay(d); total += sc.call + sc.ev;
-    lines.push([d, b.minutes, b.hyp + ' ' + confLabel(b.conf), sc.truth.trueHypothesis, sc.call, b.evidence.join(' ') || '-', sc.ev, b.reply, b.note || '-'].join(' | '));
+    lines.push([d, b.minutes, b.hyp, likLabel(b.lik), b.conf ? confLabel(b.conf) : '-', sc.truth.trueHypothesis, sc.call, b.evidence.join(' ') || '-', sc.ev, b.reply].join(' | '));
   }
   const planted = C.reports.filter(r => r.kind === 'planted');
   const dp = doubtPoints(); total += dp;
@@ -862,7 +918,7 @@ function playtestLog(){
 
 function playtestNote(){
   return '<div class="msg pt"><span class="from">Playtest build</span>'
-    + '<p>Thanks for testing. Just play. ' + (CFG.playAheadDefault ? 'Each day takes about 8 minutes, and the next one opens as soon as you send your brief, so you can do all 5 in one sitting or spread them out.' : 'One day per real day, about 8 minutes each.') + ' Your calls, timing and doubts are recorded automatically and sent to the designer. You don\'t need to write anything down.</p>'
+    + '<p>Thanks for testing. Just play. ' + (CFG.playAheadDefault ? 'Each day takes about 8 minutes, and the next one opens as soon as you send your brief, so you can play straight through in one sitting or spread it out.' : 'One day per real day, about 8 minutes each.') + ' Your calls, timing and doubts are recorded automatically and sent to the designer. You don\'t need to write anything down.</p>'
     + '<p class="small">Optional, one tap each: a quick reaction after each brief, a <b>Not realistic?</b> button on any item that doesn\'t ring true, and four questions at the end.</p>'
     + '<p class="small muted">Please don\'t look at the game\'s GitHub repo until you\'ve finished. It has the answers.</p></div>';
 }
@@ -909,9 +965,11 @@ function renderLayer(){
   let html = '';
   if (ui.sheet === 'send'){
     const d = curDay(), dr = draft(d);
-    const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
+    const cf = deriveConfidence(dr.evidence);
+    const res = resolvePolicy(d, {hyp:dr.hyp, lik:dr.lik, conf:cf.level});
     html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Send the Day ' + d + ' brief?</h3>'
-      + '<p><b>' + dr.hyp + ', ' + confLabel(dr.conf) + ' confidence.</b> ' + (dr.evidence.length ? 'Key evidence: <span class="mono">' + dr.evidence.join(', ') + '</span>.' : 'No key evidence attached.') + '</p>'
+      + '<p class="kj">' + esc(keyJudgment({hyp:dr.hyp, lik:dr.lik, conf:cf.level, evidence:dr.evidence})) + '</p>'
+      + (incoherent(dr.lik, cf.level) ? '<p class="warnline">' + esc(likLabel(dr.lik)) + ' on low confidence doesn\'t hold together.</p>' : '')
       + '<p class="small">Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>'
       + '<p class="small muted">Once it\'s sent you can\'t change it. Halvorsen acts on it tonight.</p>'
       + '<div class="btnrow"><button class="btn" data-act="confirmsend">Send</button><button class="btn ghost" data-act="cancel">Keep editing</button></div></div></div>';
@@ -967,7 +1025,7 @@ function onClick(e){
       break;
     }
     case 'hyp': draft(d).hyp = el.dataset.v; save(); render(); break;
-    case 'conf': draft(d).conf = el.dataset.v; save(); render(); break;
+    case 'lik': draft(d).lik = el.dataset.v; save(); render(); break;
     case 'ev': {
       const dr = draft(d), id = el.dataset.id, i = dr.evidence.indexOf(id);
       if (i >= 0) dr.evidence.splice(i, 1); else if (dr.evidence.length < C.scoring.maxEvidence) dr.evidence.push(id);
@@ -996,8 +1054,7 @@ function onClick(e){
 function onInput(e){
   const el = e.target;
   if (!el.dataset) return;
-  if (el.dataset.input === 'note'){ draft(curDay()).note = el.value; save(); }
-  else if (el.dataset.input === 'realism' && S.realism[el.dataset.id]){ S.realism[el.dataset.id].note = el.value; save(); }
+  if (el.dataset.input === 'realism' && S.realism[el.dataset.id]){ S.realism[el.dataset.id].note = el.value; save(); }
   else if (el.dataset.input === 'react' && ui.reactDay){ S.feedback[ui.reactDay] = Object.assign(S.feedback[ui.reactDay] || {}, {note:el.value}); save(); }
   else if (el.dataset.input === 'debrief'){ S.debrief.note = el.value; save(); }
 }
