@@ -53,7 +53,7 @@
 
 Changes already decided, held until the Crisis 01 playtest results are in so the test runs on one version.
 
-- **Hide the crisis length (#37).** Remove the day count everywhere the player sees it: the header ("Day 2 of 5" becomes "Day 2"), the opening screen ("5-day arc"), the playtest note ("all 5 in one sitting") and the playtest invite text. Keep the countdown to the exercise's announced end, which is in-world. Decide whether Day 5's read-in line ("This is your last brief before the announced end date") stays: it's in-world, but it tells the player this is the final turn.
+- **Hide the crisis length (#37).** Remove the day count everywhere the player sees it: the header ("Day 2 of 5" becomes "Day 2"), the opening screen ("5-day arc"), the playtest note ("all 5 in one sitting") and the playtest invite text. Keep the countdown to the exercise's announced end, which is in-world. On Day 5, drop "This is your last brief before the announced end date" from the read-in; the countdown line already says "Tomorrow is the announced end of IRON HARVEST (the 20th)," which gives the deadline without saying the game ends there.
 
 ## Parking lot
 
