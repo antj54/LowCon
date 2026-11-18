@@ -453,6 +453,9 @@ async function connectAccount(){
     const uid = await user.id();
     if (!uid) { updateSaveStatus(); return; }
     if (CFG.playtest) ptRef = db.doc('playtests/' + uid);
+    if (CFG.playtest && !ui.isOwner){
+      try { const m = await db.doc('meta/owner').get(); ui.isOwner = !!(m && m.exists); } catch(e) {}
+    }
     const ref = db.collection('data/users/' + uid).doc('save-' + C.id);
     const snap = await Promise.race([ref.get(), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 10000))]);
     store = {mode:'db', ref, ok:true};
@@ -553,11 +556,11 @@ function mapCard(d){
 /* ---------- Rendering ---------- */
 function render(){
   if (!C || !S) return;
-  if (!S.started){ app.innerHTML = introView(); renderLayer(); return; }
+  if (!S.started && ui.tab !== 'playtests'){ app.innerHTML = introView(); renderLayer(); return; }
   if (S.done && ui.tab !== 'files' && ui.tab !== 'playtests') ui.tab = 'postmortem';
   if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
   const d = curDay();
-  const open = isOpen(d);
+  const open = S.started && isOpen(d);
   let body = '';
   if (ui.tab === 'files') body = filesView();
   else if (ui.tab === 'playtests') body = playtestsView();
@@ -605,7 +608,7 @@ function introView(){
     + '<p class="small muted">Each day: read the inbox, doubt anything you think is false or planted, then send one brief with a judgment, a confidence level and up to 3 pieces of key evidence. The next day opens tomorrow. Sources and scoring are under Files.</p>'
     + '<p class="small muted">' + esc(C.placeholderNote) + '</p>'
     + (CFG.playtest ? playtestNote() : '')
-    + '<div class="btnrow"><button class="btn" data-act="start">Open Day 1</button></div>'
+    + '<div class="btnrow"><button class="btn" data-act="start">Open Day 1</button>' + (CFG.playtest && ui.isOwner ? '<button class="btn ghost" data-act="tab" data-v="playtests">Tester results</button>' : '') + '</div>'
     + '</main>';
 }
 
@@ -841,7 +844,10 @@ function playtestLog(){
   }
   const planted = C.reports.filter(r => r.kind === 'planted');
   const dp = doubtPoints(); total += dp;
-  lines.push('Doubts: ' + dp, 'Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total,
+  lines.push('Doubts: ' + dp);
+  if (S.done) lines.push('Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total);
+  else lines.push('In progress: ' + Object.keys(S.briefs).length + ' of ' + C.days + ' briefs sent');
+  lines.push(
     'Planted doubted: ' + planted.filter(r => (S.grades[r.id] || {}).f).length + '/' + planted.length + ' (' + planted.filter(r => (S.grades[r.id] || {}).f).map(r => r.id).join(' ') + ')',
     'True items doubted: ' + C.reports.filter(r => r.kind === 'true' && (S.grades[r.id] || {}).f).map(r => r.id).join(' '));
   for (let d = 1; d <= C.days; d++){

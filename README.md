@@ -34,7 +34,7 @@ Progress saves in the browser. When published as a claude.ai artifact, it also s
 | Build | Files published | Storage rules |
 | --- | --- | --- |
 | Main | `index.html`, `crises/` | `{db:{}, user:{}}` |
-| Playtest | `index.html`, `crises/`, `config/playtest.json` as `config.json` | `playtests` readable by Editors and the owner, each tester writes only their own record; `user` with the `profile` scope |
+| Playtest | `index.html`, `crises/`, `config/playtest.json` as `config.json` | `playtests` readable by Editors and the owner, each tester writes only their own record; `meta` owner-only (holds `meta/owner`, which marks the owner for the Testers tab); `user` with the `profile` scope |
 
 Testers need write access to save: Contributor if they're in the owner's organization, otherwise an email invite as Editor (and no public link).
 
