@@ -6,6 +6,8 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 37 | 2026-11-18 | Don't tell the player how many days a crisis lasts. In-world deadlines (like the exercise's announced end date) stay. **Change after the playtest.** See "Queued after playtest" below. | Real analysts don't know when a crisis ends. A visible day count lets players play the calendar instead of the evidence, especially on the last day. |
+| 36 | 2026-11-18 | Keep the company outcome: a Moderate brief sends a company that holds the dam but doesn't deter the invasion. Kordav crosses at Dolan and isolates it (Standoff). The tripwire and "eyes forward" alternatives are rejected for now. | Anthony's SME judgment: a company wouldn't deter in this situation. Partial commitment is a real consequence of under-calling a clear warning. |
 | 35 | 2026-11-18 | The playtest build has Play ahead on by default, so testers can play all 5 days in one sitting. The main build keeps the daily lock. | Removes the 5-day wait for feedback. Time per day is still measured, so turn length stays testable. |
 | 34 | 2026-11-18 | Working title: **Low Confidence** | Names the core mechanic, matches the project and repo, and carries the dry tone |
 | 33 | 2026-11-18 | Customers: a small recurring cast of 2–3 decision-makers who rotate across crises and remember your track record | Variety plus "the world remembers." Credibility carries across crises in a way you feel. |
@@ -47,7 +49,15 @@
 - [ ] Which seed should Crisis 02 use? (It has to prove the Phase 2 systems generalize. The defector walk-in would punish "always trust HUMINT.")
 - [ ] Does Crisis 01 get a named real region, or stay unnamed?
 
+## Queued after playtest
+
+Changes already decided, held until the Crisis 01 playtest results are in so the test runs on one version.
+
+- **Hide the crisis length (#37).** Remove the day count everywhere the player sees it: the header ("Day 2 of 5" becomes "Day 2"), the opening screen ("5-day arc"), the playtest note ("all 5 in one sitting") and the playtest invite text. Keep the countdown to the exercise's announced end, which is in-world. Decide whether Day 5's read-in line ("This is your last brief before the announced end date") stays: it's in-world, but it tells the player this is the final turn.
+
 ## Parking lot
+
+- Variable crisis length: a crisis ends early or runs on depending on the truth and the player's calls. Phase 3–4.
 
 - The adversary reacts to the customer's moves (for example switching crossings if forces move early). Phase 3–4.
 - Reverse image search as an OSINT action. Phase 2.
