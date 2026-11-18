@@ -120,6 +120,15 @@ p{margin:0}
 .status-line b.cred-discounted,.cred-discounted{color:var(--c-low)}
 .meter span.cut{background:none;outline:1px dashed var(--muted);outline-offset:-1px}
 .nudge{border-left:3px solid var(--accent);padding:4px 0 4px 10px;font-size:14px}
+.linkbtn.menulink{justify-self:start;text-decoration:none;font-family:var(--f-mono);letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+.gametitle{font-size:clamp(40px,13vw,56px);line-height:.95}
+.menu-top{padding-top:28px;gap:10px}
+.menu{margin-top:18px}
+.btn.big{display:grid;gap:4px;text-align:left;width:100%;padding:16px 16px}
+.btn.big small{font:500 12px/1.3 var(--f-mono);letter-spacing:.04em;text-transform:uppercase;opacity:.75}
+.opt.scen{width:100%;background:var(--card);cursor:pointer}
+.opt.scen.locked{opacity:.6;border-style:dashed}
+.opt.scen .d b{color:var(--ink);font-weight:500;font-family:var(--f-mono);font-size:12.5px}
 .linkbtn{background:none;border:0;padding:4px 0;color:var(--accent);font:600 13px/1.2 var(--f-body);text-decoration:underline;cursor:pointer;min-height:32px}
 .yourgrade{font:12.5px/1.4 var(--f-mono);color:var(--muted)}
 .yourgrade b{color:var(--ink)}
@@ -310,7 +319,7 @@ let CFG = {playtest:false};
 
 let C = null;          // crisis data
 let S = null;          // player state (plain JSON)
-const ui = {tab:'inbox', sheet:null, toast:'', pin:null, pmDay:5, reactDay:null, isOwner:false, pt:{loaded:false, loading:false, docs:[], names:{}, err:''}};
+const ui = {screen:'menu', tab:'inbox', sheet:null, toast:'', pin:null, pmDay:5, reactDay:null, isOwner:false, pt:{loaded:false, loading:false, docs:[], names:{}, err:''}};
 let USER = null, DB = null, ptRef = null, ptRuns = null;
 let store = {mode:'local', ref:null, ok:false};
 const app = document.getElementById('app');
@@ -586,6 +595,7 @@ function sendBrief(d){
   } else {
     S.done = true;
     S.ending = evalEnding().id;
+    S.summary = {title:evalEnding().title, total:totalScore()};
     if (CRED()){
       credTriggers(d, brief, fired);
       const o = (CRED().outcome || {})[S.ending] || 0;
@@ -680,6 +690,7 @@ async function connectAccount(){
     const ref = db.collection('data/users/' + uid).doc('save-' + C.id);
     const snap = await Promise.race([ref.get(), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 10000))]);
     store = {mode:'db', ref, ok:true};
+    remoteProgress(db, uid);
     const remote = snap.exists ? normalize((snap.data() || {}).state) : null;
     if (remote && (!S.savedAt || (remote.savedAt || '') > S.savedAt)) {
       S = remote;
@@ -783,6 +794,7 @@ function mapCard(d){
 /* ---------- Rendering ---------- */
 function render(){
   if (!C || !S) return;
+  if (ui.screen === 'menu' || ui.screen === 'list'){ app.innerHTML = ui.screen === 'menu' ? menuView() : listView(); renderLayer(); return; }
   if (!S.started && ui.tab !== 'playtests'){ app.innerHTML = introView(); renderLayer(); return; }
   if (S.done && ui.tab !== 'files' && ui.tab !== 'playtests') ui.tab = 'postmortem';
   if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
@@ -807,7 +819,7 @@ function headerView(d, open){
     : [['inbox','Inbox' + (open ? '<span class="badge">' + reportsFor(d).length + '</span>' : '')]].concat(COLL() ? [['collect','Collect' + (open ? '<span class="badge">' + (budgetFor(d) - spentOn(d)) + '</span>' : '')]] : []).concat([['board','Board'],['brief','Brief'],['files','Files']]);
   if (CFG.playtest && ui.isOwner) tabs.push(['playtests','Testers']);
   const dayText = S.done ? 'Crisis closed' : ('Day ' + d + ' · ' + esc(dayLabel(d)));
-  return '<header class="top">'
+  return '<header class="top">' + '<button class="linkbtn menulink" data-act="menu">‹ Menu</button>'
     + '<span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + esc(C.title) + '</span>'
     + '<h1>' + dayText + '</h1>'
     + '<div class="status-line"><span>' + esc(C.asset.name) + ': <b>' + esc(assetLabel()) + '</b></span>'
@@ -827,7 +839,7 @@ function policyTable(){
 
 function introView(){
   const b = C.briefing;
-  return '<header class="top"><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + '</span><h1>' + esc(C.title) + '</h1></header>'
+  return '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + '</span><h1>' + esc(C.title) + '</h1></header>'
     + '<main class="stack">'
     + (C.map ? '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">The Veyl border. Reporting will be plotted here as it arrives.</figcaption></figure>' : '')
     + '<p class="mono small muted">' + esc(b.dateLine) + '</p>'
@@ -838,7 +850,6 @@ function introView(){
     + '<p class="small muted">Each day: read the inbox, doubt anything you think is false or planted, then send one brief with a judgment, a confidence level and up to 3 pieces of key evidence. The next day opens tomorrow. Sources and scoring are under Files.</p>'
     + '<p class="small muted">' + esc(C.placeholderNote) + '</p>'
     + (CFG.playtest ? playtestNote() : '')
-    + crisisPicker()
     + '<div class="btnrow"><button class="btn" data-act="start">Open Day 1</button>' + (CFG.playtest && ui.isOwner ? '<button class="btn ghost" data-act="tab" data-v="playtests">Tester results</button>' : '') + '</div>'
     + '</main>';
 }
@@ -1089,7 +1100,6 @@ function filesView(){
     + (CRED() ? '<div class="stack"><h3>Credibility</h3><p class="small">' + esc(CRED().summary || '') + ' It doesn\'t change your score.</p><div class="tablewrap"><table><thead><tr><th>Level</th><th>Effect</th></tr></thead><tbody>'
       + CRED().levels.map(l => '<tr><td><b>' + esc(l.label) + '</b></td><td class="small">' + esc(l.text || '') + '</td></tr>').join('') + '</tbody></table></div>'
       + '<p class="small">It drops when: ' + CRED().triggers.map(t => esc(t.rule) + ' (' + t.delta + ')').join('; ') + '. You start at ' + esc(credLevel(CRED().start).label) + '.</p></div>' : '')
-    + crisisPicker()
     + '<div class="stack"><h3>Settings</h3>'
     + '<div class="switch"><span><b>Play ahead</b><br><span class="small muted">Open the next day without waiting for midnight.</span></span><button data-act="playahead" aria-pressed="' + S.playAhead + '">' + (S.playAhead ? 'On' : 'Off') + '</button></div>'
     + '<div class="switch"><span><b>Start over</b><br><span class="small muted">Wipes this crisis and opens the situation briefing again.</span></span><button data-act="restart">Reset</button></div>'
@@ -1168,6 +1178,11 @@ function credCard(){
     + '<p class="credline">Credibility: ' + lab(CRED().start) + ' → ' + lab(S.credEnd) + ' → ' + lab(S.credFinal) + ' after the outcome</p>'
     + (lines.length ? '<ul class="small">' + lines.join('') + '</ul>' : '<p class="small">Nothing ' + PRON()[0] + ' had to undo, and no run of Low calls.</p>')
     + '<p class="small muted">The outcome ' + (out ? (out.delta > 0 ? 'added ' : 'cost ') + Math.abs(out.delta) : 'changed nothing') + '. From Phase 3, credibility carries into your next crisis.</p></div>';
+}
+function totalScore(){
+  let t = (C.endings.find(e => e.id === S.ending) || evalEnding()).points + doubtPoints() + burnPoints();
+  for (let d = 1; d <= C.days; d++) if (S.briefs[d]){ const sc = scoreDay(d); t += sc.call + sc.ev; }
+  return t;
 }
 function assetOnDay(d){ return (S.posture && S.posture[d]) || 'home'; }
 
@@ -1311,9 +1326,12 @@ function onClick(e){
   if (act === 'cancel' && el.classList.contains('overlay') && e.target !== el) return;
   const d = curDay();
   switch (act){
-    case 'start': S.started = true; ui.tab = 'inbox'; save(); render(); window.scrollTo(0,0); break;
-    case 'crisis': switchCrisis(el.dataset.id); break;
-    case 'tab': ui.tab = el.dataset.v; render(); window.scrollTo(0,0); break;
+    case 'start': S.started = true; ui.screen = 'game'; ui.tab = 'inbox'; save(); render(); window.scrollTo(0,0); break;
+    case 'crisis': openCrisis(el.dataset.id); break;
+    case 'menu': ui.screen = 'menu'; ui.sheet = null; render(); window.scrollTo(0,0); break;
+    case 'list': ui.screen = 'list'; render(); window.scrollTo(0,0); break;
+    case 'continue': ui.screen = 'game'; if (ui.tab === 'playtests') ui.tab = 'inbox'; render(); window.scrollTo(0,0); break;
+    case 'tab': ui.screen = 'game'; ui.tab = el.dataset.v; render(); window.scrollTo(0,0); break;
     case 'flag': case 'nr': {
       const g = S.grades[el.dataset.id] || (S.grades[el.dataset.id] = {});
       const k = act === 'flag' ? 'f' : 'n'; g[k] = !g[k]; save(); render(); break;
@@ -1356,7 +1374,7 @@ function onClick(e){
     case 'cancel': ui.sheet = null; renderLayer(); break;
     case 'playahead': S.playAhead = !S.playAhead; save(); render(); break;
     case 'restart': ui.sheet = 'restart'; renderLayer(); break;
-    case 'confirmrestart': { const pa = S.playAhead; S = fresh(); S.playAhead = pa; ui.sheet = null; ui.tab = 'inbox'; ui.pin = null; save(); render(); window.scrollTo(0,0); break; }
+    case 'confirmrestart': { const pa = S.playAhead, cl = S.done || S.cleared; S = fresh(); S.playAhead = pa; if (cl) S.cleared = true; ui.sheet = null; ui.tab = 'inbox'; ui.pin = null; save(); render(); window.scrollTo(0,0); break; }
     case 'copylog': {
       const text = playtestLog();
       const fallback = () => { ui.sheet = 'log'; renderLayer(); };
@@ -1402,14 +1420,74 @@ async function switchCrisis(id){
   try { localStorage.setItem(LS_PREFIX + 'current', id); } catch(e) {}
   store = {mode:'local', ref:null, ok:false};
   app.innerHTML = '<p class="loading">Loading the crisis file…</p>';
+  ui.screen = 'game';
   await start({});
   window.scrollTo(0, 0);
 }
-function crisisPicker(){
-  if (INDEX.length < 2) return '';
-  return '<div class="stack"><h3>Crises</h3>' + INDEX.map(x => '<button class="opt" data-act="crisis" data-id="' + esc(x.id) + '" aria-pressed="' + (CUR.id === x.id) + '"><span class="k">' + esc(x.number || '') + '</span><span class="t">' + esc(x.title || x.id) + '</span><span class="d">' + esc(x.line || '') + (x.note ? ' ' + esc(x.note) : '') + '</span></button>').join('')
-    + '<p class="small muted">Each crisis keeps its own progress.</p></div>';
+/* ---------- Main menu, scenario list, unlocks ---------- */
+let PROG = {};   // progress of the crises that aren't loaded, read from their saves
+function progFromState(st){
+  if (!st) return null;
+  return {started:!!st.started, done:!!st.done, cleared:!!(st.done || st.cleared), day:Math.min(Object.keys(st.briefs || {}).length + 1, 99), summary:st.summary || null, ending:st.ending || null, savedAt:st.savedAt || ''};
 }
+function loadProgress(){
+  INDEX.forEach(x => { try { const raw = localStorage.getItem(LS_PREFIX + x.id); const p = raw ? progFromState(JSON.parse(raw)) : null; if (p && (!PROG[x.id] || p.savedAt >= PROG[x.id].savedAt)) PROG[x.id] = p; } catch(e) {} });
+}
+async function remoteProgress(db, uid){
+  let changed = false;
+  await Promise.all(INDEX.filter(x => !CUR || x.id !== CUR.id).map(async x => {
+    try {
+      const snap = await db.collection('data/users/' + uid).doc('save-' + x.id).get();
+      const p = snap.exists ? progFromState((snap.data() || {}).state) : null;
+      if (p && (!PROG[x.id] || p.savedAt > PROG[x.id].savedAt)){ PROG[x.id] = p; changed = true; }
+    } catch(e) {}
+  }));
+  if (changed && ui.screen !== 'game') render();
+}
+function progress(id){ return (CUR && CUR.id === id && S) ? progFromState(S) : (PROG[id] || {started:false, done:false, day:1}); }
+function crisisUnlocked(id){
+  const i = INDEX.findIndex(x => x.id === id);
+  return i <= 0 || !!CFG.unlockAll || !!progress(INDEX[i-1].id).cleared;
+}
+function crisisStatus(x){
+  if (!crisisUnlocked(x.id)){ const prev = INDEX[INDEX.findIndex(k => k.id === x.id) - 1]; return 'Finish ' + (prev.title || 'the scenario before it') + ' to unlock.'; }
+  const p = progress(x.id);
+  if (p.done) return 'Finished' + (p.summary ? ' · ' + p.summary.title + ' · ' + (p.summary.total > 0 ? '+' : '') + p.summary.total : '') + '. Open the postmortem or play again.';
+  if (p.started) return 'In progress · Day ' + p.day;
+  return p.cleared ? 'Finished before. Starting over.' : 'Not started';
+}
+async function openCrisis(id){
+  if (!crisisUnlocked(id)){ toast('Locked. Finish the scenario before it first.'); return; }
+  if (CUR && CUR.id === id){ ui.screen = 'game'; if (ui.tab === 'playtests') ui.tab = 'inbox'; render(); window.scrollTo(0, 0); return; }
+  await switchCrisis(id);
+}
+function menuView(){
+  const next = INDEX.find(x => crisisUnlocked(x.id) && !progress(x.id).cleared) || CUR;
+  const p = progress(next.id);
+  const label = (p.done ? 'Review' : p.started ? 'Continue' : 'Start') + ' · ' + (next.title || C.title);
+  const sub = p.done ? 'Finished' : p.started ? 'Scenario ' + (next.number || '') + ' · Day ' + p.day : 'Scenario ' + (next.number || '');
+  return '<header class="top menu-top"><span class="eyebrow">Intel cell sim</span><h1 class="gametitle">Low Confidence</h1>'
+    + '<p class="muted">Read the reporting. Doubt what deserves it. Tell the customer what you think, and how sure you are.</p></header>'
+    + '<main class="stack menu">'
+    + '<button class="btn big" data-act="crisis" data-id="' + esc(next.id) + '">' + esc(label) + '<small>' + esc(sub) + '</small></button>'
+    + '<button class="btn ghost big" data-act="list">Scenarios<small>' + INDEX.filter(x => progress(x.id).cleared).length + ' of ' + INDEX.length + ' finished</small></button>'
+    + (CFG.playtest && ui.isOwner ? '<button class="btn ghost big" data-act="tab" data-v="playtests">Tester results</button>' : '')
+    + (CFG.playtest ? '<p class="small muted">Playtest build. Your results are recorded automatically.</p>' : '')
+    + '<p class="small muted">' + esc(saveStatusText()) + '</p>'
+    + '</main>';
+}
+function listView(){
+  return '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><h1>Scenarios</h1>'
+    + '<p class="muted small">Finish a scenario to unlock the next. Unlocked scenarios can be played in any order, and each keeps its own progress.</p></header>'
+    + '<main class="stack">'
+    + INDEX.map(x => {
+        const open = crisisUnlocked(x.id);
+        return '<button class="opt scen' + (open ? '' : ' locked') + '" data-act="crisis" data-id="' + esc(x.id) + '" aria-disabled="' + !open + '"><span class="k">' + esc(x.number || '') + '</span><span class="t">' + (open ? esc(x.title || x.id) : 'Locked') + '</span>'
+          + '<span class="d">' + (open ? esc(x.line || '') + '<br>' : '') + '<b>' + esc(crisisStatus(x)) + '</b></span></button>';
+      }).join('')
+    + '</main>';
+}
+
 async function start(hotData){
   try {
     const cr = await fetch(CONFIG_URL, {cache:'no-cache'});
@@ -1422,7 +1500,8 @@ async function start(hotData){
   if (!INDEX.length) INDEX = [{id:'border-buildup', file:CRISIS_URL}];
   let want = null; try { want = localStorage.getItem(LS_PREFIX + 'current'); } catch(e) {}
   if (hotData && hotData.crisis) want = hotData.crisis;
-  CUR = INDEX.find(x => x.id === want) || INDEX[0];
+  loadProgress();
+  CUR = INDEX.find(x => x.id === want && crisisUnlocked(x.id)) || INDEX[0];
   try {
     const res = await fetch(CUR.file, {cache:'no-cache'});
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1434,11 +1513,12 @@ async function start(hotData){
   S = normalize(hotData && hotData.S) || normalize(loadLocal()) || fresh();
   ui.pmDay = C.days; ui.pin = null; ui.sheet = null;
   ui.tab = (hotData && hotData.tab) || 'inbox';
+  if (hotData && hotData.screen) ui.screen = hotData.screen;
   render();
   connectAccount();
 }
 const hot = window.claude && window.claude.hot;
-if (hot && typeof hot.snapshot === 'function') hot.snapshot(() => ({S:S, tab:ui.tab, crisis:CUR && CUR.id}));
+if (hot && typeof hot.snapshot === 'function') hot.snapshot(() => ({S:S, tab:ui.tab, screen:ui.screen, crisis:CUR && CUR.id}));
 if (hot && typeof hot.ready === 'function') hot.ready(start); else start((hot && hot.data) || {});
 })();
 </script>

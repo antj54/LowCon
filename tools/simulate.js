@@ -58,7 +58,7 @@ async function run(plan, doubt, cfg, opts = {}) {
       if (!/How was Day/.test(els.layer.innerHTML)) throw new Error('Playtest reaction sheet missing on day ' + (i + 1));
       click('react', { v: 'engaging' }); click('reactdone');
     }
-    if (opts.reloadAfter && opts.reloadAfter.includes(i + 1)) ({ click, els } = await boot(cfg, storage));
+    if (opts.reloadAfter && opts.reloadAfter.includes(i + 1)) { ({ click, els } = await boot(cfg, storage)); if (!/Low Confidence/.test(els.app.innerHTML)) throw new Error('Main menu missing after reload'); click('continue'); }
   }
   if (cfg && cfg.playtest) { click('realism', { id: 'R-3-03' }); click('debrief', { q: 'sixth', v: 'yes' }); }
   const out = els.app.innerHTML; lastHtml = out; lastLayer = els.layer.innerHTML;

@@ -114,6 +114,7 @@ The game is a single-page web app that Claude builds and publishes as a claude.a
 - **Engine and content kept separate:** crises live in JSON data files, so we can add new ones without touching the game code.
 - **Saving:** progress saves to the player's claude.ai account, so phone and laptop share one game, with a copy on the device as a fallback.
 - **No server of our own:** one player and one saved game. Multiplayer and leaderboards can come later if they ever earn a place.
+- **Menus:** the game opens on a main menu with a continue button and a scenario list. Scenarios unlock in order, each when the one before it has been finished once, and unlocked scenarios can be played in any order (#54).
 - **Daily lock:** the next day unlocks at midnight, unless Play ahead is on.
 - **Code and builds:** code and crisis data live in the GitHub repo `antj54/LowCon`, and the pages are published from it. `tools/simulate.js` runs fixed strategies through the real engine as a balance check. A separate playtest build records testers' results automatically.
 
