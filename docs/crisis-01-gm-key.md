@@ -205,7 +205,10 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 | Always worst case (H2 High every day) | Standoff (late) | **+10** |
 | Trust the official line (H1 Medium every day) | Seized | **−15** |
 | "It's just signaling" (H3 Medium every day) | Seized | **−7** |
-| Always hedge (Low every day) | Seized | **0** |
+| Always hedge (Low every day) | Seized | **0** (credibility Discounted from Day 4) |
+| Hedge early, then commit (Low Days 1–3, High Days 4–5) | Standoff (thin) | **+18** (Discounted by Day 4, so High gets the company) |
+| Early mover, then right (H2 High Day 1) | Standoff (thin) | **+16** (pull-back and freeze: Discounted) |
+| Flip-flop (company on Day 3, H3 on Day 4, H2 High Day 5) | Standoff (late) | **+19** (Questioned) |
 
 **Playtest 1 (Anthony, not blind, had read this key):** right hypothesis every day, never called High, doubted 2 of 6 plants (both on Day 4), cited clutter once (R-1-05). Day 5 took 1 minute with no Day 5 plants doubted. The Day 1 time (28 min) was a timer bug, now fixed.
 
@@ -220,4 +223,4 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 
 **Playtest 2 (Syd, blind, v0.3 rules):** H2 Low, H1 Moderate, then H2 Moderate on Days 3–5, never High: Standoff (thin), +7. Doubted 1 of 6 plants (the snow photo), cited none. Engaging on Days 2–5, plants fair, realism off in places (flagged R-2-05, R-2-06, R-5-04, kept as is), turn length about right at ~2 min a day, unsure about a sixth day. Led to #38: likelihood plus derived confidence.
 
-**Data format:** v0.7 is built in the game (`crises/border-buildup.json`): v0.7 adds `pirs`, `targets`, `collection`, `collectionResults` and `postmortem.missedCollection`; the hypotheses board (#49) needs no new content. Earlier: v0.6 keys `customerPolicy` and `scoring.call` on the player's confidence (`low`, `medium`, `high`), #46. v0.5 dropped derived confidence (#41). v0.4 added `hypotheses[].claim`, `likelihood` in `customerPolicy` conditions and likelihood-keyed `scoring.call`. New in v0.3: `asset.levels`, `customerPolicy[].level`, `policyNote`, `countdown`, `dailyUpdates`, `endings[].tone` and `endings[].if.since`, `map`, `reports[].pin`, and `groundTruth[].units` (shown only in the postmortem map).
+**Data format:** v0.8 adds `credibility` (#50). v0.7 is built in the game (`crises/border-buildup.json`): v0.7 adds `pirs`, `targets`, `collection`, `collectionResults` and `postmortem.missedCollection`; the hypotheses board (#49) needs no new content. Earlier: v0.6 keys `customerPolicy` and `scoring.call` on the player's confidence (`low`, `medium`, `high`), #46. v0.5 dropped derived confidence (#41). v0.4 added `hypotheses[].claim`, `likelihood` in `customerPolicy` conditions and likelihood-keyed `scoring.call`. New in v0.3: `asset.levels`, `customerPolicy[].level`, `policyNote`, `countdown`, `dailyUpdates`, `endings[].tone` and `endings[].if.since`, `map`, `reports[].pin`, and `groundTruth[].units` (shown only in the postmortem map).

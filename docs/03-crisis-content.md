@@ -22,7 +22,7 @@
 6. Fictional countries in real regions, and fictional actors only. Real terrain and generic, publicly known methods are fine. Never use real people.
 7. Don't tell the player how many days a crisis lasts; in-world deadlines are fine. The **morning read-in** states only public events and the player's own posture, never hidden truth. The **map** plots reporting (planted items included), never truth, until the postmortem.
 
-## Data format (v0.7)
+## Data format (v0.8)
 
 Each crisis is one JSON file. The working example is `crises/border-buildup.json` in the repo; this is the field reference.
 
@@ -53,11 +53,12 @@ Each crisis is one JSON file. The working example is `crises/border-buildup.json
 | `collection` | `budget` per day, `costs` per discipline, `delays` (e.g. HUMINT 2 days), `sources` (which source answers each discipline), `fallback` text, `burnRules` (source, discipline, `consecutiveDays`, text, postmortem note), `burnPoints` |
 | `collectionResults` | `id`, `discipline`, `target`, `from`, `to` (the tasking days that produce it). The result is the report with the same `id`, marked `via: "collection"` and left out of the base stream. Tasked again after it's been collected, or outside its window, the tasking returns the fallback. |
 | `postmortem.missedCollection` | Per day: the tasking that would have mattered most |
+| `credibility` | Optional. `start`, `min`, `max`; `levels` (`id`, `label`, `min`, `text`, optional `budgetDelta` and `caution`, the number of steps the customer discounts your confidence); `triggers` (`on`: `event` with `eventId`, `reply` with a reply id, or `streak` with `confidence` and `days`; plus `delta`, `rule` for the Files tab and `note` for the customer's reply); `outcome` (credibility change per ending id); `summary`. Triggers must be things the customer can see, never hidden truth. |
 | `board` | Optional. `pinsPerDay` for the hypotheses board (default 3). The board needs no other content: it works from `hypotheses` and the items the player pins. |
 
 ## Scripted crises
 
 | # | Title | Seed | Data | Notes |
 | --- | --- | --- | --- | --- |
-| 01 | Exercise or Operation? | Border buildup | `crises/border-buildup.json` | Built, with collection (v0.7). Phase 0 script: `claude/crisis-01-player-packet.md` (rules predate Phase 1) and `claude/crisis-01-gm-key.md` (spoilers, current). Phase 2 collection retrofit on paper: `claude/crisis-01-collection-retrofit.md`. |
+| 01 | Exercise or Operation? | Border buildup | `crises/border-buildup.json` | Built, with collection and credibility (v0.8). Phase 0 script: `claude/crisis-01-player-packet.md` (rules predate Phase 1) and `claude/crisis-01-gm-key.md` (spoilers, current). Phase 2 collection retrofit on paper: `claude/crisis-01-collection-retrofit.md`. |
 | 02 | The Walk-in | Defector walk-in | Not built | Phase 2 paper script: `claude/crisis-02-player-packet.md` and `claude/crisis-02-gm-key.md` (spoilers). Needs named customer states and source burn in the engine. |

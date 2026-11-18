@@ -115,6 +115,10 @@ p{margin:0}
 .bcell:disabled{cursor:default}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--muted)}
 .legend b{color:var(--ink);font-family:var(--f-mono)}
+.crednote{color:var(--ink)}
+.status-line b.cred-questioned,.cred-questioned{color:var(--c-med)}
+.status-line b.cred-discounted,.cred-discounted{color:var(--c-low)}
+.meter span.cut{background:none;outline:1px dashed var(--muted);outline-offset:-1px}
 .nudge{border-left:3px solid var(--accent);padding:4px 0 4px 10px;font-size:14px}
 .linkbtn{background:none;border:0;padding:4px 0;color:var(--accent);font:600 13px/1.2 var(--f-body);text-decoration:underline;cursor:pointer;min-height:32px}
 .yourgrade{font:12.5px/1.4 var(--f-mono);color:var(--muted)}
@@ -340,7 +344,33 @@ function fallbackReport(c){
 const COLL = () => C.collection || null;
 function tasksFor(d){ return (S.tasks[d] || []); }
 function spentOn(d){ return tasksFor(d).reduce((n, t) => n + (COLL().costs[t.disc] || 0), 0); }
-function budgetFor(d){ return COLL() ? COLL().budget : 0; }
+function budgetFor(d){ return COLL() ? Math.max(0, COLL().budget + (credLevel(credOn(d)).budgetDelta || 0)) : 0; }
+/* ---------- Credibility: moves only on what the customer can see ---------- */
+const CRED = () => C.credibility || null;
+function credOn(d){ if (!CRED()) return null; const v = (S.credAt || {})[d]; return typeof v === 'number' ? v : (typeof S.cred === 'number' ? S.cred : CRED().start); }
+function credLevel(v){
+  if (!CRED() || v == null) return {};
+  return CRED().levels.slice().sort((a, b) => b.min - a.min).find(l => v >= l.min) || CRED().levels[CRED().levels.length - 1];
+}
+const STEP_DOWN = {high:'medium', medium:'low', low:'low'};
+function effectiveConf(d, conf){ let c = conf; for (let i = 0; i < (credLevel(credOn(d)).caution || 0); i++) c = STEP_DOWN[c] || c; return c; }
+function credApply(t, day){
+  const K = CRED();
+  S.cred = Math.max(K.min == null ? 0 : K.min, Math.min(K.max == null ? 99 : K.max, S.cred + t.delta));
+  S.credLog.push({day, id:t.id, delta:t.delta, note:t.note || ''});
+}
+function credTriggers(d, brief, firedEventIds){
+  if (!CRED()) return;
+  CRED().triggers.forEach(t => {
+    if (t.on === 'reply' && brief.reply === t.reply) credApply(t, d + 1);
+    else if (t.on === 'event' && firedEventIds.includes(t.eventId)) credApply(t, d + 1);
+    else if (t.on === 'streak' && brief.conf === t.confidence){
+      let run = 1; for (let x = d - 1; x >= 1 && S.briefs[x] && S.briefs[x].conf === t.confidence; x--) run++;
+      if (run >= t.days) credApply(t, d + 1);
+    }
+  });
+}
+const credNotes = d => (S.credLog || []).filter(x => x.day === d);
 function toggleTask(d, disc, target){
   const list = S.tasks[d] || (S.tasks[d] = []);
   const i = list.findIndex(t => t.disc === disc && t.target === target);
@@ -424,7 +454,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, cred:(C.credibility ? C.credibility.start : null), credAt:{1:(C.credibility ? C.credibility.start : null)}, credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -443,6 +473,7 @@ function normalize(st){
   Object.values(s.drafts || {}).forEach(dr => { dr.conf = TO_CONF[dr.conf] || TO_CONF[dr.lik] || null; delete dr.lik; delete dr.note; });
   if (!C.asset.levels[s.asset]) s.asset = 'home';
   if (!s.board || typeof s.board !== 'object') s.board = {};
+  if (CRED() && typeof s.cred !== 'number'){ s.cred = CRED().start; s.credAt = {1:CRED().start}; s.credLog = []; }
   return s;
 }
 
@@ -453,7 +484,7 @@ function matchCond(cond, brief, asset){
   if (cond.assetAt && ![].concat(cond.assetAt).includes(asset)) return false;
   return true;
 }
-function resolvePolicy(day, brief){ return policyFor(brief, S.asset, S.frozenBriefDays.includes(day)); }
+function resolvePolicy(day, brief){ return policyFor(Object.assign({}, brief, {conf:effectiveConf(day, brief.conf)}), S.asset, S.frozenBriefDays.includes(day)); }
 function policyFor(brief, asset, frozen){
   const rule = C.customerPolicy.find(r => matchCond(r.if, brief, asset));
   const action = rule ? rule.action : 'hold';
@@ -514,6 +545,8 @@ function sendBrief(d){
   brief.reply = res.reply;
   brief.tasks = clone(tasksFor(d));
   brief.board = {pins:pinnedOn(d).length, lead:boardLead()};
+  if (CRED()){ brief.cred = credOn(d); if (effectiveConf(d, brief.conf) !== brief.conf) brief.actedAs = effectiveConf(d, brief.conf); }
+  const fired = [];
   S.briefs[d] = brief;
   delete S.drafts[d];
   resolveCollection(d);
@@ -522,15 +555,23 @@ function sendBrief(d){
     C.events.filter(e => e.atStartOfDay === d+1 && !S.firedEvents.includes(e.id)).forEach(e => {
       if (eventFires(e.if || {})){
         applyEffect(e.effect || {}, d+1);
-        S.firedEvents.push(e.id);
+        S.firedEvents.push(e.id); fired.push(e.id);
         S.replies[d+1] = {key:e.replyId, note:e.note || ''};
       }
     });
     S.posture[d+1] = S.asset;
+    if (CRED()){ credTriggers(d, brief, fired); S.credAt[d+1] = S.cred; }
     ui.tab = 'inbox';
   } else {
     S.done = true;
     S.ending = evalEnding().id;
+    if (CRED()){
+      credTriggers(d, brief, fired);
+      const o = (CRED().outcome || {})[S.ending] || 0;
+      S.credEnd = S.cred;
+      if (o) credApply({id:'outcome', delta:o, note:''}, d + 1);
+      S.credFinal = S.cred;
+    }
     ui.tab = 'postmortem';
   }
   ui.pin = null;
@@ -738,6 +779,7 @@ function headerView(d, open){
     + '<span class="eyebrow">Crisis ' + esc(C.crisisNumber) + ' · ' + esc(C.title) + '</span>'
     + '<h1>' + dayText + '</h1>'
     + '<div class="status-line"><span>' + esc(C.asset.name) + ': <b>' + esc(assetLabel()) + '</b></span>'
+    + (CRED() && !S.done ? '<span>Credibility: <b class="cred-' + esc(credLevel(credOn(d)).id) + '">' + esc(credLevel(credOn(d)).label) + '</b></span>' : '')
     + (S.playAhead ? '<span><b>Play ahead on</b></span>' : '')
     + (CFG.playtest ? '<span><b>Playtest build</b></span>' : '')
     + '<span id="savestatus">' + esc(saveStatusText()) + '</span></div>'
@@ -783,6 +825,7 @@ function readInCard(d){
   const prev = S.briefs[d-1];
   if (prev) facts.push('Your line yesterday: ' + callLabel(prev) + '.');
   if (S.frozenBriefDays.includes(d)) facts.push('Troop moves are frozen today.');
+  if (CRED()){ const L = credLevel(credOn(d)); if (L.budgetDelta || L.caution) facts.push('Credibility with ' + C.customer.name + ': ' + L.label + '.' + (COLL() ? ' Collection budget ' + budgetFor(d) + ' today.' : '') + (L.caution ? ' He treats your confidence as one step lower.' : '')); }
   return '<section class="readin"><span class="from">Morning read-in · Day ' + d + ' · ' + esc(dayLabel(d)) + '</span>'
     + (u ? '<p>' + esc(u.text) + '</p>' : '')
     + '<ul class="facts">' + facts.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul></section>';
@@ -829,6 +872,7 @@ function replyCard(d){
   return '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + ' · re your Day ' + (d-1) + ' brief' + (prev ? ' (' + callLabel(prev) + ')' : '') + '</span>'
     + '<p><q>' + esc(C.replies[r.key] || '') + '</q></p>'
     + (r.note ? '<p class="note">' + esc(r.note) + '</p>' : '')
+    + credNotes(d).map(x => '<p class="note crednote">' + esc(x.note) + ' Now: <b>' + esc(credLevel(credOn(d)).label) + '</b>. ' + esc(credLevel(credOn(d)).text || '') + '</p>').join('')
     + '</div>';
 }
 
@@ -894,7 +938,8 @@ function briefView(d){
     + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="brief">Got it</button></div></div>';
   return tip + '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
     + '<div class="msg"><span class="from">Tasking · ' + esc(C.customer.callsign) + '</span><p>' + esc(C.customer.wants) + '</p>'
-    + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p></div>'
+    + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p>'
+    + (CRED() && credLevel(credOn(d)).caution ? '<p class="note crednote">Credibility <b>' + esc(credLevel(credOn(d)).label) + '</b>: he\'ll act on your confidence as one step lower.</p>' : '') + '</div>'
     + boardNudge()
     + '<fieldset><legend>Judgment</legend>' + C.hypotheses.map(h => '<button class="opt" data-act="hyp" data-v="' + h.id + '" aria-pressed="' + (dr.hyp === h.id) + '"><span class="k">' + h.id + '</span><span class="t">' + esc(h.short) + '</span><span class="d">' + esc(h.text) + '</span></button>').join('') + '</fieldset>'
     + '<fieldset><legend>Confidence</legend><div class="confs">' + CONF.map(c => '<button class="conf c-' + c.id + '" data-act="conf" data-v="' + c.id + '" aria-pressed="' + (dr.conf === c.id) + '"><b>' + c.label + '</b></button>').join('') + '</div></fieldset>'
@@ -956,8 +1001,10 @@ function collectView(d){
     + '<p>You have ' + K.budget + ' points a day. Spend them on the targets that answer your intelligence requirements (PIRs). Results arrive tomorrow morning, or in two days for HUMINT.</p>'
     + '<p>Some taskings find nothing, and some carry risk: a source can be burned, and a target can go dark. Taskings lock when you send the brief.</p>'
     + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="collect">Got it</button></div></div>';
-  let html = tip + '<div class="section-h"><h2>Collection</h2><span class="mono small">' + left + ' of ' + K.budget + ' points left</span></div>'
-    + '<div class="meter" aria-hidden="true">' + Array.from({length:K.budget}, (_, i) => '<span class="' + (i < spentOn(d) ? 'on' : '') + '"></span>').join('') + '</div>';
+  const B = budgetFor(d), trimmed = K.budget - B;
+  let html = tip + '<div class="section-h"><h2>Collection</h2><span class="mono small">' + left + ' of ' + B + ' points left</span></div>'
+    + '<div class="meter" aria-hidden="true">' + Array.from({length:K.budget}, (_, i) => '<span class="' + (i < spentOn(d) ? 'on' : (i >= B ? 'cut' : '')) + '"></span>').join('') + '</div>'
+    + (trimmed > 0 ? '<p class="small crednote">' + trimmed + ' point' + (trimmed > 1 ? 's' : '') + ' cut: credibility with ' + esc(C.customer.name) + ' is <b>' + esc(credLevel(credOn(d)).label) + '</b>.</p>' : '');
   C.pirs.forEach(p => {
     html += '<div class="card pir"><p class="mono small muted">' + esc(p.id) + '</p><p><b>' + esc(p.question) + '</b></p>';
     p.targets.forEach(tid => {
@@ -1004,6 +1051,9 @@ function filesView(){
     + '<p class="small">Cited evidence: true +' + C.scoring.evidence.true + ', noise ' + C.scoring.evidence.noise + ', clutter ' + C.scoring.evidence.clutter + ', planted ' + C.scoring.evidence.planted + '. Doubting a report: planted item +' + C.scoring.challenge.planted + ', true item ' + C.scoring.challenge.true + ', anything else 0. The ending adds a bonus or a penalty. High pays off if you\'re about two-thirds sure. Medium pays off if you\'re better than even.</p></div>'
     + (COLL() ? '<div class="stack"><h3>Collection</h3><p class="small">' + COLL().budget + ' points a day. Results arrive the next morning' + ((COLL().delays || {}).HUMINT ? ', or in ' + COLL().delays.HUMINT + ' days for HUMINT' : '') + '.</p><div class="tablewrap"><table><thead><tr><th>Discipline</th><th class="num">Cost</th><th>Source</th></tr></thead><tbody>'
       + Object.keys(COLL().costs).map(k => '<tr><td>' + k + '</td><td class="num">' + COLL().costs[k] + '</td><td class="small">' + esc((C.sources.find(x => x.id === COLL().sources[k]) || {}).codeName || '') + '</td></tr>').join('') + '</tbody></table></div></div>' : '')
+    + (CRED() ? '<div class="stack"><h3>Credibility</h3><p class="small">' + esc(CRED().summary || '') + ' It doesn\'t change your score.</p><div class="tablewrap"><table><thead><tr><th>Level</th><th>Effect</th></tr></thead><tbody>'
+      + CRED().levels.map(l => '<tr><td><b>' + esc(l.label) + '</b></td><td class="small">' + esc(l.text || '') + '</td></tr>').join('') + '</tbody></table></div>'
+      + '<p class="small">It drops when: ' + CRED().triggers.map(t => esc(t.rule) + ' (' + t.delta + ')').join('; ') + '. You start at ' + esc(credLevel(CRED().start).label) + '.</p></div>' : '')
     + '<div class="stack"><h3>Settings</h3>'
     + '<div class="switch"><span><b>Play ahead</b><br><span class="small muted">Open the next day without waiting for midnight.</span></span><button data-act="playahead" aria-pressed="' + S.playAhead + '">' + (S.playAhead ? 'On' : 'Off') + '</button></div>'
     + '<div class="switch"><span><b>Start over</b><br><span class="small muted">Wipes this crisis and opens the situation briefing again.</span></span><button data-act="restart">Reset</button></div>'
@@ -1037,6 +1087,7 @@ function postmortemView(){
     + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '' + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
     + '</tbody></table></div>'
     + '<p class="small">Planted items you doubted: <b>' + caught + ' of ' + planted.length + '</b>. True items you doubted: <b>' + falseAlarms + '</b>. Clutter you marked not relevant: <b>' + clutterSpotted + ' of ' + clutter.length + '</b>.</p>'
+    + credCard()
     + (CFG.playtest ? debriefCard() : '')
     + '<div class="btnrow"><button class="btn ghost" data-act="copylog">Copy playtest log</button></div>'
     + '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
@@ -1072,6 +1123,16 @@ function postmortemView(){
     + '<div class="btnrow"><button class="btn" data-act="restart">Play again</button></div>';
   return html;
 }
+function credCard(){
+  if (!CRED() || typeof S.credFinal !== 'number') return '';
+  const lab = v => credLevel(v).label + ' (' + v + ')';
+  const lines = (S.credLog || []).filter(x => x.id !== 'outcome').map(x => '<li>After your Day ' + (x.day - 1) + ' brief: ' + esc(x.note) + '</li>');
+  const out = (S.credLog || []).find(x => x.id === 'outcome');
+  return '<div class="msg"><span class="from">Credibility with ' + esc(C.customer.name) + ' · not scored</span>'
+    + '<p class="credline">Credibility: ' + lab(CRED().start) + ' → ' + lab(S.credEnd) + ' → ' + lab(S.credFinal) + ' after the outcome</p>'
+    + (lines.length ? '<ul class="small">' + lines.join('') + '</ul>' : '<p class="small">Nothing he had to undo, and no run of Low calls.</p>')
+    + '<p class="small muted">The outcome ' + (out ? (out.delta > 0 ? 'added ' : 'cost ') + Math.abs(out.delta) : 'changed nothing') + '. From Phase 3, credibility carries into your next crisis.</p></div>';
+}
 function assetOnDay(d){ return (S.posture && S.posture[d]) || 'home'; }
 
 function revealItem(r, brief){
@@ -1095,13 +1156,14 @@ function revealItem(r, brief){
 
 function playtestLog(){
   const ending = C.endings.find(e => e.id === S.ending) || evalEnding();
-  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Confidence | Truth | Call pts | Evidence | Evid pts | Halvorsen | Tasked | Board'];
+  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Confidence | Truth | Call pts | Evidence | Evid pts | Halvorsen | Tasked | Board | Cred'];
   let total = ending.points;
   for (let d = 1; d <= C.days; d++){
     const b = S.briefs[d]; if (!b) continue;
     const sc = scoreDay(d); total += sc.call + sc.ev;
     lines.push([d, b.minutes, b.hyp, confLabel(b.conf) + (b.confLost ? ' (lost on reload, guessed)' : ''), sc.truth.trueHypothesis, sc.call, b.evidence.join(' ') || '-', sc.ev, b.reply, (b.tasks || []).map(x => x.disc + ':' + x.target).join(' ') || '-',
-      b.board ? (b.board.lead ? b.board.lead.join('/') + ' least contradicted' : 'no lead') + ', ' + b.board.pins + ' pinned' : '-'].join(' | '));
+      b.board ? (b.board.lead ? b.board.lead.join('/') + ' least contradicted' : 'no lead') + ', ' + b.board.pins + ' pinned' : '-',
+      b.cred == null ? '-' : b.cred + (b.actedAs ? ' (acted as ' + b.actedAs + ')' : '')].join(' | '));
   }
   const seenAll = seenReports();
   const planted = seenAll.filter(r => r.kind === 'planted');
@@ -1109,6 +1171,7 @@ function playtestLog(){
   const bp = burnPoints(); total += bp;
   if (bp) lines.push('Burned sources: ' + Object.keys(S.burned).join(' ') + ' (' + bp + ')');
   lines.push('Doubts: ' + dp);
+  if (CRED()) lines.push('Credibility: start ' + CRED().start + (S.credLog || []).map(x => ', ' + x.id + ' ' + (x.delta > 0 ? '+' : '') + x.delta).join('') + ' -> ' + (typeof S.credFinal === 'number' ? S.credFinal : S.cred));
   const bIds = boardIds();
   lines.push('Board: ' + (bIds.length ? bIds.length + ' pinned, ' + bIds.filter(id => Object.keys(S.board[id].m).length).length + ' marked (' + bIds.map(id => id + ' ' + C.hypotheses.map(h => S.board[id].m[h.id] || '.').join('')).join(', ') + ')' : 'not used'));
   if (S.done) lines.push('Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total);

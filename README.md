@@ -6,7 +6,7 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 
 ## Status
 
-**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Next: credibility, then Crisis 02.
+**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Next: Crisis 02 as data.
 
 ## Layout
 

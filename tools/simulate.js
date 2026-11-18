@@ -64,7 +64,8 @@ async function run(plan, doubt, cfg, opts = {}) {
   const ending = (out.match(/<h2>([^<]+)<\/h2>/) || [])[1];
   const total = (out.match(/class="n">([^<]+)</) || [])[1];
   const parts = (out.match(/calls[^<]+/) || [])[0];
-  return { line: `${ending} ${total} | ${parts}`, calls, total, html: out };
+  const cred = ((out.match(/credline">Credibility: ([^<]+)</) || [])[1] || '').replace(/ after the outcome/, '').replace(/&gt;/g, '>');
+  return { line: `${ending} ${total} | ${parts}`, calls, total, html: out, cred };
 }
 
 // Board use for the "with board" check: pin the day's diagnostic items and mark them like a careful analyst.
@@ -109,6 +110,9 @@ const STRATEGIES = [
   ['Always worst case', [['H2', 'high', ['R-1-03', 'R-1-01']], ['H2', 'high', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
   ['Trust the official line', Array(5).fill(['H1', 'medium', []]), none],
   ['"Just signaling"', Array(5).fill(['H3', 'medium', []]), none],
+  ['Hedge early, then commit', [['H3', 'low', ['R-1-01']], ['H3', 'low', ['R-2-01']], ['H2', 'low', ['R-3-02']], ['H2', 'high', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+  ['Early mover, then right', [['H2', 'high', ['R-1-01']], ['H3', 'medium', ['R-2-01']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+  ['Flip-flop (company, then back)', [BEST[0], BEST[1], BEST[2], ['H3', 'medium', ['R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
   ['Always hedge (Low)', [['H3', 'low', []], ['H3', 'low', []], ['H2', 'low', []], ['H2', 'low', []], ['H2', 'low', []]], none],
 ];
 
@@ -118,7 +122,7 @@ const STRATEGIES = [
   for (const [name, plan, doubt] of STRATEGIES) {
     const r = await run(plan, doubt);
     if (plan === COLLECT && doubt === none) ref = r;
-    console.log(name.padEnd(30), r.line);
+    console.log(name.padEnd(30), r.line, '| cred ' + r.cred);
     if (process.argv.includes('--calls')) console.log(' '.repeat(31) + r.calls.join(' · '));
   }
   const b = await run(COLLECT, none, null, { board: useBoard, expectNudge: { 2: 'H2</b> is the least contradicted', 3: 'H2</b> is the least contradicted' } });

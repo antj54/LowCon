@@ -1,6 +1,6 @@
 # Phase 2 design (paper) · Low Confidence
 
-*Status: in build. Decisions settled 2026-11-18 (#42–#45 in the log). Phase 1 gate waived (#48). Built: collection tasking (#48), hypotheses board (#49).*
+*Status: in build. Decisions settled 2026-11-18 (#42–#45 in the log). Phase 1 gate waived (#48). Built: collection tasking (#48), hypotheses board (#49), credibility (#50).*
 
 **Phase 2 scope:** collection tasking, the hypotheses board, credibility, and a second crisis to prove the systems generalize.
 **Gate to Phase 3:** the second crisis plays differently from the first.
@@ -90,7 +90,7 @@ Each step is playable on its own.
 
 1. **Collection tasking** *(built, #48)*, retrofitted into Crisis 01 with 3 PIRs and a handful of collection results, so it can be tuned on known content. One existing item, such as the Day 4 imagery, becomes reachable earlier through tasking.
 2. **Hypotheses board** *(built, #49)*.
-3. **Credibility meter.**
+3. **Credibility meter** *(built, #50)*.
 4. **Crisis 02 on paper** (player packet and key, Phase 0 style), then as data.
 5. **Playtest** Crisis 02 blind, and replay Crisis 01 with collection.
 

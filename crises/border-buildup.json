@@ -1,6 +1,6 @@
 {
   "id": "border-buildup",
-  "formatVersion": "0.7",
+  "formatVersion": "0.8",
   "title": "Exercise or Operation?",
   "crisisNumber": "01",
   "days": 5,
@@ -1825,5 +1825,67 @@
         "OSINT"
       ]
     }
-  ]
+  ],
+  "credibility": {
+    "start": 3,
+    "min": 0,
+    "max": 5,
+    "levels": [
+      {
+        "id": "trusted",
+        "label": "Trusted",
+        "min": 3,
+        "text": "He acts on your confidence as given, with your full collection budget."
+      },
+      {
+        "id": "questioned",
+        "label": "Questioned",
+        "min": 2,
+        "budgetDelta": -1,
+        "text": "His staff trims your collection: 1 point less a day."
+      },
+      {
+        "id": "discounted",
+        "label": "Discounted",
+        "min": 0,
+        "budgetDelta": -2,
+        "caution": 1,
+        "text": "2 points less a day, and he treats your confidence as one step lower: High gets the Medium move, Medium the Low one."
+      }
+    ],
+    "triggers": [
+      {
+        "id": "reversed",
+        "on": "event",
+        "eventId": "early-move-freeze",
+        "delta": -2,
+        "rule": "He has to reverse a move he made on your word",
+        "note": "Credibility −2. He moved troops on your word and had to march them back."
+      },
+      {
+        "id": "pulled-back",
+        "on": "reply",
+        "reply": "withdraw",
+        "delta": -1,
+        "rule": "Your brief makes him pull back troops he sent on your word",
+        "note": "Credibility −1. He sent troops on your word, and now you've talked him into bringing them home."
+      },
+      {
+        "id": "hedging",
+        "on": "streak",
+        "confidence": "low",
+        "days": 2,
+        "delta": -1,
+        "rule": "Low confidence two days running (each further Low day too)",
+        "note": "Credibility −1. Low again. \"I asked for a call, not a forecast.\""
+      }
+    ],
+    "outcome": {
+      "deterred": 2,
+      "standoff-late": 0,
+      "standoff-thin": 0,
+      "seized": -2
+    },
+    "summary": "Halvorsen can't see whether you're right until it's over. He can see when he has to undo a move, and when you won't commit."
+  }
 }
