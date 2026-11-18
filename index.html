@@ -289,7 +289,7 @@ function assetLabel(){ return (C.asset.levels[S.asset] || C.asset.levels.home).l
 const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
-  return {v:2, crisisId:C.id, started:false, playAhead:false, grades:{}, drafts:{}, briefs:{}, replies:{},
+  return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
     asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
@@ -856,7 +856,7 @@ function playtestLog(){
 
 function playtestNote(){
   return '<div class="msg pt"><span class="from">Playtest build</span>'
-    + '<p>Thanks for testing. Just play: one day per real day, about 8 minutes each. Your calls, timing and doubts are recorded automatically and sent to the designer. You don\'t need to write anything down.</p>'
+    + '<p>Thanks for testing. Just play. ' + (CFG.playAheadDefault ? 'Each day takes about 8 minutes, and the next one opens as soon as you send your brief, so you can do all 5 in one sitting or spread them out.' : 'One day per real day, about 8 minutes each.') + ' Your calls, timing and doubts are recorded automatically and sent to the designer. You don\'t need to write anything down.</p>'
     + '<p class="small">Optional, one tap each: a quick reaction after each brief, a <b>Not realistic?</b> button on any item that doesn\'t ring true, and four questions at the end.</p>'
     + '<p class="small muted">Please don\'t look at the game\'s GitHub repo until you\'ve finished. It has the answers.</p></div>';
 }

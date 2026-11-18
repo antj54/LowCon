@@ -14,7 +14,7 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 | --- | --- |
 | `index.html` | The engine: one self-contained page (markup, styles, script). Holds no crisis content. |
 | `crises/*.json` | Crisis data files. The engine loads one at start. Format v0.3. |
-| `config/playtest.json` | Published as `config.json` in the playtest build. Turns on playtest mode: results sync to a shared `playtests/<tester>` record, plus one-tap reactions, a per-item realism flag, an end-of-crisis debrief and an owner-only Testers tab. With no `config.json`, the engine runs as the normal build. |
+| `config/playtest.json` | Published as `config.json` in the playtest build. Turns on playtest mode and opens each next day immediately (`playAheadDefault`): results sync to a shared `playtests/<tester>` record, plus one-tap reactions, a per-item realism flag, an end-of-crisis debrief and an owner-only Testers tab. With no `config.json`, the engine runs as the normal build. |
 | `docs/` | Design doc, decisions log, crisis content and the Crisis 01 packet and answer key (spoilers), mirrored from the claude.ai project. |
 | `tools/simulate.js` | Runs the real engine headlessly and prints the ending and score for a set of fixed strategies. Use it after any change to scoring, policy or content. |
 

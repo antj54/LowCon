@@ -1,3 +1,4 @@
 {
-  "playtest": true
+  "playtest": true,
+  "playAheadDefault": true
 }

@@ -6,6 +6,7 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 35 | 2026-11-18 | The playtest build has Play ahead on by default, so testers can play all 5 days in one sitting. The main build keeps the daily lock. | Removes the 5-day wait for feedback. Time per day is still measured, so turn length stays testable. |
 | 34 | 2026-11-18 | Working title: **Low Confidence** | Names the core mechanic, matches the project and repo, and carries the dry tone |
 | 33 | 2026-11-18 | Customers: a small recurring cast of 2–3 decision-makers who rotate across crises and remember your track record | Variety plus "the world remembers." Credibility carries across crises in a way you feel. |
 | 32 | 2026-11-18 | You can't be fired. At rock-bottom credibility you're **reassigned**: you lose your team and unlocks but keep your track record. | Real stakes without wiping weeks of daily play. Built in Phase 3. |
