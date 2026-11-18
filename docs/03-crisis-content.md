@@ -10,7 +10,7 @@
 | Missing shipment | Dual-use components went missing between two ports. Where are they, and who has them? | A false trail planted through a front company's paperwork | Seed |
 | Ransomware group | Is a ransomware crew criminal, or working for a state? | A false-flag language artifact points at the wrong country | Seed |
 | Pipeline militia | A militia threatens a pipeline while a neighbor quietly funds both sides | Liaison partner reporting is shaped by the partner's own agenda | Seed |
-| Defector walk-in | A defector's story is almost too good | The defector is a dangle; their best details are circular | Seed |
+| Defector walk-in | A defector's story is almost too good | The defector is a dangle; their best details are circular | **Paper script: Crisis 02** |
 
 ## Authoring rules
 
@@ -54,4 +54,5 @@ Each crisis is one JSON file. The working example is `crises/border-buildup.json
 
 | # | Title | Seed | Data | Notes |
 | --- | --- | --- | --- | --- |
-| 01 | Exercise or Operation? | Border buildup | `crises/border-buildup.json` | Phase 1 build. Phase 0 script: `claude/crisis-01-player-packet.md` (rules predate Phase 1) and `claude/crisis-01-gm-key.md` (spoilers, current). |
+| 01 | Exercise or Operation? | Border buildup | `crises/border-buildup.json` | Phase 1 build. Phase 0 script: `claude/crisis-01-player-packet.md` (rules predate Phase 1) and `claude/crisis-01-gm-key.md` (spoilers, current). Phase 2 collection retrofit on paper: `claude/crisis-01-collection-retrofit.md`. |
+| 02 | The Walk-in | Defector walk-in | Not built | Phase 2 paper script: `claude/crisis-02-player-packet.md` and `claude/crisis-02-gm-key.md` (spoilers). Needs named customer states and source burn in the engine. |

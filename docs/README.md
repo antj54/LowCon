@@ -9,5 +9,8 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | `01-design-doc.md` | Pillars, core loop, systems, roadmap |
 | `03-crisis-content.md` | Crisis seeds, authoring rules, data format |
 | `crisis-01-player-packet.md` | Phase 0 paper version of Crisis 01 (no spoilers). Its rules predate the Phase 1 changes. |
+| `crisis-01-collection-retrofit.md` | **Spoilers.** Phase 2 paper design adding collection tasking to Crisis 01 |
+| `crisis-02-player-packet.md` | Crisis 02 (The Walk-in) paper script, no spoilers |
+| `crisis-02-gm-key.md` | **Spoilers.** Crisis 02 ground truth, item key, reasoning for every plant, endings, balance notes |
 | `phase-2-design.md` | Paper design for Phase 2: collection tasking, hypotheses board, credibility, Crisis 02 seed. Not built yet. |
 | `crisis-01-gm-key.md` | **Spoilers.** Crisis 01 ground truth, item key, reasoning for every planted item, endings, balance notes |
