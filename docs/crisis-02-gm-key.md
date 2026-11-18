@@ -31,7 +31,7 @@ The truth never shifts: LANTERN is a dangle on every day. What changes is how mu
 
 | Layer | Items | Deception in it |
 | --- | --- | --- |
-| **Push** (arrives every day) | STATION's notes on the room, what LANTERN volunteers, KSB, CWS, SOCIAL, WREN's pushes | The allegation, the vouching question, the ledger, the urgency, the MP's post, the kidnapping story, the press statement |
+| **Push** (arrives every day) | STATION's notes on the room, what LANTERN volunteers, KSB, CWS, SOCIAL, WREN's pushes | The allegation, the vouching question, the ledger, the urgency, the MP's post, the kidnapping story |
 | **Pull** (only if tasked) | Debriefing lines, FINCH, three SIGINT targets, three OSINT targets, WREN on request | **Room 412** (C-10): the dangle's prepared detail, given when we press for specifics. **The staged recall** (C-06): traffic placed where Kordav assumed we listen. **FINCH's burn**: the Bureau watching for who asks. |
 
 ## Sources (hidden values)
@@ -97,7 +97,7 @@ Kinds: **T** true · **N** noise · **P** planted · **C** clutter
 | ID | Kind | Supports | Tells | What it really was |
 | --- | --- | --- | --- | --- |
 | R-5-01 | P | H1 | convenient-timing | See the reasoning below |
-| R-5-02 | P | H1 | out-of-pattern | See the reasoning below |
+| R-5-02 | T | H2 | — | STATION reports the request straight, and it's the last tell: a man who asked to be kept secret (R-1-01) now wants a press statement on the morning of the vote. True item since the build (#53): doubting an accurate report shouldn't score. |
 | R-5-03 | T | — | — | If anything we passed ends up in the motion, this is where it shows |
 | R-5-04 | C | — | — | Metro strike over |
 
@@ -175,12 +175,6 @@ Each planted item has a tell in its own text and at least one check against an i
 - **Check it against R-2-03 and R-4-04:** state TV spent those days attacking Vell, not mentioning LANTERN. If you tasked the embassy (C-07), it was told to keep its distance.
 - **Why Kordav planted it:** make the defection look real just in time for LANTERN to go public.
 
-### R-5-02 (Day 5, STATION, push): the press statement
-
-- **What gave it away:** a man who asked us to keep him secret for his safety now wants a press statement released on the morning of the vote.
-- **Check it against R-1-01:** his first request was secrecy.
-- **Why Kordav planted it:** the smear's last delivery route, timed for maximum effect.
-
 ---
 
 ## Marlowe's actions and the endings
@@ -255,32 +249,29 @@ Credibility outcome adjustment (#50): Exposed +2, Survived 0, Shelved 0, Sidelin
 
 The diagnostic ("no damage control") has two tasking paths: C-01 (SIGINT, 3 points) and C-02 (OSINT, 1 point). C-07 supports it. No single bad tasking locks a player out.
 
-**Dominant-strategy check** (paper estimate: calls plus ending, before evidence, doubts and burned sources; with credibility #50):
+**Dominant-strategy check** (built engine, `node tools/simulate.js crises/walk-in.json`; totals include evidence, doubts, burned sources and ending):
 
-| Strategy | Ending | Total |
-| --- | --- | --- |
-| Best play: H2 Low, H2 Medium, then H2 High from Day 3 | Exposed | **+17** |
-| Paranoid: H2 High every day | Shelved (Day 1 counter rebuffed, credibility Discounted, so Day 5 High acts as Medium and no warning goes) | **+15** |
-| Fooled by the staged recall, then recovers: H2 Low, H1 Medium on Day 2, H2 High from Day 3 | Exposed, credibility Questioned (withdrew the caveat) | **+13** |
-| Never above Medium on H2 | Shelved | **+9** |
-| Always hedge (Low) | Shelved, credibility Discounted | **+5** |
-| "He's a fabricator" (H3 Medium every day) | Shelved | **−10** |
-| Cautious believer (H1 Medium every day) | Sidelined | **−13** |
-| Trust the walk-in (H1 High every day) | Burned | **−25** |
+| Strategy | Ending | Total | Credibility at the end |
+| --- | --- | --- | --- |
+| Best play with collection: H2 Low, H2 Medium, then H2 High | Exposed | **+31** (+37 doubting the six pushed plants) | Trusted |
+| Best play on push alone | Exposed | **+29** | Trusted |
+| Best calls with collection, doubting everything | Exposed | **+26** | Trusted |
+| Burning FINCH on Day 1 | Exposed | **+26** (−2 burn) | Trusted |
+| Never above Medium on H2 | Shelved | **+21** | Trusted |
+| Paranoid: H2 High every day, one cited item a day | Shelved | **+20** | Discounted |
+| Fooled by the staged recall (H1 Medium on Day 2), then recovers | Exposed | **+18** | Questioned, then Trusted |
+| Believer who recovers on Day 4 | Exposed | **+7** | Questioned, then Trusted |
+| Always hedge (Low) | Shelved | **+5** | Discounted |
+| "He's a fabricator" (H3 Medium every day) | Shelved | **−10** | Trusted |
+| Cautious believer (H1 Medium every day) | Sidelined | **−23** | Discounted |
+| Trust the walk-in (H1 High every day) | Burned | **−30** | Discounted |
 
 **Watch for:**
 
-- **"Always assume a dangle" is still close (+15 vs +17).** Credibility widened the gap by one point, because the rebuffed counter now leaves Marlowe discounting Day 5. Evidence widens it further: a paranoid player who never tasks has fewer true items to cite. The real fix is still a genuine walk-in in a later crisis (parking lot).
-- **Nine plants out of about 36 possible items** (7 push, 2 pull). A deception crisis, but watch whether testers find it exhausting.
+- **"Always assume a dangle" is still too close.** Its calls outscore best play's (+15 vs +12), and only the ending (0 vs +5) and credibility punish it. With one cited item a day it scores +20; citing three true items a day would put it in the high 20s against best play's +31. The real fix is still a genuine walk-in in a later crisis (parking lot).
+- **Eight plants out of 36 possible items** (6 push, 2 pull). A deception crisis, but watch whether testers find it exhausting.
 - **C-06 is the hardest plant in either crisis.** Its tells are procedural (net and precedence), which an intel-trained player will catch and a newcomer may not. It's fair because four same-day cross-checks contradict it, and C-11 exposes it to anyone who re-tasks. If testers call it unfair, add a line to MERIDIAN's access: "Compromise traffic normally goes on the Bureau's secure channel."
 - **Burning FINCH has to feel fair.** The warnings are LANTERN's question on Day 2, FINCH's own access text ("a dangerous place to ask questions") and the cheaper OSINT alternative (C-08). FINCH gives the stronger evidence; that's the trade.
 - **Free Liaison:** only one liaison target, and it can be collected once, so it can't dominate.
 
-**Engine needs before building** (Phase 2, step 4):
-
-- The customer's actions here aren't a ladder like company and battalion. The engine needs **named states with transitions** (shared, caveated, restricted, countered, ended), plus ending conditions such as "ever reached" (Burned) and "first reached on day N" (Exposed or Survived).
-- **Per-target cost and delay:** debriefing is HUMINT at 2 points, next day; FINCH is HUMINT at 3 points, two days.
-- **Burn on first tasking** (FINCH), and **debrief targets that close** when the debriefing is ended (H3).
-- **Ordered results per target** (C-06, then C-11 on the headquarters net). The v0.7 engine already resolves the first uncollected result in its window, so this is data only.
-- **Credibility triggers:** the rebuffed early counter (event) and withdrawing a caveat (reply). Both fit the v0.8 format.
-- **Map:** the neutral capital (embassy, Bureau office), Kordav's capital (Bureau headquarters, LANTERN's home), and Kalsa (parliament, Hotel Sorel). Target pins for the three SIGINT targets and the family.
+**Built (#53):** `crises/walk-in.json`, generated by `tools/build_walk_in.py`. Named customer states, per-target cost and delay, FINCH's burn on first tasking, debrief targets that close when the debriefing ends, and the credibility triggers are all in the v0.9 engine. **Not built:** a map (the neutral capital, Kordav's capital, Kalsa).

@@ -284,6 +284,8 @@ pre.log{white-space:pre-wrap;word-break:break-word;font:12px/1.5 var(--f-mono);b
 
 /* ---------- Engine constants (doctrine, not crisis content) ---------- */
 const CRISIS_URL = 'crises/border-buildup.json';
+const INDEX_URL = 'crises/index.json';
+let INDEX = [], CUR = null;
 const LS_PREFIX = 'intel-cell-sim:';
 const SOURCE_SCALE = {A:'Completely reliable',B:'Usually reliable',C:'Fairly reliable',D:'Not usually reliable',E:'Unreliable',F:'Reliability cannot be judged'};
 const INFO_SCALE = {1:'Confirmed by other sources',2:'Probably true',3:'Possibly true',4:'Doubtful',5:'Improbable',6:'Truth cannot be judged'};
@@ -299,7 +301,7 @@ const IDLE_MS = 120000, TICK_MS = 15000;
 const CONFIG_URL = 'config.json';
 const REACTIONS = [['engaging','Engaging'],['fine','Fine'],['slog','A slog']];
 const DEBRIEF = [
-  {id:'sixth', q:'Would you have wanted a sixth day?', a:[['yes','Yes'],['no','No'],['unsure','Not sure']]},
+  {id:'sixth', q:'Would you have wanted another day?', a:[['yes','Yes'],['no','No'],['unsure','Not sure']]},
   {id:'fair', q:'The planted items were…', a:[['easy','Too easy'],['fair','Fair'],['hard','Too hard'],['unfair','Unfair']]},
   {id:'realism', q:'Tradecraft realism', a:[['real','Realistic'],['mostly','Mostly'],['places','Off in places'],['off','Off']]},
   {id:'pace', q:'Length of a daily turn', a:[['short','Too short'],['right','About right'],['long','Too long']]}
@@ -309,7 +311,7 @@ let CFG = {playtest:false};
 let C = null;          // crisis data
 let S = null;          // player state (plain JSON)
 const ui = {tab:'inbox', sheet:null, toast:'', pin:null, pmDay:5, reactDay:null, isOwner:false, pt:{loaded:false, loading:false, docs:[], names:{}, err:''}};
-let USER = null, DB = null, ptRef = null;
+let USER = null, DB = null, ptRef = null, ptRuns = null;
 let store = {mode:'local', ref:null, ok:false};
 const app = document.getElementById('app');
 const layer = document.getElementById('layer');
@@ -335,15 +337,24 @@ const seenReports = () => { const out = []; for (let d = 1; d <= C.days; d++) ou
 const targetById = id => (C.targets || []).find(t => t.id === id) || {name:id};
 function fallbackReport(c){
   if (!c) return undefined;
-  const sid = (C.collection.sources || {})[c.disc];
+  const sid = tSource(c.disc, c.target);
   const s = C.sources.find(x => x.id === sid) || {startingGrade:'B'};
   return {id:c.id, day:c.arrive, sourceId:sid, discipline:c.disc, sourceGrade:s.startingGrade, credibility:null, text:c.text, kind:'noise', supports:[], contradicts:[], tells:[],
     postmortemNote:c.burn ? c.burnNote : 'A tasking that found nothing. That tells you something too: the place you looked was quiet.', collected:true, fallback:true, task:c};
 }
 // ---------- collection tasking ----------
 const COLL = () => C.collection || null;
+const CUST = () => C.customer.short || C.customer.name;
+const PRON = () => C.customer.pronouns || ['he', 'his'];
+const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+const ADV = () => C.adversary || 'the adversary';
+const everAt = st => S.asset === st || (S.moves || []).some(m => m.to === st);
+const tgt = id => (C.targets || []).find(t => t.id === id) || {};
+const tCost = (disc, tid) => { const v = (tgt(tid).cost || {})[disc]; return v != null ? v : (COLL().costs[disc] || 0); };
+const tDelay = (disc, tid) => (tgt(tid).delay || {})[disc] || (COLL().delays || {})[disc] || 1;
+const tSource = (disc, tid) => (tgt(tid).source || {})[disc] || (COLL().sources || {})[disc];
 function tasksFor(d){ return (S.tasks[d] || []); }
-function spentOn(d){ return tasksFor(d).reduce((n, t) => n + (COLL().costs[t.disc] || 0), 0); }
+function spentOn(d){ return tasksFor(d).reduce((n, t) => n + tCost(t.disc, t.target), 0); }
 function budgetFor(d){ return COLL() ? Math.max(0, COLL().budget + (credLevel(credOn(d)).budgetDelta || 0)) : 0; }
 /* ---------- Credibility: moves only on what the customer can see ---------- */
 const CRED = () => C.credibility || null;
@@ -363,6 +374,7 @@ function credTriggers(d, brief, firedEventIds){
   if (!CRED()) return;
   CRED().triggers.forEach(t => {
     if (t.on === 'reply' && brief.reply === t.reply) credApply(t, d + 1);
+    else if (t.on === 'leave' && brief.from === t.state && brief.to !== t.state && !(t.notTo || []).includes(brief.to)) credApply(t, d + 1);
     else if (t.on === 'event' && firedEventIds.includes(t.eventId)) credApply(t, d + 1);
     else if (t.on === 'streak' && brief.conf === t.confidence){
       let run = 1; for (let x = d - 1; x >= 1 && S.briefs[x] && S.briefs[x].conf === t.confidence; x--) run++;
@@ -375,27 +387,29 @@ function toggleTask(d, disc, target){
   const list = S.tasks[d] || (S.tasks[d] = []);
   const i = list.findIndex(t => t.disc === disc && t.target === target);
   if (i >= 0){ list.splice(i, 1); return; }
-  if (spentOn(d) + (COLL().costs[disc] || 0) > budgetFor(d)) { toast('Not enough collection points today.'); return; }
+  if (spentOn(d) + tCost(disc, target) > budgetFor(d)) { toast('Not enough collection points today.'); return; }
   list.push({disc, target});
 }
 function resolveCollection(d){
   if (!COLL()) return;
   tasksFor(d).forEach((t, i) => {
-    const arrive = d + ((COLL().delays || {})[t.disc] || 1);
-    const sid = COLL().sources[t.disc];
-    // burn rule: same source tasked on consecutive days
+    const arrive = d + tDelay(t.disc, t.target);
+    const sid = tSource(t.disc, t.target);
     const rule = (COLL().burnRules || []).find(b => b.discipline === t.disc && b.sourceId === sid);
-    if (rule && burnedOn(sid)) { S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true, burn:true, text:rule.text, burnNote:rule.postmortem}); return; }
-    if (rule && (S.tasks[d-1] || []).some(x => x.disc === t.disc)){
-      S.burned[sid] = arrive;
-      S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true, burn:true, text:rule.text, burnNote:rule.postmortem});
-      return;
+    const burnOut = () => S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true, burn:true, text:rule.text, burnNote:rule.postmortem});
+    if (rule && burnedOn(sid)) { burnOut(); return; }
+    // burn rule: same source tasked on consecutive days
+    if (rule && !rule.onFirstTasking && (S.tasks[d-1] || []).some(x => x.disc === t.disc && tSource(x.disc, x.target) === sid)){
+      S.burned[sid] = arrive; burnOut(); return;
     }
     const got = new Set(S.collected.map(c => c.id));
-    const hit = (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && !got.has(cr.id));
+    const closed = tgt(t.target).closedWhen && everAt(tgt(t.target).closedWhen);
+    const hit = closed ? null : (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && !got.has(cr.id));
     if (hit) S.collected.push({id:hit.id, arrive, task:d, disc:t.disc, target:t.target});
     else S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true,
-      text:(COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
+      text:(tgt(t.target).fallback || COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
+    // burn rule: the first meeting is seen, and the source is gone once it has reported
+    if (hit && rule && rule.onFirstTasking) S.burned[sid] = arrive;
   });
 }
 /* ---------- Hypotheses board (ACH-lite, unscored) ---------- */
@@ -454,7 +468,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, cred:(C.credibility ? C.credibility.start : null), credAt:{1:(C.credibility ? C.credibility.start : null)}, credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], cred:(C.credibility ? C.credibility.start : null), credAt:{1:(C.credibility ? C.credibility.start : null)}, credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -487,6 +501,10 @@ function matchCond(cond, brief, asset){
 function resolvePolicy(day, brief){ return policyFor(Object.assign({}, brief, {conf:effectiveConf(day, brief.conf)}), S.asset, S.frozenBriefDays.includes(day)); }
 function policyFor(brief, asset, frozen){
   const rule = C.customerPolicy.find(r => matchCond(r.if, brief, asset));
+  if (rule && rule.reply){   // named states: the rule gives the reply and, optionally, the state to move to
+    if (rule.sends && frozen) return {reply:rule.frozenReply || 'frozen', asset};
+    return {reply:rule.reply, asset:rule.to || asset, deployed:!!rule.to && rule.to !== asset};
+  }
   const action = rule ? rule.action : 'hold';
   if (action === 'deploy'){
     const target = rule.level || 'battalion';
@@ -499,6 +517,7 @@ function policyFor(brief, asset, frozen){
 }
 function eventFires(cond){
   if (cond.deployedOnAnyDay && !S.deployDays.some(d => cond.deployedOnAnyDay.includes(d))) return false;
+  if (cond.movedTo && !(S.moves || []).some(m => m.to === cond.movedTo.state && cond.movedTo.days.includes(m.day))) return false;
   return true;
 }
 function applyEffect(eff, day){
@@ -511,6 +530,7 @@ function evalEnding(){
     const c = e.if || {};
     if (c.assetAt && ![].concat(c.assetAt).includes(S.asset)) continue;
     if (c.since && !c.since.includes(S.assetSince)) continue;
+    if (c.everAt && !(S.moves || []).some(m => m.to === c.everAt)) continue;
     return e;
   }
   return C.endings[C.endings.length-1];
@@ -540,7 +560,8 @@ function sendBrief(d){
   const brief = {hyp:dr.hyp, conf:dr.conf, evidence:ev,
     date:todayStr(), sentAt:new Date().toISOString(), minutes:Math.max(1, Math.round((S.activeMs[d] || 0)/60000))};
   const res = resolvePolicy(d, brief);
-  if (res.asset !== S.asset){ S.asset = res.asset; S.assetSince = d; }
+  brief.from = S.asset; brief.to = res.asset;
+  if (res.asset !== S.asset){ S.moves.push({day:d, from:S.asset, to:res.asset}); S.asset = res.asset; S.assetSince = d; }
   if (res.deployed) S.deployDays.push(d);
   brief.reply = res.reply;
   brief.tasks = clone(tasksFor(d));
@@ -601,13 +622,15 @@ function save(){
 }
 let ptWriting = false, ptAgain = false;
 async function ptSync(){
-  if (!CFG.playtest || !ptRef || !S.started) return;
+  if (!CFG.playtest || !ptRef || !S.started || ptRuns === null) return;
   if (ptWriting){ ptAgain = true; return; }
   ptWriting = true;
   try {
-    await ptRef.set({crisisId:C.id, updatedAt:S.savedAt, day:curDay(), done:S.done, ending:S.ending || null,
+    const run = {crisisId:C.id, updatedAt:S.savedAt, day:curDay(), done:S.done, ending:S.ending || null,
       log:playtestLog(), briefs:clone(S.briefs), grades:clone(S.grades), feedback:clone(S.feedback),
-      realism:clone(S.realism), debrief:clone(S.debrief), activeMs:clone(S.activeMs)});
+      realism:clone(S.realism), debrief:clone(S.debrief), activeMs:clone(S.activeMs)};
+    ptRuns[C.id] = run;
+    await ptRef.set(Object.assign({}, run, {runs:clone(ptRuns)}));
   } catch(e) { /* the local save still has everything */ }
   ptWriting = false;
   if (ptAgain){ ptAgain = false; ptSync(); }
@@ -643,6 +666,14 @@ async function connectAccount(){
     const uid = await user.id();
     if (!uid) { updateSaveStatus(); return; }
     if (CFG.playtest) ptRef = db.doc('playtests/' + uid);
+    if (CFG.playtest && ptRuns === null){
+      try {
+        const ps = await ptRef.get(); const pd = ps.exists ? (ps.data() || {}) : {};
+        if (pd.runs) ptRuns = clone(pd.runs);
+        else if (pd.crisisId){ const one = clone(pd); delete one.runs; ptRuns = {}; ptRuns[pd.crisisId] = one; }
+        else ptRuns = {};
+      } catch(e) { ptRuns = {}; }
+    }
     if (CFG.playtest && !ui.isOwner){
       try { const m = await db.doc('meta/owner').get(); ui.isOwner = !!(m && m.exists); } catch(e) {}
     }
@@ -744,6 +775,7 @@ function mapCaption(dayScope){
   return esc(C.map.legend) + ' Tap a pin for its item.';
 }
 function mapCard(d){
+  if (!C.map) return '';
   return '<figure class="map" style="margin:0">' + mapSVG({uptoDay:d, today:d, asset:S.asset})
     + '<figcaption class="mapcap" id="mapcap">' + mapCaption(r => r.day <= d) + '</figcaption></figure>';
 }
@@ -788,7 +820,7 @@ function headerView(d, open){
 }
 
 function policyTable(){
-  return '<div class="tablewrap"><table><thead><tr><th>Your brief</th><th>What Halvorsen does</th></tr></thead><tbody>'
+  return '<div class="tablewrap"><table><thead><tr><th>Your brief</th><th>What ' + esc(CUST()) + ' does</th></tr></thead><tbody>'
     + C.policySummary.map(p => '<tr><td>' + esc(p.brief) + '</td><td>' + esc(p.action) + '</td></tr>').join('') + '</tbody></table></div>'
     + (C.policyNote ? '<p class="small"><b>' + esc(C.policyNote) + '</b></p>' : '');
 }
@@ -797,15 +829,16 @@ function introView(){
   const b = C.briefing;
   return '<header class="top"><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + '</span><h1>' + esc(C.title) + '</h1></header>'
     + '<main class="stack">'
-    + '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">The Veyl border. Reporting will be plotted here as it arrives.</figcaption></figure>'
+    + (C.map ? '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">The Veyl border. Reporting will be plotted here as it arrives.</figcaption></figure>' : '')
     + '<p class="mono small muted">' + esc(b.dateLine) + '</p>'
     + b.situation.map(p => '<p>' + esc(p) + '</p>').join('')
     + '<div class="msg"><span class="from">Your customer</span><p><b>' + esc(C.customer.name) + '</b>, ' + esc(C.customer.role) + '.</p><p>' + esc(C.customer.wants) + ' ' + esc(C.customer.context) + '</p></div>'
-    + '<div class="stack"><h3>Halvorsen\'s habits</h3>' + policyTable() + '</div>'
+    + '<div class="stack"><h3>' + esc(CUST()) + '\'s habits</h3>' + policyTable() + '</div>'
     + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
     + '<p class="small muted">Each day: read the inbox, doubt anything you think is false or planted, then send one brief with a judgment, a confidence level and up to 3 pieces of key evidence. The next day opens tomorrow. Sources and scoring are under Files.</p>'
     + '<p class="small muted">' + esc(C.placeholderNote) + '</p>'
     + (CFG.playtest ? playtestNote() : '')
+    + crisisPicker()
     + '<div class="btnrow"><button class="btn" data-act="start">Open Day 1</button>' + (CFG.playtest && ui.isOwner ? '<button class="btn ghost" data-act="tab" data-v="playtests">Tester results</button>' : '') + '</div>'
     + '</main>';
 }
@@ -821,11 +854,11 @@ function readInCard(d){
   const mine = collectedFor(d).length;
   if (mine) facts.push('Your collection: ' + mine + ' result' + (mine > 1 ? 's' : '') + ' in today\'s inbox.');
   const burnedToday = Object.keys(S.burned || {}).filter(k => S.burned[k] === d);
-  burnedToday.forEach(k => facts.push((C.sources.find(x => x.id === k) || {codeName:k}).codeName + ' has gone quiet.'));
+  burnedToday.forEach(k => { const br = ((COLL() || {}).burnRules || []).find(b => b.sourceId === k); facts.push((br && br.readIn) || ((C.sources.find(x => x.id === k) || {codeName:k}).codeName + ' has gone quiet.')); });
   const prev = S.briefs[d-1];
   if (prev) facts.push('Your line yesterday: ' + callLabel(prev) + '.');
-  if (S.frozenBriefDays.includes(d)) facts.push('Troop moves are frozen today.');
-  if (CRED()){ const L = credLevel(credOn(d)); if (L.budgetDelta || L.caution) facts.push('Credibility with ' + C.customer.name + ': ' + L.label + '.' + (COLL() ? ' Collection budget ' + budgetFor(d) + ' today.' : '') + (L.caution ? ' He treats your confidence as one step lower.' : '')); }
+  if (S.frozenBriefDays.includes(d)) facts.push(C.frozenText || 'Troop moves are frozen today.');
+  if (CRED()){ const L = credLevel(credOn(d)); if (L.budgetDelta || L.caution) facts.push('Credibility with ' + C.customer.name + ': ' + L.label + '.' + (COLL() ? ' Collection budget ' + budgetFor(d) + ' today.' : '') + (L.caution ? ' ' + cap(PRON()[0]) + ' treats your confidence as one step lower.' : '')); }
   return '<section class="readin"><span class="from">Morning read-in · Day ' + d + ' · ' + esc(dayLabel(d)) + '</span>'
     + (u ? '<p>' + esc(u.text) + '</p>' : '')
     + '<ul class="facts">' + facts.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul></section>';
@@ -909,7 +942,7 @@ function briefRecord(d){
     + '<p class="kj">' + esc(keyJudgment(b)) + '</p>'
     + '<p><b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>'
     + '<p class="small"><span class="muted">Key evidence:</span> <span class="mono">' + (b.evidence.length ? b.evidence.join(', ') : 'none') + '</span></p>'
-    + '<p class="small"><span class="muted">Halvorsen:</span> ' + esc(C.replyLabels[b.reply] || '') + '</p>'
+    + '<p class="small"><span class="muted">' + esc(CUST()) + ':</span> ' + esc(C.replyLabels[b.reply] || '') + '</p>'
     + '</div>';
 }
 
@@ -920,7 +953,7 @@ function briefView(d){
   let predict = '';
   if (dr.hyp && dr.conf){
     const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
-    predict = '<p class="predict">If you send this, Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>';
+    predict = '<p class="predict">If you send this, ' + esc(CUST()) + ': <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>';
   }
   const full = dr.evidence.length >= C.scoring.maxEvidence;
   const eviBtn = r => {
@@ -934,12 +967,12 @@ function briefView(d){
     + '<p><b>1. Your judgment.</b> Pick the hypothesis you think is true today.</p>'
     + '<p><b>2. Your confidence.</b> Low, Medium or High. Say what you actually believe: High pays most when you\'re right and costs most when you\'re wrong.</p>'
     + '<p><b>3. Your evidence.</b> Cite up to 3 items that back your call. They\'re scored in the postmortem by what they really were, so a planted item costs you.</p>'
-    + '<p><b>Halvorsen acts on your confidence.</b> High gets the full move. Medium gets a partial one, and Low gets none.</p>'
+    + '<p><b>' + esc(CUST()) + ' acts on your confidence.</b> ' + esc(C.customer.tipLine || 'High gets the full move. Medium gets a partial one, and Low gets none.') + '</p>'
     + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="brief">Got it</button></div></div>';
   return tip + '<div class="section-h"><h2>Day ' + d + ' brief</h2></div>'
     + '<div class="msg"><span class="from">Tasking · ' + esc(C.customer.callsign) + '</span><p>' + esc(C.customer.wants) + '</p>'
-    + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' Troop moves are frozen today.' : '') + ' ' + esc(C.policyNote || '') + '</p>'
-    + (CRED() && credLevel(credOn(d)).caution ? '<p class="note crednote">Credibility <b>' + esc(credLevel(credOn(d)).label) + '</b>: he\'ll act on your confidence as one step lower.</p>' : '') + '</div>'
+    + '<p class="note">' + esc(C.asset.name) + ': ' + esc(assetLabel()) + '.' + (frozen ? ' ' + esc(C.frozenText || 'Troop moves are frozen today.') : '') + ' ' + esc(C.policyNote || '') + '</p>'
+    + (CRED() && credLevel(credOn(d)).caution ? '<p class="note crednote">Credibility <b>' + esc(credLevel(credOn(d)).label) + '</b>: ' + PRON()[0] + '\'ll act on your confidence as one step lower.</p>' : '') + '</div>'
     + boardNudge()
     + '<fieldset><legend>Judgment</legend>' + C.hypotheses.map(h => '<button class="opt" data-act="hyp" data-v="' + h.id + '" aria-pressed="' + (dr.hyp === h.id) + '"><span class="k">' + h.id + '</span><span class="t">' + esc(h.short) + '</span><span class="d">' + esc(h.text) + '</span></button>').join('') + '</fieldset>'
     + '<fieldset><legend>Confidence</legend><div class="confs">' + CONF.map(c => '<button class="conf c-' + c.id + '" data-act="conf" data-v="' + c.id + '" aria-pressed="' + (dr.conf === c.id) + '"><b>' + c.label + '</b></button>').join('') + '</div></fieldset>'
@@ -998,7 +1031,7 @@ function collectView(d){
   const K = COLL(), left = budgetFor(d) - spentOn(d);
   const pending = (S.collected || []).filter(c => c.arrive > d && c.task < d);
   const tip = S.tipsSeen.collect ? '' : '<div class="msg tip"><span class="from">How collection works · shown once</span>'
-    + '<p>You have ' + K.budget + ' points a day. Spend them on the targets that answer your intelligence requirements (PIRs). Results arrive tomorrow morning, or in two days for HUMINT.</p>'
+    + '<p>You have ' + K.budget + ' points a day. Spend them on the targets that answer your intelligence requirements (PIRs). Results arrive the next morning unless the button shows a longer wait (2d).</p>'
     + '<p>Some taskings find nothing, and some carry risk: a source can be burned, and a target can go dark. Taskings lock when you send the brief.</p>'
     + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="collect">Got it</button></div></div>';
   const B = budgetFor(d), trimmed = K.budget - B;
@@ -1009,13 +1042,15 @@ function collectView(d){
     html += '<div class="card pir"><p class="mono small muted">' + esc(p.id) + '</p><p><b>' + esc(p.question) + '</b></p>';
     p.targets.forEach(tid => {
       const tg = targetById(tid);
+      if (tg.from && d < tg.from) return;
+      const closed = tg.closedWhen && everAt(tg.closedWhen);
       html += '<div class="trow"><span class="tname">' + esc(tg.name) + '</span><div class="toggles">' + (tg.disciplines || []).map(disc => {
         const on = tasksFor(d).some(t => t.disc === disc && t.target === tid);
-        const cost = K.costs[disc] || 0, sid = K.sources[disc];
+        const cost = tCost(disc, tid), sid = tSource(disc, tid);
         const burned = burnedOn(sid) && d >= burnedOn(sid);
-        const dis = !on && (cost > left || burned);
-        const delay = (K.delays || {})[disc] || 1;
-        return '<button class="chip task" data-act="task" data-disc="' + disc + '" data-target="' + tid + '" aria-pressed="' + on + '"' + (dis ? ' disabled' : '') + ' title="' + (delay > 1 ? 'Arrives in ' + delay + ' days' : 'Arrives tomorrow') + '">' + disc + ' · ' + cost + (delay > 1 ? ' · ' + delay + 'd' : '') + (burned ? ' · gone' : '') + '</button>';
+        const dis = !on && (cost > left || burned || closed);
+        const delay = tDelay(disc, tid);
+        return '<button class="chip task" data-act="task" data-disc="' + disc + '" data-target="' + tid + '" aria-pressed="' + on + '"' + (dis ? ' disabled' : '') + ' title="' + (delay > 1 ? 'Arrives in ' + delay + ' days' : 'Arrives tomorrow') + '">' + disc + ' · ' + cost + (delay > 1 ? ' · ' + delay + 'd' : '') + (burned ? ' · gone' : (closed ? ' · closed' : '')) + '</button>';
       }).join('') + '</div></div>';
     });
     html += '</div>';
@@ -1029,7 +1064,7 @@ function countdownText(){ const ms = msToMidnight(); const h = Math.floor(ms / 3
 
 function lockedView(d){
   return '<div class="card"><h2>Day ' + d + ' opens tomorrow</h2>'
-    + '<p>Your brief is with Halvorsen. His reply and the new inbox arrive at midnight. <span id="countdown" class="mono small">' + countdownText() + '</span></p>'
+    + '<p>Your brief is with ' + esc(CUST()) + '. ' + cap(PRON()[1]) + ' reply and the new inbox arrive at midnight. <span id="countdown" class="mono small">' + countdownText() + '</span></p>'
     + briefRecord(d-1)
     + '<p class="small muted">To play the next day now, turn on Play ahead under Files.</p></div>'
     + mapCard(d-1)
@@ -1039,7 +1074,7 @@ function lockedView(d){
 function filesView(){
   const roster = C.sources.filter(s => !s.rosterHidden);
   return '<div class="stack"><h2>Situation</h2><p class="mono small muted">' + esc(C.briefing.dateLine) + '</p>' + C.briefing.situation.map(p => '<p>' + esc(p) + '</p>').join('') + '</div>'
-    + '<div class="stack"><h3>Halvorsen\'s habits</h3>' + policyTable() + '</div>'
+    + '<div class="stack"><h3>' + esc(CUST()) + '\'s habits</h3>' + policyTable() + '</div>'
     + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
     + '<div class="stack"><h3>Sources on file</h3><div class="tablewrap"><table><thead><tr><th>Code name</th><th>Access</th><th>File</th></tr></thead><tbody>'
     + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(s.startingGrade) + '</b></td></tr>').join('') + '</tbody></table></div></div>'
@@ -1049,11 +1084,12 @@ function filesView(){
     + '<div class="stack"><h3>Scoring</h3><p class="small">Each daily call is scored against what was actually true that day.</p><div class="tablewrap"><table><thead><tr><th>Confidence</th><th class="num">Right</th><th class="num">Wrong</th></tr></thead><tbody>'
     + CONF.map(c => { const p = C.scoring.call[c.id]; return '<tr><td><span class="cdot c-' + c.id + '"></span>' + c.label + '</td><td class="num">+' + p[0] + '</td><td class="num">' + p[1] + '</td></tr>'; }).join('') + '</tbody></table></div>'
     + '<p class="small">Cited evidence: true +' + C.scoring.evidence.true + ', noise ' + C.scoring.evidence.noise + ', clutter ' + C.scoring.evidence.clutter + ', planted ' + C.scoring.evidence.planted + '. Doubting a report: planted item +' + C.scoring.challenge.planted + ', true item ' + C.scoring.challenge.true + ', anything else 0. The ending adds a bonus or a penalty. High pays off if you\'re about two-thirds sure. Medium pays off if you\'re better than even.</p></div>'
-    + (COLL() ? '<div class="stack"><h3>Collection</h3><p class="small">' + COLL().budget + ' points a day. Results arrive the next morning' + ((COLL().delays || {}).HUMINT ? ', or in ' + COLL().delays.HUMINT + ' days for HUMINT' : '') + '.</p><div class="tablewrap"><table><thead><tr><th>Discipline</th><th class="num">Cost</th><th>Source</th></tr></thead><tbody>'
+    + (COLL() ? '<div class="stack"><h3>Collection</h3><p class="small">' + COLL().budget + ' points a day. Results arrive the next morning' + ((COLL().delays || {}).HUMINT ? ', or in ' + COLL().delays.HUMINT + ' days for HUMINT' : '') + '.' + (COLL().note ? ' ' + esc(COLL().note) : '') + '</p><div class="tablewrap"><table><thead><tr><th>Discipline</th><th class="num">Cost</th><th>Source</th></tr></thead><tbody>'
       + Object.keys(COLL().costs).map(k => '<tr><td>' + k + '</td><td class="num">' + COLL().costs[k] + '</td><td class="small">' + esc((C.sources.find(x => x.id === COLL().sources[k]) || {}).codeName || '') + '</td></tr>').join('') + '</tbody></table></div></div>' : '')
     + (CRED() ? '<div class="stack"><h3>Credibility</h3><p class="small">' + esc(CRED().summary || '') + ' It doesn\'t change your score.</p><div class="tablewrap"><table><thead><tr><th>Level</th><th>Effect</th></tr></thead><tbody>'
       + CRED().levels.map(l => '<tr><td><b>' + esc(l.label) + '</b></td><td class="small">' + esc(l.text || '') + '</td></tr>').join('') + '</tbody></table></div>'
       + '<p class="small">It drops when: ' + CRED().triggers.map(t => esc(t.rule) + ' (' + t.delta + ')').join('; ') + '. You start at ' + esc(credLevel(CRED().start).label) + '.</p></div>' : '')
+    + crisisPicker()
     + '<div class="stack"><h3>Settings</h3>'
     + '<div class="switch"><span><b>Play ahead</b><br><span class="small muted">Open the next day without waiting for midnight.</span></span><button data-act="playahead" aria-pressed="' + S.playAhead + '">' + (S.playAhead ? 'On' : 'Off') + '</button></div>'
     + '<div class="switch"><span><b>Start over</b><br><span class="small muted">Wipes this crisis and opens the situation briefing again.</span></span><button data-act="restart">Reset</button></div>'
@@ -1081,7 +1117,7 @@ function postmortemView(){
   const sign = n => (n > 0 ? '+' : '') + n;
   const pd = ui.pmDay;
 
-  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">Dawn, the 20th</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
+  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">' + esc(C.endingEyebrow || 'The outcome') + '</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
     + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + (bTotal ? ' · burned sources ' + sign(bTotal) : '') + ' · ending ' + sign(ending.points) + '</span></div>'
     + '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Your call</th><th>Truth</th><th class="num">Call</th><th class="num">Evid.</th><th class="num">Min</th></tr></thead><tbody>'
     + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '' + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
@@ -1090,10 +1126,10 @@ function postmortemView(){
     + credCard()
     + (CFG.playtest ? debriefCard() : '')
     + '<div class="btnrow"><button class="btn ghost" data-act="copylog">Copy playtest log</button></div>'
-    + '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
-    + '<div class="daypick" role="group" aria-label="Day">' + [1,2,3,4,5].map(x => '<button data-act="pmday" data-v="' + x + '" aria-pressed="' + (pd === x) + '">Day ' + x + '</button>').join('') + '</div>'
+    + (!C.map ? '' : '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
+    + '<div class="daypick" role="group" aria-label="Day">' + Array.from({length:C.days}, (_, k) => k + 1).map(x => '<button data-act="pmday" data-v="' + x + '" aria-pressed="' + (pd === x) + '">Day ' + x + '</button>').join('') + '</div>'
     + '<figure class="map" style="margin:0">' + mapSVG({onlyDay:pd, today:pd, truthDay:pd, asset:assetOnDay(pd)})
-    + '<figcaption class="mapcap" id="mapcap">Red diamonds are where Kordav\'s units really were on Day ' + pd + '. Pins are that day\'s reporting. ' + (ui.pin && rep(ui.pin).day === pd ? mapCaption() : 'Tap a pin for its item.') + '</figcaption></figure></div>';
+    + '<figcaption class="mapcap" id="mapcap">Red diamonds are where ' + esc(ADV()) + '\'s units really were on Day ' + pd + '. Pins are that day\'s reporting. ' + (ui.pin && rep(ui.pin).day === pd ? mapCaption() : 'Tap a pin for its item.') + '</figcaption></figure></div>');
 
   for (let d = 1; d <= C.days; d++){
     const t = C.groundTruth.find(g => g.day === d);
@@ -1116,7 +1152,7 @@ function postmortemView(){
   if (boardIds().length){
     const last = C.groundTruth.find(g => g.day === C.days);
     html += '<div class="stack"><div class="section-h"><h3>Your board</h3></div>' + boardView(C.days, true)
-      + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as Kordav intended.</p></div>';
+      + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as ' + esc(ADV()) + ' intended.</p></div>';
   }
   html += '<div class="stack"><h3>Lessons</h3><ul>' + C.postmortem.lessons.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
     + '<div class="stack"><h3>Your sources, revealed</h3>' + C.sources.filter(s => !s.rosterHidden).map(s => '<p class="small"><span class="mono"><b>' + esc(s.codeName) + '</b></span> ' + (s.controlledByAdversary === true ? '<span class="pill k-planted">Adversary channel</span> ' : '') + esc(s.postmortemNote || '') + '</p>').join('') + '</div>'
@@ -1130,7 +1166,7 @@ function credCard(){
   const out = (S.credLog || []).find(x => x.id === 'outcome');
   return '<div class="msg"><span class="from">Credibility with ' + esc(C.customer.name) + ' · not scored</span>'
     + '<p class="credline">Credibility: ' + lab(CRED().start) + ' → ' + lab(S.credEnd) + ' → ' + lab(S.credFinal) + ' after the outcome</p>'
-    + (lines.length ? '<ul class="small">' + lines.join('') + '</ul>' : '<p class="small">Nothing he had to undo, and no run of Low calls.</p>')
+    + (lines.length ? '<ul class="small">' + lines.join('') + '</ul>' : '<p class="small">Nothing ' + PRON()[0] + ' had to undo, and no run of Low calls.</p>')
     + '<p class="small muted">The outcome ' + (out ? (out.delta > 0 ? 'added ' : 'cost ') + Math.abs(out.delta) : 'changed nothing') + '. From Phase 3, credibility carries into your next crisis.</p></div>';
 }
 function assetOnDay(d){ return (S.posture && S.posture[d]) || 'home'; }
@@ -1148,7 +1184,7 @@ function revealItem(r, brief){
     + (r.reveal
       ? '<div class="why"><p><span class="whyk">What gave it away</span>' + esc(r.reveal.tell) + '</p>'
         + '<p><span class="whyk">Check it against ' + r.reveal.crossCheck.ids.join(', ') + '</span>' + esc(r.reveal.crossCheck.text) + '</p>'
-        + '<p><span class="whyk">Why Kordav planted it</span>' + esc(r.reveal.motive) + '</p></div>'
+        + '<p><span class="whyk">Why ' + esc(ADV()) + ' planted it</span>' + esc(r.reveal.motive) + '</p></div>'
       : '<p class="what">' + esc(r.postmortemNote) + '</p>')
     + (tells.length ? '<p class="tells">Tells: ' + tells.map(esc).join(' · ') + '</p>' : '')
     + '<p class="yourgrade">' + gradeSummary(g) + '</p></div>';
@@ -1156,7 +1192,7 @@ function revealItem(r, brief){
 
 function playtestLog(){
   const ending = C.endings.find(e => e.id === S.ending) || evalEnding();
-  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Confidence | Truth | Call pts | Evidence | Evid pts | Halvorsen | Tasked | Board | Cred'];
+  const lines = ['Crisis ' + C.crisisNumber + ' (' + C.title + ') playtest log', 'Day | Min | Call | Confidence | Truth | Call pts | Evidence | Evid pts | ' + CUST() + ' | Tasked | Board | Cred'];
   let total = ending.points;
   for (let d = 1; d <= C.days; d++){
     const b = S.briefs[d]; if (!b) continue;
@@ -1223,10 +1259,15 @@ function playtestsView(){
   if (ui.pt.loading) html += '<p class="mono small muted">Loading…</p>';
   if (ui.pt.err) html += '<p class="small">' + esc(ui.pt.err) + '</p>';
   if (ui.pt.loaded && !ui.pt.docs.length) html += '<p class="small">No results yet. They appear once a tester opens Day 1.</p>';
+  ui.pt.rows = [];
   ui.pt.docs.forEach((x, i) => {
     const name = ui.pt.names[x.id] || ('Tester ' + (i + 1));
-    const status = x.done ? 'Finished · ' + (x.ending || '') : 'On Day ' + (x.day || 1) + ' of ' + C.days;
-    html += '<details' + (i === 0 ? ' open' : '') + '><summary><span>' + esc(name) + '</span><span class="mono small muted">' + esc(status) + '</span></summary><div class="inner">'
+    (x.runs ? Object.values(x.runs) : [x]).sort((p, q) => (q.updatedAt || '').localeCompare(p.updatedAt || '')).forEach(r => ui.pt.rows.push({name, r}));
+  });
+  ui.pt.rows.forEach((row, i) => {
+    const x = row.r, cx = INDEX.find(k => k.id === x.crisisId);
+    const status = (cx && cx.number ? 'Crisis ' + cx.number + ' · ' : '') + (x.done ? 'Finished · ' + (x.ending || '') : 'On Day ' + (x.day || 1));
+    html += '<details' + (i === 0 ? ' open' : '') + '><summary><span>' + esc(row.name) + '</span><span class="mono small muted">' + esc(status) + '</span></summary><div class="inner">'
       + '<p class="small muted">Last update ' + esc((x.updatedAt || '').replace('T', ' ').slice(0, 16)) + ' UTC</p>'
       + '<pre class="log">' + esc(x.log || '') + '</pre>'
       + '<div class="btnrow"><button class="btn ghost" data-act="ptcopy" data-i="' + i + '">Copy log</button></div></div></details>';
@@ -1241,8 +1282,8 @@ function renderLayer(){
     const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
     html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Send the Day ' + d + ' brief?</h3>'
       + '<p class="kj">' + esc(keyJudgment({hyp:dr.hyp, conf:dr.conf, evidence:dr.evidence})) + '</p>'
-      + '<p class="small">Halvorsen: <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>'
-      + '<p class="small muted">Once it\'s sent you can\'t change it. Halvorsen acts on it tonight.</p>'
+      + '<p class="small">' + esc(CUST()) + ': <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>'
+      + '<p class="small muted">Once it\'s sent you can\'t change it. ' + esc(CUST()) + ' acts on it tonight.</p>'
       + '<div class="btnrow"><button class="btn" data-act="confirmsend">Send</button><button class="btn ghost" data-act="cancel">Keep editing</button></div></div></div>';
   } else if (ui.sheet === 'react'){
     const k = ui.reactDay, f = S.feedback[k] || {};
@@ -1271,6 +1312,7 @@ function onClick(e){
   const d = curDay();
   switch (act){
     case 'start': S.started = true; ui.tab = 'inbox'; save(); render(); window.scrollTo(0,0); break;
+    case 'crisis': switchCrisis(el.dataset.id); break;
     case 'tab': ui.tab = el.dataset.v; render(); window.scrollTo(0,0); break;
     case 'flag': case 'nr': {
       const g = S.grades[el.dataset.id] || (S.grades[el.dataset.id] = {});
@@ -1291,7 +1333,7 @@ function onClick(e){
     case 'debrief': { const q = el.dataset.q; S.debrief[q] = S.debrief[q] === el.dataset.v ? null : el.dataset.v; save(); render(); break; }
     case 'ptload': ui.pt.loaded = false; loadPlaytests(); break;
     case 'ptcopy': {
-      const x = ui.pt.docs[Number(el.dataset.i)]; const text = (x && x.log) || '';
+      const x = ((ui.pt.rows || [])[Number(el.dataset.i)] || {}).r; const text = (x && x.log) || '';
       try { navigator.clipboard.writeText(text).then(() => toast('Log copied.'), () => toast('Copy failed. Select the text instead.')); } catch(err) { toast('Copy failed. Select the text instead.'); }
       break;
     }
@@ -1353,26 +1395,50 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* ---------- Boot ---------- */
+async function switchCrisis(id){
+  if (!INDEX.some(x => x.id === id) || (CUR && CUR.id === id)) return;
+  clearTimeout(saveTimer);
+  if (S && S.started){ try { await flush(); await ptSync(); } catch(e) {} }
+  try { localStorage.setItem(LS_PREFIX + 'current', id); } catch(e) {}
+  store = {mode:'local', ref:null, ok:false};
+  app.innerHTML = '<p class="loading">Loading the crisis file…</p>';
+  await start({});
+  window.scrollTo(0, 0);
+}
+function crisisPicker(){
+  if (INDEX.length < 2) return '';
+  return '<div class="stack"><h3>Crises</h3>' + INDEX.map(x => '<button class="opt" data-act="crisis" data-id="' + esc(x.id) + '" aria-pressed="' + (CUR.id === x.id) + '"><span class="k">' + esc(x.number || '') + '</span><span class="t">' + esc(x.title || x.id) + '</span><span class="d">' + esc(x.line || '') + (x.note ? ' ' + esc(x.note) : '') + '</span></button>').join('')
+    + '<p class="small muted">Each crisis keeps its own progress.</p></div>';
+}
 async function start(hotData){
   try {
     const cr = await fetch(CONFIG_URL, {cache:'no-cache'});
     if (cr.ok){ const cfg = await cr.json(); if (cfg && typeof cfg.playtest === 'boolean') CFG = Object.assign(CFG, cfg); }
   } catch(e) { /* no config: normal build */ }
   try {
-    const res = await fetch(CRISIS_URL, {cache:'no-cache'});
+    const ir = await fetch(INDEX_URL, {cache:'no-cache'});
+    if (ir.ok){ const ix = await ir.json(); if (Array.isArray(ix) && ix.length) INDEX = ix; }
+  } catch(e) { /* no index: single crisis */ }
+  if (!INDEX.length) INDEX = [{id:'border-buildup', file:CRISIS_URL}];
+  let want = null; try { want = localStorage.getItem(LS_PREFIX + 'current'); } catch(e) {}
+  if (hotData && hotData.crisis) want = hotData.crisis;
+  CUR = INDEX.find(x => x.id === want) || INDEX[0];
+  try {
+    const res = await fetch(CUR.file, {cache:'no-cache'});
     if (!res.ok) throw new Error('HTTP ' + res.status);
     C = await res.json();
   } catch(e) {
-    app.innerHTML = '<p class="loading">Couldn\'t load the crisis file (' + esc(CRISIS_URL) + '). Reload the page to try again.</p>';
+    app.innerHTML = '<p class="loading">Couldn\'t load the crisis file (' + esc(CUR.file) + '). Reload the page to try again.</p>';
     return;
   }
   S = normalize(hotData && hotData.S) || normalize(loadLocal()) || fresh();
-  if (hotData && hotData.tab) ui.tab = hotData.tab;
+  ui.pmDay = C.days; ui.pin = null; ui.sheet = null;
+  ui.tab = (hotData && hotData.tab) || 'inbox';
   render();
   connectAccount();
 }
 const hot = window.claude && window.claude.hot;
-if (hot && typeof hot.snapshot === 'function') hot.snapshot(() => ({S:S, tab:ui.tab}));
+if (hot && typeof hot.snapshot === 'function') hot.snapshot(() => ({S:S, tab:ui.tab, crisis:CUR && CUR.id}));
 if (hot && typeof hot.ready === 'function') hot.ready(start); else start((hot && hot.data) || {});
 })();
 </script>

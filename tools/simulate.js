@@ -30,6 +30,7 @@ function boot(cfg, storage) {
   Object.defineProperty(globalThis, 'navigator', { value: {}, configurable: true, writable: true });
   global.fetch = async url => /config\.json$/.test(url)
     ? (cfg ? { ok: true, json: async () => cfg } : { ok: false, json: async () => ({}) })
+    : /index\.json$/.test(url) ? { ok: false, json: async () => ({}) }
     : { ok: true, json: async () => JSON.parse(JSON.stringify(crisis)) };
   eval(engine);
   const click = (act, ds = {}) => handlers.click({ target: { closest: () => ({ dataset: Object.assign({ act }, ds), classList: { contains: () => false } }) } });
@@ -68,23 +69,17 @@ async function run(plan, doubt, cfg, opts = {}) {
   return { line: `${ending} ${total} | ${parts}`, calls, total, html: out, cred };
 }
 
-// Board use for the "with board" check: pin the day's diagnostic items and mark them like a careful analyst.
-const BOARD_MARKS = {
-  1: { 'R-1-01': 'ccc', 'R-1-02': 'ici' },
-  2: { 'R-2-01': 'icc', 'C-01': 'ici' },
-  3: { 'R-3-02': 'ici', 'C-05': 'ici' },
-  4: { 'C-02': 'ici' },
-  5: { 'C-03': 'ici' },
-};
 const CYCLE = { c: 1, i: 2, n: 3 };
-function useBoard(day, click) {
-  Object.entries(BOARD_MARKS[day] || {}).forEach(([id, marks]) => {
+const boardUser = marks => (day, click) => {
+  Object.entries(marks[day] || {}).forEach(([id, m]) => {
     click('bpin', { id });
-    [...marks].forEach((m, k) => { for (let n = 0; n < CYCLE[m]; n++) click('mark', { id, h: 'H' + (k + 1) }); });
+    [...m].forEach((x, k) => { for (let n = 0; n < CYCLE[x]; n++) click('mark', { id, h: 'H' + (k + 1) }); });
   });
-}
-
+};
 const none = () => false, plants = r => r.kind === 'planted', all = () => true;
+const rep5 = x => Array(5).fill(x);
+
+// ---------- Crisis 01: Exercise or Operation? ----------
 const BEST = [
   ['H3', 'medium', ['R-1-01', 'R-1-02', 'R-1-04']],
   ['H3', 'medium', ['R-2-01', 'R-2-02']],
@@ -99,38 +94,80 @@ const COLLECT = [
   ['H2', 'high', ['C-02', 'R-3-02', 'R-4-04'], [['IMINT', 'dolan']]],
   ['H2', 'high', ['C-03', 'C-04', 'R-5-04']],
 ];
-const STRATEGIES = [
-  ['Best play, no collection', BEST, none],
-  ['Best play with collection', COLLECT, none],
-  ['Collection, doubt plants', COLLECT, plants],
-  ['Collection, doubt everything', COLLECT, all],
-  ['High from Day 3, with collection', [COLLECT[0], COLLECT[1], ['H2', 'high', ['R-3-02', 'R-3-04', 'C-05'], [['IMINT', 'dolan']]], COLLECT[3], COLLECT[4]], none],
-  ['Burn KESTREL (HUMINT twice)', [['H3', 'medium', ['R-1-01'], [['HUMINT', 'depot']]], ['H3', 'medium', ['R-2-01'], [['HUMINT', 'depot']]], BEST[2], BEST[3], ['H2', 'high', ['R-5-03', 'R-4-01']]], none],
-  ['Never above Medium', [COLLECT[0], COLLECT[1], COLLECT[2], ['H2', 'medium', ['C-02', 'R-3-02', 'R-4-04'], [['IMINT', 'dolan']]], ['H2', 'medium', ['C-03', 'C-04']]], none],
-  ['Always worst case', [['H2', 'high', ['R-1-03', 'R-1-01']], ['H2', 'high', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
-  ['Trust the official line', Array(5).fill(['H1', 'medium', []]), none],
-  ['"Just signaling"', Array(5).fill(['H3', 'medium', []]), none],
-  ['Hedge early, then commit', [['H3', 'low', ['R-1-01']], ['H3', 'low', ['R-2-01']], ['H2', 'low', ['R-3-02']], ['H2', 'high', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
-  ['Early mover, then right', [['H2', 'high', ['R-1-01']], ['H3', 'medium', ['R-2-01']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
-  ['Flip-flop (company, then back)', [BEST[0], BEST[1], BEST[2], ['H3', 'medium', ['R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
-  ['Always hedge (Low)', [['H3', 'low', []], ['H3', 'low', []], ['H2', 'low', []], ['H2', 'low', []], ['H2', 'low', []]], none],
+// ---------- Crisis 02: The Walk-in ----------
+const W_BEST = [
+  ['H2', 'low', ['R-1-01', 'R-1-04'], [['OSINT', 'family'], ['OSINT', 'press'], ['SIGINT', 'bureau-office']]],
+  ['H2', 'medium', ['C-01', 'C-02', 'R-2-01'], [['HUMINT', 'd-access'], ['HUMINT', 'd-vell'], ['OSINT', 'ministry']]],
+  ['H2', 'high', ['R-3-03', 'C-01', 'C-12'], [['HUMINT', 'd-ledger'], ['SIGINT', 'embassy']]],
+  ['H2', 'high', ['C-09', 'C-07', 'R-4-02'], [['Liaison', 'travel'], ['SIGINT', 'bureau-hq']]],
+  ['H2', 'high', ['R-4-04', 'R-5-02', 'C-02']],
 ];
+const W_PUSH = [
+  ['H2', 'low', ['R-1-01', 'R-1-04']], ['H2', 'medium', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-03', 'R-3-04', 'R-2-01']],
+  ['H2', 'high', ['R-4-02', 'R-4-04', 'R-3-03']], ['H2', 'high', ['R-5-02', 'R-3-03']],
+];
+const SETS = {
+  'border-buildup': {
+    collect: COLLECT,
+    marks: { 1: { 'R-1-01': 'ccc', 'R-1-02': 'ici' }, 2: { 'R-2-01': 'icc', 'C-01': 'ici' }, 3: { 'R-3-02': 'ici', 'C-05': 'ici' }, 4: { 'C-02': 'ici' }, 5: { 'C-03': 'ici' } },
+    nudge: { 2: 'H2</b> is the least contradicted', 3: 'H2</b> is the least contradicted' },
+    strategies: [
+      ['Best play, no collection', BEST, none],
+      ['Best play with collection', COLLECT, none],
+      ['Collection, doubt plants', COLLECT, plants],
+      ['Collection, doubt everything', COLLECT, all],
+      ['High from Day 3, with collection', [COLLECT[0], COLLECT[1], ['H2', 'high', ['R-3-02', 'R-3-04', 'C-05'], [['IMINT', 'dolan']]], COLLECT[3], COLLECT[4]], none],
+      ['Burn KESTREL (HUMINT twice)', [['H3', 'medium', ['R-1-01'], [['HUMINT', 'depot']]], ['H3', 'medium', ['R-2-01'], [['HUMINT', 'depot']]], BEST[2], BEST[3], ['H2', 'high', ['R-5-03', 'R-4-01']]], none],
+      ['Never above Medium', [COLLECT[0], COLLECT[1], COLLECT[2], ['H2', 'medium', ['C-02', 'R-3-02', 'R-4-04'], [['IMINT', 'dolan']]], ['H2', 'medium', ['C-03', 'C-04']]], none],
+      ['Always worst case', [['H2', 'high', ['R-1-03', 'R-1-01']], ['H2', 'high', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+      ['Trust the official line', rep5(['H1', 'medium', []]), none],
+      ['"Just signaling"', rep5(['H3', 'medium', []]), none],
+      ['Hedge early, then commit', [['H3', 'low', ['R-1-01']], ['H3', 'low', ['R-2-01']], ['H2', 'low', ['R-3-02']], ['H2', 'high', ['R-4-01', 'R-3-02', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+      ['Early mover, then right', [['H2', 'high', ['R-1-01']], ['H3', 'medium', ['R-2-01']], ['H2', 'high', ['R-3-02', 'R-3-04']], ['H2', 'high', ['R-4-01', 'R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+      ['Flip-flop (company, then back)', [BEST[0], BEST[1], BEST[2], ['H3', 'medium', ['R-4-04']], ['H2', 'high', ['R-5-03', 'R-5-04']]], none],
+      ['Always hedge (Low)', [['H3', 'low', []], ['H3', 'low', []], ['H2', 'low', []], ['H2', 'low', []], ['H2', 'low', []]], none],
+    ],
+  },
+  'walk-in': {
+    collect: W_BEST,
+    marks: { 1: { 'R-1-03': 'cci' }, 2: { 'C-01': 'ici', 'C-02': 'ici' }, 3: { 'R-3-03': 'ici' } },
+    nudge: { 2: 'H2</b> is the least contradicted', 3: 'H2</b> is the least contradicted' },
+    strategies: [
+      ['Best play, push only', W_PUSH, none],
+      ['Best play with collection', W_BEST, none],
+      ['Collection, doubt plants', W_BEST, plants],
+      ['Collection, doubt everything', W_BEST, all],
+      ['Paranoid (H2 High daily)', rep5(['H2', 'high', ['R-1-01']]), none],
+      ['Fooled by staged recall', [['H2', 'low', ['R-1-01'], [['SIGINT', 'bureau-hq'], ['HUMINT', 'd-vell']]], ['H1', 'medium', ['C-06', 'C-10']], W_PUSH[2], W_PUSH[3], W_PUSH[4]], none],
+      ['Burn FINCH on Day 1', [['H2', 'low', ['R-1-01'], [['HUMINT', 'finch'], ['OSINT', 'family'], ['OSINT', 'press']]], W_PUSH[1], ['H2', 'high', ['R-3-03', 'C-04', 'C-02']], W_PUSH[3], W_PUSH[4]], none],
+      ['Never above Medium', W_PUSH.map(x => ['H2', x[1] === 'high' ? 'medium' : x[1], x[2]]), none],
+      ['Always hedge (Low)', rep5(['H2', 'low', []]), none],
+      ['"He\'s a fabricator"', rep5(['H3', 'medium', []]), none],
+      ['Cautious believer (H1 Medium)', rep5(['H1', 'medium', ['R-1-03']]), none],
+      ['Trust the walk-in (H1 High)', rep5(['H1', 'high', ['R-1-03', 'R-1-02']]), none],
+      ['Believer who recovers Day 4', [['H1', 'medium', []], ['H1', 'medium', []], ['H1', 'medium', []], ['H2', 'high', ['R-3-03']], ['H2', 'high', ['R-3-03']]], none],
+    ],
+  },
+};
 
 (async () => {
+  const set = SETS[crisis.id];
+  if (!set) { console.error('No strategies for crisis ' + crisis.id); process.exit(1); }
   console.log(`Crisis: ${crisis.title} (${path.relative(root, crisisPath)})`);
   let ref;
-  for (const [name, plan, doubt] of STRATEGIES) {
+  for (const [name, plan, doubt] of set.strategies) {
     const r = await run(plan, doubt);
-    if (plan === COLLECT && doubt === none) ref = r;
-    console.log(name.padEnd(30), r.line, '| cred ' + r.cred);
-    if (process.argv.includes('--calls')) console.log(' '.repeat(31) + r.calls.join(' · '));
+    if (plan === set.collect && doubt === none) ref = r;
+    console.log(name.padEnd(32), r.line, '| cred ' + r.cred);
+    if (process.argv.includes('--calls')) console.log(' '.repeat(33) + r.calls.join(' · '));
   }
-  const b = await run(COLLECT, none, null, { board: useBoard, expectNudge: { 2: 'H2</b> is the least contradicted', 3: 'H2</b> is the least contradicted' } });
+  const useBoard = boardUser(set.marks);
+  const b = await run(set.collect, none, null, { board: useBoard, expectNudge: set.nudge });
   const boardOk = b.total === ref.total && /Your board/.test(b.html);
-  console.log('Collection + board (unscored)'.padEnd(30), b.line, boardOk ? '| same score, board in postmortem' : '| BOARD CHANGED THE SCORE OR IS MISSING');
-  const rl = await run(COLLECT, none, null, { board: useBoard, reloadAfter: [1, 2, 3, 4] });
-  console.log('Reload after every day'.padEnd(30), rl.line, rl.total === ref.total && /Your board/.test(rl.html) ? '| matches, save survives reload' : '| RELOAD CHANGED THE RESULT');
-  const pt = await run(COLLECT, none, { playtest: true });
-  console.log('Playtest build'.padEnd(30), pt.line, /Playtest debrief/.test(lastHtml) ? '| debrief shown' : '| DEBRIEF MISSING');
+  console.log('Collection + board (unscored)'.padEnd(32), b.line, boardOk ? '| same score, board in postmortem' : '| BOARD CHANGED THE SCORE OR IS MISSING');
+  const rl = await run(set.collect, none, null, { board: useBoard, reloadAfter: [1, 2, 3, 4] });
+  console.log('Reload after every day'.padEnd(32), rl.line, rl.total === ref.total && /Your board/.test(rl.html) ? '| matches, save survives reload' : '| RELOAD CHANGED THE RESULT');
+  const pt = await run(set.collect, none, { playtest: true });
+  console.log('Playtest build'.padEnd(32), pt.line, /Playtest debrief/.test(lastHtml) ? '| debrief shown' : '| DEBRIEF MISSING');
   if (!boardOk || rl.total !== ref.total) process.exitCode = 1;
 })();

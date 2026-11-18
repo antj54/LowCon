@@ -25,7 +25,8 @@
     "role": "Commander, Task Force VEYL",
     "callsign": "CDR TF VEYL",
     "wants": "Does he move 2nd Battalion to the Tarsk sector? He commits as much as your confidence supports.",
-    "context": "An early move is visible, and Kordav will call it provocation in the middle of talks. A late move might not arrive in time. A company can watch the crossing. Only the full battalion can hold the dam."
+    "context": "An early move is visible, and Kordav will call it provocation in the middle of talks. A late move might not arrive in time. A company can watch the crossing. Only the full battalion can hold the dam.",
+    "short": "Halvorsen"
   },
   "asset": {
     "id": "2bn",
@@ -1887,5 +1888,7 @@
       "seized": -2
     },
     "summary": "Halvorsen can't see whether you're right until it's over. He can see when he has to undo a move, and when you won't commit."
-  }
+  },
+  "adversary": "Kordav",
+  "endingEyebrow": "Dawn, the 20th"
 }
