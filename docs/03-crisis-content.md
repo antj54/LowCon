@@ -9,7 +9,7 @@
 | Border buildup | A logistics buildup near a contested border: exercise, or staging for an operation? | The "exercise" story is true at first, then turns into cover | **Scripted: Crisis 01** |
 | Missing shipment | Dual-use components went missing between two ports. Where are they, and who has them? | A false trail planted through a front company's paperwork | Seed |
 | Ransomware group | Is a ransomware crew criminal, or working for a state? | A false-flag language artifact points at the wrong country | Seed |
-| Pipeline militia | A militia threatens a pipeline while a neighbor quietly funds both sides | Liaison partner reporting is shaped by the partner's own agenda | Seed |
+| Pipeline militia | A militia threatens a pipeline while a neighbor quietly funds both sides | Liaison partner reporting is shaped by the partner's own agenda, and this time it's right | **Chosen for Scenario 03** (#58), not yet scripted |
 | Defector walk-in | A defector's story is almost too good | The defector is a dangle; their best details are circular | **Paper script: Crisis 02** |
 
 ## Authoring rules

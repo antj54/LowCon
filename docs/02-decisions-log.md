@@ -6,6 +6,7 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 58 | 2026-11-18 | **Phase 3 design choices settled** (all as recommended). (1) **The first finished run of each scenario goes on the service record;** replays are off the record and change nothing. (2) **Analysts are notes only:** one short note a day each, nothing to assign, not citable and not scored; the postmortem shows each analyst's hit rate. (3) **Scenario 03 seed: pipeline militia.** (4) **Halvorsen returns as its customer,** starting from where Scenario 01 left his trust in you. | Anthony's call. First-finish keeps consequences real; notes keep the turn at 8 minutes; the militia seed is liaison-heavy and lets Elsin's alarm be right for once; Halvorsen is the first customer to remember you. Watch: keep the third neighbour to one name and one motive. |
 | 57 | 2026-11-18 | **Phase 3 drafted on paper** (`claude/phase-3-design.md`); nothing built. **Scenario 03 will not be another defector.** Its job is to make reflexive suspicion the mistake: the item that looks most like a plant is genuine. Four choices are open: what goes on the service record, how deep analysts go, the Scenario 03 seed and its customer. | Anthony's call on the defector. A scenario where trust is right is the real fix for "always assume a dangle" (#56), and it doesn't need a walk-in to work. The Phase 2 gate is still open (#55), so Phase 3 stays on paper. |
 | 56 | 2026-11-18 | **Crisis 02 loose ends.** (1) A schematic map of the three capitals (the neutral capital, Kordav's capital, Kalsa) with named sites; reporting and collection results are plotted as they arrive, taskings show as dashed rings, and the postmortem shows what the Bureau was really doing each day (case officers, the watch on the ministry, the staged recall, the forged ledger, the leak, the kidnap script). (2) **A rebuffed warning now costs −5 points**, shown in the postmortem only. "Always H2 High" drops to +15 with one cited item a day and +25 with full evidence, against best play's +31 (+29 on push alone). | The map brings Crisis 02 up to Crisis 01's standard and keeps to rule 7: no truth on it until the postmortem. The penalty prices an accusation made with no evidence. It narrows the dangle problem but doesn't close it, because calling High on Day 1 still scores as a right call; the real fix is a genuine walk-in in a later scenario (parking lot). |
 | 55 | 2026-11-18 | **Playtests deferred.** No Crisis 02 playtest for now; one will run after more development. The Phase 2 gate (the second crisis plays differently, judged by a blind run) stays open until then. | Anthony's call. Open risks waiting on that playtest: both intel-trained testers staying at Medium (#46), the value of collection to a human player (#48), the staged recall's fairness and "always assume a dangle" (#53). |
@@ -67,7 +68,6 @@
 ## Open questions
 
 - [ ] Does Crisis 01 get a named real region, or stay unnamed?
-- [ ] Phase 3 (see `claude/phase-3-design.md`): what goes on the service record; analysts as notes only or assigned; Scenario 03 seed; Scenario 03 customer.
 
 ## Queued after playtest
 

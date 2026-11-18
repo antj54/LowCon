@@ -1,6 +1,6 @@
 # Phase 3 design (paper) · Low Confidence
 
-*Status: paper design, nothing built. Drafted 2026-11-18. The Phase 2 gate is still open (#55), so this stays on paper until Anthony says otherwise. Four decisions are waiting at the bottom.*
+*Status: paper design, nothing built. Drafted 2026-11-18; the four choices were settled the same day (#58), all as recommended. The Phase 2 gate is still open (#55), so this stays on paper until Anthony says otherwise.*
 
 **Phase 3 scope (from the design doc):** three linked scenarios, analysts with traits, unlocks, the recurring customer cast, reassignment, and sources and deception that carry across scenarios.
 **Gate to Phase 4:** a full campaign holds up over weeks of daily play.
@@ -132,9 +132,9 @@ Each step is playable on its own.
 - Customers who talk to each other about you
 - A fourth analyst's trait
 
-## Decisions waiting
+## Decisions (settled 2026-11-18, #58)
 
-1. **What goes on the record:** A first finish (recommended), B latest finish, C player chooses
-2. **Analysts:** A notes only (recommended), B assign analysts, C defer to Phase 4
-3. **Scenario 03 seed:** A pipeline militia (recommended), B missing shipment, C ransomware group
-4. **Scenario 03 customer:** A Halvorsen returns (recommended), B a third cast member
+1. What goes on the record: **A, the first finish**
+2. Analysts: **A, notes only**
+3. Scenario 03 seed: **A, pipeline militia**
+4. Scenario 03 customer: **A, Halvorsen returns**
