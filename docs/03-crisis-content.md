@@ -64,4 +64,4 @@ Each crisis is one JSON file. The working example is `crises/border-buildup.json
 | # | Title | Seed | Data | Notes |
 | --- | --- | --- | --- | --- |
 | 01 | Exercise or Operation? | Border buildup | `crises/border-buildup.json` | Built, with collection and credibility (v0.8). Phase 0 script: `claude/crisis-01-player-packet.md` (rules predate Phase 1) and `claude/crisis-01-gm-key.md` (spoilers, current). Phase 2 collection retrofit on paper: `claude/crisis-01-collection-retrofit.md`. |
-| 02 | The Walk-in | Defector walk-in | Not built | Phase 2 paper script: `claude/crisis-02-player-packet.md` and `claude/crisis-02-gm-key.md` (spoilers). Needs named customer states and source burn in the engine. |
+| 02 | The Walk-in | Defector walk-in | Not built | Phase 2 paper script, rewritten for push/pull (#51, #52): `claude/crisis-02-player-packet.md` and `claude/crisis-02-gm-key.md` (spoilers). Engine needs: named customer states, per-target cost and delay, burn on first tasking. |
