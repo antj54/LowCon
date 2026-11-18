@@ -1,6 +1,6 @@
 # Phase 2 design (paper) · Low Confidence
 
-*Status: paper design, nothing built. Decisions settled 2026-11-18 (#42–#45 in the log). Phase 2 starts when the Phase 1 gate passes.*
+*Status: in build. Decisions settled 2026-11-18 (#42–#45 in the log). Phase 1 gate waived (#48). Built: collection tasking (#48), hypotheses board (#49).*
 
 **Phase 2 scope:** collection tasking, the hypotheses board, credibility, and a second crisis to prove the systems generalize.
 **Gate to Phase 3:** the second crisis plays differently from the first.
