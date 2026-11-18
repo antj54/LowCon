@@ -177,7 +177,7 @@ crisis = {
    "frozen": "Kalsa asked us to stay out of it, and for now we are. Nothing goes to them. Keep him talking.",
    "rebuff": "You wanted me to call a defector a plant after one interview. I did. Kalsa thinks we're protecting Vell for our own reasons, and they've asked us to stay out of it. For three days, we will."},
  "events": [{"id": "early-counter-rebuffed", "atStartOfDay": 2, "if": {"movedTo": {"state": "countered", "days": [1]}},
-   "effect": {"assetTo": "home", "freezeBriefDays": [2, 3, 4]}, "replyId": "rebuff", "note": "The warning is withdrawn. Nothing can go to Elsin for three days."}],
+   "effect": {"assetTo": "home", "freezeBriefDays": [2, 3, 4]}, "replyId": "rebuff", "note": "The warning is withdrawn. Nothing can go to Elsin for three days.", "points": -5, "pointsLabel": "rebuffed warning"}],
  "hypotheses": [
    {"id": "H1", "short": "Genuine defector", "text": "LANTERN is who he says he is, and his reporting is authentic.", "claim": "LANTERN is a genuine defector and his reporting on Vell is authentic"},
    {"id": "H2", "short": "Dangle", "text": "Kordav sent him to feed us deception.", "claim": "LANTERN was sent by Kordav to feed us deception about Vell"},
@@ -294,6 +294,45 @@ crisis = {
    "summary": "Marlowe can't see whether you're right until it's over. She can see when she has to take something back, and when you won't commit."},
  "board": {"pinsPerDay": 3},
 }
+# ---------- map: three capitals, drawn as a schematic ----------
+EMB_L, EMB_S, KEMB, BOFF = (240, 62), (240, 102), (350, 52), (388, 100)      # neutral capital
+BHQ, MIN, TV, HOME = (70, 262), (180, 256), (96, 350), (204, 338)             # Kordav's capital
+PARL, SOREL, PRESS = (440, 272), (534, 292), (472, 348)                       # Kalsa
+PINS = {
+ "R-1-01": (EMB_S, "Walk-in at 0710, asks asylum"), "R-1-02": (EMB_L, "Describes IRON HARVEST"), "R-1-03": (EMB_L, "Alleges Vell is an agent"), "R-1-04": (PARL, "No-confidence vote set"),
+ "R-2-01": (EMB_S, "Same story, unusually calm"), "R-2-02": (MIN, "Asks who can vouch for him"), "R-2-03": (TV, "State TV names Vell"),
+ "R-3-01": (PARL, "Rumors of a traitor"), "R-3-02": (EMB_L, "Produces a ledger"), "R-3-03": (EMB_S, "Ledger matches public trips only"), "R-3-04": (PARL, "Vote moved up"),
+ "R-4-01": (EMB_L, "Insists: before the vote"), "R-4-02": (HOME, "Now asks about his family"), "R-4-03": (PRESS, "MP posts about a defector"), "R-4-04": (TV, "State TV repeats the segment"),
+ "R-5-01": (TV, "Kidnapping story"), "R-5-02": (EMB_S, "Wants a press statement"), "R-5-03": (PARL, "Motion cites allied intelligence"),
+ "C-12": (EMB_L, "Questioned on his access"), "C-10": (EMB_L, "Gives room 412"), "C-09": (EMB_L, "Questioned on the ledger"), "C-13": (HOME, "Unworried about his wife"),
+ "C-04": (MIN, "FINCH on LANTERN's job"), "C-08": (MIN, "Ministry directory"), "C-06": (BHQ, "Recall order on the admin net"), "C-11": (BHQ, "Recall never mentioned again"),
+ "C-01": (BOFF, "Office traffic routine"), "C-07": (KEMB, "Embassy told to keep distance"), "C-02": (HOME, "Family life as normal"), "C-03": (PRESS, "Room 412 in print weeks ago"), "C-05": (SOREL, "Hotel meeting logged")}
+for r in reports:
+    if r["id"] in PINS: (x, y), label = PINS[r["id"]]; r["pin"] = {"x": x, "y": y, "label": label}
+TPIN = {"d-access": EMB_L, "d-vell": EMB_L, "d-family": EMB_L, "d-ledger": EMB_L, "finch": MIN, "ministry": MIN, "bureau-hq": BHQ, "bureau-office": BOFF, "embassy": KEMB, "family": HOME, "press": PRESS, "travel": SOREL}
+for t in crisis["targets"]: t["pin"] = {"x": TPIN[t["id"]][0], "y": TPIN[t["id"]][1]}
+def site(name, xy, lx, ly): return {"name": name, "x": xy[0], "y": xy[1], "type": "town", "lx": xy[0] + lx, "ly": xy[1] + ly}
+crisis["map"] = {
+ "viewBox": [0, 0, 600, 420], "title": "Schematic of the three capitals",
+ "caption": "Three capitals, not to scale. Reporting will be plotted here as it arrives.",
+ "truthNote": "Red diamonds are what the Bureau was really doing on Day {day}.",
+ "border": "M340,420 L322,350 L350,286 L318,206 L420,168 L500,100 L522,0",
+ "areas": [{"d": "M118,0 L150,96 L258,154 L318,206 L420,168 L500,100 L522,0 Z", "label": "NEUTRAL STATE", "lx": 434, "ly": 20}],
+ "zones": [{"x": 212, "y": 28, "w": 208, "h": 100, "label": "Neutral capital"}, {"x": 28, "y": 228, "w": 242, "h": 156, "label": "Kordav's capital"}, {"x": 404, "y": 236, "w": 178, "h": 140, "label": "Kalsa"}],
+ "regions": [{"name": "KORDAV", "x": 40, "y": 412}, {"name": "ELSIN", "x": 452, "y": 408}],
+ "places": [site("Our embassy", EMB_L, -22, 62), site("", EMB_S, 0, 0), site("Kordav embassy", KEMB, -34, -10), site("Bureau office", BOFF, -30, 20),
+            site("Bureau HQ", BHQ, -30, -12), site("Defence ministry", MIN, -34, 20), site("State TV", TV, -24, 20), site("LANTERN's home", HOME, -48, 20),
+            site("Parliament", PARL, -28, 20), site("Hotel Sorel", SOREL, -40, -12), site("Press", PRESS, -14, 20)],
+ "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted. Dashed rings are today's taskings."}
+U = lambda label, xy, dx=0, dy=-26: {"label": label, "x": xy[0] + dx, "y": xy[1] + dy}
+truth_units = {
+ 1: [U("Bureau case officers", BOFF, 6, 34)],
+ 2: [U("Bureau case officers", BOFF, 6, 34), U("Ministry watch", MIN, 48, 36), U("Staged recall", BHQ, 0, 38)],
+ 3: [U("Ministry watch", MIN, 48, 36), U("Forged ledger", BHQ, 0, 38)],
+ 4: [U("Ministry watch", MIN, 48, 36), U("Leak to the MP", PARL, 40, 34)],
+ 5: [U("Kidnap script", TV, 34, -32), U("Statement rehearsed", EMB_S, 70, 8)]}
+for g in crisis["groundTruth"]: g["units"] = truth_units[g["day"]]
+
 # sanity: every result id has a report, every reveal id exists, every target is in a PIR
 ids = {r["id"] for r in reports}
 assert all(cr["id"] in ids for cr in crisis["collectionResults"])

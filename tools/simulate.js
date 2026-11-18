@@ -138,6 +138,7 @@ const SETS = {
       ['Collection, doubt plants', W_BEST, plants],
       ['Collection, doubt everything', W_BEST, all],
       ['Paranoid (H2 High daily)', rep5(['H2', 'high', ['R-1-01']]), none],
+      ['Paranoid, full evidence', [['H2', 'high', ['R-1-01', 'R-1-04', 'R-1-02']], ['H2', 'high', ['R-2-01', 'R-2-03', 'R-1-04']], ['H2', 'high', ['R-3-03', 'R-3-04', 'R-2-01']], ['H2', 'high', ['R-4-02', 'R-4-04', 'R-3-03']], ['H2', 'high', ['R-5-02', 'R-3-03', 'R-4-04']]], none],
       ['Fooled by staged recall', [['H2', 'low', ['R-1-01'], [['SIGINT', 'bureau-hq'], ['HUMINT', 'd-vell']]], ['H1', 'medium', ['C-06', 'C-10']], W_PUSH[2], W_PUSH[3], W_PUSH[4]], none],
       ['Burn FINCH on Day 1', [['H2', 'low', ['R-1-01'], [['HUMINT', 'finch'], ['OSINT', 'family'], ['OSINT', 'press']]], W_PUSH[1], ['H2', 'high', ['R-3-03', 'C-04', 'C-02']], W_PUSH[3], W_PUSH[4]], none],
       ['Never above Medium', W_PUSH.map(x => ['H2', x[1] === 'high' ? 'medium' : x[1], x[2]]), none],

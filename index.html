@@ -245,6 +245,9 @@ pre.log{white-space:pre-wrap;word-break:break-word;font:12px/1.5 var(--f-mono);b
 .m-hatch{stroke:var(--m-ink);stroke-opacity:.25;stroke-width:1.2}
 .m-river{fill:none;stroke:var(--m-water);stroke-width:4;stroke-linecap:round}
 .m-res{fill:var(--m-water);fill-opacity:.85}
+.m-area{fill:var(--card);stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:9 4 2 4}
+.m-zone{fill:var(--card);fill-opacity:.55;stroke:var(--m-ink);stroke-opacity:.5;stroke-width:1;stroke-dasharray:3 3}
+.m-zonelab{font:600 10.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;fill:var(--m-ink)}
 .m-border{fill:none;stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:9 4 2 4}
 .m-place{fill:var(--card);stroke:var(--m-ink);stroke-width:1.5}
 .m-dam{stroke:var(--m-ink);stroke-width:4;stroke-linecap:square}
@@ -461,6 +464,7 @@ function boardLead(){
 }
 const leadText = lead => lead.length === 1 ? lead[0] : lead.slice(0, -1).join(', ') + ' and ' + lead[lead.length - 1];
 
+function eventPts(){ return (S.eventPoints || []).reduce((n, x) => n + x.points, 0); }
 function burnPoints(){ return Object.keys(S.burned || {}).length * ((COLL() || {}).burnPoints || 0); }
 const dayLabel = d => C.dayLabels[d-1] || ('Day ' + d);
 const briefCount = () => Object.keys(S.briefs).length;
@@ -477,7 +481,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], cred:(C.credibility ? C.credibility.start : null), credAt:{1:(C.credibility ? C.credibility.start : null)}, credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], cred:(C.credibility ? C.credibility.start : null), credAt:{1:(C.credibility ? C.credibility.start : null)}, credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -586,6 +590,7 @@ function sendBrief(d){
       if (eventFires(e.if || {})){
         applyEffect(e.effect || {}, d+1);
         S.firedEvents.push(e.id); fired.push(e.id);
+        if (e.points) S.eventPoints.push({day:d+1, id:e.id, points:e.points, label:e.pointsLabel || 'events'});
         S.replies[d+1] = {key:e.replyId, note:e.note || ''};
       }
     });
@@ -729,14 +734,16 @@ function mapSVG(opt){
   const vb = M.viewBox;
   let g = '<defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="m-hatch"/></pattern></defs>';
   g += '<rect x="0" y="0" width="' + vb[2] + '" height="' + vb[3] + '" class="m-land"/>';
-  g += '<path class="m-elsin" d="' + M.border + ' L' + vb[2] + ',0 L' + vb[2] + ',' + vb[3] + ' Z"/>';
+  if (M.border) g += '<path class="m-elsin" d="' + M.border + ' L' + vb[2] + ',0 L' + vb[2] + ',' + vb[3] + ' Z"/>';
+  (M.areas || []).forEach(a => { g += '<path class="m-area" d="' + a.d + '"/>' + (a.label ? '<text class="m-off" x="' + a.lx + '" y="' + a.ly + '">' + esc(a.label) + '</text>' : ''); });
+  (M.zones || []).forEach(z => { g += '<rect class="m-zone" x="' + z.x + '" y="' + z.y + '" width="' + z.w + '" height="' + z.h + '" rx="8"/><text class="m-zonelab" x="' + (z.x + 2) + '" y="' + (z.y - 6) + '">' + esc(z.label) + '</text>'; });
   (M.highlands || []).forEach(h => h.r.forEach(r => { g += '<circle class="m-hill" cx="' + h.cx + '" cy="' + h.cy + '" r="' + r + '"/>'; }));
   (M.forests || []).forEach(f => { g += '<path class="m-forest" d="' + f.d + '"/><text class="m-lab" x="' + f.lx + '" y="' + f.ly + '">' + esc(f.label) + '</text>'; });
   const t = M.training;
-  g += '<ellipse class="m-train" cx="' + t.cx + '" cy="' + t.cy + '" rx="' + t.rx + '" ry="' + t.ry + '"/><text class="m-lab" x="' + (t.cx - t.rx) + '" y="' + (t.cy - t.ry - 6) + '">' + esc(t.label) + '</text>';
-  g += '<path class="m-res" d="' + M.reservoir + '"/><path class="m-river" d="' + M.river.d + '"/>';
-  g += '<text class="m-rivlab" x="470" y="324" transform="rotate(34 470 324)">' + esc(M.river.name) + '</text>';
-  g += '<path class="m-border" d="' + M.border + '"/>';
+  if (t) g += '<ellipse class="m-train" cx="' + t.cx + '" cy="' + t.cy + '" rx="' + t.rx + '" ry="' + t.ry + '"/><text class="m-lab" x="' + (t.cx - t.rx) + '" y="' + (t.cy - t.ry - 6) + '">' + esc(t.label) + '</text>';
+  if (M.reservoir) g += '<path class="m-res" d="' + M.reservoir + '"/>';
+  if (M.river) g += '<path class="m-river" d="' + M.river.d + '"/><text class="m-rivlab" x="470" y="324" transform="rotate(34 470 324)">' + esc(M.river.name) + '</text>';
+  if (M.border) g += '<path class="m-border" d="' + M.border + '"/>';
   (M.regions || []).forEach(r => { g += '<text class="m-region" x="' + r.x + '" y="' + r.y + '">' + esc(r.name) + '</text>'; });
   (M.places || []).forEach(p => {
     if (p.type === 'dam') g += '<line class="m-dam" x1="' + (p.x - 6) + '" y1="' + (p.y + 6) + '" x2="' + (p.x + 6) + '" y2="' + (p.y - 6) + '"/>';
@@ -747,7 +754,7 @@ function mapSVG(opt){
     g += '<text class="m-lab" x="' + p.lx + '" y="' + p.ly + '">' + esc(p.name) + '</text>';
   });
   (M.offmap || []).forEach(o => { g += '<text class="m-off" x="' + o.x + '" y="' + o.y + '">↖ ' + esc(o.text) + '</text>'; });
-  g += '<line class="m-scale" x1="' + (vb[2] - 80) + '" y1="' + (vb[3] - 14) + '" x2="' + (vb[2] - 80 + M.scaleUnits) + '" y2="' + (vb[3] - 14) + '"/><text class="m-off" x="' + (vb[2] - 80) + '" y="' + (vb[3] - 20) + '">' + M.scaleKm + ' km</text>';
+  if (M.scaleKm) g += '<line class="m-scale" x1="' + (vb[2] - 80) + '" y1="' + (vb[3] - 14) + '" x2="' + (vb[2] - 80 + M.scaleUnits) + '" y2="' + (vb[3] - 14) + '"/><text class="m-off" x="' + (vb[2] - 80) + '" y="' + (vb[3] - 20) + '">' + M.scaleKm + ' km</text>';
 
   // Ground truth (postmortem only)
   if (opt.truthDay){
@@ -756,7 +763,8 @@ function mapSVG(opt){
   }
   // Own forces
   const fr = M.friendly, a = opt.asset || 'home';
-  if (a === 'battalion') g += friendlySym(fr.forward.x, fr.forward.y, '2 Bn');
+  if (!fr) { /* no forces to plot in this crisis */ }
+  else if (a === 'battalion') g += friendlySym(fr.forward.x, fr.forward.y, '2 Bn');
   else if (a === 'company'){ g += friendlySym(fr.forward.x, fr.forward.y, 'A Coy (+)', true); g += friendlySym(fr.home.x, fr.home.y - 22, '2 Bn (-)'); }
   else g += friendlySym(fr.home.x, fr.home.y - 22, '2 Bn');
 
@@ -778,13 +786,14 @@ function mapSVG(opt){
       + (r.day === opt.today || ui.pin === r.id ? '<text x="' + (x + 8) + '" y="' + (y - 6) + '">' + r.id.slice(2) + '</text>' : '')
       + '<title>' + esc(r.id + ': ' + r.pin.label) + '</title></g>';
   });
-  return '<svg viewBox="' + vb.join(' ') + '" role="img" aria-label="Situation map of the Veyl border">' + g + '</svg>';
+  return '<svg viewBox="' + vb.join(' ') + '" role="img" aria-label="' + esc(M.title || 'Situation map') + '">' + g + '</svg>';
 }
 function mapCaption(dayScope){
   const r = ui.pin ? rep(ui.pin) : null;
   if (r && r.pin && (!dayScope || dayScope(r))) return '<b>' + r.id + '</b> · ' + esc(src(r.sourceId).codeName) + ' · Day ' + r.day + ': ' + esc(r.pin.label) + (S.grades[r.id] && S.grades[r.id].f ? ' (you doubted it)' : '');
   return esc(C.map.legend) + ' Tap a pin for its item.';
 }
+const M0 = () => C.map || {};
 function mapCard(d){
   if (!C.map) return '';
   return '<figure class="map" style="margin:0">' + mapSVG({uptoDay:d, today:d, asset:S.asset})
@@ -841,7 +850,7 @@ function introView(){
   const b = C.briefing;
   return '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><span class="eyebrow">Crisis ' + esc(C.crisisNumber) + '</span><h1>' + esc(C.title) + '</h1></header>'
     + '<main class="stack">'
-    + (C.map ? '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">The Veyl border. Reporting will be plotted here as it arrives.</figcaption></figure>' : '')
+    + (C.map ? '<figure class="map" style="margin:0">' + mapSVG({uptoDay:0, today:0, asset:'home'}) + '<figcaption class="mapcap">' + esc(M0().caption || 'Reporting will be plotted here as it arrives.') + '</figcaption></figure>' : '')
     + '<p class="mono small muted">' + esc(b.dateLine) + '</p>'
     + b.situation.map(p => '<p>' + esc(p) + '</p>').join('')
     + '<div class="msg"><span class="from">Your customer</span><p><b>' + esc(C.customer.name) + '</b>, ' + esc(C.customer.role) + '.</p><p>' + esc(C.customer.wants) + ' ' + esc(C.customer.context) + '</p></div>'
@@ -1117,7 +1126,8 @@ function postmortemView(){
   }
   const dTotal = doubtPoints();
   const bTotal = burnPoints();
-  const total = callTotal + evTotal + dTotal + bTotal + ending.points;
+  const xTotal = eventPts();
+  const total = callTotal + evTotal + dTotal + bTotal + xTotal + ending.points;
   const seen = seenReports();
   const planted = seen.filter(r => r.kind === 'planted');
   const caught = planted.filter(r => (S.grades[r.id] || {}).f).length;
@@ -1128,7 +1138,7 @@ function postmortemView(){
   const pd = ui.pmDay;
 
   let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">' + esc(C.endingEyebrow || 'The outcome') + '</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
-    + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + (bTotal ? ' · burned sources ' + sign(bTotal) : '') + ' · ending ' + sign(ending.points) + '</span></div>'
+    + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + (bTotal ? ' · burned sources ' + sign(bTotal) : '') + (S.eventPoints || []).map(x => ' · ' + esc(x.label) + ' ' + sign(x.points)).join('') + ' · ending ' + sign(ending.points) + '</span></div>'
     + '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Your call</th><th>Truth</th><th class="num">Call</th><th class="num">Evid.</th><th class="num">Min</th></tr></thead><tbody>'
     + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '' + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
     + '</tbody></table></div>'
@@ -1139,7 +1149,7 @@ function postmortemView(){
     + (!C.map ? '' : '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
     + '<div class="daypick" role="group" aria-label="Day">' + Array.from({length:C.days}, (_, k) => k + 1).map(x => '<button data-act="pmday" data-v="' + x + '" aria-pressed="' + (pd === x) + '">Day ' + x + '</button>').join('') + '</div>'
     + '<figure class="map" style="margin:0">' + mapSVG({onlyDay:pd, today:pd, truthDay:pd, asset:assetOnDay(pd)})
-    + '<figcaption class="mapcap" id="mapcap">Red diamonds are where ' + esc(ADV()) + '\'s units really were on Day ' + pd + '. Pins are that day\'s reporting. ' + (ui.pin && rep(ui.pin).day === pd ? mapCaption() : 'Tap a pin for its item.') + '</figcaption></figure></div>');
+    + '<figcaption class="mapcap" id="mapcap">' + esc((M0().truthNote || ('Red diamonds are where ' + ADV() + '\'s units really were on Day {day}.')).replace('{day}', pd)) + ' Pins are that day\'s reporting. ' + (ui.pin && rep(ui.pin).day === pd ? mapCaption() : 'Tap a pin for its item.') + '</figcaption></figure></div>');
 
   for (let d = 1; d <= C.days; d++){
     const t = C.groundTruth.find(g => g.day === d);
@@ -1180,7 +1190,7 @@ function credCard(){
     + '<p class="small muted">The outcome ' + (out ? (out.delta > 0 ? 'added ' : 'cost ') + Math.abs(out.delta) : 'changed nothing') + '. From Phase 3, credibility carries into your next crisis.</p></div>';
 }
 function totalScore(){
-  let t = (C.endings.find(e => e.id === S.ending) || evalEnding()).points + doubtPoints() + burnPoints();
+  let t = (C.endings.find(e => e.id === S.ending) || evalEnding()).points + doubtPoints() + burnPoints() + eventPts();
   for (let d = 1; d <= C.days; d++) if (S.briefs[d]){ const sc = scoreDay(d); t += sc.call + sc.ev; }
   return t;
 }
@@ -1220,6 +1230,7 @@ function playtestLog(){
   const planted = seenAll.filter(r => r.kind === 'planted');
   const dp = doubtPoints(); total += dp;
   const bp = burnPoints(); total += bp;
+  (S.eventPoints || []).forEach(x => { total += x.points; lines.push(x.label + ': ' + x.points); });
   if (bp) lines.push('Burned sources: ' + Object.keys(S.burned).join(' ') + ' (' + bp + ')');
   lines.push('Doubts: ' + dp);
   if (CRED()) lines.push('Credibility: start ' + CRED().start + (S.credLog || []).map(x => ', ' + x.id + ' ' + (x.delta > 0 ? '+' : '') + x.delta).join('') + ' -> ' + (typeof S.credFinal === 'number' ? S.credFinal : S.cred));

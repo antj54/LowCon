@@ -286,7 +286,9 @@
         ]
       },
       "replyId": "rebuff",
-      "note": "The warning is withdrawn. Nothing can go to Elsin for three days."
+      "note": "The warning is withdrawn. Nothing can go to Elsin for three days.",
+      "points": -5,
+      "pointsLabel": "rebuffed warning"
     }
   ],
   "hypotheses": [
@@ -314,31 +316,91 @@
       "day": 1,
       "trueHypothesis": "H2",
       "bestCall": "H2 at Low",
-      "state": "LANTERN is a real mid-level planning officer, recruited by the Bureau for one job. He walked in on orders. The aim: smear Vell before the vote, and see who we ask about him."
+      "state": "LANTERN is a real mid-level planning officer, recruited by the Bureau for one job. He walked in on orders. The aim: smear Vell before the vote, and see who we ask about him.",
+      "units": [
+        {
+          "label": "Bureau case officers",
+          "x": 394,
+          "y": 134
+        }
+      ]
     },
     {
       "day": 2,
       "trueHypothesis": "H2",
       "bestCall": "H2 at Medium",
-      "state": "The Bureau watches the defence ministry for anyone asking about LANTERN, and puts a staged recall on the headquarters net it assumes we read. \"Room 412\" comes from a story the Bureau planted in The Kalsa Courier three weeks ago."
+      "state": "The Bureau watches the defence ministry for anyone asking about LANTERN, and puts a staged recall on the headquarters net it assumes we read. \"Room 412\" comes from a story the Bureau planted in The Kalsa Courier three weeks ago.",
+      "units": [
+        {
+          "label": "Bureau case officers",
+          "x": 394,
+          "y": 134
+        },
+        {
+          "label": "Ministry watch",
+          "x": 228,
+          "y": 292
+        },
+        {
+          "label": "Staged recall",
+          "x": 70,
+          "y": 300
+        }
+      ]
     },
     {
       "day": 3,
       "trueHypothesis": "H2",
       "bestCall": "H2 at High",
-      "state": "The ledger is delivered: genuine Bureau paper, with entries forged from Vell's public schedule. Elsin's opposition, working alongside Kordav's media campaign, gets the vote moved up."
+      "state": "The ledger is delivered: genuine Bureau paper, with entries forged from Vell's public schedule. Elsin's opposition, working alongside Kordav's media campaign, gets the vote moved up.",
+      "units": [
+        {
+          "label": "Ministry watch",
+          "x": 228,
+          "y": 292
+        },
+        {
+          "label": "Forged ledger",
+          "x": 70,
+          "y": 300
+        }
+      ]
     },
     {
       "day": 4,
       "trueHypothesis": "H2",
       "bestCall": "H2 at High",
-      "state": "The Bureau leaks \"a defector with evidence\" to an opposition MP, so the smear lands even if we keep quiet."
+      "state": "The Bureau leaks \"a defector with evidence\" to an opposition MP, so the smear lands even if we keep quiet.",
+      "units": [
+        {
+          "label": "Ministry watch",
+          "x": 228,
+          "y": 292
+        },
+        {
+          "label": "Leak to the MP",
+          "x": 480,
+          "y": 306
+        }
+      ]
     },
     {
       "day": 5,
       "trueHypothesis": "H2",
       "bestCall": "H2 at High",
-      "state": "State TV announces a \"kidnapping,\" and LANTERN asks to go public on the morning of the vote."
+      "state": "State TV announces a \"kidnapping,\" and LANTERN asks to go public on the morning of the vote.",
+      "units": [
+        {
+          "label": "Kidnap script",
+          "x": 130,
+          "y": 318
+        },
+        {
+          "label": "Statement rehearsed",
+          "x": 310,
+          "y": 110
+        }
+      ]
     }
   ],
   "adversaryPlan": [
@@ -500,7 +562,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "True. Two details matter later: he asked asylum for himself only (\"my wife will be fine\"), and he asked to be kept secret."
+      "postmortemNote": "True. Two details matter later: he asked asylum for himself only (\"my wife will be fine\"), and he asked to be kept secret.",
+      "pin": {
+        "x": 240,
+        "y": 102,
+        "label": "Walk-in at 0710, asks asylum"
+      }
     },
     {
       "id": "R-1-02",
@@ -517,7 +584,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "True, and worthless to Kordav. IRON HARVEST was blown three months ago. Real information that costs the other side nothing is chickenfeed: true isn't the same as genuine."
+      "postmortemNote": "True, and worthless to Kordav. IRON HARVEST was blown three months ago. Real information that costs the other side nothing is chickenfeed: true isn't the same as genuine.",
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Describes IRON HARVEST"
+      }
     },
     {
       "id": "R-1-03",
@@ -547,6 +619,11 @@
           "text": "Both put him on the General Staff's planning directorate (R-1-01, R-1-02), which is military planning, not counterintelligence. Debriefing his access (C-12) or checking the ministry directory (C-08), if you tasked them, confirm it."
         },
         "motive": "Plant the claim on Day 1 and attach a hook, so we invest in him before we test him."
+      },
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Alleges Vell is an agent"
       }
     },
     {
@@ -563,7 +640,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "Motive and timing: the vote is why LANTERN is here this week."
+      "postmortemNote": "Motive and timing: the vote is why LANTERN is here this week.",
+      "pin": {
+        "x": 440,
+        "y": 272,
+        "label": "No-confidence vote set"
+      }
     },
     {
       "id": "R-1-05",
@@ -593,7 +675,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "A rehearsed story told by a man with nothing to fear."
+      "postmortemNote": "A rehearsed story told by a man with nothing to fear.",
+      "pin": {
+        "x": 240,
+        "y": 102,
+        "label": "Same story, unusually calm"
+      }
     },
     {
       "id": "R-2-02",
@@ -621,6 +708,11 @@
           "text": "A man who claims to know Bureau agent files (R-1-03) could prove himself with something only the Bureau knows. Instead, he asks us to show our hand."
         },
         "motive": "The Bureau was watching the ministry for whoever came asking about him. Tasking FINCH did exactly that."
+      },
+      "pin": {
+        "x": 180,
+        "y": 256,
+        "label": "Asks who can vouch for him"
       }
     },
     {
@@ -637,7 +729,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "Kordav's media attacking the same man LANTERN accuses, the same day, and not looking for its missing officer."
+      "postmortemNote": "Kordav's media attacking the same man LANTERN accuses, the same day, and not looking for its missing officer.",
+      "pin": {
+        "x": 96,
+        "y": 350,
+        "label": "State TV names Vell"
+      }
     },
     {
       "id": "R-2-04",
@@ -669,7 +766,12 @@
       "tells": [
         "agenda-aligned"
       ],
-      "postmortemNote": "Elsin's anti-Vell faction repeating itself. It tells you what some in Kalsa want to hear, not what's true."
+      "postmortemNote": "Elsin's anti-Vell faction repeating itself. It tells you what some in Kalsa want to hear, not what's true.",
+      "pin": {
+        "x": 440,
+        "y": 272,
+        "label": "Rumors of a traitor"
+      }
     },
     {
       "id": "R-3-02",
@@ -697,6 +799,11 @@
           "text": "The station's analysis the same morning (R-3-03): every date is on Vell's public schedule, and none of his private travel appears. Real agents get paid on trips nobody announces. Debriefing the ledger (C-09), if you tasked it, adds that a planner had no way into the registry it came from."
         },
         "motive": "Genuine Bureau paper gets a forgery past a quick look."
+      },
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Produces a ledger"
       }
     },
     {
@@ -715,7 +822,12 @@
         "H1"
       ],
       "tells": [],
-      "postmortemNote": "The best item in the daily stream. Real agents get paid on trips nobody announces."
+      "postmortemNote": "The best item in the daily stream. Real agents get paid on trips nobody announces.",
+      "pin": {
+        "x": 240,
+        "y": 102,
+        "label": "Ledger matches public trips only"
+      }
     },
     {
       "id": "R-3-04",
@@ -731,7 +843,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The deadline LANTERN will lean on tomorrow."
+      "postmortemNote": "The deadline LANTERN will lean on tomorrow.",
+      "pin": {
+        "x": 440,
+        "y": 272,
+        "label": "Vote moved up"
+      }
     },
     {
       "id": "R-3-05",
@@ -774,6 +891,11 @@
           "text": "The vote was moved up yesterday (R-3-04), and it was the reason for his timing from Day 1 (R-1-04)."
         },
         "motive": "Force a decision before verification can catch up."
+      },
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Insists: before the vote"
       }
     },
     {
@@ -790,7 +912,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "His story about his family changes once the pressure is on. On Day 1 she would \"be fine.\""
+      "postmortemNote": "His story about his family changes once the pressure is on. On Day 1 she would \"be fine.\"",
+      "pin": {
+        "x": 204,
+        "y": 338,
+        "label": "Now asks about his family"
+      }
     },
     {
       "id": "R-4-03",
@@ -819,6 +946,11 @@
           "text": "Elsin's own service only had a rumor about \"someone from Kordav\" (R-3-01), and LANTERN asked us to keep him secret (R-1-01). If nothing left our building, nobody on our side said \"defector.\" Only LANTERN's side could have. (If the allegation had already been passed to Elsin, the leak could be theirs.)"
         },
         "motive": "A backup plan. The smear lands even if we never share anything."
+      },
+      "pin": {
+        "x": 472,
+        "y": 348,
+        "label": "MP posts about a defector"
       }
     },
     {
@@ -835,7 +967,12 @@
       ],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The media campaign building toward the vote."
+      "postmortemNote": "The media campaign building toward the vote.",
+      "pin": {
+        "x": 96,
+        "y": 350,
+        "label": "State TV repeats the segment"
+      }
     },
     {
       "id": "R-4-05",
@@ -878,6 +1015,11 @@
           "text": "State TV spent those days attacking Vell and never mentioned LANTERN (R-2-03, R-4-04). If you tasked the embassy (C-07), it was told to keep its distance."
         },
         "motive": "Make the defection look real just in time for LANTERN to go public."
+      },
+      "pin": {
+        "x": 96,
+        "y": 350,
+        "label": "Kidnapping story"
       }
     },
     {
@@ -896,7 +1038,12 @@
         "H1"
       ],
       "tells": [],
-      "postmortemNote": "STATION reported it straight, and it's the last tell: a man who asked to be kept secret for his safety (R-1-01) now wants a press statement on the morning of the vote. The smear's final delivery route."
+      "postmortemNote": "STATION reported it straight, and it's the last tell: a man who asked to be kept secret for his safety (R-1-01) now wants a press statement on the morning of the vote. The smear's final delivery route.",
+      "pin": {
+        "x": 240,
+        "y": 102,
+        "label": "Wants a press statement"
+      }
     },
     {
       "id": "R-5-03",
@@ -910,7 +1057,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "If anything we passed ended up in the motion, this is where it shows."
+      "postmortemNote": "If anything we passed ended up in the motion, this is where it shows.",
+      "pin": {
+        "x": 440,
+        "y": 272,
+        "label": "Motion cites allied intelligence"
+      }
     },
     {
       "id": "R-5-04",
@@ -944,7 +1096,12 @@
       ],
       "tells": [],
       "postmortemNote": "Expert on his own job, vague on the Bureau's. \"People talk\" is not access.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Questioned on his access"
+      }
     },
     {
       "id": "C-10",
@@ -975,7 +1132,12 @@
         },
         "motive": "A dangle is briefed with a prepared detail for when the debriefers push for specifics. Precision sounds like access. Kordav didn't need to know we'd ask: every debriefer does."
       },
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Gives room 412"
+      }
     },
     {
       "id": "C-13",
@@ -994,7 +1156,12 @@
       ],
       "tells": [],
       "postmortemNote": "A man unafraid for his wife. A real defector knows exactly what the Bureau does to families.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 204,
+        "y": 338,
+        "label": "Unworried about his wife"
+      }
     },
     {
       "id": "C-09",
@@ -1013,7 +1180,12 @@
       ],
       "tells": [],
       "postmortemNote": "A planner can't walk into the Bureau's registry, and a friend who signs him in has a name. The ledger was handed to him.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 240,
+        "y": 62,
+        "label": "Questioned on the ledger"
+      }
     },
     {
       "id": "C-04",
@@ -1033,7 +1205,12 @@
       ],
       "tells": [],
       "postmortemNote": "Confirms the access mismatch. The \"someone else\" was the Bureau's watch on the ministry, and this meeting was seen. FINCH is gone.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 180,
+        "y": 256,
+        "label": "FINCH on LANTERN's job"
+      }
     },
     {
       "id": "C-08",
@@ -1053,7 +1230,12 @@
       ],
       "tells": [],
       "postmortemNote": "The cheap version of FINCH's answer: a logistics planner, and the Bureau is a different service. One point, and nobody burned.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 180,
+        "y": 256,
+        "label": "Ministry directory"
+      }
     },
     {
       "id": "C-06",
@@ -1088,7 +1270,12 @@
         },
         "motive": "The strongest sign of a genuine defection is the other side's damage control. Kordav couldn't fake it everywhere, so it faked it where it thought we were listening: it has assumed its administrative net is read ever since IRON HARVEST was blown."
       },
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 70,
+        "y": 262,
+        "label": "Recall order on the admin net"
+      }
     },
     {
       "id": "C-11",
@@ -1107,7 +1294,12 @@
       ],
       "tells": [],
       "postmortemNote": "The staged recall was a one-off. Real damage control generates traffic for days.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 70,
+        "y": 262,
+        "label": "Recall never mentioned again"
+      }
     },
     {
       "id": "C-01",
@@ -1128,7 +1320,12 @@
       "tells": [],
       "postmortemNote": "The diagnostic item: no damage control. If an officer with the access LANTERN claims had really defected, this office would be pulling people home and changing codes. Nobody moves, nothing changes, and headquarters is thinking about the media.",
       "via": "collection",
-      "diagnostic": true
+      "diagnostic": true,
+      "pin": {
+        "x": 388,
+        "y": 100,
+        "label": "Office traffic routine"
+      }
     },
     {
       "id": "C-07",
@@ -1147,7 +1344,12 @@
       ],
       "tells": [],
       "postmortemNote": "Kordav's embassy is under orders to stay hands-off. Nobody is looking for him.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 350,
+        "y": 52,
+        "label": "Embassy told to keep distance"
+      }
     },
     {
       "id": "C-02",
@@ -1168,7 +1370,12 @@
       "tells": [],
       "postmortemNote": "The diagnostic by the cheap route. A real defector's family gets questioned and stopped from traveling. His goes to the lake.",
       "via": "collection",
-      "diagnostic": true
+      "diagnostic": true,
+      "pin": {
+        "x": 204,
+        "y": 338,
+        "label": "Family life as normal"
+      }
     },
     {
       "id": "C-03",
@@ -1188,7 +1395,12 @@
       ],
       "tells": [],
       "postmortemNote": "The origin of \"room 412.\" It was in print three weeks before LANTERN walked in.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 472,
+        "y": 348,
+        "label": "Room 412 in print weeks ago"
+      }
     },
     {
       "id": "C-05",
@@ -1206,7 +1418,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "The meeting happened, logged and innocent. WREN's last line is its faction talking.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 534,
+        "y": 292,
+        "label": "Hotel meeting logged"
+      }
     }
   ],
   "tellLabels": {
@@ -1418,7 +1635,11 @@
         "HUMINT"
       ],
       "closedWhen": "ended",
-      "fallback": "The session on this went over old ground. Nothing new."
+      "fallback": "The session on this went over old ground. Nothing new.",
+      "pin": {
+        "x": 240,
+        "y": 62
+      }
     },
     {
       "id": "d-vell",
@@ -1427,7 +1648,11 @@
         "HUMINT"
       ],
       "closedWhen": "ended",
-      "fallback": "The session on this went over old ground. Nothing new."
+      "fallback": "The session on this went over old ground. Nothing new.",
+      "pin": {
+        "x": 240,
+        "y": 62
+      }
     },
     {
       "id": "d-family",
@@ -1436,7 +1661,11 @@
         "HUMINT"
       ],
       "closedWhen": "ended",
-      "fallback": "The session on this went over old ground. Nothing new."
+      "fallback": "The session on this went over old ground. Nothing new.",
+      "pin": {
+        "x": 240,
+        "y": 62
+      }
     },
     {
       "id": "d-ledger",
@@ -1446,7 +1675,11 @@
       ],
       "from": 3,
       "closedWhen": "ended",
-      "fallback": "The session on this went over old ground. Nothing new."
+      "fallback": "The session on this went over old ground. Nothing new.",
+      "pin": {
+        "x": 240,
+        "y": 62
+      }
     },
     {
       "id": "finch",
@@ -1463,56 +1696,88 @@
       "source": {
         "HUMINT": "S-FINCH"
       },
-      "fallback": "No meeting with FINCH could be arranged in time."
+      "fallback": "No meeting with FINCH could be arranged in time.",
+      "pin": {
+        "x": 180,
+        "y": 256
+      }
     },
     {
       "id": "ministry",
       "name": "Kordav defence ministry, public records",
       "disciplines": [
         "OSINT"
-      ]
+      ],
+      "pin": {
+        "x": 180,
+        "y": 256
+      }
     },
     {
       "id": "bureau-hq",
       "name": "Bureau headquarters administrative net",
       "disciplines": [
         "SIGINT"
-      ]
+      ],
+      "pin": {
+        "x": 70,
+        "y": 262
+      }
     },
     {
       "id": "bureau-office",
       "name": "Bureau office in the neutral capital",
       "disciplines": [
         "SIGINT"
-      ]
+      ],
+      "pin": {
+        "x": 388,
+        "y": 100
+      }
     },
     {
       "id": "embassy",
       "name": "Kordav's embassy in the neutral capital",
       "disciplines": [
         "SIGINT"
-      ]
+      ],
+      "pin": {
+        "x": 350,
+        "y": 52
+      }
     },
     {
       "id": "family",
       "name": "LANTERN's family",
       "disciplines": [
         "OSINT"
-      ]
+      ],
+      "pin": {
+        "x": 204,
+        "y": 338
+      }
     },
     {
       "id": "press",
       "name": "Elsin's press",
       "disciplines": [
         "OSINT"
-      ]
+      ],
+      "pin": {
+        "x": 472,
+        "y": 348
+      }
     },
     {
       "id": "travel",
       "name": "Vell's travel records, via WREN",
       "disciplines": [
         "Liaison"
-      ]
+      ],
+      "pin": {
+        "x": 534,
+        "y": 292
+      }
     }
   ],
   "collection": {
@@ -1713,5 +1978,151 @@
   },
   "board": {
     "pinsPerDay": 3
+  },
+  "map": {
+    "viewBox": [
+      0,
+      0,
+      600,
+      420
+    ],
+    "title": "Schematic of the three capitals",
+    "caption": "Three capitals, not to scale. Reporting will be plotted here as it arrives.",
+    "truthNote": "Red diamonds are what the Bureau was really doing on Day {day}.",
+    "border": "M340,420 L322,350 L350,286 L318,206 L420,168 L500,100 L522,0",
+    "areas": [
+      {
+        "d": "M118,0 L150,96 L258,154 L318,206 L420,168 L500,100 L522,0 Z",
+        "label": "NEUTRAL STATE",
+        "lx": 434,
+        "ly": 20
+      }
+    ],
+    "zones": [
+      {
+        "x": 212,
+        "y": 28,
+        "w": 208,
+        "h": 100,
+        "label": "Neutral capital"
+      },
+      {
+        "x": 28,
+        "y": 228,
+        "w": 242,
+        "h": 156,
+        "label": "Kordav's capital"
+      },
+      {
+        "x": 404,
+        "y": 236,
+        "w": 178,
+        "h": 140,
+        "label": "Kalsa"
+      }
+    ],
+    "regions": [
+      {
+        "name": "KORDAV",
+        "x": 40,
+        "y": 412
+      },
+      {
+        "name": "ELSIN",
+        "x": 452,
+        "y": 408
+      }
+    ],
+    "places": [
+      {
+        "name": "Our embassy",
+        "x": 240,
+        "y": 62,
+        "type": "town",
+        "lx": 218,
+        "ly": 124
+      },
+      {
+        "name": "",
+        "x": 240,
+        "y": 102,
+        "type": "town",
+        "lx": 240,
+        "ly": 102
+      },
+      {
+        "name": "Kordav embassy",
+        "x": 350,
+        "y": 52,
+        "type": "town",
+        "lx": 316,
+        "ly": 42
+      },
+      {
+        "name": "Bureau office",
+        "x": 388,
+        "y": 100,
+        "type": "town",
+        "lx": 358,
+        "ly": 120
+      },
+      {
+        "name": "Bureau HQ",
+        "x": 70,
+        "y": 262,
+        "type": "town",
+        "lx": 40,
+        "ly": 250
+      },
+      {
+        "name": "Defence ministry",
+        "x": 180,
+        "y": 256,
+        "type": "town",
+        "lx": 146,
+        "ly": 276
+      },
+      {
+        "name": "State TV",
+        "x": 96,
+        "y": 350,
+        "type": "town",
+        "lx": 72,
+        "ly": 370
+      },
+      {
+        "name": "LANTERN's home",
+        "x": 204,
+        "y": 338,
+        "type": "town",
+        "lx": 156,
+        "ly": 358
+      },
+      {
+        "name": "Parliament",
+        "x": 440,
+        "y": 272,
+        "type": "town",
+        "lx": 412,
+        "ly": 292
+      },
+      {
+        "name": "Hotel Sorel",
+        "x": 534,
+        "y": 292,
+        "type": "town",
+        "lx": 494,
+        "ly": 280
+      },
+      {
+        "name": "Press",
+        "x": 472,
+        "y": 348,
+        "type": "town",
+        "lx": 458,
+        "ly": 368
+      }
+    ],
+    "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted. Dashed rings are today's taskings."
   }
 }
