@@ -1,8 +1,8 @@
-# Intel Cell Sim
+# Low Confidence
+
+*Working title. Project name: Intel Cell Sim.*
 
 A phone-first daily strategy game. You lead a small intelligence analysis cell: each day you read incoming reporting, decide what to believe, and brief a commander with a judgment and a confidence level. The world reacts, and the truth comes out in a postmortem.
-
-Working title options: *Low Confidence*, *The Daily Brief*, *Indications & Warning*, *Tradecraft*.
 
 ## Status
 
@@ -48,4 +48,4 @@ Expected for Crisis 01: best play ends **Deterred**, "always worst case" and "ne
 
 ## Setting
 
-A real map in the early 2030s with fictional countries, leaders, units and companies. Kordav, Elsin, the Veyl, Tarsk, Ostrel, Dolan and Varn are stand-in names. No real people are depicted.
+Fictional countries placed in real regions, in the early 2030s. All leaders, units and companies are fictional. No real people are depicted.

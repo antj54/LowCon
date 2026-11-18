@@ -6,6 +6,11 @@
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 34 | 2026-11-18 | Working title: **Low Confidence** | Names the core mechanic, matches the project and repo, and carries the dry tone |
+| 33 | 2026-11-18 | Customers: a small recurring cast of 2–3 decision-makers who rotate across crises and remember your track record | Variety plus "the world remembers." Credibility carries across crises in a way you feel. |
+| 32 | 2026-11-18 | You can't be fired. At rock-bottom credibility you're **reassigned**: you lose your team and unlocks but keep your track record. | Real stakes without wiping weeks of daily play. Built in Phase 3. |
+| 31 | 2026-11-18 | Setting: **fictional countries placed in real regions**. Crisis 01's Kordav and Elsin stay as they are. | Won't date, accuses no real government, keeps real terrain and threat types |
+| 30 | 2026-11-18 | Blind playtest runs on a separate playtest build: results sync automatically to a shared record, with optional one-tap reactions, a per-item "Not realistic?" flag and a 4-question end debrief. The owner sees a Testers tab. | The tester shouldn't have to fill anything in. The realism flag captures an intel professional's judgment where it matters. |
 | 29 | 2026-11-18 | Project docs are mirrored in the repo under `docs/`. The claude.ai project stays the source of truth for docs, and the repo copy is refreshed when they change. | Everything about the game lives in one repo, without two copies that can both be edited |
 | 28 | 2026-11-18 | The GitHub repo `antj54/LowCon` (public) is the source of truth for code and crisis data. The claude.ai page is the published build, updated from the repo. | Version history and a home for the code outside the chat. `tools/simulate.js` is the balance check to run after any change. |
 | 27 | 2026-11-18 | The time-per-day measure counts active time only (page visible, input in the last 2 minutes) | Day 1 showed 28 minutes because idle time counted |
@@ -27,7 +32,7 @@
 | 11 | 2026-11-18 | Authoring rule 4 amended: in Phase 1 crises the diagnostic item arrives in the normal inbox. From Phase 2 on, at least one diagnostic item has to come from collection. | Phase 1 has no collection |
 | 10 | 2026-11-18 | First crisis: Border buildup, "Exercise or Operation?", 5 days, with made-up stand-in country names | Easiest first-time question, the truth changes mid-crisis, and every plant can be caught from the inbox |
 
-**Open questions this resolves:** "Which crisis seed should the first arc use?" (#10) and "Strictly one day per real day, or play ahead?" (#17).
+**Open questions this resolves:** all six. First crisis seed (#10), play ahead (#17), real vs fictional countries (#31), getting fired (#32), one customer or many (#33), working title (#34). The open questions list in the log can be emptied.
 
 ## Doc changes
 
@@ -38,6 +43,10 @@
 - **Sources and reliability:** replace "The grade you see is the one you assign" with *"Each item arrives with the collector's grade. You decide whether to believe the report. A source's file grade updates between crises as it builds a track record."*
 - **Customer and consequences:** add *"The customer commits in proportion to your confidence. A Moderate brief buys a partial move, and a High brief buys the full one."*
 - **Platform and tech:** add *"A situation map plots reporting as it arrives. The real positions appear only in the postmortem."* and *"Code and crisis data live in the GitHub repo `antj54/LowCon`. The claude.ai page is published from it."*
+- **Title:** change the header to *"Low Confidence — Game Design Doc"* and replace the working-title options line with *"Working title: **Low Confidence**."*
+- **Setting:** replace the first sentence with *"The game uses fictional countries placed in real regions in the early 2030s."*
+- **Customer** (under Setting): replace with *"A small recurring cast of 2–3 decision-makers, each with a personality and priorities. One runs each crisis, and they remember your track record."*
+- **Credibility** (under Player role and progression): add *"You can't be fired. At rock-bottom credibility you're reassigned to a new cell: you lose your team and unlocks but keep your track record."*
 - **Roadmap:** move *(current)* from **0 · Paper prototype** to **1 · First playable (MVP)**.
 
 ### `03-crisis-content.md`
