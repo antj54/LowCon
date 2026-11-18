@@ -1,16 +1,42 @@
-# Intel Cell Sim — Decisions Log
+# Low Confidence — Decisions Log
 
-*Newest entries at the top. This file wins over the design doc when they disagree. Anything still open is listed at the bottom.*
+*Newest entries at the top. This file wins over the design doc when they disagree. Anything still open is listed at the bottom. Superseded entries stay for history and are marked.*
 
 ## Decisions
 
 | # | Date | Decision | Why / notes |
 | --- | --- | --- | --- |
+| 35 | 2026-11-18 | The playtest build has Play ahead on by default, so testers can play all 5 days in one sitting. The main build keeps the daily lock. | Removes the 5-day wait for feedback. Time per day is still measured, so turn length stays testable. |
+| 34 | 2026-11-18 | Working title: **Low Confidence** | Names the core mechanic, matches the project and repo, and carries the dry tone |
+| 33 | 2026-11-18 | Customers: a small recurring cast of 2–3 decision-makers who rotate across crises and remember your track record | Variety plus "the world remembers." Credibility carries across crises in a way you feel. |
+| 32 | 2026-11-18 | You can't be fired. At rock-bottom credibility you're **reassigned**: you lose your team and unlocks but keep your track record. | Real stakes without wiping weeks of daily play. Built in Phase 3. |
+| 31 | 2026-11-18 | Setting: **fictional countries placed in real regions**. Crisis 01's Kordav and Elsin stay as they are. | Won't date, accuses no real government, keeps real terrain and threat types |
+| 30 | 2026-11-18 | Blind playtest runs on a separate playtest build: results sync automatically, with optional one-tap reactions, a per-item "Not realistic?" flag and a 4-question end debrief. The owner sees a Testers tab. | The tester shouldn't have to fill anything in. The realism flag captures an intel professional's judgment where it matters. |
+| 29 | 2026-11-18 | Project docs are mirrored in the repo under `docs/`. The claude.ai project stays the source of truth for docs, and the repo copy is refreshed when they change. | Everything about the game lives in one repo, without two copies that can both be edited |
+| 28 | 2026-11-18 | The GitHub repo `antj54/LowCon` (public) is the source of truth for code and crisis data. The claude.ai page is the published build, updated from the repo. | Version history and a home for the code. `tools/simulate.js` is the balance check to run after any change. |
+| 27 | 2026-11-18 | The time-per-day measure counts active time only (page visible, input in the last 2 minutes) | Day 1 showed 28 minutes because idle time counted |
+| 26 | 2026-11-18 | Situation map: plots reporting as it arrives (planted items included), own forces and doubted items. Ground truth appears only in the postmortem, by day. | An evolving picture of the scenario that keeps the deception intact. The postmortem overlay is the payoff. |
+| 25 | 2026-11-18 | Each day opens with a morning read-in: public events, countdown, own posture, yesterday's line. It never states hidden truth. | Shows how the overall picture is changing without becoming an answer key |
+| 24 | 2026-11-18 | Crisis length stays at 5 days | Anthony's playtest: 5 was enough |
+| 23 | 2026-11-18 | The customer commits in proportion to confidence: Moderate sends a lead company, High the full battalion. Deterred needs the battalion in place by the Day 4 brief; a company alone or a battalion only on Day 5 gets Standoff. | High confidence had no effect in the world, so Moderate dominated. Now confidence is a real call and teaches calibration. |
+| 22 | 2026-11-18 | Each item has one per-item judgment, **Doubt this report**: the player judges the information false or deliberately misleading. The source letter can't be challenged per item. Doubting a planted item +1, a true item −1, noise and clutter 0. | A good source can carry a bad report (R-4-02 arrives B2 and is planted). Attacking the letter would punish the channel for the adversary's trick. |
+| 21 | 2026-11-18 | Every planted item has a tell in its own text and at least one cross-check: an item available by that day that contradicts it. The postmortem names the tell, the cross-check item IDs and the adversary's motive. | Deception has to be explainable from the evidence, not asserted by the answer key |
+| 20 | 2026-11-18 | Source reliability belongs to the source, not to each report. It shows on the roster, and from Phase 3 it changes between crises based on the source's track record. | Matches real tradecraft. Supports "the world remembers." |
+| 19 | 2026-11-18 | *Superseded by #22.* Accept-or-challenge grading of the received grade | Re-entering a grade already on the card was busywork |
+| 18 | 2026-11-18 | Progress saves to the player's account through the page's private per-user storage, with a copy on the device as a fallback | Keeps #7 ("play from any device") with no server of our own |
+| 17 | 2026-11-18 | Day lock on by default; a Play ahead switch is available from the start | Matches the design doc and keeps playtests quick |
+| 16 | 2026-11-18 | *Superseded by #19.* Phase 1 records grades but doesn't score them | |
+| 15 | 2026-11-18 | Phase 0 gate passed for Crisis 01, and the Phase 1 build is published | Anthony read it and judged it fun and believable |
+| 14 | 2026-11-18 | An early false alarm has a cost: troops moved on Day 1 or 2 are ordered back on Day 3 and moves are frozen for 48 hours | Stops "always assume the worst" from getting the best ending |
+| 13 | 2026-11-18 | Scoring: Right/Wrong = Low +1/−1, Moderate +2/−2, High +3/−4. Cited evidence scores true +1, noise 0, clutter −1, planted −2. Plus an ending bonus or penalty. | High only pays off above about ⅔ certainty |
+| 12 | 2026-11-18 | Ground truth can change during a crisis. Each daily brief is scored against what was true that day. | Intent really does change. Serves "every day counts." |
+| 11 | 2026-11-18 | Authoring rule 4 amended: in Phase 1 crises the diagnostic item arrives in the normal inbox. From Phase 2 on, at least one diagnostic item has to come from collection. | Phase 1 has no collection |
+| 10 | 2026-11-18 | First crisis: Border buildup, "Exercise or Operation?", 5 days | Easiest first-time question, the truth changes mid-crisis, and every plant can be caught from the inbox |
 | 9 | 2026-11-18 | Knowledge files split into a design doc, this log and a crisis content file, all in Markdown | Each can be updated on its own; Markdown is easiest for Claude to read |
 | 8 | 2026-11-18 | Tradecraft realism: **authentic but simplified** | Real concepts (Admiralty grading, estimative confidence, ACH, PIRs) streamlined so a daily turn stays short |
 | 7 | 2026-11-18 | Platform: phone-first single-page web app published as an artifact, saved progress, no server for the MVP | Lets Anthony play from any device with no setup |
 | 6 | 2026-11-18 | Roadmap runs in gated phases 0–4; MVP = Phase 1 (one 5-day crisis) | Prove it's fun before adding systems |
-| 5 | 2026-11-18 | Setting: real map in the early 2030s, all leaders, groups, units and companies fictional | Grounded but won't date badly; no real people depicted |
+| 5 | 2026-11-18 | Setting: early 2030s, all leaders, groups, units and companies fictional (countries refined by #31) | Grounded but won't date badly; no real people depicted |
 | 4 | 2026-11-18 | Session style: **short daily turns** (about 8 min), one in-game day per real day | Phone-friendly daily habit |
 | 3 | 2026-11-18 | Gameplay feel: **balanced mix**; analysis puzzles feed resource decisions | |
 | 2 | 2026-11-18 | Setting era: **near-future real world** | |
@@ -18,9 +44,17 @@
 
 ## Open questions
 
-- [ ] Which crisis seed should the first arc use? (Options are in `03-crisis-content.md`)
-- [ ] Real countries with fictional actors, or fictional countries placed in real regions?
-- [ ] Can you get fired (game over), or do you only lose credibility and resources?
-- [ ] Strictly one day per real day, or is "play ahead" allowed from the start?
-- [ ] One customer for the whole campaign, or a new one for each crisis?
-- [ ] Working title
+- [ ] Which seed should Crisis 02 use? (It has to prove the Phase 2 systems generalize. The defector walk-in would punish "always trust HUMINT.")
+- [ ] Does Crisis 01 get a named real region, or stay unnamed?
+
+## Parking lot
+
+- The adversary reacts to the customer's moves (for example switching crossings if forces move early). Phase 3–4.
+- Reverse image search as an OSINT action. Phase 2.
+- Pressure from the liaison partner ("act alone") as its own mechanic. Phase 3.
+- Tapping a map area to aim collection there. Phase 2.
+- Letting the player mark their own judgments on the map. Phase 3.
+
+## Status
+
+**Phase 1 · First playable.** Crisis 01 is built and published. Blind playtest out to testers on 2026-11-18; the Phase 1 gate waits on their results.

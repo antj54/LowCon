@@ -6,7 +6,6 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | --- | --- |
 | `project-instructions.md` | How Claude works on this project: roles, standards, working style |
 | `02-decisions-log.md` | Settled decisions and open questions. Wins over the design doc when they disagree. |
-| `decisions-pending.md` | Entries proposed but not yet pasted into the log, plus the doc changes they need. Delete once applied. |
 | `01-design-doc.md` | Pillars, core loop, systems, roadmap |
 | `03-crisis-content.md` | Crisis seeds, authoring rules, data format |
 | `crisis-01-player-packet.md` | Phase 0 paper version of Crisis 01 (no spoilers). Its rules predate the Phase 1 changes. |
