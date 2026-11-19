@@ -260,6 +260,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .cx-cart-s{font:500 8.5px/1 var(--f-mono);letter-spacing:.06em;fill:var(--m-ink);fill-opacity:.7}
 .cx{padding:0}
 .cx-h{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:none;border:0;padding:12px 14px;font:inherit;color:inherit;cursor:pointer}
+.opt.against[aria-pressed="true"]{background:#f6d6d0;border-color:#b0412e;color:#7a2416}
 .cx-bio{font-style:italic;margin-top:10px}
 .cx-b{padding:0 14px 10px;border-top:1px dashed var(--line)}
 .trow{display:grid;gap:6px;padding-top:8px;border-top:1px dashed var(--line)}
@@ -1297,6 +1298,7 @@ function postmortemView(){
     html += '<div class="stack"><div class="section-h"><h3>Your board</h3></div>' + boardView(C.days, true)
       + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as ' + esc(ADV()) + ' intended.</p></div>';
   }
+  (C.postmortem.callouts || []).forEach(k => { if (storyOk(k.if, C, S)) html += '<div class="msg tip"><span class="from">' + esc(k.title || 'Worth knowing') + '</span><p>' + esc(k.text) + '</p></div>'; });
   if (C.postmortem.answer) html += '<div class="msg"><span class="from">The answer</span><p>' + esc(C.postmortem.answer) + '</p></div>';
   if (C.postmortem.openQuestion) html += '<div class="msg"><span class="from">An open question</span><p>' + esc(C.postmortem.openQuestion) + '</p>' + (REC.runs[C.id] && !S.offRecord ? '<p class="small muted">Added to your case file.</p>' : '') + '</div>';
   html += analystsCard();
@@ -1441,9 +1443,9 @@ function renderLayer(){
   if (ui.ask && S.board[ui.ask]){
     const id = ui.ask;
     html = '<div class="overlay" data-act="askskip"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ask-h"><h3 id="ask-h">' + esc(id) + ' is on the board</h3>'
-      + '<p>Which hypothesis does it make <b>harder to believe</b>? Tap any that apply.</p>'
-      + '<div class="btnrow">' + C.hypotheses.map(h => '<button class="opt" data-act="askmark" data-id="' + id + '" data-h="' + h.id + '" aria-pressed="' + (S.board[id].m[h.id] === 'i') + '"><b>' + h.id + '</b> ' + esc(h.short) + '</button>').join('') + '</div>'
-      + '<p class="small muted">That marks it <b>I</b> (inconsistent) on the board. You can mark C and – there too.</p>'
+      + '<p>Which hypothesis does this item argue <b>against</b>? Tap any that apply, or none.</p>'
+      + '<div class="btnrow">' + C.hypotheses.map(h => '<button class="opt against" data-act="askmark" data-id="' + id + '" data-h="' + h.id + '" aria-pressed="' + (S.board[id].m[h.id] === 'i') + '">' + (S.board[id].m[h.id] === 'i' ? '✗ against ' : '') + '<b>' + h.id + '</b> ' + esc(h.short) + '</button>').join('') + '</div>'
+      + '<p class="small muted">Each one you tap is marked <b>I</b> (inconsistent) on the board: it counts against that hypothesis. Items that support a hypothesis don\'t need marking here.</p>'
       + '<div class="btnrow"><button class="btn" data-act="askskip">Done</button></div></div></div>';
     document.getElementById('layer').innerHTML = html; return;
   }
@@ -1612,6 +1614,7 @@ function storyOk(c, Cx, Sx){
   if (!c) return true;
   const got = new Set((Sx.collected || []).map(x => x.id));
   if (c.anyOf) return c.anyOf.some(x => storyOk(x, Cx, Sx));
+  if (c.allOf) return c.allOf.every(x => storyOk(x, Cx, Sx));
   if (c.ending && ![].concat(c.ending).includes(Sx.ending)) return false;
   if (c.flag && !(c.flag.in || []).includes((Sx.flags || {})[c.flag.event])) return false;
   if (c.everAt && !(Sx.moves || []).some(m => [].concat(c.everAt).includes(m.to))) return false;

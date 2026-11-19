@@ -1627,6 +1627,33 @@
       "4": "The lab, if you hadn't asked yet. Tests sent today would arrive too late.",
       "5": "Nothing tasked today could arrive in time."
     },
+    "callouts": [
+      {
+        "title": "Your tests already answered it",
+        "if": {
+          "allOf": [
+            {
+              "collected": "C-01"
+            },
+            {
+              "collected": "C-02"
+            }
+          ]
+        },
+        "text": "Same desk, two roads. The copy you sent Rhun by hand never surfaced; the copy you sent her over the link did. If she were passing things on, both would have leaked. What leaked was the road."
+      },
+      {
+        "title": "Your test answered it",
+        "if": {
+          "allOf": [
+            {
+              "collected": "C-03"
+            }
+          ]
+        },
+        "text": "The copy you sent over the link to Director Brandt's office, a desk Rhun never sees, surfaced in Bureau traffic. No person sat on both ends of that road. Only the link did."
+      }
+    ],
     "answer": "The leak was LATTICE. Its terminals were altered in Halsk four years ago, during a day and a half nobody asked about, and the Bureau has read everything that crossed the link since. Only what crossed the link ever leaked. Nothing that stayed in the cell ever did. Nobody betrayed anyone. A procurement officer signed for a late delivery without asking why it was late."
   },
   "pirs": [
