@@ -6,17 +6,18 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 
 ## Status
 
-**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Crisis 02 (*The Walk-in*) is playable from the crisis picker. Phase 3 has started: a service record and carry-over between scenarios. Analyst notes are in every scenario, and Crisis 03 (*The Southern Line*) is playable. Reassignment is in. Next: a full campaign playtest.
+**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Crisis 02 (*The Walk-in*) is playable from the crisis picker. Phase 3 has started: a service record and carry-over between scenarios. Analyst notes are in every scenario, and Crisis 03 (*The Southern Line*) is playable. Reassignment is in. Act 2 (Crises 04–06) is built, with a Case file and a Codex on the main menu. Next: a full campaign playtest.
 
 ## Layout
 
 | Path | What it is |
 | --- | --- |
 | `index.html` | The engine: one self-contained page (markup, styles, script). Holds no crisis content. |
-| `crises/*.json` | Crisis data files. The engine loads one at start. Format v0.3. |
+| `crises/*.json` | Crisis data files, listed in `crises/index.json`. Format v1.3. **Crises 04 onward spoil the campaign.** |
+| `codex.json` | The Codex: cast, nations and the region map, revealed as scenarios are played. **Spoils the campaign.** |
 | `config/playtest.json` | Published as `config.json` in the playtest build. Turns on playtest mode and opens each next day immediately (`playAheadDefault`): results sync to a shared `playtests/<tester>` record, plus one-tap reactions, a per-item realism flag, an end-of-crisis debrief and an owner-only Testers tab. With no `config.json`, the engine runs as the normal build. |
 | `docs/` | Design doc, decisions log, crisis content and the Crisis 01 packet and answer key (spoilers), mirrored from the claude.ai project. |
-| `tools/simulate.js` | Runs the real engine headlessly and prints the ending and score for a set of fixed strategies. Use it after any change to scoring, policy or content. |
+| `tools/simulate.js` | Runs the real engine headlessly and prints the ending and score for a set of fixed strategies. Use it after any change to scoring, policy or content. **Its strategy sets for Crises 04 onward spoil the campaign.** |
 
 ## Run it
 

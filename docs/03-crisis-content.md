@@ -69,6 +69,10 @@ Each crisis is one JSON file, listed in `crises/index.json` (`id`, `file`, `numb
 | Reassignment (v1.1) | No crisis data needed: it triggers when a scenario is finished on the record at credibility 0, except the first scenario in `crises/index.json`, which records 0 as 1 (#75). Optional fields: `credibility.reassignStart` (default 1, #67), `analysts[].extra: true` for analysts lost on reassignment, and `opening.reassigned` for the customer's Day 1 line to a new cell. |
 | `board` | Optional. `pinsPerDay` for the hypotheses board (default 3). The board needs no other content: it works from `hypotheses` and the items the player pins. |
 
+## Codex (`codex.json`, #76)
+
+One file for the whole campaign, outside the crisis files. `groups` (`id`, `title`) and `entries` (`id`, `group`, `name`, `role`, `stages`, optional `customer` for a standing line from the record, optional `source` for a burned line). Each stage has `seen` (a crisis id: shown once that scenario is started) or `after` (shown once it's finished), `text`, and optional `if` with `recordEnding` (`crisis`, `in`), `recordFlag` (`crisis`, `event`, `in`) or `recordStory` (`crisis`, `flag`, `in`). Rule: a `seen` stage may only state what the scenario's briefing states. `map`: `viewBox`, `title`, `sea`, `countries` (`d`, `name`, label `x`, `y`, `cls`), `borders`, `hills`, `river`, `lines` (`cls`, `d`, label), `places` (`name`, `x`, `y`, label offset `lx`, `ly`, `type`: `capital`, `dam`, `depot`) and `offmap`; anything with `from` (a crisis id) appears once that scenario is started. Every new scenario adds its cast, places and stages here.
+
 ## Scripted crises
 
 | # | Title | Seed | Data | Notes |

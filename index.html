@@ -229,6 +229,15 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .meter span.on{background:var(--accent)}
 .card.pir{gap:8px}
 .callchange{background:#f3dfb4;border-left:4px solid #a86a00;padding:8px 10px;margin:8px 0;font-size:.95em}
+.c-kordav{fill:var(--m-land)}
+.c-elsin{fill:var(--m-elsin)}
+.c-marrat{fill:#e6dcc4}
+.c-rail{fill:none;stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:7 3;stroke-opacity:.7}
+.m-cap{fill:var(--m-ink)}
+.cxmap{margin:0}
+.cx{padding:0}
+.cx-h{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:none;border:0;padding:12px 14px;font:inherit;color:inherit;cursor:pointer}
+.cx-b{padding:0 14px 10px;border-top:1px dashed var(--line)}
 .trow{display:grid;gap:6px;padding-top:8px;border-top:1px dashed var(--line)}
 .tname{font-weight:600;font-size:15px}
 .chip.task{font:600 12.5px/1 var(--f-mono)}
@@ -303,6 +312,8 @@ pre.log{white-space:pre-wrap;word-break:break-word;font:12px/1.5 var(--f-mono);b
 /* ---------- Engine constants (doctrine, not crisis content) ---------- */
 const CRISIS_URL = 'crises/border-buildup.json';
 const INDEX_URL = 'crises/index.json';
+const CODEX_URL = 'codex.json';
+let CODEX = null;
 let INDEX = [], CUR = null;
 const LS_PREFIX = 'intel-cell-sim:';
 const SOURCE_SCALE = {A:'Completely reliable',B:'Usually reliable',C:'Fairly reliable',D:'Not usually reliable',E:'Unreliable',F:'Reliability cannot be judged'};
@@ -833,7 +844,7 @@ function mapCard(d){
 /* ---------- Rendering ---------- */
 function render(){
   if (!C || !S) return;
-  if (['menu', 'list', 'record', 'case'].includes(ui.screen)){ app.innerHTML = ui.screen === 'menu' ? menuView() : ui.screen === 'list' ? listView() : ui.screen === 'case' ? caseView() : recordView(); renderLayer(); return; }
+  if (['menu', 'list', 'record', 'case', 'codex'].includes(ui.screen)){ app.innerHTML = ui.screen === 'menu' ? menuView() : ui.screen === 'list' ? listView() : ui.screen === 'case' ? caseView() : ui.screen === 'codex' ? codexView() : recordView(); renderLayer(); return; }
   if (!S.started && ui.tab !== 'playtests'){ app.innerHTML = introView(); renderLayer(); return; }
   if (S.done && ui.tab !== 'files' && ui.tab !== 'playtests') ui.tab = 'postmortem';
   if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
@@ -1457,6 +1468,8 @@ function onClick(e){
     case 'list': ui.screen = 'list'; render(); window.scrollTo(0,0); break;
     case 'record': ui.screen = 'record'; render(); window.scrollTo(0,0); break;
     case 'case': ui.screen = 'case'; render(); window.scrollTo(0,0); break;
+    case 'codex': ui.screen = 'codex'; ui.codexOpen = null; render(); window.scrollTo(0,0); break;
+    case 'cxopen': ui.codexOpen = ui.codexOpen === el.dataset.id ? null : el.dataset.id; render(); break;
     case 'clearrec': ui.clearId = el.dataset.id; ui.sheet = 'clearrec'; renderLayer(); break;
     case 'confirmclearrec': {
       const r = REC.runs[ui.clearId];
@@ -1712,6 +1725,71 @@ function fileGrade(s0){
   return {g, why};
 }
 function goneBefore(sid){ const s0 = C.sources.find(x => x.id === sid); return !!s0 && earlierRuns().some(r => (r.burned || []).includes(s0.codeName)); }
+/* ---------- Codex: what the player knows about the cast and the region, by how far they've got ---------- */
+const cxSeen = id => { const p = progress(id); return !!(p.started || p.done || p.cleared); };
+const cxDone = id => !!progress(id).cleared;
+function cxOk(c){
+  if (!c) return true;
+  const run = id => REC.runs[id] || null;
+  if (c.recordEnding){ const r = run(c.recordEnding.crisis); if (!r || !(c.recordEnding.in || []).includes(r.ending)) return false; }
+  if (c.recordFlag){ const r = run(c.recordFlag.crisis); if (!r || !(c.recordFlag.in || []).includes((r.flags || {})[c.recordFlag.event])) return false; }
+  if (c.recordStory){ const r = run(c.recordStory.crisis); if (!r || !(c.recordStory.in || []).includes(((r.story || {}).flags || {})[c.recordStory.flag])) return false; }
+  return true;
+}
+function cxStageOk(st){ return (st.seen ? cxSeen(st.seen) : st.after ? cxDone(st.after) : true) && cxOk(st.if); }
+function codexKnown(){ return CODEX ? CODEX.entries.filter(e => e.stages.some(cxStageOk)) : []; }
+const cxNum = id => (INDEX.find(x => x.id === id) || {}).number || '';
+function cxStanding(e){
+  if (e.customer){
+    const r = INDEX.map(x => REC.runs[x.id]).filter(r => r && r.customer === e.customer && r.credLabel).pop();
+    if (r) return 'Where you stand: <b>' + esc(r.credLabel) + ' (' + r.cred + ')</b>, after ' + esc(r.title) + '.';
+  }
+  if (e.source){
+    const r = INDEX.map(x => REC.runs[x.id]).find(r => r && (r.burned || []).includes(e.source));
+    if (r) return '<b>Burned</b> in ' + esc(r.title) + '.';
+  }
+  return '';
+}
+function codexMap(){
+  const M = CODEX.map, vb = M.viewBox, on = x => !x.from || cxSeen(x.from);
+  let g = '<rect x="0" y="0" width="' + vb[2] + '" height="' + vb[3] + '" class="m-land"/>';
+  (M.countries || []).forEach(k => { g += '<path class="' + k.cls + '" d="' + k.d + '"/>'; });
+  if (M.sea) g += '<path class="m-res" d="' + M.sea + '"/>';
+  (M.hills || []).forEach(h => h.r.forEach(r => { g += '<circle class="m-hill" cx="' + h.cx + '" cy="' + h.cy + '" r="' + r + '"/>'; }));
+  if (M.river && on(M.river)) g += '<path class="m-river" d="' + M.river.d + '"/><text class="m-rivlab" x="' + M.river.lx + '" y="' + M.river.ly + '" transform="rotate(' + (M.river.rot || 0) + ' ' + M.river.lx + ' ' + M.river.ly + ')">' + esc(M.river.label) + '</text>';
+  (M.lines || []).filter(on).forEach(l => { g += '<path class="' + l.cls + '" d="' + l.d + '"/>' + (l.label ? '<text class="m-lab" x="' + l.lx + '" y="' + l.ly + '">' + esc(l.label) + '</text>' : ''); });
+  (M.borders || []).forEach(b => { g += '<path class="m-border" d="' + b + '"/>'; });
+  (M.countries || []).forEach(k => { g += '<text class="m-region" x="' + k.x + '" y="' + k.y + '">' + esc(k.name) + '</text>'; });
+  (M.places || []).filter(on).forEach(p => {
+    if (p.type === 'dam') g += '<line class="m-dam" x1="' + (p.x - 6) + '" y1="' + (p.y + 6) + '" x2="' + (p.x + 6) + '" y2="' + (p.y - 6) + '"/>';
+    else if (p.type === 'depot') g += '<rect class="m-place" x="' + (p.x - 5) + '" y="' + (p.y - 5) + '" width="10" height="10"/>';
+    else if (p.type === 'capital') g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="6"/><circle class="m-cap" cx="' + p.x + '" cy="' + p.y + '" r="2.5"/>';
+    else g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="4"/>';
+    g += '<text class="m-lab" x="' + (p.x + p.lx) + '" y="' + (p.y + p.ly) + '">' + esc(p.name) + '</text>';
+  });
+  (M.offmap || []).filter(on).forEach(o => { g += '<text class="m-off" x="' + o.x + '" y="' + o.y + '">' + esc(o.text) + ' →</text>'; });
+  return '<figure class="map cxmap"><svg viewBox="0 0 ' + vb[2] + ' ' + vb[3] + '" role="img" aria-label="' + esc(M.title) + '">' + g + '</svg>'
+    + '<figcaption class="small muted">' + esc(M.title) + '. Places appear as your scenarios reach them.</figcaption></figure>';
+}
+function codexView(){
+  let html = '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><h1>Codex</h1>'
+    + '<p class="muted small">What your cell knows about the region and the people in it, as of your last scenario. Entries grow as you play, and some depend on how your scenarios ended.</p></header><main class="stack">';
+  if (!CODEX) return html + '<p>The codex isn\'t available.</p></main>';
+  html += codexMap();
+  const known = codexKnown();
+  CODEX.groups.forEach(gp => {
+    const es = known.filter(e => e.group === gp.id);
+    if (!es.length) return;
+    html += '<div class="section-h"><h2>' + esc(gp.title) + '</h2><span class="mono small">' + es.length + '</span></div>';
+    es.forEach(e => {
+      const open = ui.codexOpen === e.id, st = e.stages.filter(cxStageOk), stand = cxStanding(e);
+      html += '<div class="card cx"><button class="cx-h" data-act="cxopen" data-id="' + e.id + '" aria-expanded="' + open + '"><b>' + esc(e.name) + '</b><span class="small muted">' + esc(e.role || '') + '</span></button>'
+        + (open ? '<div class="cx-b">' + st.map(x => '<p class="small"><span class="mono muted">' + esc(cxNum(x.seen || x.after)) + '</span> ' + esc(x.text) + '</p>').join('') + (stand ? '<p class="small">' + stand + '</p>' : '') + '</div>' : '')
+        + '</div>';
+    });
+  });
+  return html + '</main>';
+}
 function caseEntries(){
   const runs = INDEX.map(x => REC.runs[x.id]).filter(r => r && (r.openQuestion || r.answer));
   return {runs, total:runs.length, noticed:runs.reduce((n, r) => n + ((r.story || {}).caseFile || []).length, 0)};
@@ -1799,6 +1877,7 @@ function menuView(){
     + '<button class="btn big" data-act="crisis" data-id="' + esc(next.id) + '">' + esc(label) + '<small>' + esc(sub) + '</small></button>'
     + '<button class="btn ghost big" data-act="list">Scenarios<small>' + INDEX.filter(x => progress(x.id).cleared).length + ' of ' + INDEX.length + ' finished</small></button>'
     + '<button class="btn ghost big" data-act="record">Service record<small>' + (Object.keys(REC.runs).length ? Object.keys(REC.runs).length + ' on the record' : 'Nothing on the record yet') + '</small></button>'
+    + (codexKnown().length ? '<button class="btn ghost big" data-act="codex">Codex<small>' + codexKnown().length + ' entries · people, nations and the map</small></button>' : '')
     + (caseEntries().total ? '<button class="btn ghost big" data-act="case">Case file<small>' + caseEntries().noticed + ' noted · ' + caseEntries().total + ' open question' + (caseEntries().total > 1 ? 's' : '') + '</small></button>' : '')
     + (CFG.playtest && ui.isOwner ? '<button class="btn ghost big" data-act="tab" data-v="playtests">Tester results</button>' : '')
     + (CFG.playtest ? '<p class="small muted">Playtest build. Your results are recorded automatically.</p>' : '')
@@ -1827,6 +1906,7 @@ async function start(hotData){
     if (ir.ok){ const ix = await ir.json(); if (Array.isArray(ix) && ix.length) INDEX = ix; }
   } catch(e) { /* no index: single crisis */ }
   if (!INDEX.length) INDEX = [{id:'border-buildup', file:CRISIS_URL}];
+  try { const xr = await fetch(CODEX_URL, {cache:'no-cache'}); if (xr.ok) CODEX = await xr.json(); } catch(e) { /* no codex */ }
   let want = null; try { want = localStorage.getItem(LS_PREFIX + 'current'); } catch(e) {}
   if (hotData && hotData.crisis) want = hotData.crisis;
   loadProgress(); loadRecord();

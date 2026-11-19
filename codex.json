@@ -1,0 +1,1027 @@
+{
+  "note": "SPOILERS: later stages of these entries describe what each scenario's postmortem reveals. The game shows a stage only once the player has started (seen) or finished (after) that scenario.",
+  "groups": [
+    {
+      "id": "nations",
+      "title": "Nations and alliances"
+    },
+    {
+      "id": "people",
+      "title": "People"
+    },
+    {
+      "id": "orgs",
+      "title": "Services, forces and companies"
+    },
+    {
+      "id": "sources",
+      "title": "Your sources"
+    },
+    {
+      "id": "team",
+      "title": "Your cell"
+    }
+  ],
+  "entries": [
+    {
+      "id": "kordav",
+      "group": "nations",
+      "name": "Kordav",
+      "role": "Elsin's neighbour to the north and west",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Its farmland depends on the Veyl River, which rises in Elsin. The two have argued over the water for ten years. Its 4th Army trains at Ostrel, 40 km from the border, and its Bureau runs its intelligence."
+        },
+        {
+          "after": "border-buildup",
+          "text": "IRON HARVEST was a real exercise, enlarged to put pressure on the water talks. When the talks failed, its leadership authorised a plan to seize Tarsk Dam."
+        },
+        {
+          "after": "border-buildup",
+          "if": {
+            "recordEnding": {
+              "crisis": "border-buildup",
+              "in": [
+                "deterred"
+              ]
+            }
+          },
+          "text": "Its lead elements found a battalion dug in at Dolan and stopped at the river."
+        },
+        {
+          "after": "border-buildup",
+          "if": {
+            "recordEnding": {
+              "crisis": "border-buildup",
+              "in": [
+                "standoff-late",
+                "standoff-thin"
+              ]
+            }
+          },
+          "text": "Its engineers bridged the river at Dolan and took the dam's access road. The dam is still argued over."
+        },
+        {
+          "after": "border-buildup",
+          "if": {
+            "recordEnding": {
+              "crisis": "border-buildup",
+              "in": [
+                "seized"
+              ]
+            }
+          },
+          "text": "It holds Tarsk Dam, and calls it securing critical water infrastructure."
+        },
+        {
+          "after": "walk-in",
+          "text": "It sent a major on its General Staff, LANTERN, to walk into our embassy and smear Deputy Defence Minister Vell before a vote."
+        },
+        {
+          "after": "southern-line",
+          "text": "Blamed for the Southern Line attacks, and innocent of them: the evidence against it was planted."
+        },
+        {
+          "after": "missing-shipment",
+          "text": "The replacement terminals for Elsin's ministry spent a day and a half on a fenced quay at Brask, on Kordav's coast, and came back sealed."
+        },
+        {
+          "after": "lights-out",
+          "text": "Paid a criminal crew in advance to break Elsin's grid controls, so that Elsin would repair them from images on a compromised update server."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Its Bureau has read everything that crossed LATTICE for four years."
+        }
+      ]
+    },
+    {
+      "id": "elsin",
+      "group": "nations",
+      "name": "Elsin",
+      "role": "The alliance's partner. Capital: Kalsa.",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Holds the Veyl's headwaters and Tarsk Dam, 6 km inside the border. Hosts Task Force VEYL, and asked for months to have it at Tarsk."
+        },
+        {
+          "seen": "walk-in",
+          "text": "Its parliament is fractious. Deputy Defence Minister Aron Vell negotiated the task force agreement, and some of Elsin's own officers distrust him."
+        },
+        {
+          "seen": "southern-line",
+          "text": "Its gas pipeline, the Southern Line, runs from the Kessa pumping station through the Sarn valley to the Tolen bridge on the border with Marrat."
+        },
+        {
+          "seen": "missing-shipment",
+          "text": "Its ministries talk to the alliance over LATTICE, a secure terminal link."
+        },
+        {
+          "seen": "lights-out",
+          "text": "Its northern grid and the Southern Line's pumping controls run on control servers built by Corvane Systems."
+        }
+      ]
+    },
+    {
+      "id": "marrat",
+      "group": "nations",
+      "name": "Marrat",
+      "role": "Elsin's southern neighbour",
+      "stages": [
+        {
+          "seen": "southern-line",
+          "text": "Wants its border guards on the Southern Line, and already has advisers at Elsin's Southern Command."
+        },
+        {
+          "after": "southern-line",
+          "text": "Its intelligence service paid and armed the Sarn Valley Front for a month to frighten Elsin into a security pact, then cut it loose. When the Front turned rogue, Marrat warned Elsin, truthfully."
+        },
+        {
+          "after": "southern-line",
+          "if": {
+            "recordFlag": {
+              "crisis": "southern-line",
+              "event": "tolen",
+              "in": [
+                "caught"
+              ]
+            }
+          },
+          "text": "The pact is dead. Elsin sent its advisers home."
+        },
+        {
+          "after": "southern-line",
+          "if": {
+            "recordFlag": {
+              "crisis": "southern-line",
+              "event": "tolen",
+              "in": [
+                "held",
+                "displaced"
+              ]
+            }
+          },
+          "text": "Its guards got the southern third of the line under a thinner pact."
+        },
+        {
+          "after": "southern-line",
+          "if": {
+            "recordFlag": {
+              "crisis": "southern-line",
+              "event": "tolen",
+              "in": [
+                "cut",
+                "cut_far"
+              ]
+            }
+          },
+          "text": "Elsin signed the pact. Its guards are on the line, protecting it from a militia Marrat built."
+        },
+        {
+          "seen": "missing-shipment",
+          "text": "Runs Halsk, a free port on its coast, with a rail line to Kalsa."
+        },
+        {
+          "after": "lights-out",
+          "text": "Innocent of the grid attack. Its language was added to the malware to make it look guilty."
+        }
+      ]
+    },
+    {
+      "id": "alliance",
+      "group": "nations",
+      "name": "The alliance",
+      "role": "The multinational alliance you work for",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Keeps Task Force VEYL in Elsin to reassure it. Shares a daily assessment with Kalsa."
+        },
+        {
+          "seen": "lights-out",
+          "text": "Runs an Infrastructure Protection Cell in Kalsa, under Director Ilse Brandt."
+        }
+      ]
+    },
+    {
+      "id": "neutral",
+      "group": "nations",
+      "name": "The neutral capital",
+      "role": "A neutral state's capital, off the map",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Where the water talks between Kordav and Elsin were held."
+        },
+        {
+          "seen": "walk-in",
+          "text": "Where LANTERN walked into our embassy. The Bureau keeps an office there."
+        }
+      ]
+    },
+    {
+      "id": "halvorsen",
+      "group": "people",
+      "name": "Gen. R. Halvorsen",
+      "role": "Commander, Task Force VEYL",
+      "customer": "Gen. R. Halvorsen",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Your first customer. He commits forces in proportion to your confidence, and remembers when he has had to pull them back."
+        },
+        {
+          "seen": "southern-line",
+          "text": "Placed one guard company on the Southern Line on your word."
+        },
+        {
+          "seen": "damage-assessment",
+          "text": "Copied on the damage assessment. His revised Veyl contingency plan was due in Kalsa on the 17th."
+        }
+      ]
+    },
+    {
+      "id": "marlowe",
+      "group": "people",
+      "name": "Under Secretary H. Marlowe",
+      "role": "Under Secretary for alliance affairs",
+      "customer": "Under Secretary H. Marlowe",
+      "stages": [
+        {
+          "seen": "walk-in",
+          "text": "Handles the alliance's relationship with Elsin. She won't accuse anyone on a guess."
+        },
+        {
+          "seen": "missing-shipment",
+          "text": "Advised Kalsa on what to do with the missing terminals."
+        },
+        {
+          "seen": "damage-assessment",
+          "text": "Opened the damage assessment. Her High actions can't be undone, and she likes to have something to show Kalsa."
+        }
+      ]
+    },
+    {
+      "id": "brandt",
+      "group": "people",
+      "name": "Director Ilse Brandt",
+      "role": "Director, Infrastructure Protection Cell, Kalsa",
+      "customer": "Director Ilse Brandt",
+      "stages": [
+        {
+          "seen": "lights-out",
+          "text": "An engineer, with no patience for estimative language. She acts only on High."
+        }
+      ]
+    },
+    {
+      "id": "rhun",
+      "group": "people",
+      "name": "Col. E. Rhun",
+      "role": "Head of the liaison desk, Elsin military intelligence (WREN)",
+      "stages": [
+        {
+          "seen": "missing-shipment",
+          "text": "Abrasive and political, and the voice behind WREN."
+        },
+        {
+          "after": "missing-shipment",
+          "text": "Rude about Halsk, and right about Tessaly Freight."
+        },
+        {
+          "after": "lights-out",
+          "text": "A forged chat log, and then Kordav's broadcaster, pointed at \"the liaison office.\" Her copy of the network diagram never left her safe."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Innocent. Everything that reached her desk over LATTICE could leak; nothing she received on paper ever did. She asked for a transfer."
+        },
+        {
+          "after": "damage-assessment",
+          "if": {
+            "recordStory": {
+              "crisis": "damage-assessment",
+              "flag": "wrongName",
+              "in": [
+                "rhun"
+              ]
+            }
+          },
+          "text": "Removed from the liaison desk at the alliance's request, on your assessment."
+        }
+      ]
+    },
+    {
+      "id": "arle",
+      "group": "people",
+      "name": "Maj. T. Arle",
+      "role": "Intelligence staff officer to Gen. Halvorsen",
+      "stages": [
+        {
+          "seen": "damage-assessment",
+          "text": "Runs Halvorsen's distribution."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "His lists were long, and he was on leave all January. Sloppy, and innocent."
+        },
+        {
+          "after": "damage-assessment",
+          "if": {
+            "recordStory": {
+              "crisis": "damage-assessment",
+              "flag": "wrongName",
+              "in": [
+                "arle"
+              ]
+            }
+          },
+          "text": "Relieved, on your assessment."
+        }
+      ]
+    },
+    {
+      "id": "vell",
+      "group": "people",
+      "name": "Aron Vell",
+      "role": "Elsin's Deputy Defence Minister",
+      "stages": [
+        {
+          "seen": "walk-in",
+          "text": "Negotiated the task force agreement. Kordav's least favourite politician in Kalsa, and facing a no-confidence vote."
+        },
+        {
+          "after": "walk-in",
+          "text": "The target of the Bureau's smear: a ledger of forged entries built from his public schedule."
+        },
+        {
+          "after": "walk-in",
+          "if": {
+            "recordEnding": {
+              "crisis": "walk-in",
+              "in": [
+                "burned"
+              ]
+            }
+          },
+          "text": "Arrested on the morning of the vote."
+        },
+        {
+          "after": "walk-in",
+          "if": {
+            "recordEnding": {
+              "crisis": "walk-in",
+              "in": [
+                "sidelined"
+              ]
+            }
+          },
+          "text": "Resigned \"to clear his name.\""
+        },
+        {
+          "after": "walk-in",
+          "if": {
+            "recordEnding": {
+              "crisis": "walk-in",
+              "in": [
+                "exposed"
+              ]
+            }
+          },
+          "text": "The motion against him failed by forty votes."
+        },
+        {
+          "after": "walk-in",
+          "if": {
+            "recordEnding": {
+              "crisis": "walk-in",
+              "in": [
+                "survived"
+              ]
+            }
+          },
+          "text": "Kept his job by three votes, and lost his reputation."
+        },
+        {
+          "after": "walk-in",
+          "if": {
+            "recordEnding": {
+              "crisis": "walk-in",
+              "in": [
+                "shelved"
+              ]
+            }
+          },
+          "text": "Survived by five votes, without knowing who was behind it."
+        }
+      ]
+    },
+    {
+      "id": "lantern",
+      "group": "people",
+      "name": "LANTERN",
+      "role": "A walk-in at our embassy in the neutral capital",
+      "stages": [
+        {
+          "seen": "walk-in",
+          "text": "Said he was a major on the planning directorate of Kordav's General Staff."
+        },
+        {
+          "after": "walk-in",
+          "text": "He was: a real mid-level planning officer, recruited by the Bureau for one job. He walked in on orders."
+        }
+      ]
+    },
+    {
+      "id": "oro",
+      "group": "people",
+      "name": "Davin Oro",
+      "role": "Commander, Sarn Valley Front",
+      "stages": [
+        {
+          "seen": "southern-line",
+          "text": "A farmer whose land was taken for the Sarn compressor station."
+        },
+        {
+          "after": "southern-line",
+          "text": "Marrat promised him his land back, then cut him loose. He turned on the thing he actually hated: the compressor station."
+        },
+        {
+          "after": "southern-line",
+          "if": {
+            "recordEnding": {
+              "crisis": "southern-line",
+              "in": [
+                "held"
+              ]
+            }
+          },
+          "text": "Taken alive at the quarry road, still asking about his fields."
+        }
+      ]
+    },
+    {
+      "id": "lind",
+      "group": "people",
+      "name": "O. Lind",
+      "role": "Deputy Director, Elsin's grid operator",
+      "stages": [
+        {
+          "seen": "lights-out",
+          "text": "Deputy Director at the grid operator."
+        },
+        {
+          "after": "lights-out",
+          "text": "Wrote that a rebuild by hand would mean nine more days of blackouts in January, and that people would die of it. He wasn't wrong about the cold."
+        }
+      ]
+    },
+    {
+      "id": "bureau",
+      "group": "orgs",
+      "name": "The Bureau",
+      "role": "Kordav's intelligence service",
+      "stages": [
+        {
+          "seen": "walk-in",
+          "text": "Headquartered in Kordav's capital, with an office in the neutral capital."
+        },
+        {
+          "after": "walk-in",
+          "text": "Ran LANTERN, watched the defence ministry for anyone asking about him, and staged a recall on the headquarters net it believed we read."
+        },
+        {
+          "after": "lights-out",
+          "text": "Hired Grey Ledger through a front company, and planted a chat log blaming the liaison office."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Altered LATTICE's terminals in transit four years ago, and has read the link ever since. A mole hunt suited it: a hunt for a person protects an implant."
+        }
+      ]
+    },
+    {
+      "id": "tfveyl",
+      "group": "orgs",
+      "name": "Task Force VEYL",
+      "role": "The alliance's reassurance force in Elsin",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Commanded by Gen. Halvorsen. 2nd Battalion is its manoeuvre force. Its garrison is south-east of Tarsk."
+        },
+        {
+          "seen": "southern-line",
+          "text": "Buys its fuel off the Southern Line."
+        }
+      ]
+    },
+    {
+      "id": "4army",
+      "group": "orgs",
+      "name": "Kordav's 4th Army",
+      "role": "Kordav's army on the Elsin border",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Runs the annual IRON HARVEST exercise at Ostrel, supplied from the depot at Varn."
+        },
+        {
+          "after": "border-buildup",
+          "text": "12th Brigade and 77th Engineer Regiment (bridging) left Ostrel for a hidden staging area near the Dolan crossing."
+        }
+      ]
+    },
+    {
+      "id": "front",
+      "group": "orgs",
+      "name": "Sarn Valley Front",
+      "role": "A local militia in the Sarn valley",
+      "stages": [
+        {
+          "seen": "southern-line",
+          "text": "Claimed the explosion that damaged a valve housing on the Southern Line."
+        },
+        {
+          "after": "southern-line",
+          "text": "Paid and armed by Marrat for a month, then cut loose and left to act alone."
+        }
+      ]
+    },
+    {
+      "id": "corvane",
+      "group": "orgs",
+      "name": "Corvane Systems",
+      "role": "Alliance contractor",
+      "stages": [
+        {
+          "seen": "missing-shipment",
+          "text": "Builds secure communications hardware for Elsin's defence ministry, including the CX-4 terminals."
+        },
+        {
+          "seen": "lights-out",
+          "text": "Built and maintains the control servers for Elsin's grid, and runs their update server."
+        },
+        {
+          "seen": "damage-assessment",
+          "text": "Maintains LATTICE."
+        },
+        {
+          "after": "lights-out",
+          "text": "Its update server held an image set built two days before the attack, carrying a component that isn't on its build list."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Honest throughout. It didn't know what was in its own terminals."
+        }
+      ]
+    },
+    {
+      "id": "tessaly",
+      "group": "orgs",
+      "name": "Tessaly Freight",
+      "role": "A freight forwarder in Halsk",
+      "stages": [
+        {
+          "seen": "missing-shipment",
+          "text": "Was to put the container of terminals on a train to Kalsa."
+        },
+        {
+          "after": "missing-shipment",
+          "text": "Kordav's forwarder. Its chartered coaster took the container to Brask and back, and its owner's private crew stowed it in a shed customs had already searched."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Also shipped LATTICE's original terminals to Kalsa, four years ago, 36 hours late."
+        }
+      ]
+    },
+    {
+      "id": "ledger",
+      "group": "orgs",
+      "name": "Grey Ledger",
+      "role": "A ransomware crew",
+      "stages": [
+        {
+          "seen": "lights-out",
+          "text": "Nineteen victims in three years, always for money. Claimed the attack on Elsin's grid."
+        },
+        {
+          "after": "lights-out",
+          "text": "Hired for this one, paid in advance, told which six servers to hit and told not to close."
+        }
+      ]
+    },
+    {
+      "id": "ipc",
+      "group": "orgs",
+      "name": "Infrastructure Protection Cell",
+      "role": "The alliance's infrastructure security office in Kalsa",
+      "stages": [
+        {
+          "seen": "lights-out",
+          "text": "Run by Director Brandt. Its forensic team, IPC LAB, is careful and slower than anyone would like."
+        }
+      ]
+    },
+    {
+      "id": "lattice",
+      "group": "orgs",
+      "name": "LATTICE",
+      "role": "The secure terminal link between the alliance and Elsin's ministries",
+      "stages": [
+        {
+          "seen": "missing-shipment",
+          "text": "The alliance's link to Elsin's ministries. Liaison requests to Kalsa go over it."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Compromised. Its terminals were altered during a 36-hour delay in Halsk four years ago. Only what crossed it ever leaked."
+        },
+        {
+          "after": "damage-assessment",
+          "if": {
+            "recordStory": {
+              "crisis": "damage-assessment",
+              "flag": "leak",
+              "in": [
+                "closed"
+              ]
+            }
+          },
+          "text": "Shut, on your assessment."
+        },
+        {
+          "after": "damage-assessment",
+          "if": {
+            "recordStory": {
+              "crisis": "damage-assessment",
+              "flag": "leak",
+              "in": [
+                "open"
+              ]
+            }
+          },
+          "text": "Still running."
+        }
+      ]
+    },
+    {
+      "id": "ksb",
+      "group": "orgs",
+      "name": "KSB",
+      "role": "Kordav State Broadcaster",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Kordav's state television and official channels. Says what Kordav wants said."
+        }
+      ]
+    },
+    {
+      "id": "wren",
+      "group": "sources",
+      "name": "WREN",
+      "role": "Elsin's military intelligence liaison",
+      "source": "WREN",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "A long relationship. Pushes what it wants us to see, and answers requests."
+        },
+        {
+          "after": "southern-line",
+          "text": "Its unsourced claim on the first day of the Southern Line was true."
+        }
+      ]
+    },
+    {
+      "id": "kestrel",
+      "group": "sources",
+      "name": "KESTREL",
+      "role": "A clerk at 4th Army's depot in Varn",
+      "source": "KESTREL",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Sees allocations, issue orders and accounting codes, not unit plans. Don't meet him two days running."
+        }
+      ]
+    },
+    {
+      "id": "finch",
+      "group": "sources",
+      "name": "FINCH",
+      "role": "Inside Kordav's defence ministry",
+      "source": "FINCH",
+      "stages": [
+        {
+          "seen": "walk-in",
+          "text": "Six years, reliable. Meetings take two days to arrange, and the ministry is a dangerous place to ask questions."
+        }
+      ]
+    },
+    {
+      "id": "magpie",
+      "group": "sources",
+      "name": "MAGPIE",
+      "role": "A fuel trader in the Sarn valley",
+      "source": "MAGPIE",
+      "stages": [
+        {
+          "seen": "southern-line",
+          "text": "Sells to the Front. Sees their money and their vehicles, not their plans."
+        }
+      ]
+    },
+    {
+      "id": "gannet",
+      "group": "sources",
+      "name": "GANNET",
+      "role": "A dock foreman at Halsk",
+      "source": "GANNET",
+      "stages": [
+        {
+          "seen": "missing-shipment",
+          "text": "Sees what moves through the bonded sheds at night."
+        }
+      ]
+    },
+    {
+      "id": "petrel",
+      "group": "sources",
+      "name": "PETREL",
+      "role": "A broker on criminal forums",
+      "source": "PETREL",
+      "stages": [
+        {
+          "seen": "lights-out",
+          "text": "Has dealt with Grey Ledger, and hears what the crew complains about."
+        }
+      ]
+    },
+    {
+      "id": "vasko",
+      "group": "team",
+      "name": "Imre Vasko",
+      "role": "Regional analyst",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Writes one note a day."
+        },
+        {
+          "after": "border-buildup",
+          "text": "Anchors on his first theory, and reads everything after it that way."
+        }
+      ]
+    },
+    {
+      "id": "halden",
+      "group": "team",
+      "name": "Noor Halden",
+      "role": "Technical analyst",
+      "stages": [
+        {
+          "seen": "border-buildup",
+          "text": "Signals, imagery and forensics."
+        },
+        {
+          "after": "border-buildup",
+          "text": "Slow but careful, and never wrong. Her notes arrive a day after the item."
+        }
+      ]
+    },
+    {
+      "id": "marrow",
+      "group": "team",
+      "name": "Tess Marrow",
+      "role": "Open-source analyst",
+      "stages": [
+        {
+          "seen": "southern-line",
+          "text": "Joined the cell for the Southern Line."
+        },
+        {
+          "after": "southern-line",
+          "text": "Overconfident, and occasionally sharp."
+        },
+        {
+          "after": "damage-assessment",
+          "text": "Flagged by vetting for travel she declared late. It was her mother's funeral."
+        },
+        {
+          "after": "damage-assessment",
+          "if": {
+            "recordStory": {
+              "crisis": "damage-assessment",
+              "flag": "marrowLost",
+              "in": [
+                "yes"
+              ]
+            }
+          },
+          "text": "Suspended pending review."
+        }
+      ]
+    }
+  ],
+  "map": {
+    "viewBox": [
+      0,
+      0,
+      600,
+      560
+    ],
+    "title": "The region, not to scale",
+    "sea": "M0,0 L120,0 L105,90 L80,170 L95,250 L72,330 L90,420 L62,560 L0,560 Z",
+    "countries": [
+      {
+        "id": "kordav",
+        "name": "KORDAV",
+        "d": "M120,0 L600,0 L600,60 L460,130 L380,190 L290,250 L210,300 L72,330 L95,250 L80,170 L105,90 Z",
+        "x": 200,
+        "y": 46,
+        "cls": "c-kordav"
+      },
+      {
+        "id": "elsin",
+        "name": "ELSIN",
+        "d": "M600,60 L600,560 L420,560 L380,470 L300,400 L210,300 L290,250 L380,190 L460,130 Z",
+        "x": 470,
+        "y": 520,
+        "cls": "c-elsin"
+      },
+      {
+        "id": "marrat",
+        "name": "MARRAT",
+        "d": "M72,330 L210,300 L300,400 L380,470 L420,560 L62,560 L90,420 Z",
+        "x": 140,
+        "y": 520,
+        "cls": "c-marrat"
+      }
+    ],
+    "borders": [
+      "M72,330 L210,300",
+      "M600,60 L460,130 L380,190 L290,250 L210,300",
+      "M210,300 L300,400 L380,470 L420,560"
+    ],
+    "hills": [
+      {
+        "cx": 550,
+        "cy": 210,
+        "r": [
+          10,
+          20,
+          30
+        ]
+      }
+    ],
+    "river": {
+      "from": "border-buildup",
+      "d": "M560,232 C512,214 470,196 440,180 L420,160 C380,128 318,104 240,72",
+      "label": "Veyl",
+      "lx": 330,
+      "ly": 118,
+      "rot": 24
+    },
+    "lines": [
+      {
+        "from": "southern-line",
+        "cls": "m-pipe",
+        "d": "M330,262 C346,300 350,330 352,352 C352,390 348,412 345,438",
+        "label": "Southern Line",
+        "lx": 360,
+        "ly": 330
+      },
+      {
+        "from": "missing-shipment",
+        "cls": "c-rail",
+        "d": "M104,402 C180,412 250,412 320,396 C390,380 450,350 500,330",
+        "label": "Rail",
+        "lx": 210,
+        "ly": 426
+      }
+    ],
+    "places": [
+      {
+        "from": "border-buildup",
+        "name": "Kordav's capital",
+        "x": 200,
+        "y": 96,
+        "lx": -52,
+        "ly": -12,
+        "type": "capital"
+      },
+      {
+        "from": "border-buildup",
+        "name": "Ostrel",
+        "x": 300,
+        "y": 186,
+        "lx": -18,
+        "ly": -10
+      },
+      {
+        "from": "border-buildup",
+        "name": "Varn depot",
+        "x": 236,
+        "y": 170,
+        "lx": -30,
+        "ly": 18,
+        "type": "depot"
+      },
+      {
+        "from": "border-buildup",
+        "name": "Dolan",
+        "x": 420,
+        "y": 160,
+        "lx": -40,
+        "ly": -6
+      },
+      {
+        "from": "border-buildup",
+        "name": "Tarsk Dam",
+        "x": 440,
+        "y": 180,
+        "lx": 10,
+        "ly": 14,
+        "type": "dam"
+      },
+      {
+        "from": "border-buildup",
+        "name": "TF VEYL",
+        "x": 508,
+        "y": 258,
+        "lx": -24,
+        "ly": 18
+      },
+      {
+        "from": "border-buildup",
+        "name": "Kalsa",
+        "x": 500,
+        "y": 330,
+        "lx": 10,
+        "ly": 4,
+        "type": "capital"
+      },
+      {
+        "from": "southern-line",
+        "name": "Kessa",
+        "x": 330,
+        "y": 262,
+        "lx": -40,
+        "ly": 4
+      },
+      {
+        "from": "southern-line",
+        "name": "Sarn",
+        "x": 352,
+        "y": 352,
+        "lx": -36,
+        "ly": 4
+      },
+      {
+        "from": "southern-line",
+        "name": "Tolen bridge",
+        "x": 345,
+        "y": 438,
+        "lx": -86,
+        "ly": 4
+      },
+      {
+        "from": "southern-line",
+        "name": "Southern Command",
+        "x": 440,
+        "y": 400,
+        "lx": -18,
+        "ly": 18
+      },
+      {
+        "from": "missing-shipment",
+        "name": "Brask",
+        "x": 104,
+        "y": 140,
+        "lx": 10,
+        "ly": 4
+      },
+      {
+        "from": "missing-shipment",
+        "name": "Halsk",
+        "x": 104,
+        "y": 402,
+        "lx": 10,
+        "ly": -8
+      }
+    ],
+    "offmap": [
+      {
+        "from": "border-buildup",
+        "text": "Neutral capital: off the map",
+        "x": 418,
+        "y": 22
+      }
+    ]
+  }
+}
