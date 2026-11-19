@@ -140,7 +140,34 @@ const L_BEST = [
 ];
 const L_PUSH = [['H2', 'low', ['R-1-03']], ['H2', 'medium', ['R-1-03', 'R-2-03']], ['H2', 'high', ['R-3-03', 'R-1-03', 'R-2-03']], ['H2', 'high', ['R-3-03', 'R-4-02']], ['H2', 'high', ['R-5-04', 'R-3-03']]];
 const sCalls = calls => calls.map(([h, c]) => [h, c, []]);
+// ---------- Crisis 06: The Damage Assessment ----------
+const D_BEST = [
+  ['H3', 'low', ['R-1-01', 'R-1-02'], [['Test', 'test-link-ipc'], ['OSINT', 'delivery-history'], ['OSINT', 'marrow-travel']]],
+  ['H3', 'medium', ['R-2-04', 'R-2-01', 'C-08'], [['Test', 'test-hand-rhun'], ['OSINT', 'delivery-history']]],
+  ['H3', 'high', ['C-03', 'R-3-01', 'R-2-04'], [['Technical', 'lab-terminal'], ['Test', 'test-cell']]],
+  ['H3', 'high', ['C-01', 'C-06', 'C-03']],
+  ['H3', 'high', ['C-05', 'C-03', 'C-06']],
+];
+const D_PUSH = [['H3', 'low', ['R-1-01']], ['H3', 'medium', ['R-2-04', 'R-1-01']], ['H3', 'medium', ['R-3-01', 'R-2-04']], ['H3', 'high', ['R-4-02', 'R-3-01', 'R-2-04']], ['H3', 'high', ['R-4-02', 'R-3-01']]];
 const SETS = {
+  'damage-assessment': {
+    collect: D_BEST, marks: { 1: { 'R-1-01': 'icic' }, 2: { 'R-2-04': 'icic' } }, nudge: {},
+    strategies: [
+      ['Best play with collection', D_BEST, none],
+      ['Collection, doubt plants', D_BEST, plants],
+      ['Collection, doubt everything', D_BEST, all],
+      ['Push only (lab-free, Medium then High Day 4)', D_PUSH, none],
+      ['Always the link (H3 High)', rep5(['H3', 'high', ['R-1-01']]), none],
+      ['Never above Medium (H3)', rep5(['H3', 'medium', ['R-1-01']]), none],
+      ['Late, no couriers (Low x3, High)', [['H3', 'low', ['R-1-01'], [['Test', 'test-link-ipc']]], ['H3', 'low', []], ['H3', 'low', ['C-03']], ['H3', 'high', ['C-03']], ['H3', 'high', ['C-03']]], none],
+      ['The trap (link test to Rhun, then H1 High)', [['H1', 'low', ['R-1-01'], [['Test', 'test-link-rhun']]], ['H1', 'medium', ['R-2-03'], [['Test', 'test-hand-rhun']]], ['H1', 'high', ['C-02']], ['H3', 'high', ['C-01']], ['H3', 'high', ['C-01']]], none],
+      ['Always Rhun (H1 High)', rep5(['H1', 'high', ['R-2-03']]), none],
+      ['Always Arle (H2 High)', rep5(['H2', 'high', ['R-3-03']]), none],
+      ['No leak (H4 Medium)', rep5(['H4', 'medium', ['R-1-05']]), none],
+      ['Always hedge (Low)', rep5(['H3', 'low', []]), none],
+      ['Vetting request, then couriers, then High', [['H3', 'low', ['R-1-01'], [['Liaison', 'vetting-rhun'], ['Test', 'test-link-ipc']]], ['H3', 'medium', ['C-10']], ['H3', 'high', ['C-03', 'C-10K']], ['H3', 'high', ['C-03']], ['H3', 'high', ['C-03']]], none],
+    ],
+  },
   'missing-shipment': {
     collect: M_BEST, marks: { 1: { 'R-1-04': 'ici' }, 2: { 'C-01': 'ici' } }, nudge: {},
     strategies: [

@@ -391,7 +391,7 @@ function credApply(t, day){
 function credTriggers(d, brief, firedEventIds){
   if (!CRED()) return;
   CRED().triggers.forEach(t => {
-    if (t.on === 'reply' && brief.reply === t.reply) credApply(t, d + 1);
+    if (t.on === 'reply' && [].concat(t.reply).includes(brief.reply)) credApply(t, d + 1);
     else if (t.on === 'leave' && [].concat(t.state).includes(brief.from) && brief.to !== brief.from && (!t.days || t.days.includes(d)) && !(t.notTo || []).includes(brief.to)) credApply(t, d + 1);
     else if (t.on === 'flag' && firedEventIds.includes(t.event + ':' + t.flag)) credApply(t, d + 1);
     else if (t.on === 'event' && firedEventIds.includes(t.eventId)) credApply(t, d + 1);
@@ -426,9 +426,9 @@ function resolveCollection(d){
     const hit = closed ? null : (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && condOk(cr.when, d) && !got.has(cr.id));
     if (hit) S.collected.push({id:hit.id, arrive, task:d, disc:t.disc, target:t.target});
     // a result can bring a follow-up item a day or more later
-    if (hit && hit.then && !got.has(hit.then.id)) S.collected.push({id:hit.then.id, arrive:arrive + (hit.then.after || 1), task:d, disc:t.disc, target:t.target, follow:true});
+    if (hit && hit.then && !got.has(hit.then.id) && condOk(hit.then.when, d)) S.collected.push({id:hit.then.id, arrive:arrive + (hit.then.after || 1), task:d, disc:t.disc, target:t.target, follow:true});
     if (!hit) S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true,
-      text:(tgt(t.target).fallback || COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
+      text:((closed && tgt(t.target).closedText) || tgt(t.target).fallback || COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
     // burn rule: the first meeting is seen, and the source is gone once it has reported
     if (hit && rule && rule.onFirstTasking) S.burned[sid] = arrive;
   });
@@ -521,9 +521,10 @@ function matchCond(cond, brief, asset){
   if (cond.hypothesis && ![].concat(cond.hypothesis).includes(brief.hyp)) return false;
   if (cond.confidence && !cond.confidence.includes(brief.conf)) return false;
   if (cond.assetAt && ![].concat(cond.assetAt).includes(asset)) return false;
+  if (cond.collected && !arrivedBy(cond.collected, brief.day)) return false;
   return true;
 }
-function resolvePolicy(day, brief){ return policyFor(Object.assign({}, brief, {conf:effectiveConf(day, brief.conf)}), S.asset, S.frozenBriefDays.includes(day)); }
+function resolvePolicy(day, brief){ return policyFor(Object.assign({}, brief, {conf:effectiveConf(day, brief.conf), day}), S.asset, S.frozenBriefDays.includes(day)); }
 function policyFor(brief, asset, frozen){
   const rule = C.customerPolicy.find(r => matchCond(r.if, brief, asset));
   if (rule && rule.reply){   // named states: the rule gives the reply and, optionally, the state to move to
@@ -560,7 +561,10 @@ function evalEnding(){
     const c = e.if || {};
     if (c.assetAt && ![].concat(c.assetAt).includes(S.asset)) continue;
     if (c.since && !c.since.includes(S.assetSince)) continue;
-    if (c.everAt && !(S.moves || []).some(m => m.to === c.everAt)) continue;
+    if (c.everAt && !(S.moves || []).some(m => [].concat(c.everAt).includes(m.to))) continue;
+    if (c.notEverAt && (S.moves || []).some(m => [].concat(c.notEverAt).includes(m.to))) continue;
+    if (c.everReply && !Object.values(S.briefs || {}).some(b => [].concat(c.everReply).includes(b.reply))) continue;
+    if (c.flag && !(c.flag.in || []).includes((S.flags || {})[c.flag.event])) continue;
     return e;
   }
   return C.endings[C.endings.length-1];
@@ -612,7 +616,8 @@ function sendBrief(d){
       S.firedEvents.push(e.id); fired.push(e.id);
       if (e.outcomes){ S.flags[e.id] = o.flag; fired.push(e.id + ':' + o.flag); }
       if (o.points || e.outcomes) S.eventPoints.push({day:d+1, id:e.id, points:o.points || 0, label:o.pointsLabel || e.pointsLabel || 'events', title:o.title || ''});
-      S.replies[d+1] = {key:o.replyId, note:o.note || ''};
+      if (o.replyId) S.replies[d+1] = {key:o.replyId, note:o.note || ''};
+      else if (o.note) S.replies[d+1].note = ((S.replies[d+1].note || '') + ' ' + o.note).trim();
     });
     S.posture[d+1] = S.asset;
     if (CRED()){ credTriggers(d, brief, fired); S.credAt[d+1] = S.cred; }
@@ -948,7 +953,7 @@ function itemCard(r, editable, pinnable){
   const cls = 'card' + (g.f ? ' flagged' : '') + (g.n ? ' nr' : '') + (ui.pin === r.id ? ' hl' : '');
   let html = '<article class="' + cls + '" id="card-' + r.id + '">'
     + '<header class="cable-h"><span class="rid">' + r.id + '</span><span class="src">' + esc(s.codeName) + '</span><span>' + esc(r.discipline) + '</span>' + (r.collected ? '<span class="pill tasked">Your tasking</span>' : '') + '<span class="recv" title="' + esc(recvTitle(r)) + '">' + received(r) + '</span></header>'
-    + '<p class="cable-t">' + esc(r.text) + '</p>'
+    + '<p class="cable-t">' + esc(RT(r)) + '</p>'
     + notesHtml(r.id, editable ? 0 : 9);
   if (editable){
     html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button>' + pinChip(r)
@@ -1083,7 +1088,7 @@ function boardRow(id, d, done, cols){
     + (done ? '<span class="pill k-' + r.kind + '">' + KIND_LABEL[r.kind] + '</span>' : '');
   const unpin = !done && b.day === d ? '<button class="linkbtn" data-act="bpin" data-id="' + id + '">Unpin</button>' : '';
   return '<div class="brow' + (aside || nd ? ' dim' : '') + '" style="' + cols + '"><div class="bitem"><span class="mono small"><b>' + id + '</b> · ' + esc(src(r.sourceId).codeName) + ' · Day ' + itemDay(id) + '</span>'
-    + '<span class="btext">' + esc(r.text.length > 110 ? r.text.slice(0, 108) + '…' : r.text) + '</span>' + (tags || unpin ? '<span class="btags">' + tags + unpin + '</span>' : '') + '</div>' + cells + '</div>';
+    + '<span class="btext">' + esc(RT(r).length > 110 ? RT(r).slice(0, 108) + '…' : RT(r)) + '</span>' + (tags || unpin ? '<span class="btags">' + tags + unpin + '</span>' : '') + '</div>' + cells + '</div>';
 }
 function boardTable(d, done){
   const ids = boardIds(), t = boardTally(), lead = boardLead() || [];
@@ -1133,7 +1138,7 @@ function collectView(d){
     html += '<div class="card pir"><p class="mono small muted">' + esc(p.id) + '</p><p><b>' + esc(p.question) + '</b></p>';
     p.targets.forEach(tid => {
       const tg = targetById(tid);
-      if ((tg.from && d < tg.from) || !condOk(tg.when)) return;
+      if ((tg.from && d < tg.from) || (tg.until && d > tg.until) || !condOk(tg.when)) return;
       const closed = tg.closedWhen && everAt(tg.closedWhen);
       html += '<div class="trow"><span class="tname">' + esc(tg.name) + '</span><div class="toggles">' + (tg.disciplines || []).map(disc => {
         const on = tasksFor(d).some(t => t.disc === disc && t.target === tid);
@@ -1250,6 +1255,7 @@ function postmortemView(){
     html += '<div class="stack"><div class="section-h"><h3>Your board</h3></div>' + boardView(C.days, true)
       + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as ' + esc(ADV()) + ' intended.</p></div>';
   }
+  if (C.postmortem.answer) html += '<div class="msg"><span class="from">The answer</span><p>' + esc(C.postmortem.answer) + '</p></div>';
   if (C.postmortem.openQuestion) html += '<div class="msg"><span class="from">An open question</span><p>' + esc(C.postmortem.openQuestion) + '</p>' + (REC.runs[C.id] && !S.offRecord ? '<p class="small muted">Added to your case file.</p>' : '') + '</div>';
   html += analystsCard();
   html += '<div class="stack"><h3>Lessons</h3><ul>' + C.postmortem.lessons.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
@@ -1291,7 +1297,7 @@ function revealItem(r, brief){
   else if (r.kind === 'clutter' && g.n) mark = '<span class="caught">Marked not relevant</span>';
   const tells = (r.tells || []).map(t => C.tellLabels[t] || t);
   return '<div class="reveal"><div class="head"><b>' + r.id + '</b><span>' + esc(src(r.sourceId).codeName) + '</span><span class="pill k-' + r.kind + '">' + KIND_LABEL[r.kind] + '</span>' + (r.diagnostic ? '<span class="pill k-true">Diagnostic</span>' : '') + (cited ? '<span class="pill">Cited ' + ((C.scoring.evidence[r.kind] > 0 ? '+' : '') + C.scoring.evidence[r.kind]) + '</span>' : '') + mark + '</div>'
-    + '<p class="txt">' + esc(r.text) + '</p>'
+    + '<p class="txt">' + esc(RT(r)) + '</p>'
     + (r.reveal
       ? '<div class="why"><p><span class="whyk">What gave it away</span>' + esc(r.reveal.tell) + '</p>'
         + '<p><span class="whyk">Check it against ' + r.reveal.crossCheck.ids.join(', ') + '</span>' + esc(r.reveal.crossCheck.text) + '</p>'
@@ -1551,14 +1557,16 @@ function storyOk(c, Cx, Sx){
   if (c.anyOf) return c.anyOf.some(x => storyOk(x, Cx, Sx));
   if (c.ending && ![].concat(c.ending).includes(Sx.ending)) return false;
   if (c.flag && !(c.flag.in || []).includes((Sx.flags || {})[c.flag.event])) return false;
-  if (c.everAt && !(Sx.moves || []).some(m => m.to === c.everAt)) return false;
+  if (c.everAt && !(Sx.moves || []).some(m => [].concat(c.everAt).includes(m.to))) return false;
+  if (c.notEverAt && (Sx.moves || []).some(m => [].concat(c.notEverAt).includes(m.to))) return false;
   if (c.fired && !(Sx.firedEvents || []).includes(c.fired)) return false;
   if (c.collected && !(Sx.collected || []).some(x => x.id === c.collected && x.arrive <= Cx.days)) return false;
   if (c.doubted && !((Sx.grades || {})[c.doubted] || {}).f) return false;
   return true;
 }
 function storyFrom(Cx, Sx){
-  const T = Cx.story || {}, out = {alliance:0, pressure:0, caseFile:[]};
+  const T = Cx.story || {}, out = {alliance:0, pressure:0, caseFile:[], flags:{}};
+  (T.flags || []).forEach(f => { if (storyOk(f.if, Cx, Sx)) out.flags[f.flag] = f.value; });
   (T.values || []).forEach(v => { if (storyOk(v.if, Cx, Sx) && out[v.value] != null) out[v.value] += v.delta; });
   (T.caseFile || []).forEach(c => { if (storyOk(c.if, Cx, Sx)) out.caseFile.push({tag:c.tag, text:c.text}); });
   return out;
@@ -1578,7 +1586,7 @@ function recordFrom(Cx, Sx){
     else if (((Sx.grades || {})[r.id] || {}).f && !tested.includes(r.callbackTag)) tested.push(r.callbackTag);
   });
   return {id:Cx.id, number:Cx.crisisNumber, title:Cx.title, ending:Sx.ending, endingTitle:end.title || '', tone:end.tone || '', total:Sx.summary ? Sx.summary.total : null,
-    customer:Cx.customer.name, openQuestion:(Cx.postmortem || {}).openQuestion || '', cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
+    customer:Cx.customer.name, openQuestion:(Cx.postmortem || {}).openQuestion || '', answer:(Cx.postmortem || {}).answer || '', cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
     fooled, tested, flags:clone(Sx.flags || {}), story:storyFrom(Cx, Sx), reassigned:cred === 0, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
 }
 function commitRecord(){
@@ -1631,7 +1639,29 @@ function condOk(w, d){
   if (w.flagNot && (w.flagNot.in || []).includes(fl[w.flagNot.event])) return false;
   if (w.fooled && !recFooled(w.fooled)) return false;
   if (w.notFooled && w.notFooled.some(recFooled)) return false;
+  if (w.noticed && !recNoticed(w.noticed)) return false;
+  if (w.notNoticed && recNoticed(w.notNoticed)) return false;
+  if (w.recordEnding){ const r = REC.runs[w.recordEnding.crisis]; if (!r || !(w.recordEnding.in || []).includes(r.ending)) return false; }
+  if (w.notRecordEnding){ const r = REC.runs[w.notRecordEnding.crisis]; if (r && (w.notRecordEnding.in || []).includes(r.ending)) return false; }
+  if (w.burnedOnRecord && !earlierRuns().some(r => (r.burned || []).includes(w.burnedOnRecord))) return false;
+  if (w.onTeam && !onTeam(w.onTeam)) return false;
+  if (w.assetAt && ![].concat(w.assetAt).includes(S.asset)) return false;
+  if (w.notAssetAt && [].concat(w.notAssetAt).includes(S.asset)) return false;
   return true;
+}
+// A case-file entry earned in an earlier scenario on the record.
+function recNoticed(tag){ return earlierRuns().some(r => ((r.story || {}).caseFile || []).some(c => c.tag === tag)); }
+// An item's text can depend on the record or on a flag: the first variant that fits wins, then any additions.
+function RT(r){
+  if (!r) return '';
+  let t = r.textBy ? ((r.textBy.find(v => condOk(v.when)) || {}).text || r.text) : r.text;
+  (r.append || []).forEach(a => { if (condOk(a.when)) t += ' ' + a.text; });
+  return t;
+}
+// Has a result arrived by this day? ("Something to show.")
+function arrivedBy(ids, day){
+  if (day == null) return true;
+  return (S.collected || []).some(c => [].concat(ids).includes(c.id) && c.arrive <= day);
 }
 function earlierRuns(){ const i = CUR ? INDEX.findIndex(x => x.id === CUR.id) : 0; return INDEX.slice(0, Math.max(i, 0)).map(x => REC.runs[x.id]).filter(Boolean); }
 // Reassignment (#32): a scenario finished on the record at zero credibility. Runs before it no longer set anyone's opinion of you.
@@ -1655,7 +1685,7 @@ function fileGrade(s0){
 }
 function goneBefore(sid){ const s0 = C.sources.find(x => x.id === sid); return !!s0 && earlierRuns().some(r => (r.burned || []).includes(s0.codeName)); }
 function caseEntries(){
-  const runs = INDEX.map(x => REC.runs[x.id]).filter(r => r && r.openQuestion);
+  const runs = INDEX.map(x => REC.runs[x.id]).filter(r => r && (r.openQuestion || r.answer));
   return {runs, total:runs.length, noticed:runs.reduce((n, r) => n + ((r.story || {}).caseFile || []).length, 0)};
 }
 function caseView(){
@@ -1665,7 +1695,7 @@ function caseView(){
   if (!E.total) return html + '<p>Nothing in the file yet.</p></main>';
   E.runs.forEach(r => {
     const got = (r.story || {}).caseFile || [];
-    html += '<div class="card"><p class="mono small muted">Scenario ' + esc(r.number || '') + ' · ' + esc(r.title) + '</p><p>' + esc(r.openQuestion) + '</p>'
+    html += '<div class="card"><p class="mono small muted">Scenario ' + esc(r.number || '') + ' · ' + esc(r.title) + '</p>' + (r.answer ? '<p><b>The answer.</b> ' + esc(r.answer) + '</p>' : '<p>' + esc(r.openQuestion) + '</p>')
       + (got.length ? got.map(c => '<p class="small"><span class="muted">Noted:</span> ' + esc(c.text) + '</p>').join('') : '<p class="small muted">Nothing noted at the time.</p>') + '</div>';
   });
   return html + '</main>';
@@ -1783,7 +1813,7 @@ async function start(hotData){
   }
   S = normalize(hotData && hotData.S) || normalize(loadLocal()) || fresh();
   if (S.done && !S.offRecord) commitRecord();
-  if (S.done && REC.runs[C.id] && !REC.runs[C.id].story && REC.runs[C.id].runKey === runKey(C, S)){ REC.runs[C.id].story = storyFrom(C, S); REC.runs[C.id].flags = clone(S.flags || {}); REC.runs[C.id].openQuestion = (C.postmortem || {}).openQuestion || ''; saveRecord(); }
+  if (S.done && REC.runs[C.id] && !REC.runs[C.id].story && REC.runs[C.id].runKey === runKey(C, S)){ REC.runs[C.id].story = storyFrom(C, S); REC.runs[C.id].flags = clone(S.flags || {}); REC.runs[C.id].openQuestion = (C.postmortem || {}).openQuestion || ''; REC.runs[C.id].answer = (C.postmortem || {}).answer || ''; saveRecord(); }
   ensureRecords();
   ui.pmDay = C.days; ui.pin = null; ui.sheet = null;
   ui.tab = (hotData && hotData.tab) || 'inbox';

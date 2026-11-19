@@ -33,5 +33,12 @@
     "number": "05",
     "title": "Lights Out",
     "line": "A ransomware crew, a capital in the dark, and a director who can't use a maybe."
+  },
+  {
+    "id": "damage-assessment",
+    "file": "crises/damage-assessment.json",
+    "number": "06",
+    "title": "The Damage Assessment",
+    "line": "Somebody, or something, has been reading us for a year."
   }
 ]
