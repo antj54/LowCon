@@ -1,6 +1,6 @@
 # Story plan · Low Confidence
 
-*Status: plan on paper, drafted 2026-11-18 (#66, #67). No spoilers about who the leak is: that is in `claude/story-key.md`, which Anthony has asked not to read so he can play the campaign. Nothing here is built beyond Act 1. Act 2 is being scripted on paper.*
+*Status: plan on paper, drafted 2026-11-18 (#66, #67). No spoilers about who the leak is: that is in `claude/story-key.md`, which Anthony has asked not to read so he can play the campaign. Nothing here is built beyond Act 1. Act 2 is being scripted on paper: Scenario 04 is done (#68).*
 
 ## The shape
 

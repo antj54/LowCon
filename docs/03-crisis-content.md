@@ -7,7 +7,7 @@
 | Seed | Core question for the player | Deception angle | Status |
 | --- | --- | --- | --- |
 | Border buildup | A logistics buildup near a contested border: exercise, or staging for an operation? | The "exercise" story is true at first, then turns into cover | **Scripted: Crisis 01** |
-| Missing shipment | Dual-use components went missing between two ports. Where are they, and who has them? | A false trail planted through a front company's paperwork | Seed |
+| Missing shipment | Dual-use components went missing between two ports. Where are they, and who has them? | A false trail planted through a front company's paperwork | **Paper script: Crisis 04** |
 | Ransomware group | Is a ransomware crew criminal, or working for a state? | A false-flag language artifact points at the wrong country | Seed |
 | Pipeline militia | A militia threatens a pipeline while a neighbor quietly funds both sides | Liaison partner reporting is shaped by the partner's own agenda, and this time it's right | **Paper script: Crisis 03** |
 | Defector walk-in | A defector's story is almost too good | The defector is a dangle; their best details are circular | **Paper script: Crisis 02** |
@@ -73,3 +73,4 @@ Each crisis is one JSON file, listed in `crises/index.json` (`id`, `file`, `numb
 | 01 | Exercise or Operation? | Border buildup | `crises/border-buildup.json` | Built, with collection and credibility (v0.8). Phase 0 script: `claude/crisis-01-player-packet.md` (rules predate Phase 1) and `claude/crisis-01-gm-key.md` (spoilers, current). Phase 2 collection retrofit on paper: `claude/crisis-01-collection-retrofit.md`. |
 | 02 | The Walk-in | Defector walk-in | `crises/walk-in.json` | Built (v0.9, #53), with a schematic map (#56). Paper script: `claude/crisis-02-player-packet.md` and `claude/crisis-02-gm-key.md` (spoilers). |
 | 03 | The Southern Line | Pipeline militia | `crises/southern-line.json` | Built (v1.1, #64). Paper script (#59): `claude/crisis-03-player-packet.md` and `claude/crisis-03-gm-key.md` (spoilers). |
+| 04 | The Missing Shipment | Missing shipment | Not built | Act 2 paper script (#68): `claude/crisis-04-player-packet.md`, and `claude/crisis-04-gm-key.md` (**spoilers for the campaign**). |
