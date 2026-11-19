@@ -55,7 +55,7 @@ Built on #43 and #50. Inside a scenario nothing changes: it only drops, and only
 
 **Deception**
 
-- The record notes which kinds of plant you cited as evidence: state media, staged signals traffic, a recycled photo, a dangle's prepared detail.
+- The record notes which kinds of plant you cited as evidence (citing only; not doubting one doesn't count, #62): state media, staged signals traffic, a recycled photo, a dangle's prepared detail.
 - Each later scenario has one or two authored **callback items** that appear only if the matching flag is set. If the staged recall fooled you in Scenario 02, Scenario 03 stages something on a net again. If you caught it, the adversary tries a channel you haven't been tested on.
 - Authored, not generated, so every callback still has a tell and a cross-check, and the postmortem can say: "They tried this because it worked on you last time."
 

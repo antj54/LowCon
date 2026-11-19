@@ -172,7 +172,7 @@ const SETS = {
   const rl = await run(set.collect, none, null, { board: useBoard, reloadAfter: [1, 2, 3, 4] });
   console.log('Reload after every day'.padEnd(32), rl.line, rl.total === ref.total && /Your board/.test(rl.html) ? '| matches, save survives reload' : '| RELOAD CHANGED THE RESULT');
   if (crisis.id === 'walk-in') {
-    const prior = tone => ({ 'intel-cell-sim:record': JSON.stringify({ v: 1, runs: { 'border-buildup': { id: 'border-buildup', title: 'Exercise or Operation?', customer: 'Gen. R. Halvorsen', cred: tone === 'good' ? 5 : 1, tone, burned: [], fooled: [], tested: [], grades: [{ codeName: 'WREN', to: 'C', reason: 'test' }], at: '2026-01-01' } } }) });
+    const prior = tone => ({ 'intel-cell-sim:record': JSON.stringify({ v: 2, runs: { 'border-buildup': { id: 'border-buildup', title: 'Exercise or Operation?', customer: 'Gen. R. Halvorsen', cred: tone === 'good' ? 5 : 1, tone, burned: [], fooled: [], tested: [], grades: [{ codeName: 'WREN', to: 'C', reason: 'test' }], at: '2026-01-01' } } }) });
     for (const tone of ['good', 'bad']) {
       const r = await run(set.collect, none, null, { seed: prior(tone) });
       const want = tone === 'good' ? 'Trusted (4)' : 'Questioned (2)';

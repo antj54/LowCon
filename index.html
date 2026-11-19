@@ -1327,6 +1327,10 @@ function renderLayer(){
       + '<div class="toggles">' + REACTIONS.map(r => '<button class="chip" data-act="react" data-v="' + r[0] + '" aria-pressed="' + (f.r === r[0]) + '">' + r[1] + '</button>').join('') + '</div>'
       + '<label class="lab" for="react-note">What stood out? (optional)</label><textarea id="react-note" class="short" data-input="react" maxlength="400">' + esc(f.note || '') + '</textarea>'
       + '<div class="btnrow"><button class="btn" data-act="reactdone">' + (f.r || f.note ? 'Done' : 'Skip') + '</button></div></div></div>';
+  } else if (ui.sheet === 'clearrec'){
+    const r = REC.runs[ui.clearId] || {};
+    html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Take this run off the record?</h3><p>' + esc(r.title || '') + ': ' + esc(r.endingTitle || '') + '. Your next finish of this scenario will go on the record instead. Your saved game and unlocks aren\'t touched.</p>'
+      + '<div class="btnrow"><button class="btn" data-act="confirmclearrec">Take it off</button><button class="btn ghost" data-act="cancel">Cancel</button></div></div></div>';
   } else if (ui.sheet === 'restart'){
     html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Start this crisis over?</h3><p>All your doubts and briefs for this crisis will be wiped.</p>'
       + '<div class="btnrow"><button class="btn" data-act="confirmrestart">Start over</button><button class="btn ghost" data-act="cancel">Cancel</button></div></div></div>';
@@ -1351,6 +1355,14 @@ function onClick(e){
     case 'menu': ui.screen = 'menu'; ui.sheet = null; render(); window.scrollTo(0,0); break;
     case 'list': ui.screen = 'list'; render(); window.scrollTo(0,0); break;
     case 'record': ui.screen = 'record'; render(); window.scrollTo(0,0); break;
+    case 'clearrec': ui.clearId = el.dataset.id; ui.sheet = 'clearrec'; renderLayer(); break;
+    case 'confirmclearrec': {
+      const r = REC.runs[ui.clearId];
+      if (r){ REC.voided[r.id] = r.runKey || 'none'; delete REC.runs[r.id]; saveRecord(); }
+      ui.sheet = null; ui.clearId = null;
+      if (S && !S.started){ const pa = S.playAhead; S = fresh(); S.playAhead = pa; }
+      render(); toast('Taken off the record.'); break;
+    }
     case 'continue': ui.screen = 'game'; if (ui.tab === 'playtests') ui.tab = 'inbox'; render(); window.scrollTo(0,0); break;
     case 'tab': ui.screen = 'game'; ui.tab = el.dataset.v; render(); window.scrollTo(0,0); break;
     case 'flag': case 'nr': {
@@ -1446,14 +1458,16 @@ async function switchCrisis(id){
   window.scrollTo(0, 0);
 }
 /* ---------- Service record: the first finish of each scenario, and what carries forward ---------- */
-let REC = {v:1, runs:{}}, recRef = null;
+let REC = {v:2, runs:{}, voided:{}}, recRef = null;
 const TAG_TEXT = {'recycled-photo':'an old photo passed off as new', 'staged-signals':'a message staged on a net the adversary knew was covered', 'prepared-detail':'a walk-in\'s prepared detail'};
-function loadRecord(){ try { const raw = localStorage.getItem(LS_PREFIX + 'record'); const r = raw ? JSON.parse(raw) : null; if (r && r.runs) REC = r; } catch(e) {} }
+function loadRecord(){ try { const raw = localStorage.getItem(LS_PREFIX + 'record'); const r = raw ? JSON.parse(raw) : null; if (r && r.runs && r.v === 2){ REC = r; REC.voided = REC.voided || {}; } } catch(e) {} }
 function saveRecord(){
   REC.updatedAt = new Date().toISOString();
   try { localStorage.setItem(LS_PREFIX + 'record', JSON.stringify(REC)); } catch(e) {}
   if (recRef){ try { Promise.resolve(recRef.set(clone(REC))).catch(() => {}); } catch(e) {} }
 }
+const runKey = (Cx, Sx) => ((Sx.briefs || {})[Cx.days] || {}).sentAt || Sx.savedAt || '';
+const isVoided = (Cx, Sx) => !!runKey(Cx, Sx) && (REC.voided || {})[Cx.id] === runKey(Cx, Sx);
 function recordFrom(Cx, Sx){
   const end = Cx.endings.find(e => e.id === Sx.ending) || {}, K = Cx.credibility;
   const cred = typeof Sx.credFinal === 'number' ? Sx.credFinal : (K ? Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + ((K.outcome || {})[Sx.ending] || 0))) : null);
@@ -1463,20 +1477,20 @@ function recordFrom(Cx, Sx){
   const fooled = [], tested = [];
   Cx.reports.forEach(r => {
     if (r.kind !== 'planted' || !r.callbackTag || (r.via && !got.has(r.id))) return;
-    if (!tested.includes(r.callbackTag)) tested.push(r.callbackTag);
-    if ((cited.has(r.id) || !((Sx.grades || {})[r.id] || {}).f) && !fooled.includes(r.callbackTag)) fooled.push(r.callbackTag);
+    if (cited.has(r.id)){ if (!fooled.includes(r.callbackTag)) fooled.push(r.callbackTag); }
+    else if (((Sx.grades || {})[r.id] || {}).f && !tested.includes(r.callbackTag)) tested.push(r.callbackTag);
   });
   return {id:Cx.id, number:Cx.crisisNumber, title:Cx.title, ending:Sx.ending, endingTitle:end.title || '', tone:end.tone || '', total:Sx.summary ? Sx.summary.total : null,
     customer:Cx.customer.name, cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
-    fooled, tested, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString()};
+    fooled, tested, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
 }
 function commitRecord(){
-  if (REC.runs[C.id] || S.offRecord || !S.done) return;
+  if (REC.runs[C.id] || S.offRecord || !S.done || isVoided(C, S)) return;
   REC.runs[C.id] = recordFrom(C, S); saveRecord();
 }
 async function maybeRecord(x, st){
   if (REC.runs[x.id] || !st || !st.done || st.offRecord) return false;
-  try { const r = await fetch(x.file, {cache:'no-cache'}); if (!r.ok) return false; const Cx = await r.json(); if (REC.runs[x.id]) return false; REC.runs[x.id] = recordFrom(Cx, st); saveRecord(); return true; } catch(e) { return false; }
+  try { const r = await fetch(x.file, {cache:'no-cache'}); if (!r.ok) return false; const Cx = await r.json(); if (REC.runs[x.id] || isVoided(Cx, st)) return false; REC.runs[x.id] = recordFrom(Cx, st); saveRecord(); return true; } catch(e) { return false; }
 }
 async function ensureRecords(){
   let changed = false;
@@ -1490,9 +1504,12 @@ async function ensureRecords(){
 async function syncRecord(db, uid){
   try {
     recRef = db.collection('data/users/' + uid).doc('record');
-    const snap = await recRef.get(); const remote = snap.exists ? (snap.data() || {}) : {};
+    const snap = await recRef.get(); let remote = snap.exists ? (snap.data() || {}) : {};
+    if (remote.v !== 2) remote = {};
     let changed = false, push = false;
-    Object.keys(remote.runs || {}).forEach(id => { const a = REC.runs[id], b = remote.runs[id]; if (!a || (b.at || '') < (a.at || '')){ REC.runs[id] = b; changed = true; } });
+    Object.keys(remote.voided || {}).forEach(id => { if (!REC.voided[id]){ REC.voided[id] = remote.voided[id]; changed = true; } });
+    Object.keys(REC.voided).forEach(id => { if ((remote.voided || {})[id] !== REC.voided[id]) push = true; if (REC.runs[id] && REC.runs[id].runKey === REC.voided[id]){ delete REC.runs[id]; changed = true; } });
+    Object.keys(remote.runs || {}).forEach(id => { const a = REC.runs[id], b = remote.runs[id]; if (b.runKey && b.runKey === REC.voided[id]){ push = true; return; } if (!a || (b.at || '') < (a.at || '')){ REC.runs[id] = b; changed = true; } });
     Object.keys(REC.runs).forEach(id => { const b = (remote.runs || {})[id]; if (!b || (REC.runs[id].at || '') < (b.at || '')) push = true; });
     if (changed || push) saveRecord();
     if (changed) carryChanged();
@@ -1532,6 +1549,7 @@ function recordView(){
       + ((r.fooled || []).length ? '<p class="small"><span class="muted">What got past you:</span> ' + r.fooled.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
       + (caught.length ? '<p class="small"><span class="muted">What you caught:</span> ' + caught.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
       + ((r.grades || []).filter(g => !(r.burned || []).includes(g.codeName)).length ? '<p class="small"><span class="muted">Source files updated:</span> ' + r.grades.filter(g => !(r.burned || []).includes(g.codeName)).map(g => '<b>' + esc(g.codeName) + '</b> now ' + esc(g.to) + ' (' + esc(g.reason) + ')').join('; ') + '.</p>' : '')
+      + '<div class="btnrow"><button class="linkbtn" data-act="clearrec" data-id="' + esc(r.id) + '">Take this run off the record</button></div>'
       + '</div>';
   });
   return html + '<p class="small muted">What carries forward: a returning customer starts where you left them, a new one has read your file, burned sources stay burned, and source grades follow their track record. The other side keeps notes too.</p></main>';

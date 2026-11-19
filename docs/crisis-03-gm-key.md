@@ -134,9 +134,9 @@ One item on Day 3 depends on the service record. Marrat has read the same after-
 
 | On your record | Version of R-3-03 | Tell | Cross-check |
 | --- | --- | --- | --- |
-| You cited, or didn't doubt, the snow photo in Crisis 01 (R-5-05) | A photo of "Kordavan instructors in the Sarn valley" | Ostrel's water tower is in the background: it's from the IRON HARVEST press pack | C-17, C-10 |
-| You cited, or didn't doubt, the staged recall in Crisis 02 (C-06) | No push item. Instead, tasking the Front's radios on Day 3 returns C-05 plus a call in Kordavan-accented speech on an open channel, naming Kessa. | Every other Front call that week is encrypted (C-05). The one call in the clear names the wrong target in the wrong accent. | C-05, C-12, C-03 |
-| Neither, or no record | The payment order in the packet | A Kordavan army order that pays in Marrat crowns | C-02, C-17 |
+| You cited the snow photo in Crisis 01 (R-5-05) as evidence | A photo of "Kordavan instructors in the Sarn valley" | Ostrel's water tower is in the background: it's from the IRON HARVEST press pack | C-17, C-10 |
+| You cited the staged recall in Crisis 02 (C-06) as evidence | No push item. Instead, tasking the Front's radios on Day 3 returns C-05 plus a call in Kordavan-accented speech on an open channel, naming Kessa. | Every other Front call that week is encrypted (C-05). The one call in the clear names the wrong target in the wrong accent. | C-05, C-12, C-03 |
+| Neither (cited neither), or no record | The payment order in the packet | A Kordavan army order that pays in Marrat crowns | C-02, C-17 |
 
 The postmortem says which you got and why: "They tried this because it worked on you last time," or "They tried something new because you caught the last one."
 
