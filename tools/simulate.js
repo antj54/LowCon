@@ -302,7 +302,11 @@ const SETS = {
       ['Record: Seized, credibility 1', rec(1, 'bad'), r => r.cred.startsWith('Discounted (1)') && /lost a dam/.test(r.day1)],
       ['Record: KESTREL burned', rec(3, 'warn', { burned: ['KESTREL'] }), r => /data-target="kestrel"[^>]*disabled/.test(r.collect1)],
       ['Record: cited the snow photo', rec(3, 'warn', { fooled: ['recycled-photo'] }), r => /water tower/.test(r.html) && !/Marrat crowns\./.test(r.day3)],
-      ['Record: reassigned after Crisis 01', rec(0, 'bad', { reassigned: true }), r => r.cred.startsWith('Discounted (1)') && /fresh pair of eyes/.test(r.day1) && !/Tess Marrow/.test(r.html) && /Imre Vasko/.test(r.html)],
+      ['Old record: reassigned after 01', rec(0, 'bad', { reassigned: true }), r => r.cred.startsWith('Discounted (1)') && !/fresh pair of eyes/.test(r.day1) && /Tess Marrow/.test(r.html)],
+      ['Record: reassigned after 02', { 'intel-cell-sim:record': JSON.stringify({ v: 2, voided: {}, runs: {
+          'border-buildup': { id: 'border-buildup', title: 'Exercise or Operation?', customer: 'Gen. R. Halvorsen', cred: 4, tone: 'good', burned: [], fooled: [], tested: [], grades: [], at: '2026-01-01' },
+          'walk-in': { id: 'walk-in', title: 'The Walk-in', customer: 'Under Secretary H. Marlowe', cred: 0, tone: 'bad', reassigned: true, burned: [], fooled: [], tested: [], grades: [], at: '2026-01-02' } } }) },
+        r => r.cred.startsWith('Discounted (1)') && /fresh pair of eyes/.test(r.day1) && !/Tess Marrow/.test(r.html) && /Imre Vasko/.test(r.html)],
       ['Record: cited staged signals', rec(3, 'warn', { fooled: ['staged-signals'] }), r => !/Valley Truth/.test(r.day3)],
     ];
     for (const [name, seed, ok] of cases) {
@@ -315,8 +319,8 @@ const SETS = {
   if (crisis.id === 'border-buildup') {
     const hedge = set.strategies.find(x => /Always hedge/.test(x[0]));
     const r = await run(hedge[1], none);
-    const ok = /Posting notice/.test(r.html) && /"reassigned":true/.test(r.record);
-    console.log('Reassignment at zero credibility'.padEnd(32), r.line, ok ? '| posting notice shown, on the record' : '| NO REASSIGNMENT');
+    const ok = !/Posting notice/.test(r.html) && /"reassigned":false/.test(r.record) && /"cred":1/.test(r.record);
+    console.log('Zero credibility in Scenario 01'.padEnd(32), r.line, ok ? '| not reassigned, carries over as 1' : '| NO REASSIGNMENT RULE');
     if (!ok) process.exitCode = 1;
   }
   const pt = await run(set.collect, none, { playtest: true });

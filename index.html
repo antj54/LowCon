@@ -228,6 +228,7 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .meter span{height:8px;border-radius:2px;background:var(--line)}
 .meter span.on{background:var(--accent)}
 .card.pir{gap:8px}
+.callchange{background:#f3dfb4;border-left:4px solid #a86a00;padding:8px 10px;margin:8px 0;font-size:.95em}
 .trow{display:grid;gap:6px;padding-top:8px;border-top:1px dashed var(--line)}
 .tname{font-weight:600;font-size:15px}
 .chip.task{font:600 12.5px/1 var(--f-mono)}
@@ -450,6 +451,7 @@ function togglePin(d, id){
   }
   if (pinnedOn(d).length >= pinsPerDay()){ toast('Board is full for today: ' + pinsPerDay() + ' pins a day.'); return; }
   S.board[id] = {day:d, m:{}};
+  ui.ask = id;   // ask which hypothesis it makes harder to believe
 }
 function cycleMark(id, h){
   const b = S.board[id]; if (!b) return;
@@ -985,12 +987,17 @@ function openingCard(d){
   const text = re ? (O.reassigned || 'I\'m told this is a new cell. I\'ve read the file on the last one. Start again.') : ((run && (O.byTone || {})[run.tone]) || (!run && (O.byLastTone || {})[(sinceReassigned().post.slice(-1)[0] || {}).tone]) || O.text);
   return text ? '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + (run ? ' · he remembers ' + esc(run.title) : '') + '</span><p><q>' + esc(text) + '</q></p></div>' : '';
 }
+// A reply can have a variant for the day the brief was sent (replyByDay: {key: [{days, text}]}).
+function replyText(key, day){
+  const v = ((C.replyByDay || {})[key] || []).find(x => (x.days || []).includes(day));
+  return v ? v.text : (C.replies[key] || '');
+}
 function replyCard(d){
   const r = S.replies[d];
   if (!r) return '';
   const prev = S.briefs[d-1];
   return '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + ' · re your Day ' + (d-1) + ' brief' + (prev ? ' (' + callLabel(prev) + ')' : '') + '</span>'
-    + '<p><q>' + esc(C.replies[r.key] || '') + '</q></p>'
+    + '<p><q>' + esc(replyText(r.key, d - 1)) + '</q></p>'
     + (r.note ? '<p class="note">' + esc(r.note) + '</p>' : '')
     + credNotes(d).map(x => '<p class="note crednote">' + esc(x.note) + ' Now: <b>' + esc(credLevel(credOn(d)).label) + '</b>. ' + esc(credLevel(credOn(d)).text || '') + '</p>').join('')
     + '</div>';
@@ -1393,13 +1400,24 @@ function playtestsView(){
   return html;
 }
 
+const hypShort = id => (C.hypotheses.find(h => h.id === id) || {short:id}).short;
 function renderLayer(){
   let html = '';
+  if (ui.ask && S.board[ui.ask]){
+    const id = ui.ask;
+    html = '<div class="overlay" data-act="askskip"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ask-h"><h3 id="ask-h">' + esc(id) + ' is on the board</h3>'
+      + '<p>Which hypothesis does it make <b>harder to believe</b>? Tap any that apply.</p>'
+      + '<div class="btnrow">' + C.hypotheses.map(h => '<button class="opt" data-act="askmark" data-id="' + id + '" data-h="' + h.id + '" aria-pressed="' + (S.board[id].m[h.id] === 'i') + '"><b>' + h.id + '</b> ' + esc(h.short) + '</button>').join('') + '</div>'
+      + '<p class="small muted">That marks it <b>I</b> (inconsistent) on the board. You can mark C and – there too.</p>'
+      + '<div class="btnrow"><button class="btn" data-act="askskip">Done</button></div></div></div>';
+    document.getElementById('layer').innerHTML = html; return;
+  }
   if (ui.sheet === 'send'){
     const d = curDay(), dr = draft(d);
     const res = resolvePolicy(d, {hyp:dr.hyp, conf:dr.conf});
     html = '<div class="overlay" data-act="cancel"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h"><h3 id="sheet-h">Send the Day ' + d + ' brief?</h3>'
       + '<p class="kj">' + esc(keyJudgment({hyp:dr.hyp, conf:dr.conf, evidence:dr.evidence})) + '</p>'
+      + ((S.briefs[d-1] && S.briefs[d-1].hyp !== dr.hyp) ? '<p class="callchange">This changes your call from <b>' + esc(S.briefs[d-1].hyp + ' (' + hypShort(S.briefs[d-1].hyp) + ')') + '</b> to <b>' + esc(dr.hyp + ' (' + hypShort(dr.hyp) + ')') + '</b>.</p>' : '')
       + '<p class="small">' + esc(CUST()) + ': <b>' + esc(C.replyLabels[res.reply]) + '</b>.</p>'
       + '<p class="small muted">Once it\'s sent you can\'t change it. ' + esc(CUST()) + ' acts on it tonight.</p>'
       + '<div class="btnrow"><button class="btn" data-act="confirmsend">Send</button><button class="btn ghost" data-act="cancel">Keep editing</button></div></div></div>';
@@ -1478,6 +1496,8 @@ function onClick(e){
     case 'task': toggleTask(d, el.dataset.disc, el.dataset.target); save(); render(); break;
     case 'bpin': if (!S.done){ togglePin(d, el.dataset.id); save(); render(); } break;
     case 'mark': if (!S.done){ cycleMark(el.dataset.id, el.dataset.h); save(); render(); } break;
+    case 'askmark': { const b = S.board[el.dataset.id]; if (b && !S.done){ if (b.m[el.dataset.h] === 'i') delete b.m[el.dataset.h]; else b.m[el.dataset.h] = 'i'; save(); renderLayer(); } break; }
+    case 'askskip': if (e.target === el){ ui.ask = null; save(); render(); } break;
     case 'ev': {
       const dr = draft(d), id = el.dataset.id, i = dr.evidence.indexOf(id);
       if (i >= 0) dr.evidence.splice(i, 1); else if (dr.evidence.length < C.scoring.maxEvidence) dr.evidence.push(id);
@@ -1573,9 +1593,17 @@ function storyFrom(Cx, Sx){
 }
 const runKey = (Cx, Sx) => ((Sx.briefs || {})[Cx.days] || {}).sentAt || Sx.savedAt || '';
 const isVoided = (Cx, Sx) => !!runKey(Cx, Sx) && (REC.voided || {})[Cx.id] === runKey(Cx, Sx);
+const firstScenario = id => !!(INDEX && INDEX.length && INDEX[0].id === id);
+// Records written before the first-scenario rule: undo a reassignment from Scenario 01.
+function fixFirstRun(){
+  const f = INDEX && INDEX.length && REC.runs[INDEX[0].id];
+  if (f && (f.reassigned || f.cred === 0)){ f.reassigned = false; f.cred = Math.max(1, f.cred || 0); const l = (C && C.id === INDEX[0].id) ? C.credibility : null; if (l) f.credLabel = (l.levels.slice().sort((a, b) => b.min - a.min).find(x => f.cred >= x.min) || {}).label || f.credLabel; saveRecord(); return true; }
+  return false;
+}
 function recordFrom(Cx, Sx){
   const end = Cx.endings.find(e => e.id === Sx.ending) || {}, K = Cx.credibility;
-  const cred = typeof Sx.credFinal === 'number' ? Sx.credFinal : (K ? Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + ((K.outcome || {})[Sx.ending] || 0))) : null);
+  let cred = typeof Sx.credFinal === 'number' ? Sx.credFinal : (K ? Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + ((K.outcome || {})[Sx.ending] || 0))) : null);
+  if (cred === 0 && firstScenario(Cx.id)) cred = 1;   // nobody is reassigned after their first scenario: it carries over as 1
   const lvl = (K && cred != null) ? (K.levels.slice().sort((a, b) => b.min - a.min).find(l => cred >= l.min) || {}) : {};
   const cited = new Set(); Object.values(Sx.briefs || {}).forEach(b => (b.evidence || []).forEach(id => cited.add(id)));
   const got = new Set((Sx.collected || []).map(c => c.id));
@@ -1587,7 +1615,7 @@ function recordFrom(Cx, Sx){
   });
   return {id:Cx.id, number:Cx.crisisNumber, title:Cx.title, ending:Sx.ending, endingTitle:end.title || '', tone:end.tone || '', total:Sx.summary ? Sx.summary.total : null,
     customer:Cx.customer.name, openQuestion:(Cx.postmortem || {}).openQuestion || '', answer:(Cx.postmortem || {}).answer || '', cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
-    fooled, tested, flags:clone(Sx.flags || {}), story:storyFrom(Cx, Sx), reassigned:cred === 0, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
+    fooled, tested, flags:clone(Sx.flags || {}), story:storyFrom(Cx, Sx), reassigned:cred === 0 && !firstScenario(Cx.id), grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
 }
 function commitRecord(){
   if (REC.runs[C.id] || S.offRecord || !S.done || isVoided(C, S)) return;
@@ -1598,7 +1626,7 @@ async function maybeRecord(x, st){
   try { const r = await fetch(x.file, {cache:'no-cache'}); if (!r.ok) return false; const Cx = await r.json(); if (REC.runs[x.id] || isVoided(Cx, st)) return false; REC.runs[x.id] = recordFrom(Cx, st); saveRecord(); return true; } catch(e) { return false; }
 }
 async function ensureRecords(){
-  let changed = false;
+  let changed = fixFirstRun();
   for (const x of INDEX){
     if (CUR && x.id === CUR.id) continue;
     let st = null; try { const raw = localStorage.getItem(LS_PREFIX + x.id); st = raw ? JSON.parse(raw) : null; } catch(e) {}

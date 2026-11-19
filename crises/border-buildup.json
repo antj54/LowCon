@@ -2048,5 +2048,34 @@
         }
       }
     ]
+  },
+  "replyByDay": {
+    "deploy_company": [
+      {
+        "days": [
+          1,
+          2
+        ],
+        "text": "Sending 2nd Battalion's lead company to Tarsk, reinforced. It can watch the crossing. It can't hold the dam on its own. If you want the rest of the battalion, give me more than medium confidence. Kordav will see it. If the talks go badly with my troops on camera, higher HQ will pull them back, and I won't be able to argue."
+      }
+    ],
+    "deploy_battalion": [
+      {
+        "days": [
+          1,
+          2
+        ],
+        "text": "Moving all of 2nd Battalion to Tarsk. If this turns out to be an exercise, I'll be explaining myself to a lot of people. Make sure it isn't. Kordav will see it. If the talks go badly with my troops on camera, higher HQ will pull them back, and I won't be able to argue."
+      }
+    ],
+    "upgrade_battalion": [
+      {
+        "days": [
+          1,
+          2
+        ],
+        "text": "Sending the rest of 2nd Battalion to join the lead company at Tarsk. That's everything I have in the sector. Kordav will see it. If the talks go badly with my troops on camera, higher HQ will pull them back, and I won't be able to argue."
+      }
+    ]
   }
 }
