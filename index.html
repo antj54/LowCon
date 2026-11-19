@@ -32,6 +32,7 @@
   --m-water:#5b8fb0;
   --m-forest:#a9bf98;
   --m-ink:#3a4148;
+  --m-marrat:#ebe0c6;--m-sea2:#8fb6cf;--m-halo:#f7f5ee;
   --friendly:#2f62a8;
   --hostile:#b0281f;
   --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
@@ -44,7 +45,7 @@
     --paper:#101417;--card:#181e22;--ink:#e3e8e6;--muted:#93a0a8;--line:#2b353b;
     --accent:#e2a33c;--accent-soft:#3a2d16;--banner:#2c5537;--banner-ink:#e6f0e8;
     --good:#5cbf84;--bad:#ec6a5e;--warn:#e2a33c;--stamp:#ec6a5e;
-    --m-land:#232823;--m-elsin:#1e2420;--m-water:#5f93b5;--m-forest:#3c5236;--m-ink:#c9d0cc;
+    --m-land:#232823;--m-elsin:#1e2420;--m-water:#5f93b5;--m-forest:#3c5236;--m-ink:#c9d0cc;--m-marrat:#2a2a22;--m-sea2:#2c4a5e;--m-halo:#151917;
     --friendly:#6f9be0;--hostile:#ec6a5e;color-scheme:dark;
     --c-low:#ec6a5e;--c-low-soft:#3a1f1c;--c-med:#e2a33c;--c-med-soft:#3a2d16;--c-high:#5cbf84;--c-high-soft:#1d3326;
   }
@@ -53,7 +54,7 @@
   --paper:#101417;--card:#181e22;--ink:#e3e8e6;--muted:#93a0a8;--line:#2b353b;
   --accent:#e2a33c;--accent-soft:#3a2d16;--banner:#2c5537;--banner-ink:#e6f0e8;
   --good:#5cbf84;--bad:#ec6a5e;--warn:#e2a33c;--stamp:#ec6a5e;
-  --m-land:#232823;--m-elsin:#1e2420;--m-water:#5f93b5;--m-forest:#3c5236;--m-ink:#c9d0cc;
+  --m-land:#232823;--m-elsin:#1e2420;--m-water:#5f93b5;--m-forest:#3c5236;--m-ink:#c9d0cc;--m-marrat:#2a2a22;--m-sea2:#2c4a5e;--m-halo:#151917;
   --friendly:#6f9be0;--hostile:#ec6a5e;color-scheme:dark;
   --c-low:#ec6a5e;--c-low-soft:#3a1f1c;--c-med:#e2a33c;--c-med-soft:#3a2d16;--c-high:#5cbf84;--c-high-soft:#1d3326;
 }
@@ -231,12 +232,35 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .callchange{background:#f3dfb4;border-left:4px solid #a86a00;padding:8px 10px;margin:8px 0;font-size:.95em}
 .c-kordav{fill:var(--m-land)}
 .c-elsin{fill:var(--m-elsin)}
-.c-marrat{fill:#e6dcc4}
+.c-marrat{fill:var(--m-marrat)}
 .c-rail{fill:none;stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:7 3;stroke-opacity:.7}
 .m-cap{fill:var(--m-ink)}
 .cxmap{margin:0}
+.cx-halo{paint-order:stroke;stroke:var(--m-halo);stroke-width:3px;stroke-linejoin:round}
+.cx-it{font-style:italic}
+.cx-capl{font-weight:700}
+.cx-coast{fill:none;stroke:var(--m-water);stroke-width:1.4}
+.cx-coastglow{fill:none;stroke:var(--m-water);stroke-opacity:.18;stroke-width:12}
+.cx-river{fill:none;stroke:var(--m-water);stroke-width:3.5;stroke-linecap:round}
+.cx-pipe{fill:none;stroke:#b8732a;stroke-width:2.6;stroke-dasharray:1 5;stroke-linecap:round}
+.cx-rail-a{fill:none;stroke:var(--m-ink);stroke-width:3.4;stroke-opacity:.75}
+.cx-rail-b{fill:none;stroke:var(--m-halo);stroke-width:1.6;stroke-dasharray:6 6}
+.cx-border-u{fill:none;stroke:var(--m-halo);stroke-width:4;stroke-opacity:.8}
+.cx-forest circle{fill:var(--m-forest);fill-opacity:.75;stroke:var(--m-ink);stroke-opacity:.18}
+.cx-mtn{fill:var(--m-ink);fill-opacity:.16;stroke:var(--m-ink);stroke-opacity:.35;stroke-width:1}
+.cx-snow{fill:var(--m-halo);fill-opacity:.9}
+.cx-star{fill:var(--m-ink);stroke:var(--m-halo);stroke-width:1}
+.cx-anchor{stroke:var(--m-ink);stroke-width:1.4}
+.cx-compass circle{fill:var(--m-halo);fill-opacity:.7;stroke:var(--m-ink);stroke-opacity:.4}
+.cx-compass path{fill:var(--m-ink);fill-opacity:.35}
+.cx-compass .cx-n{fill-opacity:.9}
+.cx-compass text{font:700 10px/1 var(--f-mono);fill:var(--m-ink)}
+.cx-cart rect{fill:var(--m-halo);fill-opacity:.88;stroke:var(--m-ink);stroke-opacity:.45}
+.cx-cart-t{font:700 11px/1 var(--f-display);letter-spacing:.18em;fill:var(--m-ink)}
+.cx-cart-s{font:500 8.5px/1 var(--f-mono);letter-spacing:.06em;fill:var(--m-ink);fill-opacity:.7}
 .cx{padding:0}
 .cx-h{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:none;border:0;padding:12px 14px;font:inherit;color:inherit;cursor:pointer}
+.cx-bio{font-style:italic;margin-top:10px}
 .cx-b{padding:0 14px 10px;border-top:1px dashed var(--line)}
 .trow{display:grid;gap:6px;padding-top:8px;border-top:1px dashed var(--line)}
 .tname{font-weight:600;font-size:15px}
@@ -1751,25 +1775,46 @@ function cxStanding(e){
   return '';
 }
 function codexMap(){
-  const M = CODEX.map, vb = M.viewBox, on = x => !x.from || cxSeen(x.from);
-  let g = '<rect x="0" y="0" width="' + vb[2] + '" height="' + vb[3] + '" class="m-land"/>';
+  const M = CODEX.map, vb = M.viewBox, on = x => !x.from || cxSeen(x.from), D = M.decor || {};
+  let g = '<defs>'
+    + '<linearGradient id="cx-sea" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--m-water)"/><stop offset="1" style="stop-color:var(--m-sea2)"/></linearGradient>'
+    + '<pattern id="cx-waves" width="26" height="14" patternUnits="userSpaceOnUse"><path d="M2,9 q5,-5 10,0 t10,0" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1"/></pattern>'
+    + '<pattern id="cx-farm" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)"><line x1="0" y1="4.5" x2="9" y2="4.5" style="stroke:var(--m-forest)" stroke-opacity=".55" stroke-width="1"/></pattern>'
+    + '<radialGradient id="cx-vig" cx=".55" cy=".45" r=".75"><stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".10"/></radialGradient>'
+    + '</defs>';
+  g += '<rect x="0" y="0" width="' + vb[2] + '" height="' + vb[3] + '" class="m-land"/>';
   (M.countries || []).forEach(k => { g += '<path class="' + k.cls + '" d="' + k.d + '"/>'; });
-  if (M.sea) g += '<path class="m-res" d="' + M.sea + '"/>';
-  (M.hills || []).forEach(h => h.r.forEach(r => { g += '<circle class="m-hill" cx="' + h.cx + '" cy="' + h.cy + '" r="' + r + '"/>'; }));
-  if (M.river && on(M.river)) g += '<path class="m-river" d="' + M.river.d + '"/><text class="m-rivlab" x="' + M.river.lx + '" y="' + M.river.ly + '" transform="rotate(' + (M.river.rot || 0) + ' ' + M.river.lx + ' ' + M.river.ly + ')">' + esc(M.river.label) + '</text>';
-  (M.lines || []).filter(on).forEach(l => { g += '<path class="' + l.cls + '" d="' + l.d + '"/>' + (l.label ? '<text class="m-lab" x="' + l.lx + '" y="' + l.ly + '">' + esc(l.label) + '</text>' : ''); });
-  (M.borders || []).forEach(b => { g += '<path class="m-border" d="' + b + '"/>'; });
-  (M.countries || []).forEach(k => { g += '<text class="m-region" x="' + k.x + '" y="' + k.y + '">' + esc(k.name) + '</text>'; });
+  (D.farmland || []).forEach(f => { g += '<path d="' + f + '" fill="url(#cx-farm)"/>'; });
+  (D.forests || []).forEach(f => { g += '<g class="cx-forest">' + f.trees.map(t => '<circle cx="' + t[0] + '" cy="' + t[1] + '" r="' + (t[2] || 5) + '"/>').join('') + '</g>'; });
+  (D.mountains || []).forEach(m => { g += '<path class="cx-mtn" d="M' + (m[0] - 9) + ',' + (m[1] + 6) + ' L' + m[0] + ',' + (m[1] - 8) + ' L' + (m[0] + 9) + ',' + (m[1] + 6) + '"/><path class="cx-snow" d="M' + (m[0] - 3) + ',' + (m[1] - 3) + ' L' + m[0] + ',' + (m[1] - 8) + ' L' + (m[0] + 3) + ',' + (m[1] - 3) + '"/>'; });
+  if (M.sea){ g += '<path d="' + M.sea + '" class="cx-coastglow"/><path d="' + M.sea + '" fill="url(#cx-sea)"/><path d="' + M.sea + '" fill="url(#cx-waves)"/><path d="' + M.sea + '" class="cx-coast"/>'; }
+  if (M.river && on(M.river)) g += '<path class="cx-river" d="' + M.river.d + '"/><text class="m-rivlab cx-halo" x="' + M.river.lx + '" y="' + M.river.ly + '" transform="rotate(' + (M.river.rot || 0) + ' ' + M.river.lx + ' ' + M.river.ly + ')">' + esc(M.river.label) + '</text>';
+  (M.lines || []).filter(on).forEach(l => {
+    if (l.cls === 'c-rail') g += '<path class="cx-rail-a" d="' + l.d + '"/><path class="cx-rail-b" d="' + l.d + '"/>';
+    else g += '<path class="cx-pipe" d="' + l.d + '"/>';
+    if (l.label) g += '<text class="m-lab cx-halo cx-it" x="' + l.lx + '" y="' + l.ly + '">' + esc(l.label) + '</text>';
+  });
+  (M.borders || []).forEach(b => { g += '<path class="cx-border-u" d="' + b + '"/><path class="m-border" d="' + b + '"/>'; });
+  (M.countries || []).forEach(k => { g += '<text class="m-region cx-halo" x="' + k.x + '" y="' + k.y + '">' + esc(k.name) + '</text>'; });
   (M.places || []).filter(on).forEach(p => {
     if (p.type === 'dam') g += '<line class="m-dam" x1="' + (p.x - 6) + '" y1="' + (p.y + 6) + '" x2="' + (p.x + 6) + '" y2="' + (p.y - 6) + '"/>';
-    else if (p.type === 'depot') g += '<rect class="m-place" x="' + (p.x - 5) + '" y="' + (p.y - 5) + '" width="10" height="10"/>';
-    else if (p.type === 'capital') g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="6"/><circle class="m-cap" cx="' + p.x + '" cy="' + p.y + '" r="2.5"/>';
-    else g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="4"/>';
-    g += '<text class="m-lab" x="' + (p.x + p.lx) + '" y="' + (p.y + p.ly) + '">' + esc(p.name) + '</text>';
+    else if (p.type === 'depot') g += '<rect class="m-place" x="' + (p.x - 4.5) + '" y="' + (p.y - 4.5) + '" width="9" height="9"/>';
+    else if (p.type === 'capital') g += '<path class="cx-star" d="' + star(p.x, p.y, 7.5, 3.2) + '"/>';
+    else if (p.type === 'port') g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="4"/><path class="cx-anchor" d="M' + p.x + ',' + (p.y - 2.5) + ' L' + p.x + ',' + (p.y + 2.5) + '"/>';
+    else g += '<circle class="m-place" cx="' + p.x + '" cy="' + p.y + '" r="3.6"/>';
+    g += '<text class="m-lab cx-halo' + (p.type === 'capital' ? ' cx-capl' : '') + '" x="' + (p.x + p.lx) + '" y="' + (p.y + p.ly) + '">' + esc(p.name) + '</text>';
   });
-  (M.offmap || []).filter(on).forEach(o => { g += '<text class="m-off" x="' + o.x + '" y="' + o.y + '">' + esc(o.text) + ' →</text>'; });
+  (M.offmap || []).filter(on).forEach(o => { g += '<text class="m-off cx-halo" x="' + o.x + '" y="' + o.y + '"' + (o.anchor ? ' text-anchor="' + o.anchor + '"' : '') + '>' + esc(o.text) + '</text>'; });
+  if (D.compass){ const c = D.compass; g += '<g class="cx-compass" transform="translate(' + c.x + ' ' + c.y + ')"><circle r="15"/><path d="M0,-19 L4,0 L0,4 L-4,0 Z" class="cx-n"/><path d="M0,19 L4,0 L0,-4 L-4,0 Z"/><text y="-23" text-anchor="middle">N</text></g>'; }
+  if (D.cartouche){ const c = D.cartouche; g += '<g class="cx-cart"><rect x="' + c.x + '" y="' + c.y + '" width="' + c.w + '" height="34" rx="2"/><text x="' + (c.x + c.w / 2) + '" y="' + (c.y + 15) + '" text-anchor="middle" class="cx-cart-t">' + esc(c.title) + '</text><text x="' + (c.x + c.w / 2) + '" y="' + (c.y + 27) + '" text-anchor="middle" class="cx-cart-s">' + esc(c.sub) + '</text></g>'; }
+  g += '<rect x="0" y="0" width="' + vb[2] + '" height="' + vb[3] + '" fill="url(#cx-vig)" pointer-events="none"/>';
   return '<figure class="map cxmap"><svg viewBox="0 0 ' + vb[2] + ' ' + vb[3] + '" role="img" aria-label="' + esc(M.title) + '">' + g + '</svg>'
-    + '<figcaption class="small muted">' + esc(M.title) + '. Places appear as your scenarios reach them.</figcaption></figure>';
+    + '<figcaption class="small muted">Not to scale. Places appear as your scenarios reach them.</figcaption></figure>';
+}
+function star(cx, cy, R, r){
+  let d = '';
+  for (let i = 0; i < 10; i++){ const a = -Math.PI / 2 + i * Math.PI / 5, q = i % 2 ? r : R; d += (i ? 'L' : 'M') + (cx + q * Math.cos(a)).toFixed(1) + ',' + (cy + q * Math.sin(a)).toFixed(1); }
+  return d + 'Z';
 }
 function codexView(){
   let html = '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><h1>Codex</h1>'
@@ -1784,7 +1829,7 @@ function codexView(){
     es.forEach(e => {
       const open = ui.codexOpen === e.id, st = e.stages.filter(cxStageOk), stand = cxStanding(e);
       html += '<div class="card cx"><button class="cx-h" data-act="cxopen" data-id="' + e.id + '" aria-expanded="' + open + '"><b>' + esc(e.name) + '</b><span class="small muted">' + esc(e.role || '') + '</span></button>'
-        + (open ? '<div class="cx-b">' + st.map(x => '<p class="small"><span class="mono muted">' + esc(cxNum(x.seen || x.after)) + '</span> ' + esc(x.text) + '</p>').join('') + (stand ? '<p class="small">' + stand + '</p>' : '') + '</div>' : '')
+        + (open ? '<div class="cx-b">' + (e.bio ? '<p class="cx-bio">' + esc(e.bio) + '</p>' : '') + st.map(x => '<p class="small"><span class="mono muted">' + esc(cxNum(x.seen || x.after)) + '</span> ' + esc(x.text) + '</p>').join('') + (stand ? '<p class="small">' + stand + '</p>' : '') + '</div>' : '')
         + '</div>';
     });
   });

@@ -73,6 +73,18 @@ Each crisis is one JSON file, listed in `crises/index.json` (`id`, `file`, `numb
 
 One file for the whole campaign, outside the crisis files. `groups` (`id`, `title`) and `entries` (`id`, `group`, `name`, `role`, `stages`, optional `customer` for a standing line from the record, optional `source` for a burned line). Each stage has `seen` (a crisis id: shown once that scenario is started) or `after` (shown once it's finished), `text`, and optional `if` with `recordEnding` (`crisis`, `in`), `recordFlag` (`crisis`, `event`, `in`) or `recordStory` (`crisis`, `flag`, `in`). Rule: a `seen` stage may only state what the scenario's briefing states. `map`: `viewBox`, `title`, `sea`, `countries` (`d`, `name`, label `x`, `y`, `cls`), `borders`, `hills`, `river`, `lines` (`cls`, `d`, label), `places` (`name`, `x`, `y`, label offset `lx`, `ly`, `type`: `capital`, `dam`, `depot`) and `offmap`; anything with `from` (a crisis id) appears once that scenario is started. Every new scenario adds its cast, places and stages here.
 
+## Setting canon (#77)
+
+Settled facts every scenario and Codex entry has to agree with. Spoiler-free: answers live in the keys.
+
+- **Geography.** Sea to the west. Kordav holds the north and west, with a cold coast and one port that matters, Brask; its capital is in the north-west. Elsin is east and landlocked, with highlands in the north-east where the Veyl rises; its capital is Kalsa. Marrat is south-west, on the coast, with the free port of Halsk and a railway to Kalsa. **Pellaria**, a long-neutral state, lies off the map to the north-east; its capital **Aubrec** hosts the region's talks and embassies, and its metro strikes most winters.
+- **Kordav.** Centralised, governed by a small leadership that rarely explains itself. Its wealth is grain from the lower Veyl. 4th Army faces Elsin and trains at Ostrel, supplied from Varn. Its intelligence service is the Bureau; its broadcaster is KSB.
+- **Elsin.** A parliamentary republic of coalitions and close votes. A partner of the alliance, not a member. Most of its trade goes through Halsk. Its gas pipeline, the Southern Line, runs Kessa to Sarn to the Tolen bridge.
+- **Marrat.** A commercial, patient trading state. Halsk is its fortune.
+- **Seasons so far.** 01 autumn; 02 winter, three months later; 03 the next spring; 04 autumn; 05 January; 06 April.
+- **People.** Halvorsen is a career armoured officer from a northern alliance member. Marlowe is a career diplomat on the Elsin account for six years. Brandt is a power engineer. Col. Edda Rhun has 22 years in Elsin's military intelligence, six at the liaison desk, and dislikes Vell and Halsk. Maj. Tobin Arle is Halvorsen's intelligence staff officer. Aron Vell is a young reformer who negotiated the task force agreement. Davin Oro is a third-generation Sarn farmer. O. Lind ran Elsin's grid control rooms for fifteen years.
+- **Your cell.** Vasko: a decade on the Kordav desk. Halden: signals, imagery and forensics. Marrow: from a commercial due-diligence firm, joined for Scenario 03.
+
 ## Scripted crises
 
 | # | Title | Seed | Data | Notes |

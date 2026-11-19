@@ -94,7 +94,8 @@
           "after": "damage-assessment",
           "text": "Its Bureau has read everything that crossed LATTICE for four years."
         }
-      ]
+      ],
+      "bio": "A large, centralised state governed from its capital by a small leadership that rarely explains itself. Its wealth is grain from the lower Veyl, which is why the river matters more to it than any border. Its coast is cold and its harbours few; Brask is the only one that matters. Its army is large, and its state broadcaster, KSB, is never off message."
     },
     {
       "id": "elsin",
@@ -122,7 +123,8 @@
           "seen": "lights-out",
           "text": "Its northern grid and the Southern Line's pumping controls run on control servers built by Corvane Systems."
         }
-      ]
+      ],
+      "bio": "A small, landlocked parliamentary republic of highlands and river valleys. Its governments are coalitions and its votes are close. It looks west to the alliance for its security, south to Marrat's free port at Halsk for its trade, and north at Kordav with long suspicion."
     },
     {
       "id": "marrat",
@@ -187,7 +189,8 @@
           "after": "lights-out",
           "text": "Innocent of the grid attack. Its language was added to the malware to make it look guilty."
         }
-      ]
+      ],
+      "bio": "A coastal trading state whose fortune is Halsk, a free port that handles much of the region's freight, and most of Elsin's. Its foreign policy is commercial and patient. It keeps good relations with everyone it can sell to."
     },
     {
       "id": "alliance",
@@ -203,23 +206,25 @@
           "seen": "lights-out",
           "text": "Runs an Infrastructure Protection Cell in Kalsa, under Director Ilse Brandt."
         }
-      ]
+      ],
+      "bio": "A multinational defence alliance. Elsin is a partner, not a member, and Task Force VEYL is the alliance's promise that the difference won't matter."
     },
     {
-      "id": "neutral",
+      "id": "pellaria",
       "group": "nations",
-      "name": "The neutral capital",
-      "role": "A neutral state's capital, off the map",
+      "name": "Pellaria",
+      "role": "A neutral state to the north-east. Capital: Aubrec.",
       "stages": [
         {
           "seen": "border-buildup",
-          "text": "Where the water talks between Kordav and Elsin were held."
+          "text": "The water talks between Kordav and Elsin were held in Aubrec."
         },
         {
           "seen": "walk-in",
-          "text": "Where LANTERN walked into our embassy. The Bureau keeps an office there."
+          "text": "LANTERN walked into our embassy in Aubrec. The Bureau keeps an office there, and Kordav an embassy."
         }
-      ]
+      ],
+      "bio": "Neutral for longer than anyone in the region can remember. Aubrec, its capital, hosts more embassies than it has ministries, most of the region's negotiations, and a metro that goes on strike most winters."
     },
     {
       "id": "halvorsen",
@@ -240,7 +245,8 @@
           "seen": "damage-assessment",
           "text": "Copied on the damage assessment. His revised Veyl contingency plan was due in Kalsa on the 17th."
         }
-      ]
+      ],
+      "bio": "A career armoured officer from one of the alliance's northern members. He has commanded Task Force VEYL since it arrived in Elsin. Plain-spoken, careful with his soldiers, and allergic to moving them twice."
     },
     {
       "id": "marlowe",
@@ -261,7 +267,8 @@
           "seen": "damage-assessment",
           "text": "Opened the damage assessment. Her High actions can't be undone, and she likes to have something to show Kalsa."
         }
-      ]
+      ],
+      "bio": "A career diplomat who has handled the alliance's side of the Elsin relationship for six years, the task force agreement included. She reads everything twice, and won't sign what she can't defend."
     },
     {
       "id": "brandt",
@@ -274,7 +281,8 @@
           "seen": "lights-out",
           "text": "An engineer, with no patience for estimative language. She acts only on High."
         }
-      ]
+      ],
+      "bio": "A power engineer who ran grid control rooms for twenty years before she ran the people who protect them. She calls estimative language \"weather forecasting.\""
     },
     {
       "id": "rhun",
@@ -284,7 +292,7 @@
       "stages": [
         {
           "seen": "missing-shipment",
-          "text": "Abrasive and political, and the voice behind WREN."
+          "text": "Her desk is the voice behind WREN."
         },
         {
           "after": "missing-shipment",
@@ -311,7 +319,8 @@
           },
           "text": "Removed from the liaison desk at the alliance's request, on your assessment."
         }
-      ]
+      ],
+      "bio": "Edda Rhun has spent twenty-two years in Elsin's military intelligence, the last six running its liaison desk with the alliance. Blunt and political, she has never hidden her low opinion of Aron Vell, or of Marrat's free port."
     },
     {
       "id": "arle",
@@ -340,7 +349,8 @@
           },
           "text": "Relieved, on your assessment."
         }
-      ]
+      ],
+      "bio": "Tobin Arle is Halvorsen's intelligence staff officer. Capable, overworked, and generous with distribution lists."
     },
     {
       "id": "vell",
@@ -416,13 +426,14 @@
           },
           "text": "Survived by five votes, without knowing who was behind it."
         }
-      ]
+      ],
+      "bio": "One of Kalsa's younger reformers, and the minister who negotiated the task force agreement. His enemies in parliament are numerous. His enemies in Kordav are louder."
     },
     {
       "id": "lantern",
       "group": "people",
       "name": "LANTERN",
-      "role": "A walk-in at our embassy in the neutral capital",
+      "role": "A walk-in at our embassy in Aubrec",
       "stages": [
         {
           "seen": "walk-in",
@@ -432,7 +443,8 @@
           "after": "walk-in",
           "text": "He was: a real mid-level planning officer, recruited by the Bureau for one job. He walked in on orders."
         }
-      ]
+      ],
+      "bio": "A cryptonym, given at the embassy within the hour. He arrived with a briefcase, a story, and a request for coffee."
     },
     {
       "id": "oro",
@@ -460,7 +472,8 @@
           },
           "text": "Taken alive at the quarry road, still asking about his fields."
         }
-      ]
+      ],
+      "bio": "A third-generation farmer in the Sarn valley. Most of his family's land went under the Sarn compressor station. The compensation came late, and short."
     },
     {
       "id": "lind",
@@ -476,7 +489,8 @@
           "after": "lights-out",
           "text": "Wrote that a rebuild by hand would mean nine more days of blackouts in January, and that people would die of it. He wasn't wrong about the cold."
         }
-      ]
+      ],
+      "bio": "Ran Elsin's grid control rooms for fifteen years before becoming the operator's deputy director. He has seen a lot of hard winters."
     },
     {
       "id": "bureau",
@@ -486,7 +500,7 @@
       "stages": [
         {
           "seen": "walk-in",
-          "text": "Headquartered in Kordav's capital, with an office in the neutral capital."
+          "text": "Headquartered in Kordav's capital, with an office in Aubrec."
         },
         {
           "after": "walk-in",
@@ -695,7 +709,8 @@
           "after": "southern-line",
           "text": "Its unsourced claim on the first day of the Southern Line was true."
         }
-      ]
+      ],
+      "bio": "The alliance's oldest liaison channel with Elsin's military intelligence, older than the task force. It tells you what Elsin wants you to know, and what you ask, in that order."
     },
     {
       "id": "kestrel",
@@ -708,7 +723,8 @@
           "seen": "border-buildup",
           "text": "Sees allocations, issue orders and accounting codes, not unit plans. Don't meet him two days running."
         }
-      ]
+      ],
+      "bio": "A clerk at the fuel and supply depot in Varn, recruited eight months before IRON HARVEST. He counts things, and he is very good at counting things."
     },
     {
       "id": "finch",
@@ -721,7 +737,8 @@
           "seen": "walk-in",
           "text": "Six years, reliable. Meetings take two days to arrange, and the ministry is a dangerous place to ask questions."
         }
-      ]
+      ],
+      "bio": "Six years inside Kordav's defence ministry. Never late, never asks for more money, and never meets in a hurry."
     },
     {
       "id": "magpie",
@@ -734,7 +751,8 @@
           "seen": "southern-line",
           "text": "Sells to the Front. Sees their money and their vehicles, not their plans."
         }
-      ]
+      ],
+      "bio": "Sells diesel and gas oil up and down the Sarn valley, to anyone who pays in cash. The Front pays in cash."
     },
     {
       "id": "gannet",
@@ -747,7 +765,8 @@
           "seen": "missing-shipment",
           "text": "Sees what moves through the bonded sheds at night."
         }
-      ]
+      ],
+      "bio": "Night foreman at Halsk's bonded sheds, recruited weeks before the shipment went missing. Sees what moves, and when."
     },
     {
       "id": "petrel",
@@ -760,7 +779,8 @@
           "seen": "lights-out",
           "text": "Has dealt with Grey Ledger, and hears what the crew complains about."
         }
-      ]
+      ],
+      "bio": "Brokers stolen data on criminal forums. Talks to us because we pay well and ask nothing about the rest of his business."
     },
     {
       "id": "vasko",
@@ -776,7 +796,8 @@
           "after": "border-buildup",
           "text": "Anchors on his first theory, and reads everything after it that way."
         }
-      ]
+      ],
+      "bio": "A regional analyst with a decade on the Kordav desk. He knows the country's politics by heart, and forms a view early."
     },
     {
       "id": "halden",
@@ -792,7 +813,8 @@
           "after": "border-buildup",
           "text": "Slow but careful, and never wrong. Her notes arrive a day after the item."
         }
-      ]
+      ],
+      "bio": "A technical analyst: signals, imagery and forensics. She checks everything twice, and it shows in her timing."
     },
     {
       "id": "marrow",
@@ -825,7 +847,8 @@
           },
           "text": "Suspended pending review."
         }
-      ]
+      ],
+      "bio": "An open-source analyst who joined the cell from a commercial due-diligence firm. Quick, confident, and very good at finding things online."
     }
   ],
   "map": {
@@ -835,7 +858,7 @@
       600,
       560
     ],
-    "title": "The region, not to scale",
+    "title": "The Veyl region",
     "sea": "M0,0 L120,0 L105,90 L80,170 L95,250 L72,330 L90,420 L62,560 L0,560 Z",
     "countries": [
       {
@@ -858,8 +881,8 @@
         "id": "marrat",
         "name": "MARRAT",
         "d": "M72,330 L210,300 L300,400 L380,470 L420,560 L62,560 L90,420 Z",
-        "x": 140,
-        "y": 520,
+        "x": 128,
+        "y": 478,
         "cls": "c-marrat"
       }
     ],
@@ -867,17 +890,6 @@
       "M72,330 L210,300",
       "M600,60 L460,130 L380,190 L290,250 L210,300",
       "M210,300 L300,400 L380,470 L420,560"
-    ],
-    "hills": [
-      {
-        "cx": 550,
-        "cy": 210,
-        "r": [
-          10,
-          20,
-          30
-        ]
-      }
     ],
     "river": {
       "from": "border-buildup",
@@ -1004,7 +1016,8 @@
         "x": 104,
         "y": 140,
         "lx": 10,
-        "ly": 4
+        "ly": 4,
+        "type": "port"
       },
       {
         "from": "missing-shipment",
@@ -1012,16 +1025,143 @@
         "x": 104,
         "y": 402,
         "lx": 10,
-        "ly": -8
+        "ly": -8,
+        "type": "port"
       }
     ],
     "offmap": [
       {
         "from": "border-buildup",
-        "text": "Neutral capital: off the map",
-        "x": 418,
-        "y": 22
+        "text": "Pellaria and Aubrec, to the north-east ↗",
+        "x": 594,
+        "y": 20,
+        "anchor": "end"
       }
-    ]
+    ],
+    "decor": {
+      "compass": {
+        "x": 46,
+        "y": 56
+      },
+      "cartouche": {
+        "x": 8,
+        "y": 516,
+        "w": 168,
+        "title": "THE VEYL REGION",
+        "sub": "Kordav · Elsin · Marrat"
+      },
+      "mountains": [
+        [
+          528,
+          206
+        ],
+        [
+          550,
+          190
+        ],
+        [
+          572,
+          212
+        ],
+        [
+          548,
+          228
+        ],
+        [
+          586,
+          184
+        ],
+        [
+          566,
+          236
+        ],
+        [
+          592,
+          226
+        ]
+      ],
+      "forests": [
+        {
+          "trees": [
+            [
+              160,
+              226,
+              6
+            ],
+            [
+              172,
+              236,
+              5
+            ],
+            [
+              150,
+              240,
+              5
+            ],
+            [
+              166,
+              250,
+              6
+            ],
+            [
+              182,
+              222,
+              4
+            ]
+          ]
+        },
+        {
+          "trees": [
+            [
+              520,
+              440,
+              6
+            ],
+            [
+              534,
+              452,
+              5
+            ],
+            [
+              512,
+              456,
+              5
+            ],
+            [
+              528,
+              468,
+              6
+            ],
+            [
+              546,
+              440,
+              4
+            ]
+          ]
+        },
+        {
+          "trees": [
+            [
+              176,
+              404,
+              5
+            ],
+            [
+              188,
+              414,
+              4
+            ],
+            [
+              170,
+              420,
+              5
+            ]
+          ]
+        }
+      ],
+      "farmland": [
+        "M222,58 L330,62 L418,128 L392,150 L310,132 L236,100 Z"
+      ]
+    }
   }
 }

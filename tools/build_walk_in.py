@@ -34,7 +34,7 @@ reports = [
            "The Bureau was watching the ministry for whoever came asking about him. Tasking FINCH did exactly that.")),
  R("R-2-03", 2, KSB, "OSINT", "D", 1, "State TV runs a long segment on \"corruption\" in Elsin's defence ministry, naming Deputy Minister Vell. Nothing about any missing officer.", "true",
    "Kordav's media attacking the same man LANTERN accuses, the same day, and not looking for its missing officer.", supports=["H2"]),
- R("R-2-04", 2, CWS, "OSINT", "B", 1, "The neutral capital's metro workers strike tomorrow. Embassy staff are advised to work from home.", "clutter", "Metro strike."),
+ R("R-2-04", 2, CWS, "OSINT", "B", 1, "Aubrec's metro workers strike tomorrow, as they do most winters. Embassy staff are advised to work from home.", "clutter", "Metro strike."),
  # Day 3
  R("R-3-01", 3, WR, "Liaison", "B", 3, "Elsin's service has heard rumors that \"someone from Kordav\" is talking about \"a traitor in our ministry,\" and asks for details. WREN adds that \"some here have long doubted Vell.\"", "noise",
    "Elsin's anti-Vell faction repeating itself. It tells you what some in Kalsa want to hear, not what's true.", supports=["H1"], tells=["agenda-aligned"]),
@@ -65,7 +65,7 @@ reports = [
    "The media campaign building toward the vote.", supports=["H2"]),
  R("R-4-05", 4, SEC, "Admin", "A", 1, "The phishing campaign is back: \"Updated_Per_Diem_Rates_v2.xlsm\". The rates have still not gone up.", "clutter", "Still phishing."),
  # Day 5
- R("R-5-01", 5, KSB, "OSINT", "D", 1, "State TV reports that a Kordavan officer was \"kidnapped by Western intelligence\" in a neutral capital, and names LANTERN.", "planted",
+ R("R-5-01", 5, KSB, "OSINT", "D", 1, "State TV reports that a Kordavan officer was \"kidnapped by Western intelligence\" in Aubrec, and names LANTERN.", "planted",
    "Four days of silence, then a kidnapping.", supports=["H1"], tells=["convenient-timing"],
    reveal=("Four days of silence about a missing officer, then a kidnapping story the day before the vote.",
            ["R-2-03", "R-4-04"], "State TV spent those days attacking Vell and never mentioned LANTERN (R-2-03, R-4-04). If you tasked the embassy (C-07), it was told to keep its distance.",
@@ -91,14 +91,14 @@ reports = [
    "Confirms the access mismatch. The \"someone else\" was the Bureau's watch on the ministry, and this meeting was seen. FINCH is gone.", supports=["H2", "H3"], contradicts=["H1"], via=True),
  R("C-08", None, OS, "OSINT", "B", 1, "The ministry's published staff directory lists LANTERN's name under the General Staff planning directorate, logistics branch. The Bureau is a separate service with its own directory; his name isn't in it.", "true",
    "The cheap version of FINCH's answer: a logistics planner, and the Bureau is a different service. One point, and nobody burned.", supports=["H2", "H3"], contradicts=["H1"], via=True),
- R("C-06", None, ME, "SIGINT", "B", 2, "Bureau headquarters to its office in the neutral capital, administrative net, routine precedence: \"Suspend contact with all persons known to [LANTERN's true name]. Officers KARSA, DOVIN and TREL to return to the capital for consultations.\"", "planted",
+ R("C-06", None, ME, "SIGINT", "B", 2, "Bureau headquarters to its office in Aubrec, administrative net, routine precedence: \"Suspend contact with all persons known to [LANTERN's true name]. Officers KARSA, DOVIN and TREL to return to the capital for consultations.\"", "planted",
    "Staged for MERIDIAN. Reliable channel, planted content.", supports=["H1"], contradicts=["H2"], tells=["wrong-channel", "too-on-message"], via=True,
    reveal=("A real compromise order goes out on a service's secure operational channel at the highest precedence. This one went on the administrative net, at routine precedence, and names the officers it's recalling. It reads like a press release for an audience of one.",
            ["C-01", "C-02", "C-07", "C-11"], "The office's own traffic shows every officer still at post and nothing changed (C-01). His family isn't questioned (C-02). The embassy is told to stay out of it (C-07). Task the headquarters net again and the recall is never mentioned (C-11). Any one of these, all available the same day, says the recall never happened.",
            "The strongest sign of a genuine defection is the other side's damage control. Kordav couldn't fake it everywhere, so it faked it where it thought we were listening: it has assumed its administrative net is read ever since IRON HARVEST was blown.")),
  R("C-11", None, ME, "SIGINT", "B", 2, "Bureau headquarters administrative net: routine traffic only. Nothing further about LANTERN. The recall of KARSA, DOVIN and TREL isn't mentioned again.", "true",
    "The staged recall was a one-off. Real damage control generates traffic for days.", supports=["H2"], contradicts=["H1"], via=True),
- R("C-01", None, ME, "SIGINT", "B", 2, "Bureau office in the neutral capital: its own traffic is routine. Every officer on its duty roster is still at post, and nobody has been called home. No change to codes or procedures since LANTERN walked in. One circular from headquarters reminds staff of \"media discipline this week.\"", "true",
+ R("C-01", None, ME, "SIGINT", "B", 2, "Bureau office in Aubrec: its own traffic is routine. Every officer on its duty roster is still at post, and nobody has been called home. No change to codes or procedures since LANTERN walked in. One circular from headquarters reminds staff of \"media discipline this week.\"", "true",
    "The diagnostic item: no damage control. If an officer with the access LANTERN claims had really defected, this office would be pulling people home and changing codes. Nobody moves, nothing changes, and headquarters is thinking about the media.", supports=["H2"], contradicts=["H1", "H3"], via=True, diagnostic=True),
  R("C-07", None, ME, "SIGINT", "B", 2, "Kordav's embassy: routine traffic. Its security officer has been told to \"keep distance from the matter.\" No sign of any effort to find anyone.", "true",
    "Kordav's embassy is under orders to stay hands-off. Nobody is looking for him.", supports=["H2"], contradicts=["H1"], via=True),
@@ -117,7 +117,7 @@ crisis = {
  "adversary": "Kordav", "endingEyebrow": "The vote", "frozenText": "Kalsa has asked us to stay out of it. Nothing can go to Elsin today.",
  "briefing": {"dateLine": "Day 1 is the 5th, three months after IRON HARVEST.", "situation": [
    "Your cell now supports Under Secretary H. Marlowe, who handles the alliance's relationship with Elsin.",
-   "At 0710 this morning, a man walked into our embassy in a neutral capital and asked for asylum. He says he's a major on the planning directorate of Kordav's General Staff. He has been given the cryptonym LANTERN.",
+   "At 0710 this morning, a man walked into our embassy in Aubrec, the capital of neutral Pellaria, and asked for asylum. He says he's a major on the planning directorate of Kordav's General Staff. He has been given the cryptonym LANTERN.",
    "Elsin's parliament is about to vote on a no-confidence motion against Deputy Defence Minister Aron Vell, who negotiated the task force agreement and is Kordav's least favorite politician in Kalsa.",
    "This crisis works differently. Public reporting, and whatever LANTERN chooses to volunteer, reach you every day. Everything secret arrives only if you task it: questioning him, signals intelligence, your own sources. And Kordav knows some of what you can collect."]},
  "customer": {"name": "Under Secretary H. Marlowe", "short": "Marlowe", "pronouns": ["she", "her"], "role": "Under Secretary for alliance affairs", "callsign": "USEC ALLIANCE",
@@ -193,10 +193,10 @@ crisis = {
    {"phase": "Proof and pressure", "days": [3, 4, 5], "wantsYouToBelieve": "H1", "summary": "A forged ledger on real paper, a deadline, a leak to the opposition and a kidnapping story. A staged recall sits on the net Kordav assumes we read.", "channels": [LN, KSB, SOC, ME]}],
  "sources": [
    {"id": LN, "codeName": "LANTERN", "discipline": "HUMINT (walk-in)", "access": "Says he's a major on Kordav's General Staff planning directorate. No track record. What he volunteers reaches you every day; what you want to test, you have to ask.", "startingGrade": "F", "trueReliability": None, "controlledByAdversary": True, "postmortemNote": "A real officer on a Bureau assignment. His one true gift, IRON HARVEST, was chickenfeed. Accurate about his own job, vague about everything else."},
-   {"id": ST, "codeName": "STATION", "discipline": "HUMINT handling", "access": "Our station in the neutral capital. Runs the debriefing and reports what happens in the room.", "startingGrade": "A", "trueReliability": 1, "controlledByAdversary": False, "postmortemNote": "Reported exactly what happened in the room, including the things LANTERN wanted reported."},
+   {"id": ST, "codeName": "STATION", "discipline": "HUMINT handling", "access": "Our station in Aubrec. Runs the debriefing and reports what happens in the room.", "startingGrade": "A", "trueReliability": 1, "controlledByAdversary": False, "postmortemNote": "Reported exactly what happened in the room, including the things LANTERN wanted reported."},
    {"id": FI, "codeName": "FINCH", "discipline": "HUMINT", "access": "A source inside Kordav's defence ministry for six years. Reliable. A meeting takes two days to arrange, and the ministry is a dangerous place to be seen asking questions.", "startingGrade": "B", "trueReliability": 0.9, "controlledByAdversary": False, "postmortemNote": "Honest. The Bureau was watching for whoever asked about LANTERN, so his first meeting on this was his last."},
    {"id": WR, "codeName": "WREN", "discipline": "Liaison", "access": "Elsin's military intelligence. Pushes what it wants us to see, and answers requests. Some of its officers have long distrusted Vell.", "startingGrade": "B", "trueReliability": 0.6, "controlledByAdversary": False, "postmortemNote": "Not controlled, but some of its officers wanted Vell gone and kept saying so."},
-   {"id": ME, "codeName": "MERIDIAN", "discipline": "SIGINT", "access": "Tasked coverage only: the Bureau's headquarters administrative net (read since last year; Kordav has had reason to suspect it since IRON HARVEST was blown), the Bureau's office in the neutral capital, and Kordav's embassy there.", "startingGrade": "B", "trueReliability": 0.9, "controlledByAdversary": False, "postmortemNote": "A reliable channel. Kordav suspected the headquarters net was read and staged one message on it. The office's own traffic was genuine."},
+   {"id": ME, "codeName": "MERIDIAN", "discipline": "SIGINT", "access": "Tasked coverage only: the Bureau's headquarters administrative net (read since last year; Kordav has had reason to suspect it since IRON HARVEST was blown), the Bureau's office in Aubrec, and Kordav's embassy there.", "startingGrade": "B", "trueReliability": 0.9, "controlledByAdversary": False, "postmortemNote": "A reliable channel. Kordav suspected the headquarters net was read and staged one message on it. The office's own traffic was genuine."},
    {"id": KSB, "codeName": "KSB", "discipline": "OSINT", "access": "Kordav State Broadcaster and official channels", "startingGrade": "D", "trueReliability": None, "controlledByAdversary": True, "postmortemNote": "Ran the media side of the smear."},
    {"id": CWS, "codeName": "CWS", "discipline": "OSINT", "access": "Continental Wire Service", "startingGrade": "B", "trueReliability": 0.9, "controlledByAdversary": False, "postmortemNote": "Straight reporting throughout."},
    {"id": SOC, "codeName": "SOCIAL", "discipline": "OSINT", "access": "Social media monitoring. Accounts unvetted.", "startingGrade": "F", "trueReliability": 0.3, "controlledByAdversary": "partly", "postmortemNote": "Carried the MP's planted claim, and a wedding."},
@@ -212,7 +212,7 @@ crisis = {
  "endings": [
    {"id": "burned", "tone": "bad", "title": "Burned", "points": -5, "if": {"everAt": "shared"}, "text": "Elsin arrests Vell on the morning of the vote. Six months later the ledger is exposed as a forgery built from his public schedule. Nobody in Kalsa trusts allied intelligence again. Kordav couldn't have bought a better outcome."},
    {"id": "sidelined", "tone": "bad", "title": "Sidelined", "points": -3, "if": {"assetAt": "caveated"}, "text": "The caveat leaked within a day and is quoted in the opposition's speech. Vell resigns \"to clear his name.\" Elsin's reformers lose their best voice, and Kordav never fired a shot."},
-   {"id": "exposed", "tone": "good", "title": "Exposed", "points": 5, "if": {"assetAt": "countered", "since": [1, 2, 3, 4]}, "text": "Elsin's defence minister stands up in parliament with your warning: Kordav is running a smear, and its \"defector\" was sent. The motion fails by forty votes. LANTERN's statement never airs. Two Bureau officers are quietly recalled from the neutral capital, for real this time."},
+   {"id": "exposed", "tone": "good", "title": "Exposed", "points": 5, "if": {"assetAt": "countered", "since": [1, 2, 3, 4]}, "text": "Elsin's defence minister stands up in parliament with your warning: Kordav is running a smear, and its \"defector\" was sent. The motion fails by forty votes. LANTERN's statement never airs. Two Bureau officers are quietly recalled from Aubrec, for real this time."},
    {"id": "survived", "tone": "warn", "title": "Survived", "points": 1, "if": {"assetAt": "countered"}, "text": "Your warning reaches Kalsa the night before the vote. The motion fails by three. Vell keeps his job and loses his reputation."},
    {"id": "shelved", "tone": "warn", "title": "Shelved", "points": 0, "default": True, "text": "You kept it to yourself. The opposition runs with the MP's claim anyway, and Vell survives by five votes without knowing how close it came or who was behind it."}],
  "dailyUpdates": [
@@ -227,7 +227,7 @@ crisis = {
      {"days": [2], "text": "If you pressed him for details, room 412 came from a newspaper: The Kalsa Courier printed it three weeks before he walked in. His question about who could vouch for him was the second job he'd been sent to do: find out who we have in the ministry. And if you read the Bureau's headquarters net, you saw a recall that never happened. Kordav put it where it thought we were listening."},
      {"days": [3], "text": "The ledger was real paper telling a forged story. Every payment matched a trip anyone could look up. Real agents get paid on trips nobody announces."},
      {"days": [4], "text": "The deadline was Kordav's, not Elsin's. The MP heard about \"a defector\" from the only people who knew besides us."},
-     {"days": [5], "text": "A man kidnapped by Western intelligence asked to record a press statement for the morning of the vote. Kordav stayed silent for four days, then announced a kidnapping. The Bureau's office in the neutral capital never so much as changed a code."}],
+     {"days": [5], "text": "A man kidnapped by Western intelligence asked to record a press statement for the morning of the vote. Kordav stayed silent for four days, then announced a kidnapping. The Bureau's office in Aubrec never so much as changed a code."}],
    "lessons": [
      "A walk-in's verifiable details prove access, not intent. Ask what they cost the other side.",
      "Check claims against access: what could he actually have seen?",
@@ -236,7 +236,7 @@ crisis = {
      "The adversary knows some of what you collect. Ask what it expects you to hear.",
      "Collection can be seen too. Asking the wrong source the wrong question can burn it."],
    "missedCollection": {
-     "1": "The Bureau's office in the neutral capital (SIGINT) or LANTERN's family (OSINT): either shows that Kordav isn't doing any damage control.",
+     "1": "The Bureau's office in Aubrec (SIGINT) or LANTERN's family (OSINT): either shows that Kordav isn't doing any damage control.",
      "2": "Elsin's press (OSINT, 1 point): the newspaper story that \"room 412\" came from.",
      "3": "Questioning LANTERN on the ledger: he can't explain how a planner got into the Bureau's registry.",
      "4": "Anything still untasked on Kordav's reaction. It's the last tasking that can arrive before the vote.",
@@ -253,8 +253,8 @@ crisis = {
    {"id": "finch", "name": "FINCH, inside Kordav's defence ministry", "disciplines": ["HUMINT"], "cost": {"HUMINT": 3}, "delay": {"HUMINT": 2}, "source": {"HUMINT": FI}, "fallback": "No meeting with FINCH could be arranged in time."},
    {"id": "ministry", "name": "Kordav defence ministry, public records", "disciplines": ["OSINT"]},
    {"id": "bureau-hq", "name": "Bureau headquarters administrative net", "disciplines": ["SIGINT"]},
-   {"id": "bureau-office", "name": "Bureau office in the neutral capital", "disciplines": ["SIGINT"]},
-   {"id": "embassy", "name": "Kordav's embassy in the neutral capital", "disciplines": ["SIGINT"]},
+   {"id": "bureau-office", "name": "Bureau office in Aubrec", "disciplines": ["SIGINT"]},
+   {"id": "embassy", "name": "Kordav's embassy in Aubrec", "disciplines": ["SIGINT"]},
    {"id": "family", "name": "LANTERN's family", "disciplines": ["OSINT"]},
    {"id": "press", "name": "Elsin's press", "disciplines": ["OSINT"]},
    {"id": "travel", "name": "Vell's travel records, via WREN", "disciplines": ["Liaison"]}],
@@ -295,7 +295,7 @@ crisis = {
  "board": {"pinsPerDay": 3},
 }
 # ---------- map: three capitals, drawn as a schematic ----------
-EMB_L, EMB_S, KEMB, BOFF = (240, 62), (240, 102), (350, 52), (388, 100)      # neutral capital
+EMB_L, EMB_S, KEMB, BOFF = (240, 62), (240, 102), (350, 52), (388, 100)      # Aubrec
 BHQ, MIN, TV, HOME = (70, 262), (180, 256), (96, 350), (204, 338)             # Kordav's capital
 PARL, SOREL, PRESS = (440, 272), (534, 292), (472, 348)                       # Kalsa
 PINS = {
@@ -317,8 +317,8 @@ crisis["map"] = {
  "caption": "Three capitals, not to scale. Reporting will be plotted here as it arrives.",
  "truthNote": "Red diamonds are what the Bureau was really doing on Day {day}.",
  "border": "M340,420 L322,350 L350,286 L318,206 L420,168 L500,100 L522,0",
- "areas": [{"d": "M118,0 L150,96 L258,154 L318,206 L420,168 L500,100 L522,0 Z", "label": "NEUTRAL STATE", "lx": 434, "ly": 20}],
- "zones": [{"x": 212, "y": 28, "w": 208, "h": 100, "label": "Neutral capital"}, {"x": 28, "y": 228, "w": 242, "h": 156, "label": "Kordav's capital"}, {"x": 404, "y": 236, "w": 178, "h": 140, "label": "Kalsa"}],
+ "areas": [{"d": "M118,0 L150,96 L258,154 L318,206 L420,168 L500,100 L522,0 Z", "label": "PELLARIA", "lx": 434, "ly": 20}],
+ "zones": [{"x": 212, "y": 28, "w": 208, "h": 100, "label": "Aubrec"}, {"x": 28, "y": 228, "w": 242, "h": 156, "label": "Kordav's capital"}, {"x": 404, "y": 236, "w": 178, "h": 140, "label": "Kalsa"}],
  "regions": [{"name": "KORDAV", "x": 40, "y": 412}, {"name": "ELSIN", "x": 452, "y": 408}],
  "places": [site("Our embassy", EMB_L, -22, 62), site("", EMB_S, 0, 0), site("Kordav embassy", KEMB, -34, -10), site("Bureau office", BOFF, -30, 20),
             site("Bureau HQ", BHQ, -30, -12), site("Defence ministry", MIN, -34, 20), site("State TV", TV, -24, 20), site("LANTERN's home", HOME, -48, 20),

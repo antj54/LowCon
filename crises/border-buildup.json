@@ -16,7 +16,7 @@
     "dateLine": "Day 1 is the 15th, early 2030s.",
     "situation": [
       "You lead the analysis cell supporting Task Force VEYL, a multinational reassurance force based in Elsin.",
-      "Kordav and Elsin have been arguing over the Veyl River for ten years. The river starts in Elsin's highlands and feeds Kordav's farmland. Elsin's Tarsk Dam, 6 km inside the border, controls the flow. Water talks open tomorrow in a neutral capital.",
+      "Kordav and Elsin have been arguing over the Veyl River for ten years. The river starts in Elsin's highlands and feeds Kordav's farmland. Elsin's Tarsk Dam, 6 km inside the border, controls the flow. Water talks open tomorrow in Aubrec, the capital of neutral Pellaria.",
       "Two days ago Kordav's 4th Army started its annual autumn exercise, IRON HARVEST, at the Ostrel training area, 40 km from the border. The announced end date is the 20th, the day after Day 5."
     ]
   },
@@ -1572,7 +1572,7 @@
   "dailyUpdates": [
     {
       "day": 1,
-      "text": "IRON HARVEST is under way at Ostrel. Water talks open tomorrow in a neutral capital."
+      "text": "IRON HARVEST is under way at Ostrel. Water talks open tomorrow in Aubrec, the capital of neutral Pellaria."
     },
     {
       "day": 2,

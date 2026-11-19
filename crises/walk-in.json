@@ -19,7 +19,7 @@
     "dateLine": "Day 1 is the 5th, three months after IRON HARVEST.",
     "situation": [
       "Your cell now supports Under Secretary H. Marlowe, who handles the alliance's relationship with Elsin.",
-      "At 0710 this morning, a man walked into our embassy in a neutral capital and asked for asylum. He says he's a major on the planning directorate of Kordav's General Staff. He has been given the cryptonym LANTERN.",
+      "At 0710 this morning, a man walked into our embassy in Aubrec, the capital of neutral Pellaria, and asked for asylum. He says he's a major on the planning directorate of Kordav's General Staff. He has been given the cryptonym LANTERN.",
       "Elsin's parliament is about to vote on a no-confidence motion against Deputy Defence Minister Aron Vell, who negotiated the task force agreement and is Kordav's least favorite politician in Kalsa.",
       "This crisis works differently. Public reporting, and whatever LANTERN chooses to volunteer, reach you every day. Everything secret arrives only if you task it: questioning him, signals intelligence, your own sources. And Kordav knows some of what you can collect."
     ]
@@ -449,7 +449,7 @@
       "id": "S-STATION",
       "codeName": "STATION",
       "discipline": "HUMINT handling",
-      "access": "Our station in the neutral capital. Runs the debriefing and reports what happens in the room.",
+      "access": "Our station in Aubrec. Runs the debriefing and reports what happens in the room.",
       "startingGrade": "A",
       "trueReliability": 1,
       "controlledByAdversary": false,
@@ -479,7 +479,7 @@
       "id": "S-MERIDIAN",
       "codeName": "MERIDIAN",
       "discipline": "SIGINT",
-      "access": "Tasked coverage only: the Bureau's headquarters administrative net (read since last year; Kordav has had reason to suspect it since IRON HARVEST was blown), the Bureau's office in the neutral capital, and Kordav's embassy there.",
+      "access": "Tasked coverage only: the Bureau's headquarters administrative net (read since last year; Kordav has had reason to suspect it since IRON HARVEST was blown), the Bureau's office in Aubrec, and Kordav's embassy there.",
       "startingGrade": "B",
       "trueReliability": 0.9,
       "controlledByAdversary": false,
@@ -743,7 +743,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The neutral capital's metro workers strike tomorrow. Embassy staff are advised to work from home.",
+      "text": "Aubrec's metro workers strike tomorrow, as they do most winters. Embassy staff are advised to work from home.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -995,7 +995,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "State TV reports that a Kordavan officer was \"kidnapped by Western intelligence\" in a neutral capital, and names LANTERN.",
+      "text": "State TV reports that a Kordavan officer was \"kidnapped by Western intelligence\" in Aubrec, and names LANTERN.",
       "kind": "planted",
       "supports": [
         "H1"
@@ -1245,7 +1245,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau headquarters to its office in the neutral capital, administrative net, routine precedence: \"Suspend contact with all persons known to [LANTERN's true name]. Officers KARSA, DOVIN and TREL to return to the capital for consultations.\"",
+      "text": "Bureau headquarters to its office in Aubrec, administrative net, routine precedence: \"Suspend contact with all persons known to [LANTERN's true name]. Officers KARSA, DOVIN and TREL to return to the capital for consultations.\"",
       "kind": "planted",
       "supports": [
         "H1"
@@ -1310,7 +1310,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau office in the neutral capital: its own traffic is routine. Every officer on its duty roster is still at post, and nobody has been called home. No change to codes or procedures since LANTERN walked in. One circular from headquarters reminds staff of \"media discipline this week.\"",
+      "text": "Bureau office in Aubrec: its own traffic is routine. Every officer on its duty roster is still at post, and nobody has been called home. No change to codes or procedures since LANTERN walked in. One circular from headquarters reminds staff of \"media discipline this week.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -1505,7 +1505,7 @@
           4
         ]
       },
-      "text": "Elsin's defence minister stands up in parliament with your warning: Kordav is running a smear, and its \"defector\" was sent. The motion fails by forty votes. LANTERN's statement never airs. Two Bureau officers are quietly recalled from the neutral capital, for real this time."
+      "text": "Elsin's defence minister stands up in parliament with your warning: Kordav is running a smear, and its \"defector\" was sent. The motion fails by forty votes. LANTERN's statement never airs. Two Bureau officers are quietly recalled from Aubrec, for real this time."
     },
     {
       "id": "survived",
@@ -1578,7 +1578,7 @@
         "days": [
           5
         ],
-        "text": "A man kidnapped by Western intelligence asked to record a press statement for the morning of the vote. Kordav stayed silent for four days, then announced a kidnapping. The Bureau's office in the neutral capital never so much as changed a code."
+        "text": "A man kidnapped by Western intelligence asked to record a press statement for the morning of the vote. Kordav stayed silent for four days, then announced a kidnapping. The Bureau's office in Aubrec never so much as changed a code."
       }
     ],
     "lessons": [
@@ -1590,7 +1590,7 @@
       "Collection can be seen too. Asking the wrong source the wrong question can burn it."
     ],
     "missedCollection": {
-      "1": "The Bureau's office in the neutral capital (SIGINT) or LANTERN's family (OSINT): either shows that Kordav isn't doing any damage control.",
+      "1": "The Bureau's office in Aubrec (SIGINT) or LANTERN's family (OSINT): either shows that Kordav isn't doing any damage control.",
       "2": "Elsin's press (OSINT, 1 point): the newspaper story that \"room 412\" came from.",
       "3": "Questioning LANTERN on the ledger: he can't explain how a planner got into the Bureau's registry.",
       "4": "Anything still untasked on Kordav's reaction. It's the last tasking that can arrive before the vote.",
@@ -1729,7 +1729,7 @@
     },
     {
       "id": "bureau-office",
-      "name": "Bureau office in the neutral capital",
+      "name": "Bureau office in Aubrec",
       "disciplines": [
         "SIGINT"
       ],
@@ -1740,7 +1740,7 @@
     },
     {
       "id": "embassy",
-      "name": "Kordav's embassy in the neutral capital",
+      "name": "Kordav's embassy in Aubrec",
       "disciplines": [
         "SIGINT"
       ],
@@ -1997,7 +1997,7 @@
     "areas": [
       {
         "d": "M118,0 L150,96 L258,154 L318,206 L420,168 L500,100 L522,0 Z",
-        "label": "NEUTRAL STATE",
+        "label": "PELLARIA",
         "lx": 434,
         "ly": 20
       }
@@ -2008,7 +2008,7 @@
         "y": 28,
         "w": 208,
         "h": 100,
-        "label": "Neutral capital"
+        "label": "Aubrec"
       },
       {
         "x": 28,
