@@ -87,6 +87,10 @@ The adversary plants items that are consistent with each other but false. Every 
 
 Your daily brief drives a decision by your customer, who commits in proportion to your confidence: High buys the full move, Medium a partial one, and Low none. Moving too early has a cost too. The true world state evolves out of sight, and outcomes show up a day or two later. That delay is deliberate: you have to live with a call before you find out how it turned out.
 
+## The campaign story
+
+Ten scenarios in three acts of three and a finale, played in a fixed order. The service record changes the world each one is played in. The plot is Kordav's long campaign to pull Elsin out of the alliance; the thread under it is a leak that explains why Kordav keeps knowing what we collect. Endings have two axes: what happens to the world, and what happens to you. The plan is in `claude/story-plan.md` (#66).
+
 ## Content: crises and reports
 
 A crisis is a 5 to 10 day arc built from three layers. Reports are generated from the hidden truth, so every item is either a noisy reflection of what's really happening or a deliberate lie.
