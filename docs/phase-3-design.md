@@ -1,6 +1,6 @@
 # Phase 3 design (paper) · Low Confidence
 
-*Status: paper design, nothing built. Drafted 2026-11-18; the four choices were settled the same day (#58), all as recommended. The Phase 2 gate is still open (#55), so this stays on paper until Anthony says otherwise.*
+*Status: in build since #61 (Phase 2 gate waived). Originally a paper design. Drafted 2026-11-18; the four choices were settled the same day (#58), all as recommended. The Phase 2 gate is still open (#55), so this stays on paper until Anthony says otherwise.*
 
 **Phase 3 scope (from the design doc):** three linked scenarios, analysts with traits, unlocks, the recurring customer cast, reassignment, and sources and deception that carry across scenarios.
 **Gate to Phase 4:** a full campaign holds up over weeks of daily play.
@@ -118,8 +118,8 @@ The design doc gives you 2 analysts to start and up to 4, each with a specialty 
 
 Each step is playable on its own.
 
-1. **Service record:** written at the end of Scenarios 01 and 02, shown on the main menu. No effects yet.
-2. **Carry-over:** starting credibility, burned sources and file grades applied in Scenarios 01 and 02 as they exist.
+1. **Service record** *(built, #61)*: written at the end of Scenarios 01 and 02, shown on the main menu.
+2. **Carry-over** *(built, #61)*: starting credibility, burned sources and file grades applied in Scenarios 01 and 02 as they exist.
 3. **Analyst notes** written into Scenarios 01 and 02.
 4. **Scenario 03 on paper** (player packet and key; done, #59), then as data, with its callback items.
 5. **Reassignment.**

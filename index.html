@@ -342,7 +342,7 @@ function keyJudgment(b){
   return 'We assess with ' + l.label.toLowerCase() + ' confidence that ' + (h.claim || h.text) + (b.evidence.length ? ', based on ' + b.evidence.join(', ') : '') + '.';
 }
 const callLabel = b => b.hyp + ', ' + confLabel(b.conf) + (b.confLost ? '?' : '');
-const burnedOn = sid => (S.burned || {})[sid];
+const burnedOn = sid => (S.burned || {})[sid] || (goneBefore(sid) ? 1 : undefined);
 const collectedFor = d => (S.collected || []).filter(c => c.arrive === d).map(c => c.fallback ? fallbackReport(c) : Object.assign({}, C.reports.find(r => r.id === c.id), {day:d, collected:true, task:c}));
 const reportsFor = d => C.reports.filter(r => !r.via && r.day === d && !(burnedOn(r.sourceId) && d >= burnedOn(r.sourceId))).concat(collectedFor(d));
 const seenReports = () => { const out = []; for (let d = 1; d <= C.days; d++) out.push(...reportsFor(d)); return out; };
@@ -367,7 +367,8 @@ const tDelay = (disc, tid) => (tgt(tid).delay || {})[disc] || (COLL().delays || 
 const tSource = (disc, tid) => (tgt(tid).source || {})[disc] || (COLL().sources || {})[disc];
 function tasksFor(d){ return (S.tasks[d] || []); }
 function spentOn(d){ return tasksFor(d).reduce((n, t) => n + tCost(t.disc, t.target), 0); }
-function budgetFor(d){ return COLL() ? Math.max(0, COLL().budget + (credLevel(credOn(d)).budgetDelta || 0)) : 0; }
+const credBonus = d => (CRED() && CRED().bonusAt != null && credOn(d) >= CRED().bonusAt) ? 1 : 0;
+function budgetFor(d){ return COLL() ? Math.max(0, COLL().budget + (credLevel(credOn(d)).budgetDelta || 0) + credBonus(d)) : 0; }
 /* ---------- Credibility: moves only on what the customer can see ---------- */
 const CRED = () => C.credibility || null;
 function credOn(d){ if (!CRED()) return null; const v = (S.credAt || {})[d]; return typeof v === 'number' ? v : (typeof S.cred === 'number' ? S.cred : CRED().start); }
@@ -475,13 +476,14 @@ function unlocked(d){
   const prev = S.briefs[d-1];
   return !!prev && todayStr() > prev.date;
 }
-function received(r){ return (r.sourceGrade || '?') + (r.credibility == null ? '–' : r.credibility); }
+function received(r){ const s0 = C.sources.find(x => x.id === r.sourceId), fg = s0 ? fileGrade(s0) : null;
+  return ((fg && fg.g !== s0.startingGrade ? fg.g : r.sourceGrade) || '?') + (r.credibility == null ? '–' : r.credibility); }
 function assetLabel(){ return (C.asset.levels[S.asset] || C.asset.levels.home).label; }
 const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], cred:(C.credibility ? C.credibility.start : null), credAt:{1:(C.credibility ? C.credibility.start : null)}, credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], cred:credStart(), credAt:{1:credStart()}, credStart:credStart(), offRecord:!!REC.runs[C.id], credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -501,6 +503,8 @@ function normalize(st){
   if (!C.asset.levels[s.asset]) s.asset = 'home';
   if (!s.board || typeof s.board !== 'object') s.board = {};
   if (CRED() && typeof s.cred !== 'number'){ s.cred = CRED().start; s.credAt = {1:CRED().start}; s.credLog = []; }
+  if (CRED() && st.credStart === undefined && st.started) s.credStart = CRED().start;
+  if (st.offRecord === undefined) s.offRecord = false;
   return s;
 }
 
@@ -608,6 +612,7 @@ function sendBrief(d){
       if (o) credApply({id:'outcome', delta:o, note:''}, d + 1);
       S.credFinal = S.cred;
     }
+    commitRecord();
     ui.tab = 'postmortem';
   }
   ui.pin = null;
@@ -695,7 +700,7 @@ async function connectAccount(){
     const ref = db.collection('data/users/' + uid).doc('save-' + C.id);
     const snap = await Promise.race([ref.get(), new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), 10000))]);
     store = {mode:'db', ref, ok:true};
-    remoteProgress(db, uid);
+    syncRecord(db, uid).then(() => remoteProgress(db, uid));
     const remote = snap.exists ? normalize((snap.data() || {}).state) : null;
     if (remote && (!S.savedAt || (remote.savedAt || '') > S.savedAt)) {
       S = remote;
@@ -803,7 +808,7 @@ function mapCard(d){
 /* ---------- Rendering ---------- */
 function render(){
   if (!C || !S) return;
-  if (ui.screen === 'menu' || ui.screen === 'list'){ app.innerHTML = ui.screen === 'menu' ? menuView() : listView(); renderLayer(); return; }
+  if (ui.screen === 'menu' || ui.screen === 'list' || ui.screen === 'record'){ app.innerHTML = ui.screen === 'menu' ? menuView() : ui.screen === 'list' ? listView() : recordView(); renderLayer(); return; }
   if (!S.started && ui.tab !== 'playtests'){ app.innerHTML = introView(); renderLayer(); return; }
   if (S.done && ui.tab !== 'files' && ui.tab !== 'playtests') ui.tab = 'postmortem';
   if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
@@ -833,6 +838,7 @@ function headerView(d, open){
     + '<h1>' + dayText + '</h1>'
     + '<div class="status-line"><span>' + esc(C.asset.name) + ': <b>' + esc(assetLabel()) + '</b></span>'
     + (CRED() && !S.done ? '<span>Credibility: <b class="cred-' + esc(credLevel(credOn(d)).id) + '">' + esc(credLevel(credOn(d)).label) + '</b></span>' : '')
+    + (S.offRecord ? '<span><b>Off the record</b></span>' : '')
     + (S.playAhead ? '<span><b>Play ahead on</b></span>' : '')
     + (CFG.playtest ? '<span><b>Playtest build</b></span>' : '')
     + '<span id="savestatus">' + esc(saveStatusText()) + '</span></div>'
@@ -1056,7 +1062,8 @@ function collectView(d){
     + '<div class="btnrow"><button class="btn ghost" data-act="tipseen" data-v="collect">Got it</button></div></div>';
   const B = budgetFor(d), trimmed = K.budget - B;
   let html = tip + '<div class="section-h"><h2>Collection</h2><span class="mono small">' + left + ' of ' + B + ' points left</span></div>'
-    + '<div class="meter" aria-hidden="true">' + Array.from({length:K.budget}, (_, i) => '<span class="' + (i < spentOn(d) ? 'on' : (i >= B ? 'cut' : '')) + '"></span>').join('') + '</div>'
+    + '<div class="meter" aria-hidden="true">' + Array.from({length:Math.max(K.budget, B)}, (_, i) => '<span class="' + (i < spentOn(d) ? 'on' : (i >= B ? 'cut' : '')) + '"></span>').join('') + '</div>'
+    + (credBonus(d) ? '<p class="small crednote">1 extra point: ' + esc(CUST()) + ' trusts your cell.</p>' : '')
     + (trimmed > 0 ? '<p class="small crednote">' + trimmed + ' point' + (trimmed > 1 ? 's' : '') + ' cut: credibility with ' + esc(C.customer.name) + ' is <b>' + esc(credLevel(credOn(d)).label) + '</b>.</p>' : '');
   C.pirs.forEach(p => {
     html += '<div class="card pir"><p class="mono small muted">' + esc(p.id) + '</p><p><b>' + esc(p.question) + '</b></p>';
@@ -1097,7 +1104,8 @@ function filesView(){
     + '<div class="stack"><h3>' + esc(CUST()) + '\'s habits</h3>' + policyTable() + '</div>'
     + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
     + '<div class="stack"><h3>Sources on file</h3><div class="tablewrap"><table><thead><tr><th>Code name</th><th>Access</th><th>File</th></tr></thead><tbody>'
-    + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(s.startingGrade) + '</b></td></tr>').join('') + '</tbody></table></div></div>'
+    + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(fileGrade(s).g) + '</b>' + (goneBefore(s.id) ? '<br><span class="small muted">burned</span>' : '') + '</td></tr>').join('') + '</tbody></table></div></div>'
+    + (roster.some(x => fileGrade(x).why || goneBefore(x.id)) ? '<p class="small muted">From your record: ' + roster.filter(x => fileGrade(x).why || goneBefore(x.id)).map(x => '<b>' + esc(x.codeName) + '</b> ' + (goneBefore(x.id) ? 'was burned in an earlier scenario and can\'t be used.' : 'is now graded ' + fileGrade(x).g + ': ' + esc(fileGrade(x).why))).join(' ') + '</p>' : '')
     + '<div class="stack"><h3>Grading scale</h3><p class="small">Collectors grade each item as it arrives: the letter is the source\'s reliability, the number is the information\'s credibility. The letter belongs to the source and doesn\'t change from report to report. Your call on each item is whether to believe it.</p><div class="tablewrap"><table><thead><tr><th>Source</th><th>Information</th></tr></thead><tbody>'
     + [0,1,2,3,4,5].map(i => { const k = 'ABCDEF'[i]; return '<tr><td class="small"><span class="mono"><b>' + k + '</b></span> ' + SOURCE_SCALE[k] + '</td><td class="small"><span class="mono"><b>' + (i+1) + '</b></span> ' + INFO_SCALE[i+1] + '</td></tr>'; }).join('') + '</tbody></table></div></div>'
     + '<div class="stack"><h3>Confidence</h3><p class="small">You choose your confidence in the judgment: Low, Medium or High. The evidence you cite is scored by what it turned out to be; it doesn\'t change your confidence or what Halvorsen does.</p></div>'
@@ -1108,7 +1116,7 @@ function filesView(){
       + Object.keys(COLL().costs).map(k => '<tr><td>' + k + '</td><td class="num">' + COLL().costs[k] + '</td><td class="small">' + esc((C.sources.find(x => x.id === COLL().sources[k]) || {}).codeName || '') + '</td></tr>').join('') + '</tbody></table></div></div>' : '')
     + (CRED() ? '<div class="stack"><h3>Credibility</h3><p class="small">' + esc(CRED().summary || '') + ' It doesn\'t change your score.</p><div class="tablewrap"><table><thead><tr><th>Level</th><th>Effect</th></tr></thead><tbody>'
       + CRED().levels.map(l => '<tr><td><b>' + esc(l.label) + '</b></td><td class="small">' + esc(l.text || '') + '</td></tr>').join('') + '</tbody></table></div>'
-      + '<p class="small">It drops when: ' + CRED().triggers.map(t => esc(t.rule) + ' (' + t.delta + ')').join('; ') + '. You start at ' + esc(credLevel(CRED().start).label) + '.</p></div>' : '')
+      + '<p class="small">It drops when: ' + CRED().triggers.map(t => esc(t.rule) + ' (' + t.delta + ')').join('; ') + '. You started this scenario at ' + esc(credLevel(S.credStart).label) + '.</p></div>' : '')
     + '<div class="stack"><h3>Settings</h3>'
     + '<div class="switch"><span><b>Play ahead</b><br><span class="small muted">Open the next day without waiting for midnight.</span></span><button data-act="playahead" aria-pressed="' + S.playAhead + '">' + (S.playAhead ? 'On' : 'Off') + '</button></div>'
     + '<div class="switch"><span><b>Start over</b><br><span class="small muted">Wipes this crisis and opens the situation briefing again.</span></span><button data-act="restart">Reset</button></div>'
@@ -1144,6 +1152,7 @@ function postmortemView(){
     + '</tbody></table></div>'
     + '<p class="small">Planted items you doubted: <b>' + caught + ' of ' + planted.length + '</b>. True items you doubted: <b>' + falseAlarms + '</b>. Clutter you marked not relevant: <b>' + clutterSpotted + ' of ' + clutter.length + '</b>.</p>'
     + credCard()
+    + (S.offRecord && REC.runs[C.id] ? '<p class="small muted">This run is off the record. Your first finish stands: ' + esc(REC.runs[C.id].endingTitle) + '.</p>' : '<p class="small muted">This finish is on your service record.</p>')
     + (CFG.playtest ? debriefCard() : '')
     + '<div class="btnrow"><button class="btn ghost" data-act="copylog">Copy playtest log</button></div>'
     + (!C.map ? '' : '<div class="stack"><div class="section-h"><h3>What was really there</h3></div>'
@@ -1185,7 +1194,7 @@ function credCard(){
   const lines = (S.credLog || []).filter(x => x.id !== 'outcome').map(x => '<li>After your Day ' + (x.day - 1) + ' brief: ' + esc(x.note) + '</li>');
   const out = (S.credLog || []).find(x => x.id === 'outcome');
   return '<div class="msg"><span class="from">Credibility with ' + esc(C.customer.name) + ' · not scored</span>'
-    + '<p class="credline">Credibility: ' + lab(CRED().start) + ' → ' + lab(S.credEnd) + ' → ' + lab(S.credFinal) + ' after the outcome</p>'
+    + '<p class="credline">Credibility: ' + lab(S.credStart) + ' → ' + lab(S.credEnd) + ' → ' + lab(S.credFinal) + ' after the outcome</p>'
     + (lines.length ? '<ul class="small">' + lines.join('') + '</ul>' : '<p class="small">Nothing ' + PRON()[0] + ' had to undo, and no run of Low calls.</p>')
     + '<p class="small muted">The outcome ' + (out ? (out.delta > 0 ? 'added ' : 'cost ') + Math.abs(out.delta) : 'changed nothing') + '. From Phase 3, credibility carries into your next crisis.</p></div>';
 }
@@ -1233,7 +1242,7 @@ function playtestLog(){
   (S.eventPoints || []).forEach(x => { total += x.points; lines.push(x.label + ': ' + x.points); });
   if (bp) lines.push('Burned sources: ' + Object.keys(S.burned).join(' ') + ' (' + bp + ')');
   lines.push('Doubts: ' + dp);
-  if (CRED()) lines.push('Credibility: start ' + CRED().start + (S.credLog || []).map(x => ', ' + x.id + ' ' + (x.delta > 0 ? '+' : '') + x.delta).join('') + ' -> ' + (typeof S.credFinal === 'number' ? S.credFinal : S.cred));
+  if (CRED()) lines.push('Credibility: start ' + S.credStart + (S.credLog || []).map(x => ', ' + x.id + ' ' + (x.delta > 0 ? '+' : '') + x.delta).join('') + ' -> ' + (typeof S.credFinal === 'number' ? S.credFinal : S.cred));
   const bIds = boardIds();
   lines.push('Board: ' + (bIds.length ? bIds.length + ' pinned, ' + bIds.filter(id => Object.keys(S.board[id].m).length).length + ' marked (' + bIds.map(id => id + ' ' + C.hypotheses.map(h => S.board[id].m[h.id] || '.').join('')).join(', ') + ')' : 'not used'));
   if (S.done) lines.push('Ending: ' + ending.title + ' [' + ending.id + '] (' + ending.points + ')', 'Total: ' + total);
@@ -1341,6 +1350,7 @@ function onClick(e){
     case 'crisis': openCrisis(el.dataset.id); break;
     case 'menu': ui.screen = 'menu'; ui.sheet = null; render(); window.scrollTo(0,0); break;
     case 'list': ui.screen = 'list'; render(); window.scrollTo(0,0); break;
+    case 'record': ui.screen = 'record'; render(); window.scrollTo(0,0); break;
     case 'continue': ui.screen = 'game'; if (ui.tab === 'playtests') ui.tab = 'inbox'; render(); window.scrollTo(0,0); break;
     case 'tab': ui.screen = 'game'; ui.tab = el.dataset.v; render(); window.scrollTo(0,0); break;
     case 'flag': case 'nr': {
@@ -1435,6 +1445,98 @@ async function switchCrisis(id){
   await start({});
   window.scrollTo(0, 0);
 }
+/* ---------- Service record: the first finish of each scenario, and what carries forward ---------- */
+let REC = {v:1, runs:{}}, recRef = null;
+const TAG_TEXT = {'recycled-photo':'an old photo passed off as new', 'staged-signals':'a message staged on a net the adversary knew was covered', 'prepared-detail':'a walk-in\'s prepared detail'};
+function loadRecord(){ try { const raw = localStorage.getItem(LS_PREFIX + 'record'); const r = raw ? JSON.parse(raw) : null; if (r && r.runs) REC = r; } catch(e) {} }
+function saveRecord(){
+  REC.updatedAt = new Date().toISOString();
+  try { localStorage.setItem(LS_PREFIX + 'record', JSON.stringify(REC)); } catch(e) {}
+  if (recRef){ try { Promise.resolve(recRef.set(clone(REC))).catch(() => {}); } catch(e) {} }
+}
+function recordFrom(Cx, Sx){
+  const end = Cx.endings.find(e => e.id === Sx.ending) || {}, K = Cx.credibility;
+  const cred = typeof Sx.credFinal === 'number' ? Sx.credFinal : (K ? Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + ((K.outcome || {})[Sx.ending] || 0))) : null);
+  const lvl = (K && cred != null) ? (K.levels.slice().sort((a, b) => b.min - a.min).find(l => cred >= l.min) || {}) : {};
+  const cited = new Set(); Object.values(Sx.briefs || {}).forEach(b => (b.evidence || []).forEach(id => cited.add(id)));
+  const got = new Set((Sx.collected || []).map(c => c.id));
+  const fooled = [], tested = [];
+  Cx.reports.forEach(r => {
+    if (r.kind !== 'planted' || !r.callbackTag || (r.via && !got.has(r.id))) return;
+    if (!tested.includes(r.callbackTag)) tested.push(r.callbackTag);
+    if ((cited.has(r.id) || !((Sx.grades || {})[r.id] || {}).f) && !fooled.includes(r.callbackTag)) fooled.push(r.callbackTag);
+  });
+  return {id:Cx.id, number:Cx.crisisNumber, title:Cx.title, ending:Sx.ending, endingTitle:end.title || '', tone:end.tone || '', total:Sx.summary ? Sx.summary.total : null,
+    customer:Cx.customer.name, cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
+    fooled, tested, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString()};
+}
+function commitRecord(){
+  if (REC.runs[C.id] || S.offRecord || !S.done) return;
+  REC.runs[C.id] = recordFrom(C, S); saveRecord();
+}
+async function maybeRecord(x, st){
+  if (REC.runs[x.id] || !st || !st.done || st.offRecord) return false;
+  try { const r = await fetch(x.file, {cache:'no-cache'}); if (!r.ok) return false; const Cx = await r.json(); if (REC.runs[x.id]) return false; REC.runs[x.id] = recordFrom(Cx, st); saveRecord(); return true; } catch(e) { return false; }
+}
+async function ensureRecords(){
+  let changed = false;
+  for (const x of INDEX){
+    if (CUR && x.id === CUR.id) continue;
+    let st = null; try { const raw = localStorage.getItem(LS_PREFIX + x.id); st = raw ? JSON.parse(raw) : null; } catch(e) {}
+    if (await maybeRecord(x, st)) changed = true;
+  }
+  if (changed) carryChanged();
+}
+async function syncRecord(db, uid){
+  try {
+    recRef = db.collection('data/users/' + uid).doc('record');
+    const snap = await recRef.get(); const remote = snap.exists ? (snap.data() || {}) : {};
+    let changed = false, push = false;
+    Object.keys(remote.runs || {}).forEach(id => { const a = REC.runs[id], b = remote.runs[id]; if (!a || (b.at || '') < (a.at || '')){ REC.runs[id] = b; changed = true; } });
+    Object.keys(REC.runs).forEach(id => { const b = (remote.runs || {})[id]; if (!b || (REC.runs[id].at || '') < (b.at || '')) push = true; });
+    if (changed || push) saveRecord();
+    if (changed) carryChanged();
+  } catch(e) {}
+}
+// The record arrived or grew after this scenario was set up: a run that hasn't started picks up the new carry-in.
+function carryChanged(){
+  if (S && !S.started){ const pa = S.playAhead; S = fresh(); S.playAhead = pa; }
+  if (S && S.done && !S.offRecord) commitRecord();
+  render();
+}
+function earlierRuns(){ const i = CUR ? INDEX.findIndex(x => x.id === CUR.id) : 0; return INDEX.slice(0, Math.max(i, 0)).map(x => REC.runs[x.id]).filter(Boolean); }
+function credStart(){
+  const K = C.credibility; if (!K) return null;
+  const runs = earlierRuns(), same = runs.filter(r => r.customer === C.customer.name && typeof r.cred === 'number').pop();
+  if (same) return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, same.cred));
+  const last = runs[runs.length - 1], step = !last ? 0 : last.tone === 'good' ? 1 : last.tone === 'bad' ? -1 : 0;
+  return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + step));
+}
+function fileGrade(s0){
+  let g = s0.startingGrade, why = '';
+  earlierRuns().forEach(r => (r.grades || []).forEach(x => { if (x.codeName === s0.codeName){ g = x.to; why = x.reason + ' (' + r.title + ')'; } }));
+  return {g, why};
+}
+function goneBefore(sid){ const s0 = C.sources.find(x => x.id === sid); return !!s0 && earlierRuns().some(r => (r.burned || []).includes(s0.codeName)); }
+function recordView(){
+  const runs = INDEX.map(x => REC.runs[x.id]).filter(Boolean), sign = n => (n > 0 ? '+' : '') + n;
+  let html = '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><h1>Service record</h1>'
+    + '<p class="muted small">Your first finish of each scenario goes on the record and stays there. Replays are off the record: scored, but they change nothing here.</p></header><main class="stack">';
+  if (!runs.length) return html + '<p>Nothing on the record yet.</p></main>';
+  runs.forEach(r => {
+    const caught = (r.tested || []).filter(t => !(r.fooled || []).includes(t));
+    html += '<div class="card"><p class="mono small muted">Scenario ' + esc(r.number || '') + '</p><p><b>' + esc(r.title) + '</b></p>'
+      + '<p class="small"><span class="muted">Outcome:</span> ' + esc(r.endingTitle || r.ending || '') + (r.total != null ? ' · score ' + sign(r.total) : '') + '</p>'
+      + (r.cred != null ? '<p class="small"><span class="muted">' + esc(r.customer) + ':</span> left you at ' + esc(r.credLabel || '') + ' (' + r.cred + ')</p>' : '')
+      + ((r.burned || []).length ? '<p class="small"><span class="muted">Sources burned:</span> ' + r.burned.map(esc).join(', ') + '. They stay gone.</p>' : '<p class="small"><span class="muted">Sources burned:</span> none</p>')
+      + ((r.fooled || []).length ? '<p class="small"><span class="muted">What got past you:</span> ' + r.fooled.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
+      + (caught.length ? '<p class="small"><span class="muted">What you caught:</span> ' + caught.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
+      + ((r.grades || []).filter(g => !(r.burned || []).includes(g.codeName)).length ? '<p class="small"><span class="muted">Source files updated:</span> ' + r.grades.filter(g => !(r.burned || []).includes(g.codeName)).map(g => '<b>' + esc(g.codeName) + '</b> now ' + esc(g.to) + ' (' + esc(g.reason) + ')').join('; ') + '.</p>' : '')
+      + '</div>';
+  });
+  return html + '<p class="small muted">What carries forward: a returning customer starts where you left them, a new one has read your file, burned sources stay burned, and source grades follow their track record. The other side keeps notes too.</p></main>';
+}
+
 /* ---------- Main menu, scenario list, unlocks ---------- */
 let PROG = {};   // progress of the crises that aren't loaded, read from their saves
 function progFromState(st){
@@ -1449,7 +1551,9 @@ async function remoteProgress(db, uid){
   await Promise.all(INDEX.filter(x => !CUR || x.id !== CUR.id).map(async x => {
     try {
       const snap = await db.collection('data/users/' + uid).doc('save-' + x.id).get();
-      const p = snap.exists ? progFromState((snap.data() || {}).state) : null;
+      const st0 = snap.exists ? (snap.data() || {}).state : null;
+      const p = progFromState(st0);
+      if (await maybeRecord(x, st0)) changed = true, carryChanged();
       if (p && (!PROG[x.id] || p.savedAt > PROG[x.id].savedAt)){ PROG[x.id] = p; changed = true; }
     } catch(e) {}
   }));
@@ -1482,6 +1586,7 @@ function menuView(){
     + '<main class="stack menu">'
     + '<button class="btn big" data-act="crisis" data-id="' + esc(next.id) + '">' + esc(label) + '<small>' + esc(sub) + '</small></button>'
     + '<button class="btn ghost big" data-act="list">Scenarios<small>' + INDEX.filter(x => progress(x.id).cleared).length + ' of ' + INDEX.length + ' finished</small></button>'
+    + '<button class="btn ghost big" data-act="record">Service record<small>' + (Object.keys(REC.runs).length ? Object.keys(REC.runs).length + ' on the record' : 'Nothing on the record yet') + '</small></button>'
     + (CFG.playtest && ui.isOwner ? '<button class="btn ghost big" data-act="tab" data-v="playtests">Tester results</button>' : '')
     + (CFG.playtest ? '<p class="small muted">Playtest build. Your results are recorded automatically.</p>' : '')
     + '<p class="small muted">' + esc(saveStatusText()) + '</p>'
@@ -1511,7 +1616,7 @@ async function start(hotData){
   if (!INDEX.length) INDEX = [{id:'border-buildup', file:CRISIS_URL}];
   let want = null; try { want = localStorage.getItem(LS_PREFIX + 'current'); } catch(e) {}
   if (hotData && hotData.crisis) want = hotData.crisis;
-  loadProgress();
+  loadProgress(); loadRecord();
   CUR = INDEX.find(x => x.id === want && crisisUnlocked(x.id)) || INDEX[0];
   try {
     const res = await fetch(CUR.file, {cache:'no-cache'});
@@ -1522,6 +1627,8 @@ async function start(hotData){
     return;
   }
   S = normalize(hotData && hotData.S) || normalize(loadLocal()) || fresh();
+  if (S.done && !S.offRecord) commitRecord();
+  ensureRecords();
   ui.pmDay = C.days; ui.pin = null; ui.sheet = null;
   ui.tab = (hotData && hotData.tab) || 'inbox';
   if (hotData && hotData.screen) ui.screen = hotData.screen;

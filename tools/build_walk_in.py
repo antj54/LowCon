@@ -333,6 +333,12 @@ truth_units = {
  5: [U("Kidnap script", TV, 34, -32), U("Statement rehearsed", EMB_S, 70, 8)]}
 for g in crisis["groundTruth"]: g["units"] = truth_units[g["day"]]
 
+for r in reports:
+    if r["id"] == "C-06": r["callbackTag"] = "staged-signals"
+    if r["id"] == "C-10": r["callbackTag"] = "prepared-detail"
+crisis["record"] = {"grades": []}
+crisis["credibility"]["bonusAt"] = 5
+crisis["formatVersion"] = "1.0"
 # sanity: every result id has a report, every reveal id exists, every target is in a PIR
 ids = {r["id"] for r in reports}
 assert all(cr["id"] in ids for cr in crisis["collectionResults"])

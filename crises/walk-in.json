@@ -1,6 +1,6 @@
 {
   "id": "walk-in",
-  "formatVersion": "0.9",
+  "formatVersion": "1.0",
   "title": "The Walk-in",
   "crisisNumber": "02",
   "days": 5,
@@ -1137,7 +1137,8 @@
         "x": 240,
         "y": 62,
         "label": "Gives room 412"
-      }
+      },
+      "callbackTag": "prepared-detail"
     },
     {
       "id": "C-13",
@@ -1275,7 +1276,8 @@
         "x": 70,
         "y": 262,
         "label": "Recall order on the admin net"
-      }
+      },
+      "callbackTag": "staged-signals"
     },
     {
       "id": "C-11",
@@ -1974,7 +1976,8 @@
       "sidelined": -2,
       "burned": -2
     },
-    "summary": "Marlowe can't see whether you're right until it's over. She can see when she has to take something back, and when you won't commit."
+    "summary": "Marlowe can't see whether you're right until it's over. She can see when she has to take something back, and when you won't commit.",
+    "bonusAt": 5
   },
   "board": {
     "pinsPerDay": 3
@@ -2124,5 +2127,8 @@
       }
     ],
     "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted. Dashed rings are today's taskings."
+  },
+  "record": {
+    "grades": []
   }
 }

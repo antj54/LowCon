@@ -1,6 +1,6 @@
 {
   "id": "border-buildup",
-  "formatVersion": "0.8",
+  "formatVersion": "1.0",
   "title": "Exercise or Operation?",
   "crisisNumber": "01",
   "days": 5,
@@ -838,7 +838,8 @@
         },
         "motive": "Kordav knew the net was covered. A reliable channel is the best place for a lie, because you trust the channel."
       },
-      "postmortemNote": "Staged for MERIDIAN. Reliable channel, planted content."
+      "postmortemNote": "Staged for MERIDIAN. Reliable channel, planted content.",
+      "callbackTag": "staged-signals"
     },
     {
       "id": "R-4-03",
@@ -1049,7 +1050,8 @@
         "x": 166,
         "y": 186,
         "label": "Photo: tanks on flatcars"
-      }
+      },
+      "callbackTag": "recycled-photo"
     },
     {
       "id": "R-5-06",
@@ -1887,8 +1889,23 @@
       "standoff-thin": 0,
       "seized": -2
     },
-    "summary": "Halvorsen can't see whether you're right until it's over. He can see when he has to undo a move, and when you won't commit."
+    "summary": "Halvorsen can't see whether you're right until it's over. He can see when he has to undo a move, and when you won't commit.",
+    "bonusAt": 5
   },
   "adversary": "Kordav",
-  "endingEyebrow": "Dawn, the 20th"
+  "endingEyebrow": "Dawn, the 20th",
+  "record": {
+    "grades": [
+      {
+        "codeName": "WREN",
+        "to": "C",
+        "reason": "raised the alarm on two days with nothing behind it"
+      },
+      {
+        "codeName": "KESTREL",
+        "to": "B",
+        "reason": "everything he reported held up"
+      }
+    ]
+  }
 }

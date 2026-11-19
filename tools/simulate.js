@@ -28,10 +28,11 @@ function boot(cfg, storage) {
   global.setInterval = () => 0;
   global.setTimeout = (f, ms) => (ms === 0 || ms === 50 ? realSetTimeout(f, ms) : 0);
   Object.defineProperty(globalThis, 'navigator', { value: {}, configurable: true, writable: true });
-  global.fetch = async url => /config\.json$/.test(url)
-    ? (cfg ? { ok: true, json: async () => cfg } : { ok: false, json: async () => ({}) })
-    : /index\.json$/.test(url) ? { ok: false, json: async () => ({}) }
-    : { ok: true, json: async () => JSON.parse(JSON.stringify(crisis)) };
+  const file = u => { const f = path.join(root, u); return fs.existsSync(f) ? { ok: true, json: async () => JSON.parse(fs.readFileSync(f, 'utf8')) } : { ok: false, json: async () => ({}) }; };
+  const conf = Object.assign({ playtest: false, unlockAll: true }, cfg || {});
+  global.fetch = async url => /config\.json$/.test(url) ? { ok: true, json: async () => conf }
+    : url === path.relative(root, crisisPath) ? { ok: true, json: async () => JSON.parse(JSON.stringify(crisis)) } : file(url);
+  storage['intel-cell-sim:current'] = crisis.id;
   eval(engine);
   const click = (act, ds = {}) => handlers.click({ target: { closest: () => ({ dataset: Object.assign({ act }, ds), classList: { contains: () => false } }) } });
   return new Promise(resolve => realSetTimeout(() => resolve({ click, els }), 20));
@@ -39,7 +40,7 @@ function boot(cfg, storage) {
 const realSetTimeout = setTimeout;
 
 async function run(plan, doubt, cfg, opts = {}) {
-  const storage = {};
+  const storage = Object.assign({}, opts.seed || {});
   let { click, els } = await boot(cfg, storage);
   click('start'); click('playahead');
   const calls = [];
@@ -61,6 +62,8 @@ async function run(plan, doubt, cfg, opts = {}) {
     if (opts.reloadAfter && opts.reloadAfter.includes(i + 1)) { ({ click, els } = await boot(cfg, storage)); if (!/Low Confidence/.test(els.app.innerHTML)) throw new Error('Main menu missing after reload'); click('continue'); }
   }
   if (cfg && cfg.playtest) { click('realism', { id: 'R-3-03' }); click('debrief', { q: 'sixth', v: 'yes' }); }
+  const rec = JSON.parse(storage['intel-cell-sim:record'] || '{"runs":{}}').runs[crisis.id];
+  if (!opts.seed && (!rec || !rec.ending)) throw new Error('Service record not written at the end of the run');
   const out = els.app.innerHTML; lastHtml = out; lastLayer = els.layer.innerHTML;
   const ending = (out.match(/<h2>([^<]+)<\/h2>/) || [])[1];
   const total = (out.match(/class="n">([^<]+)</) || [])[1];
@@ -168,6 +171,15 @@ const SETS = {
   console.log('Collection + board (unscored)'.padEnd(32), b.line, boardOk ? '| same score, board in postmortem' : '| BOARD CHANGED THE SCORE OR IS MISSING');
   const rl = await run(set.collect, none, null, { board: useBoard, reloadAfter: [1, 2, 3, 4] });
   console.log('Reload after every day'.padEnd(32), rl.line, rl.total === ref.total && /Your board/.test(rl.html) ? '| matches, save survives reload' : '| RELOAD CHANGED THE RESULT');
+  if (crisis.id === 'walk-in') {
+    const prior = tone => ({ 'intel-cell-sim:record': JSON.stringify({ v: 1, runs: { 'border-buildup': { id: 'border-buildup', title: 'Exercise or Operation?', customer: 'Gen. R. Halvorsen', cred: tone === 'good' ? 5 : 1, tone, burned: [], fooled: [], tested: [], grades: [{ codeName: 'WREN', to: 'C', reason: 'test' }], at: '2026-01-01' } } }) });
+    for (const tone of ['good', 'bad']) {
+      const r = await run(set.collect, none, null, { seed: prior(tone) });
+      const want = tone === 'good' ? 'Trusted (4)' : 'Questioned (2)';
+      console.log(('Carry-in: Crisis 01 ended ' + tone).padEnd(32), r.line, '| cred ' + r.cred, r.cred.startsWith(want) ? '| starts as expected' : '| WRONG START, wanted ' + want);
+      if (!r.cred.startsWith(want)) process.exitCode = 1;
+    }
+  }
   const pt = await run(set.collect, none, { playtest: true });
   console.log('Playtest build'.padEnd(32), pt.line, /Playtest debrief/.test(lastHtml) ? '| debrief shown' : '| DEBRIEF MISSING');
   if (!boardOk || rl.total !== ref.total) process.exitCode = 1;
