@@ -1907,5 +1907,101 @@
         "reason": "everything he reported held up"
       }
     ]
-  }
+  },
+  "analysts": [
+    {
+      "id": "vasko",
+      "name": "Imre Vasko",
+      "specialty": "Regional analyst",
+      "reveal": "Anchors on his first theory. His was coercion, which was right for two days. After the walkout he read every new item as proof the pressure campaign was winding down."
+    },
+    {
+      "id": "halden",
+      "name": "Noor Halden",
+      "specialty": "Technical analyst (signals, imagery, documents)",
+      "reveal": "Slow but careful. Her notes arrive a day after the item, and she was never wrong. The cost is the day."
+    }
+  ],
+  "notes": [
+    {
+      "analyst": "vasko",
+      "item": "R-1-02",
+      "after": 0,
+      "text": "This is theatre for the talks. A state that wants to be watched this badly isn't about to do anything.",
+      "right": 1,
+      "why": "Right on Day 1: it was signaling."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-2-01",
+      "after": 0,
+      "text": "Every army has a drawer full of plans like this. It's leverage until someone signs it.",
+      "right": 1,
+      "why": "Right on Day 2: plans aren't intent."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-3-03",
+      "after": 0,
+      "text": "There it is. The talks are off, so the show is over. They're standing down.",
+      "right": 0,
+      "why": "He took the plant as the natural end of his own theory. The same morning's depot and signals reporting said otherwise."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-4-04",
+      "after": 0,
+      "text": "WREN again. They've been wrong twice this week already.",
+      "right": 0,
+      "why": "True, and beside the point: this time imagery agreed with them."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-5-01",
+      "after": 0,
+      "text": "The wire service has it now. Two outlets, one story. I'd call that confirmed.",
+      "right": 0,
+      "why": "One origin, two outlets."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-1-04",
+      "after": 1,
+      "text": "No bridging at Ostrel and nothing at Dolan. Keep this picture. It's what normal looks like.",
+      "right": 1,
+      "why": "The baseline that Day 4 broke."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-2-04",
+      "after": 1,
+      "text": "A day of cloud is a day of nothing seen. It isn't a day of nothing happening.",
+      "right": 1,
+      "why": "A gap isn't evidence either way."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-3-04",
+      "after": 1,
+      "text": "Nets don't go quiet at 0400 by habit. That was an order, and it landed the same hour the depot changed accounts.",
+      "right": 1,
+      "why": "Two independent sources, one timestamp. It arrived a day after you needed it."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-4-02",
+      "after": 1,
+      "text": "Four days of encrypted voice, then one call in the clear that happens to be the press line. I don't believe in that kind of luck.",
+      "right": 1,
+      "why": "The staged call. Her note came the morning after it was sent to fool you."
+    },
+    {
+      "analyst": "halden",
+      "item": "C-02",
+      "after": 1,
+      "text": "Bridging under trees with a field hospital beside it. Nobody hides a show of force.",
+      "right": 1,
+      "why": "The diagnostic, read correctly."
+    }
+  ]
 }

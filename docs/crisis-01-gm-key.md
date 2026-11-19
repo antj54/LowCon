@@ -187,6 +187,23 @@ What's at Tarsk at dawn on the 20th, and when it got there:
 
 ---
 
+## Analyst notes (Phase 3, #63)
+
+| Analyst | Item | Shown | Note | Verdict |
+| --- | --- | --- | --- | --- |
+| Vasko | R-1-02 | Day 1 | "This is theatre for the talks. A state that wants to be watched this badly isn't about to do anything." | Right on Day 1 |
+| Vasko | R-2-01 | Day 2 | "Every army has a drawer full of plans like this. It's leverage until someone signs it." | Right on Day 2 |
+| Vasko | R-3-03 | Day 3 | "There it is. The talks are off, so the show is over. They're standing down." | Wrong: he takes the plant as the end of his own theory |
+| Vasko | R-4-04 | Day 4 | "WREN again. They've been wrong twice this week already." | Wrong: this time imagery agreed |
+| Vasko | R-5-01 | Day 5 | "The wire service has it now. Two outlets, one story. I'd call that confirmed." | Wrong: one origin |
+| Halden | R-1-04 | Day 2 | "No bridging at Ostrel and nothing at Dolan. Keep this picture. It's what normal looks like." | Right |
+| Halden | R-2-04 | Day 3 | "A day of cloud is a day of nothing seen. It isn't a day of nothing happening." | Right |
+| Halden | R-3-04 | Day 4 | "Nets don't go quiet at 0400 by habit. That was an order, and it landed the same hour the depot changed accounts." | Right, a day after it mattered |
+| Halden | R-4-02 | Day 5 | "Four days of encrypted voice, then one call in the clear that happens to be the press line. I don't believe in that kind of luck." | Right, the morning after the staged call |
+| Halden | C-02 | The day after it arrives | "Bridging under trees with a field hospital beside it. Nobody hides a show of force." | Right |
+
+Vasko's first theory, coercion, is true for two days, so he looks reliable until the truth moves. Halden is never wrong and never on time.
+
 ## Designer notes (critic hat)
 
 **Dominant-strategy check** (v0.7 engine with collection, `node tools/simulate.js --calls`; totals include evidence, doubts, burned sources and ending). Collection is the full plan in the retrofit doc; the simulator assumes perfect calls, so it understates what collection is worth to a human player:

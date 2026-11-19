@@ -120,7 +120,7 @@ Each step is playable on its own.
 
 1. **Service record** *(built, #61)*: written at the end of Scenarios 01 and 02, shown on the main menu.
 2. **Carry-over** *(built, #61)*: starting credibility, burned sources and file grades applied in Scenarios 01 and 02 as they exist.
-3. **Analyst notes** written into Scenarios 01 and 02.
+3. **Analyst notes** *(built, #63)* written into Scenarios 01 and 02.
 4. **Scenario 03 on paper** (player packet and key; done, #59), then as data, with its callback items.
 5. **Reassignment.**
 6. **Playtest** the full campaign, which also closes the Phase 2 gate.

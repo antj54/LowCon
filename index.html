@@ -115,6 +115,9 @@ p{margin:0}
 .bcell:disabled{cursor:default}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--muted)}
 .legend b{color:var(--ink);font-family:var(--f-mono)}
+.anote{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;color:var(--muted);font-style:italic}
+.anote .who{display:block;font:500 11.5px/1.4 var(--f-mono);font-style:normal;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.msg.notes{border-left-color:var(--line)}
 .crednote{color:var(--ink)}
 .status-line b.cred-questioned,.cred-questioned{color:var(--c-med)}
 .status-line b.cred-discounted,.cred-discounted{color:var(--c-low)}
@@ -890,6 +893,34 @@ function readInCard(d){
     + '<ul class="facts">' + facts.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul></section>';
 }
 
+/* ---------- Analyst notes: opinion, not evidence ---------- */
+const analyst = id => (C.analysts || []).find(a => a.id === id) || {name:id};
+// A note shows once its item has been in for `after` days. In the postmortem everything on a seen item shows.
+function notesOn(id, upToDay){ return (C.notes || []).filter(n => n.item === id && itemDay(id) + (n.after || 0) <= upToDay); }
+function noteLine(n, withItem){
+  return '<p class="anote"><span class="who">' + esc(analyst(n.analyst).name) + (withItem ? ', on ' + esc(n.item) + ' (Day ' + itemDay(n.item) + ')' : (n.after ? ', a day later' : '')) + '</span>' + esc(n.text) + '</p>';
+}
+function notesHtml(id, maxAfter){
+  const day = S.done ? 99 : curDay();
+  return notesOn(id, day).filter(n => (n.after || 0) <= maxAfter).map(n => noteLine(n, false)).join('');
+}
+function lateNotes(d){
+  const seen = new Set(seenReports().map(r => r.id));
+  const late = (C.notes || []).filter(n => (n.after || 0) > 0 && seen.has(n.item) && itemDay(n.item) + n.after === d);
+  return late.length ? '<div class="msg notes"><span class="from">Analyst notes on earlier items</span>' + late.map(n => noteLine(n, true)).join('') + '</div>' : '';
+}
+function analystsCard(){
+  if (!(C.analysts || []).length) return '';
+  const seen = new Set(seenReports().map(r => r.id));
+  return '<div class="stack"><h3>Your analysts</h3>' + C.analysts.map(a => {
+    const ns = (C.notes || []).filter(n => n.analyst === a.id && seen.has(n.item));
+    const score = ns.reduce((t, n) => t + (n.right || 0), 0);
+    return '<div class="reveal"><div class="head"><b>' + esc(a.name) + '</b><span>' + esc(a.specialty) + '</span><span class="pill">Right ' + (Number.isInteger(score) ? score : score.toFixed(1).replace('.5', '½').replace('0½', '½')) + ' of ' + ns.length + '</span></div>'
+      + '<p class="what">' + esc(a.reveal || '') + '</p>'
+      + ns.map(n => '<p class="small"><span class="mono">' + (n.right === 1 ? '✓' : n.right ? '~' : '✗') + ' ' + esc(n.item) + '</span> <q>' + esc(n.text) + '</q> ' + esc(n.why || '') + '</p>').join('')
+      + '</div>';
+  }).join('') + '<p class="small muted">Notes are opinion. They weren\'t scored.</p></div>';
+}
 function pinChip(r){
   const on = onBoard(r.id);
   return '<button class="chip bpin" data-act="bpin" data-id="' + r.id + '" aria-pressed="' + on + '">' + (on ? 'On the board' : 'Pin to board') + '</button>';
@@ -900,7 +931,8 @@ function itemCard(r, editable, pinnable){
   const cls = 'card' + (g.f ? ' flagged' : '') + (g.n ? ' nr' : '') + (ui.pin === r.id ? ' hl' : '');
   let html = '<article class="' + cls + '" id="card-' + r.id + '">'
     + '<header class="cable-h"><span class="rid">' + r.id + '</span><span class="src">' + esc(s.codeName) + '</span><span>' + esc(r.discipline) + '</span>' + (r.collected ? '<span class="pill tasked">Your tasking</span>' : '') + '<span class="recv" title="' + esc(recvTitle(r)) + '">' + received(r) + '</span></header>'
-    + '<p class="cable-t">' + esc(r.text) + '</p>';
+    + '<p class="cable-t">' + esc(r.text) + '</p>'
+    + notesHtml(r.id, editable ? 0 : 9);
   if (editable){
     html += '<div class="toggles"><button class="chip flag" data-act="flag" data-id="' + r.id + '" aria-pressed="' + !!g.f + '">' + (g.f ? 'Doubted' : 'Doubt this report') + '</button><button class="chip" data-act="nr" data-id="' + r.id + '" aria-pressed="' + !!g.n + '">Not relevant</button>' + pinChip(r)
       + (CFG.playtest ? '<button class="chip rflag" data-act="realism" data-id="' + r.id + '" aria-pressed="' + !!S.realism[r.id] + '" title="Playtest: tell the designer this item doesn\'t ring true">' + (S.realism[r.id] ? 'Flagged as unrealistic' : 'Not realistic?') + '</button>' : '')
@@ -956,6 +988,7 @@ function inboxView(d){
     + '<div class="section-h"><h2>Inbox</h2><span class="mono small muted">' + doubted + ' doubted</span></div>'
     + '<p class="small muted">Each item arrives graded by its collector: the letter is the source\'s track record, the number is how credible the information looks. A good source can still carry a bad report. If you think an item is false or deliberately misleading, doubt it. Doubts are scored in the postmortem.</p>'
     + '<div class="stack">' + items.map(r => itemCard(r, true)).join('') + '</div>'
+    + lateNotes(d)
     + '<div class="btnrow">' + (COLL() ? '<button class="btn ghost" data-act="tab" data-v="collect">Task collection</button>' : '') + '<button class="btn" data-act="tab" data-v="brief">Write the brief</button></div>'
     + earlierDays(d-1);
 }
@@ -1103,6 +1136,7 @@ function filesView(){
   return '<div class="stack"><h2>Situation</h2><p class="mono small muted">' + esc(C.briefing.dateLine) + '</p>' + C.briefing.situation.map(p => '<p>' + esc(p) + '</p>').join('') + '</div>'
     + '<div class="stack"><h3>' + esc(CUST()) + '\'s habits</h3>' + policyTable() + '</div>'
     + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
+    + ((C.analysts || []).length ? '<div class="stack"><h3>Your analysts</h3>' + C.analysts.map(a => '<p class="small"><b>' + esc(a.name) + '</b> · ' + esc(a.specialty) + '</p>').join('') + '<p class="small muted">Their notes appear under items. Notes are opinion: you can\'t cite or doubt them, and they don\'t score. The postmortem shows how often each of them was right.</p></div>' : '')
     + '<div class="stack"><h3>Sources on file</h3><div class="tablewrap"><table><thead><tr><th>Code name</th><th>Access</th><th>File</th></tr></thead><tbody>'
     + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(fileGrade(s).g) + '</b>' + (goneBefore(s.id) ? '<br><span class="small muted">burned</span>' : '') + '</td></tr>').join('') + '</tbody></table></div></div>'
     + (roster.some(x => fileGrade(x).why || goneBefore(x.id)) ? '<p class="small muted">From your record: ' + roster.filter(x => fileGrade(x).why || goneBefore(x.id)).map(x => '<b>' + esc(x.codeName) + '</b> ' + (goneBefore(x.id) ? 'was burned in an earlier scenario and can\'t be used.' : 'is now graded ' + fileGrade(x).g + ': ' + esc(fileGrade(x).why))).join(' ') + '</p>' : '')
@@ -1183,6 +1217,7 @@ function postmortemView(){
     html += '<div class="stack"><div class="section-h"><h3>Your board</h3></div>' + boardView(C.days, true)
       + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as ' + esc(ADV()) + ' intended.</p></div>';
   }
+  html += analystsCard();
   html += '<div class="stack"><h3>Lessons</h3><ul>' + C.postmortem.lessons.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
     + '<div class="stack"><h3>Your sources, revealed</h3>' + C.sources.filter(s => !s.rosterHidden).map(s => '<p class="small"><span class="mono"><b>' + esc(s.codeName) + '</b></span> ' + (s.controlledByAdversary === true ? '<span class="pill k-planted">Adversary channel</span> ' : '') + esc(s.postmortemNote || '') + '</p>').join('') + '</div>'
     + '<div class="btnrow"><button class="btn" data-act="restart">Play again</button></div>';

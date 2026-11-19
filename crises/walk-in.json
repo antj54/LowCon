@@ -2130,5 +2130,101 @@
   },
   "record": {
     "grades": []
-  }
+  },
+  "analysts": [
+    {
+      "id": "vasko",
+      "name": "Imre Vasko",
+      "specialty": "Regional analyst",
+      "reveal": "Anchors on his first theory. He started well, with the vote. Then LANTERN's IRON HARVEST details convinced him the man was real, and nothing after that moved him."
+    },
+    {
+      "id": "halden",
+      "name": "Noor Halden",
+      "specialty": "Technical analyst (signals, imagery, documents)",
+      "reveal": "Slow but careful. Her notes arrive a day after the item, and she was never wrong. The cost is the day."
+    }
+  ],
+  "notes": [
+    {
+      "analyst": "vasko",
+      "item": "R-1-04",
+      "after": 0,
+      "text": "The vote is the only story in Kalsa this week. Anything that lands before it lands on Vell.",
+      "right": 1,
+      "why": "Motive and timing, on Day 1."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-2-01",
+      "after": 0,
+      "text": "Calm isn't guilt. Staff officers rehearse everything. And his IRON HARVEST details checked out to the hour.",
+      "right": 0,
+      "why": "The details were true and cost Kordav nothing. He anchored on them."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-3-02",
+      "after": 0,
+      "text": "That's real Bureau paper. A man making it up for a visa doesn't get hold of that.",
+      "right": 0.5,
+      "why": "Right that he's no lone fabricator. Wrong about what follows: the Bureau gave it to him."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-4-02",
+      "after": 0,
+      "text": "Of course he's asking about his family now. It's sinking in that he isn't going home.",
+      "right": 0,
+      "why": "On Day 1 she would 'be fine.' The story changed when the pressure did."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-5-01",
+      "after": 0,
+      "text": "So they've finally noticed he's gone. That's what a real defection looks like from the other side.",
+      "right": 0,
+      "why": "Four days of silence, then a kidnapping story on the eve of the vote."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-1-02",
+      "after": 1,
+      "text": "Everything he's told us about IRON HARVEST, we already had. Accurate isn't the same as new.",
+      "right": 1,
+      "why": "Chickenfeed, named as such."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-3-03",
+      "after": 1,
+      "text": "Public trips only. If I were paying an agent, I'd pick the trips nobody could look up.",
+      "right": 1,
+      "why": "The ledger's flaw, a day after the analysis."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-4-03",
+      "after": 1,
+      "text": "We told nobody. Elsin's service had a rumor, not a defector. So who gave the MP the word 'defected'?",
+      "right": 1,
+      "why": "The leak could only have come from LANTERN's side."
+    },
+    {
+      "analyst": "halden",
+      "item": "C-06",
+      "after": 1,
+      "text": "Recall orders go out on the operational channel at the highest precedence. This one went on the admin net, routine, with names. Someone wanted it read.",
+      "right": 1,
+      "why": "The staged recall, caught on procedure. A day late if you'd already briefed on it."
+    },
+    {
+      "analyst": "halden",
+      "item": "C-10",
+      "after": 1,
+      "text": "An exact room number and no idea how he knows it. Details like that come from a briefing or a newspaper.",
+      "right": 1,
+      "why": "It was a newspaper."
+    }
+  ]
 }

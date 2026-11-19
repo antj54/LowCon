@@ -337,6 +337,22 @@ for r in reports:
     if r["id"] == "C-06": r["callbackTag"] = "staged-signals"
     if r["id"] == "C-10": r["callbackTag"] = "prepared-detail"
 crisis["record"] = {"grades": []}
+def NOTE(a, item, text, right, why, after=0): return {"analyst": a, "item": item, "after": after, "text": text, "right": right, "why": why}
+crisis["analysts"] = [
+ {"id": "vasko", "name": "Imre Vasko", "specialty": "Regional analyst", "reveal": "Anchors on his first theory. He started well, with the vote. Then LANTERN's IRON HARVEST details convinced him the man was real, and nothing after that moved him."},
+ {"id": "halden", "name": "Noor Halden", "specialty": "Technical analyst (signals, imagery, documents)", "reveal": "Slow but careful. Her notes arrive a day after the item, and she was never wrong. The cost is the day."}]
+crisis["notes"] = [
+ NOTE("vasko", "R-1-04", "The vote is the only story in Kalsa this week. Anything that lands before it lands on Vell.", 1, "Motive and timing, on Day 1."),
+ NOTE("vasko", "R-2-01", "Calm isn't guilt. Staff officers rehearse everything. And his IRON HARVEST details checked out to the hour.", 0, "The details were true and cost Kordav nothing. He anchored on them."),
+ NOTE("vasko", "R-3-02", "That's real Bureau paper. A man making it up for a visa doesn't get hold of that.", 0.5, "Right that he's no lone fabricator. Wrong about what follows: the Bureau gave it to him."),
+ NOTE("vasko", "R-4-02", "Of course he's asking about his family now. It's sinking in that he isn't going home.", 0, "On Day 1 she would 'be fine.' The story changed when the pressure did."),
+ NOTE("vasko", "R-5-01", "So they've finally noticed he's gone. That's what a real defection looks like from the other side.", 0, "Four days of silence, then a kidnapping story on the eve of the vote."),
+ NOTE("halden", "R-1-02", "Everything he's told us about IRON HARVEST, we already had. Accurate isn't the same as new.", 1, "Chickenfeed, named as such.", 1),
+ NOTE("halden", "R-3-03", "Public trips only. If I were paying an agent, I'd pick the trips nobody could look up.", 1, "The ledger's flaw, a day after the analysis.", 1),
+ NOTE("halden", "R-4-03", "We told nobody. Elsin's service had a rumor, not a defector. So who gave the MP the word 'defected'?", 1, "The leak could only have come from LANTERN's side.", 1),
+ NOTE("halden", "C-06", "Recall orders go out on the operational channel at the highest precedence. This one went on the admin net, routine, with names. Someone wanted it read.", 1, "The staged recall, caught on procedure. A day late if you'd already briefed on it.", 1),
+ NOTE("halden", "C-10", "An exact room number and no idea how he knows it. Details like that come from a briefing or a newspaper.", 1, "It was a newspaper.", 1)]
+assert all(n["item"] in {r["id"] for r in reports} for n in crisis["notes"])
 crisis["credibility"]["bonusAt"] = 5
 crisis["formatVersion"] = "1.0"
 # sanity: every result id has a report, every reveal id exists, every target is in a PIR

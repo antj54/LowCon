@@ -227,6 +227,23 @@ Credibility outcome adjustment (#50): Exposed +2, Survived 0, Shelved 0, Sidelin
 
 ---
 
+## Analyst notes (Phase 3, #63)
+
+| Analyst | Item | Shown | Note | Verdict |
+| --- | --- | --- | --- | --- |
+| Vasko | R-1-04 | Day 1 | "The vote is the only story in Kalsa this week. Anything that lands before it lands on Vell." | Right: motive and timing |
+| Vasko | R-2-01 | Day 2 | "Calm isn't guilt. Staff officers rehearse everything. And his IRON HARVEST details checked out to the hour." | Wrong: he anchors on the chickenfeed |
+| Vasko | R-3-02 | Day 3 | "That's real Bureau paper. A man making it up for a visa doesn't get hold of that." | Half: not a lone fabricator, but the Bureau gave it to him |
+| Vasko | R-4-02 | Day 4 | "Of course he's asking about his family now. It's sinking in that he isn't going home." | Wrong |
+| Vasko | R-5-01 | Day 5 | "So they've finally noticed he's gone. That's what a real defection looks like from the other side." | Wrong |
+| Halden | R-1-02 | Day 2 | "Everything he's told us about IRON HARVEST, we already had. Accurate isn't the same as new." | Right |
+| Halden | R-3-03 | Day 4 | "Public trips only. If I were paying an agent, I'd pick the trips nobody could look up." | Right |
+| Halden | R-4-03 | Day 5 | "We told nobody. Elsin's service had a rumor, not a defector. So who gave the MP the word 'defected'?" | Right |
+| Halden | C-06 | The day after it arrives | "Recall orders go out on the operational channel at the highest precedence. This one went on the admin net, routine, with names. Someone wanted it read." | Right, and a day late if you'd already briefed on it |
+| Halden | C-10 | The day after it arrives | "An exact room number and no idea how he knows it. Details like that come from a briefing or a newspaper." | Right |
+
+**Critic's note:** Halden's note on C-06 softens the hardest plant in the game for anyone who waits a day. That's her trait working as designed, but it lowers the staged recall's difficulty for patient players.
+
 ## Designer notes (critic hat)
 
 **Does it play differently from Crisis 01?** (the Phase 2 gate)
