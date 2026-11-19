@@ -1475,7 +1475,8 @@
       "3": "Imagery of Dolan forest would have found the bridging vehicles and the field hospital (C-02).",
       "4": "Imagery of the Ostrel railhead would have shown nothing loading: nobody was going home on the 20th.",
       "5": "Imagery of Dolan would have shown the bridging within 2 km of the river."
-    }
+    },
+    "openQuestion": "Kordav staged a call on the one net we were reading, and its \"routine\" statement came out the morning after our assessment reached Kalsa. How did it know which net, and when?"
   },
   "collectionResults": [
     {
@@ -2003,5 +2004,49 @@
       "right": 1,
       "why": "The diagnostic, read correctly."
     }
-  ]
+  ],
+  "story": {
+    "values": [
+      {
+        "value": "alliance",
+        "delta": 1,
+        "if": {
+          "ending": "deterred"
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -1,
+        "if": {
+          "ending": "seized"
+        }
+      },
+      {
+        "value": "pressure",
+        "delta": 2,
+        "if": {
+          "ending": "seized"
+        }
+      },
+      {
+        "value": "pressure",
+        "delta": 1,
+        "if": {
+          "ending": [
+            "standoff-late",
+            "standoff-thin"
+          ]
+        }
+      }
+    ],
+    "caseFile": [
+      {
+        "tag": "staged-call",
+        "text": "You doubted the call in the clear on 12th Brigade's net. It was staged on the one net we were covering.",
+        "if": {
+          "doubted": "R-4-02"
+        }
+      }
+    ]
+  }
 }

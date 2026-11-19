@@ -1595,7 +1595,8 @@
       "3": "Questioning LANTERN on the ledger: he can't explain how a planner got into the Bureau's registry.",
       "4": "Anything still untasked on Kordav's reaction. It's the last tasking that can arrive before the vote.",
       "5": "Nothing tasked today could arrive in time."
-    }
+    },
+    "openQuestion": "The Bureau put its staged recall on the one net it believed we were reading. It was right. What made it believe that?"
   },
   "pirs": [
     {
@@ -2226,5 +2227,56 @@
       "right": 1,
       "why": "It was a newspaper."
     }
-  ]
+  ],
+  "story": {
+    "values": [
+      {
+        "value": "alliance",
+        "delta": 1,
+        "if": {
+          "ending": "exposed"
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -1,
+        "if": {
+          "ending": "sidelined"
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -2,
+        "if": {
+          "ending": "burned"
+        }
+      },
+      {
+        "value": "pressure",
+        "delta": 1,
+        "if": {
+          "ending": [
+            "sidelined",
+            "burned"
+          ]
+        }
+      }
+    ],
+    "caseFile": [
+      {
+        "tag": "known-net",
+        "text": "You checked the Bureau's own office traffic, or doubted the recall: the headquarters net carried a message meant for us.",
+        "if": {
+          "anyOf": [
+            {
+              "collected": "C-01"
+            },
+            {
+              "doubted": "C-06"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

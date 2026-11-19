@@ -19,5 +19,19 @@
     "number": "03",
     "title": "The Southern Line",
     "line": "A militia, a pipeline, and a neighbour who keeps offering to help."
+  },
+  {
+    "id": "missing-shipment",
+    "file": "crises/missing-shipment.json",
+    "number": "04",
+    "title": "The Missing Shipment",
+    "line": "A container of secure hardware goes missing in a free port, and then it comes back."
+  },
+  {
+    "id": "lights-out",
+    "file": "crises/lights-out.json",
+    "number": "05",
+    "title": "Lights Out",
+    "line": "A ransomware crew, a capital in the dark, and a director who can't use a maybe."
   }
 ]

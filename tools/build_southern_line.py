@@ -392,6 +392,11 @@ truth = {1: [U("Marrat paymaster", FARM, -10, 34)], 2: [U("Marrat paymaster", FA
          3: [U("Marrat paymaster", FARM, -10, 34), U("Raiding party", TOLEN, 78, -44)], 4: [U("Oro's column", QUARRY, 44, -22)], 5: [U("Oro's column", QUARRY, 44, -22)]}
 for g in crisis["groundTruth"]: g["units"] = truth[g["day"]]
 
+crisis["postmortem"]["openQuestion"] = "Someone knew where the guard company was. Marrat's advisers sit in Southern Command, so this one has an answer. Not every leak does."
+crisis["story"] = {"values": [
+  {"value": "alliance", "delta": 1, "if": {"flag": {"event": "tolen", "in": ["caught"]}}}, {"value": "alliance", "delta": -1, "if": {"flag": {"event": "tolen", "in": ["cut", "cut_far"]}}},
+  {"value": "pressure", "delta": 1, "if": {"flag": {"event": "tolen", "in": ["cut", "cut_far"]}}}, {"value": "pressure", "delta": 1, "if": {"ending": "burning"}}],
+ "caseFile": [{"tag": "knew-too-much", "text": "You doubted the transcript that named the next target, or watched a raid go around a company nobody should have known about.", "if": {"anyOf": [{"doubted": "R-2-02"}, {"flag": {"event": "tolen", "in": ["displaced"]}}]}}]}
 # ---------- sanity ----------
 ids = {r["id"] for r in reports}
 assert all(cr["id"] in ids for cr in crisis["collectionResults"])

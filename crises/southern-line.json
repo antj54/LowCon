@@ -1697,7 +1697,8 @@
       "3": "Imagery of the Tolen approaches, or MAGPIE: either would have shown the raid was tonight.",
       "4": "MAGPIE, the Front's radios or the ford: each shows Marrat has let go.",
       "5": "Nothing tasked today could arrive in time."
-    }
+    },
+    "openQuestion": "Someone knew where the guard company was. Marrat's advisers sit in Southern Command, so this one has an answer. Not every leak does."
   },
   "pirs": [
     {
@@ -2493,5 +2494,75 @@
       ]
     },
     "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted. Dashed rings are today's taskings."
+  },
+  "story": {
+    "values": [
+      {
+        "value": "alliance",
+        "delta": 1,
+        "if": {
+          "flag": {
+            "event": "tolen",
+            "in": [
+              "caught"
+            ]
+          }
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -1,
+        "if": {
+          "flag": {
+            "event": "tolen",
+            "in": [
+              "cut",
+              "cut_far"
+            ]
+          }
+        }
+      },
+      {
+        "value": "pressure",
+        "delta": 1,
+        "if": {
+          "flag": {
+            "event": "tolen",
+            "in": [
+              "cut",
+              "cut_far"
+            ]
+          }
+        }
+      },
+      {
+        "value": "pressure",
+        "delta": 1,
+        "if": {
+          "ending": "burning"
+        }
+      }
+    ],
+    "caseFile": [
+      {
+        "tag": "knew-too-much",
+        "text": "You doubted the transcript that named the next target, or watched a raid go around a company nobody should have known about.",
+        "if": {
+          "anyOf": [
+            {
+              "doubted": "R-2-02"
+            },
+            {
+              "flag": {
+                "event": "tolen",
+                "in": [
+                  "displaced"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

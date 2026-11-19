@@ -121,8 +121,61 @@ const S_BEST = [
   ['H1', 'high', ['C-06', 'C-16', 'R-5-01']],
 ];
 const S_PUSH = [['H3', 'low', ['R-1-01', 'R-1-02']], ['H3', 'medium', ['R-2-03', 'R-2-04']], ['H3', 'high', ['R-3-01', 'R-3-02']], ['H1', 'medium', ['R-4-02']], ['H1', 'high', ['R-5-01', 'R-5-04', 'R-4-02']]];
+// ---------- Crisis 04: The Missing Shipment ----------
+const M_BEST = [
+  ['H2', 'low', ['R-1-04', 'R-1-01'], [['IMINT', 'brask'], ['OSINT', 'maren-lys'], ['OSINT', 'tessaly-history']]],
+  ['H2', 'medium', ['C-01', 'C-05', 'R-1-04'], [['SIGINT', 'tessaly-office'], ['OSINT', 'listing']]],
+  ['H2', 'high', ['C-01', 'C-07', 'R-3-01'], [['SIGINT', 'brask-warehouse'], ['IMINT', 'halsk-sheds']]],
+  ['H2', 'high', ['C-12', 'C-03', 'R-2-04'], [['HUMINT', 'gannet']]],
+  ['H2', 'high', ['C-09', 'C-07', 'R-5-03']],
+];
+const M_PUSH = [['H2', 'low', ['R-1-04']], ['H2', 'medium', ['R-1-04', 'R-2-04']], ['H2', 'high', ['R-3-01', 'R-3-03', 'R-1-04']], ['H2', 'high', ['R-2-04', 'R-4-01', 'R-3-01']], ['H2', 'high', ['R-5-03', 'R-2-04']]];
+// ---------- Crisis 05: Lights Out ----------
+const L_BEST = [
+  ['H2', 'low', ['R-1-03'], [['OSINT', 'wallet'], ['OSINT', 'release-history'], ['HUMINT', 'petrel']]],
+  ['H2', 'high', ['C-01', 'C-02', 'C-09'], [['Technical', 'target-list'], ['SIGINT', 'negotiator']]],
+  ['H2', 'high', ['C-04', 'C-06', 'R-3-03'], [['Liaison', 'registry'], ['OSINT', 'language']]],
+  ['H2', 'high', ['C-01', 'R-4-02', 'C-08'], [['Technical', 'images'], ['HUMINT', 'petrel']]],
+  ['H2', 'high', ['C-10', 'C-03', 'R-5-04']],
+];
+const L_PUSH = [['H2', 'low', ['R-1-03']], ['H2', 'medium', ['R-1-03', 'R-2-03']], ['H2', 'high', ['R-3-03', 'R-1-03', 'R-2-03']], ['H2', 'high', ['R-3-03', 'R-4-02']], ['H2', 'high', ['R-5-04', 'R-3-03']]];
 const sCalls = calls => calls.map(([h, c]) => [h, c, []]);
 const SETS = {
+  'missing-shipment': {
+    collect: M_BEST, marks: { 1: { 'R-1-04': 'ici' }, 2: { 'C-01': 'ici' } }, nudge: {},
+    strategies: [
+      ['Best play, push only', M_PUSH, none],
+      ['Best play with collection', M_BEST, none],
+      ['Collection, doubt plants', M_BEST, plants],
+      ['Collection, doubt everything', M_BEST, all],
+      ['Port police first, then SIGINT', [['H2', 'low', ['R-1-04'], [['Liaison', 'port-police'], ['IMINT', 'brask']]], ['H2', 'medium', ['C-01'], [['SIGINT', 'tessaly-office']]], M_PUSH[2], M_PUSH[3], M_PUSH[4]], none],
+      ['Burn GANNET (Days 1 and 2)', [['H2', 'low', ['R-1-04'], [['HUMINT', 'gannet']]], ['H2', 'medium', ['C-08'], [['HUMINT', 'gannet']]], M_PUSH[2], M_PUSH[3], M_PUSH[4]], none],
+      ['Always Kordav (H2 High)', rep5(['H2', 'high', ['R-1-04']]), none],
+      ['Never above Medium', rep5(['H2', 'medium', ['R-1-04']]), none],
+      ['Always hedge (Low)', rep5(['H2', 'low', []]), none],
+      ['Relieved on Day 4', [M_PUSH[0], M_PUSH[1], M_PUSH[2], ['H1', 'medium', ['R-4-01', 'R-4-03']], ['H1', 'high', ['R-4-01', 'R-4-03']]], none],
+      ['Theft all along (H3 Medium)', rep5(['H3', 'medium', ['R-2-02']]), none],
+      ['Paperwork (H1 High)', rep5(['H1', 'high', ['R-1-02']]), none],
+    ],
+  },
+  'lights-out': {
+    collect: L_BEST, marks: { 1: { 'R-1-03': 'ici' }, 2: { 'C-01': 'ici' } }, nudge: {},
+    strategies: [
+      ['Best play, push only', L_PUSH, none],
+      ['Fast, with collection', L_BEST, none],
+      ['Collection, doubt plants', L_BEST, plants],
+      ['Collection, doubt everything', L_BEST, all],
+      ['Late (High from Day 4)', [L_PUSH[0], L_PUSH[1], ['H2', 'medium', ['R-3-03']], L_PUSH[3], L_PUSH[4]], none],
+      ['Always Kordav (H2 High)', rep5(['H2', 'high', ['R-1-03']]), none],
+      ['Paid Day 1, right from Day 3', [['H1', 'high', ['R-1-02']], ['H2', 'medium', ['R-2-03']], L_PUSH[2], L_PUSH[3], L_PUSH[4]], none],
+      ['Burn PETREL (Days 1 and 2)', [['H2', 'low', ['R-1-03'], [['HUMINT', 'petrel']]], ['H2', 'medium', ['C-02'], [['HUMINT', 'petrel']]], L_PUSH[2], L_PUSH[3], L_PUSH[4]], none],
+      ['Never above Medium', rep5(['H2', 'medium', ['R-1-03']]), none],
+      ['Always hedge (Low)', rep5(['H2', 'low', []]), none],
+      ['Crime all along (H1 Medium)', rep5(['H1', 'medium', ['R-1-02']]), none],
+      ['Marrat (H3 Medium, then High)', [['H3', 'medium', []], ['H3', 'high', ['R-2-01']], ['H3', 'high', ['R-2-01']], ['H3', 'high', ['R-2-01']], ['H3', 'high', ['R-2-01']]], none],
+      ['Crime at High (pays daily)', rep5(['H1', 'high', ['R-1-02']]), none],
+    ],
+  },
   'southern-line': {
     collect: S_BEST,
     marks: { 1: { 'R-1-02': 'iic', 'R-1-04': 'ici' }, 2: { 'C-01': 'iic' } },

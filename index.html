@@ -395,8 +395,8 @@ function credTriggers(d, brief, firedEventIds){
     else if (t.on === 'leave' && [].concat(t.state).includes(brief.from) && brief.to !== brief.from && (!t.days || t.days.includes(d)) && !(t.notTo || []).includes(brief.to)) credApply(t, d + 1);
     else if (t.on === 'flag' && firedEventIds.includes(t.event + ':' + t.flag)) credApply(t, d + 1);
     else if (t.on === 'event' && firedEventIds.includes(t.eventId)) credApply(t, d + 1);
-    else if (t.on === 'streak' && brief.conf === t.confidence){
-      let run = 1; for (let x = d - 1; x >= 1 && S.briefs[x] && S.briefs[x].conf === t.confidence; x--) run++;
+    else if (t.on === 'streak' && [].concat(t.confidence).includes(brief.conf)){
+      let run = 1; for (let x = d - 1; x >= 1 && S.briefs[x] && [].concat(t.confidence).includes(S.briefs[x].conf); x--) run++;
       if (run >= t.days) credApply(t, d + 1);
     }
   });
@@ -423,9 +423,11 @@ function resolveCollection(d){
     }
     const got = new Set(S.collected.map(c => c.id));
     const closed = tgt(t.target).closedWhen && everAt(tgt(t.target).closedWhen);
-    const hit = closed ? null : (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && condOk(cr.when) && !got.has(cr.id));
+    const hit = closed ? null : (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && condOk(cr.when, d) && !got.has(cr.id));
     if (hit) S.collected.push({id:hit.id, arrive, task:d, disc:t.disc, target:t.target});
-    else S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true,
+    // a result can bring a follow-up item a day or more later
+    if (hit && hit.then && !got.has(hit.then.id)) S.collected.push({id:hit.then.id, arrive:arrive + (hit.then.after || 1), task:d, disc:t.disc, target:t.target, follow:true});
+    if (!hit) S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true,
       text:(tgt(t.target).fallback || COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
     // burn rule: the first meeting is seen, and the source is gone once it has reported
     if (hit && rule && rule.onFirstTasking) S.burned[sid] = arrive;
@@ -601,7 +603,7 @@ function sendBrief(d){
   resolveCollection(d);
   if (d < C.days){
     S.replies[d+1] = {key:res.reply};
-    C.events.filter(e => e.atStartOfDay === d+1 && !S.firedEvents.includes(e.id)).forEach(e => {
+    C.events.filter(e => (e.atStartOfDay === d+1 || (e.onEnter && brief.to === e.onEnter && brief.from !== e.onEnter)) && (e.repeat || !S.firedEvents.includes(e.id))).forEach(e => {
       if (!eventFires(e.if || {})) return;
       // An event with outcomes reads where the customer's force is and takes the first outcome that fits.
       const o = e.outcomes ? e.outcomes.find(x => outcomeFits(x.if || {})) : e;
@@ -824,7 +826,7 @@ function mapCard(d){
 /* ---------- Rendering ---------- */
 function render(){
   if (!C || !S) return;
-  if (ui.screen === 'menu' || ui.screen === 'list' || ui.screen === 'record'){ app.innerHTML = ui.screen === 'menu' ? menuView() : ui.screen === 'list' ? listView() : recordView(); renderLayer(); return; }
+  if (['menu', 'list', 'record', 'case'].includes(ui.screen)){ app.innerHTML = ui.screen === 'menu' ? menuView() : ui.screen === 'list' ? listView() : ui.screen === 'case' ? caseView() : recordView(); renderLayer(); return; }
   if (!S.started && ui.tab !== 'playtests'){ app.innerHTML = introView(); renderLayer(); return; }
   if (S.done && ui.tab !== 'files' && ui.tab !== 'playtests') ui.tab = 'postmortem';
   if (!S.done && ui.tab === 'postmortem') ui.tab = 'inbox';
@@ -975,7 +977,7 @@ function openingCard(d){
   const O = C.opening || {}; if (d !== 1) return '';
   const re = S.carry && S.carry.reassigned;
   const run = re ? null : sinceReassigned().same;
-  const text = re ? (O.reassigned || 'I\'m told this is a new cell. I\'ve read the file on the last one. Start again.') : ((run && (O.byTone || {})[run.tone]) || O.text);
+  const text = re ? (O.reassigned || 'I\'m told this is a new cell. I\'ve read the file on the last one. Start again.') : ((run && (O.byTone || {})[run.tone]) || (!run && (O.byLastTone || {})[(sinceReassigned().post.slice(-1)[0] || {}).tone]) || O.text);
   return text ? '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + (run ? ' · he remembers ' + esc(run.title) : '') + '</span><p><q>' + esc(text) + '</q></p></div>' : '';
 }
 function replyCard(d){
@@ -1241,6 +1243,7 @@ function postmortemView(){
     html += '<div class="stack"><div class="section-h"><h3>Your board</h3></div>' + boardView(C.days, true)
       + '<p class="small muted">Truth on the last day: <b>' + last.trueHypothesis + '</b>. A planted item you didn\'t doubt counts on your board exactly as ' + esc(ADV()) + ' intended.</p></div>';
   }
+  if (C.postmortem.openQuestion) html += '<div class="msg"><span class="from">An open question</span><p>' + esc(C.postmortem.openQuestion) + '</p>' + (REC.runs[C.id] && !S.offRecord ? '<p class="small muted">Added to your case file.</p>' : '') + '</div>';
   html += analystsCard();
   html += '<div class="stack"><h3>Lessons</h3><ul>' + C.postmortem.lessons.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul></div>'
     + '<div class="stack"><h3>Your sources, revealed</h3>' + C.sources.filter(s => !s.rosterHidden).map(s => '<p class="small"><span class="mono"><b>' + esc(s.codeName) + '</b></span> ' + (s.controlledByAdversary === true ? '<span class="pill k-planted">Adversary channel</span> ' : '') + esc(s.postmortemNote || '') + '</p>').join('') + '</div>'
@@ -1422,6 +1425,7 @@ function onClick(e){
     case 'menu': ui.screen = 'menu'; ui.sheet = null; render(); window.scrollTo(0,0); break;
     case 'list': ui.screen = 'list'; render(); window.scrollTo(0,0); break;
     case 'record': ui.screen = 'record'; render(); window.scrollTo(0,0); break;
+    case 'case': ui.screen = 'case'; render(); window.scrollTo(0,0); break;
     case 'clearrec': ui.clearId = el.dataset.id; ui.sheet = 'clearrec'; renderLayer(); break;
     case 'confirmclearrec': {
       const r = REC.runs[ui.clearId];
@@ -1533,6 +1537,25 @@ function saveRecord(){
   try { localStorage.setItem(LS_PREFIX + 'record', JSON.stringify(REC)); } catch(e) {}
   if (recRef){ try { Promise.resolve(recRef.set(clone(REC))).catch(() => {}); } catch(e) {} }
 }
+// The campaign story: what a finished scenario did to the world, and what the player noticed along the way.
+function storyOk(c, Cx, Sx){
+  if (!c) return true;
+  const got = new Set((Sx.collected || []).map(x => x.id));
+  if (c.anyOf) return c.anyOf.some(x => storyOk(x, Cx, Sx));
+  if (c.ending && ![].concat(c.ending).includes(Sx.ending)) return false;
+  if (c.flag && !(c.flag.in || []).includes((Sx.flags || {})[c.flag.event])) return false;
+  if (c.everAt && !(Sx.moves || []).some(m => m.to === c.everAt)) return false;
+  if (c.fired && !(Sx.firedEvents || []).includes(c.fired)) return false;
+  if (c.collected && !(Sx.collected || []).some(x => x.id === c.collected && x.arrive <= Cx.days)) return false;
+  if (c.doubted && !((Sx.grades || {})[c.doubted] || {}).f) return false;
+  return true;
+}
+function storyFrom(Cx, Sx){
+  const T = Cx.story || {}, out = {alliance:0, pressure:0, caseFile:[]};
+  (T.values || []).forEach(v => { if (storyOk(v.if, Cx, Sx) && out[v.value] != null) out[v.value] += v.delta; });
+  (T.caseFile || []).forEach(c => { if (storyOk(c.if, Cx, Sx)) out.caseFile.push({tag:c.tag, text:c.text}); });
+  return out;
+}
 const runKey = (Cx, Sx) => ((Sx.briefs || {})[Cx.days] || {}).sentAt || Sx.savedAt || '';
 const isVoided = (Cx, Sx) => !!runKey(Cx, Sx) && (REC.voided || {})[Cx.id] === runKey(Cx, Sx);
 function recordFrom(Cx, Sx){
@@ -1548,8 +1571,8 @@ function recordFrom(Cx, Sx){
     else if (((Sx.grades || {})[r.id] || {}).f && !tested.includes(r.callbackTag)) tested.push(r.callbackTag);
   });
   return {id:Cx.id, number:Cx.crisisNumber, title:Cx.title, ending:Sx.ending, endingTitle:end.title || '', tone:end.tone || '', total:Sx.summary ? Sx.summary.total : null,
-    customer:Cx.customer.name, cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
-    fooled, tested, reassigned:cred === 0, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
+    customer:Cx.customer.name, openQuestion:(Cx.postmortem || {}).openQuestion || '', cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
+    fooled, tested, flags:clone(Sx.flags || {}), story:storyFrom(Cx, Sx), reassigned:cred === 0, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
 }
 function commitRecord(){
   if (REC.runs[C.id] || S.offRecord || !S.done || isVoided(C, S)) return;
@@ -1591,8 +1614,11 @@ function carryChanged(){
 function carryFooled(){ const out = []; earlierRuns().forEach(r => (r.fooled || []).forEach(t => { if (!out.includes(t)) out.push(t); })); return out; }
 const recFooled = tag => ((S && S.carry && S.carry.fooled) || []).includes(tag);
 // Conditions on items, results, targets and notes: an earlier outcome in this scenario, or what the record says got past you.
-function condOk(w){
+function taskedBefore(target, d){ for (let x = 1; x < d; x++) if ((S.tasks[x] || []).some(t => t.target === target)) return true; return false; }
+function condOk(w, d){
   if (!w) return true;
+  if (w.taskedBefore && !taskedBefore(w.taskedBefore, d || 99)) return false;
+  if (w.notTaskedBefore && taskedBefore(w.notTaskedBefore, d || 99)) return false;
   const fl = (S && S.flags) || {};
   if (w.flag && !(w.flag.in || []).includes(fl[w.flag.event])) return false;
   if (w.flagNot && (w.flagNot.in || []).includes(fl[w.flagNot.event])) return false;
@@ -1621,6 +1647,22 @@ function fileGrade(s0){
   return {g, why};
 }
 function goneBefore(sid){ const s0 = C.sources.find(x => x.id === sid); return !!s0 && earlierRuns().some(r => (r.burned || []).includes(s0.codeName)); }
+function caseEntries(){
+  const runs = INDEX.map(x => REC.runs[x.id]).filter(r => r && r.openQuestion);
+  return {runs, total:runs.length, noticed:runs.reduce((n, r) => n + ((r.story || {}).caseFile || []).length, 0)};
+}
+function caseView(){
+  const E = caseEntries();
+  let html = '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><h1>Case file</h1>'
+    + '<p class="muted small">Questions your finished scenarios left open, and what your record shows you did or saw. The file states facts. It draws no conclusions.</p></header><main class="stack">';
+  if (!E.total) return html + '<p>Nothing in the file yet.</p></main>';
+  E.runs.forEach(r => {
+    const got = (r.story || {}).caseFile || [];
+    html += '<div class="card"><p class="mono small muted">Scenario ' + esc(r.number || '') + ' · ' + esc(r.title) + '</p><p>' + esc(r.openQuestion) + '</p>'
+      + (got.length ? got.map(c => '<p class="small"><span class="muted">Noted:</span> ' + esc(c.text) + '</p>').join('') : '<p class="small muted">Nothing noted at the time.</p>') + '</div>';
+  });
+  return html + '</main>';
+}
 function recordView(){
   const runs = INDEX.map(x => REC.runs[x.id]).filter(Boolean), sign = n => (n > 0 ? '+' : '') + n;
   let html = '<header class="top"><button class="linkbtn menulink" data-act="menu">‹ Menu</button><h1>Service record</h1>'
@@ -1692,6 +1734,7 @@ function menuView(){
     + '<button class="btn big" data-act="crisis" data-id="' + esc(next.id) + '">' + esc(label) + '<small>' + esc(sub) + '</small></button>'
     + '<button class="btn ghost big" data-act="list">Scenarios<small>' + INDEX.filter(x => progress(x.id).cleared).length + ' of ' + INDEX.length + ' finished</small></button>'
     + '<button class="btn ghost big" data-act="record">Service record<small>' + (Object.keys(REC.runs).length ? Object.keys(REC.runs).length + ' on the record' : 'Nothing on the record yet') + '</small></button>'
+    + (caseEntries().total ? '<button class="btn ghost big" data-act="case">Case file<small>' + caseEntries().noticed + ' noted · ' + caseEntries().total + ' open question' + (caseEntries().total > 1 ? 's' : '') + '</small></button>' : '')
     + (CFG.playtest && ui.isOwner ? '<button class="btn ghost big" data-act="tab" data-v="playtests">Tester results</button>' : '')
     + (CFG.playtest ? '<p class="small muted">Playtest build. Your results are recorded automatically.</p>' : '')
     + '<p class="small muted">' + esc(saveStatusText()) + '</p>'
@@ -1733,6 +1776,7 @@ async function start(hotData){
   }
   S = normalize(hotData && hotData.S) || normalize(loadLocal()) || fresh();
   if (S.done && !S.offRecord) commitRecord();
+  if (S.done && REC.runs[C.id] && !REC.runs[C.id].story && REC.runs[C.id].runKey === runKey(C, S)){ REC.runs[C.id].story = storyFrom(C, S); REC.runs[C.id].flags = clone(S.flags || {}); REC.runs[C.id].openQuestion = (C.postmortem || {}).openQuestion || ''; saveRecord(); }
   ensureRecords();
   ui.pmDay = C.days; ui.pin = null; ui.sheet = null;
   ui.tab = (hotData && hotData.tab) || 'inbox';

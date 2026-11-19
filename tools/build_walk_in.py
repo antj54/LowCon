@@ -355,6 +355,11 @@ crisis["notes"] = [
 assert all(n["item"] in {r["id"] for r in reports} for n in crisis["notes"])
 crisis["credibility"]["bonusAt"] = 5
 crisis["formatVersion"] = "1.0"
+crisis["postmortem"]["openQuestion"] = "The Bureau put its staged recall on the one net it believed we were reading. It was right. What made it believe that?"
+crisis["story"] = {"values": [
+  {"value": "alliance", "delta": 1, "if": {"ending": "exposed"}}, {"value": "alliance", "delta": -1, "if": {"ending": "sidelined"}}, {"value": "alliance", "delta": -2, "if": {"ending": "burned"}},
+  {"value": "pressure", "delta": 1, "if": {"ending": ["sidelined", "burned"]}}],
+ "caseFile": [{"tag": "known-net", "text": "You checked the Bureau's own office traffic, or doubted the recall: the headquarters net carried a message meant for us.", "if": {"anyOf": [{"collected": "C-01"}, {"doubted": "C-06"}]}}]}
 # sanity: every result id has a report, every reveal id exists, every target is in a PIR
 ids = {r["id"] for r in reports}
 assert all(cr["id"] in ids for cr in crisis["collectionResults"])
