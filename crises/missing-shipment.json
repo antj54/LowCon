@@ -262,31 +262,86 @@
       "day": 1,
       "trueHypothesis": "H2",
       "bestCall": "H2 at Low",
-      "state": "The container left Halsk on the night of the 1st on Maren Lys and is on a fenced quay at Brask, in Kordav. A Bureau technical team has started on the forty units. Tessaly's clerk wrote a false gate entry for shed 6."
+      "state": "The container left Halsk on the night of the 1st on Maren Lys and is on a fenced quay at Brask, in Kordav. A Bureau technical team has started on the forty units. Tessaly's clerk wrote a false gate entry for shed 6.",
+      "units": [
+        {
+          "label": "The container",
+          "x": 258,
+          "y": 88
+        },
+        {
+          "label": "Bureau team at work",
+          "x": 352,
+          "y": 48
+        }
+      ]
     },
     {
       "day": 2,
       "trueHypothesis": "H2",
       "bestCall": "H2 at Medium",
-      "state": "Work continues at Brask. Tessaly's owner announces a 72-hour search, which is how long he knows it will take. A fake listing goes up to make it look like theft for resale."
+      "state": "Work continues at Brask. Tessaly's owner announces a 72-hour search, which is how long he knows it will take. A fake listing goes up to make it look like theft for resale.",
+      "units": [
+        {
+          "label": "The container",
+          "x": 258,
+          "y": 88
+        },
+        {
+          "label": "Bureau team at work",
+          "x": 352,
+          "y": 48
+        },
+        {
+          "label": "Fake listing",
+          "x": 296,
+          "y": 324
+        }
+      ]
     },
     {
       "day": 3,
       "trueHypothesis": "H2",
       "bestCall": "H2 at High",
-      "state": "The work is finished: forty of forty. Maren Lys sails for Halsk. The fake listing is marked sold."
+      "state": "The work is finished: forty of forty. Maren Lys sails for Halsk. The fake listing is marked sold.",
+      "units": [
+        {
+          "label": "Forty of forty done",
+          "x": 352,
+          "y": 48
+        },
+        {
+          "label": "Maren Lys, loaded",
+          "x": 96,
+          "y": 254
+        }
+      ]
     },
     {
       "day": 4,
       "trueHypothesis": "H2",
       "bestCall": "H2 at High",
-      "state": "The container was put in shed 9 overnight by a private crew and resealed with copied customs seals. It is \"found.\""
+      "state": "The container was put in shed 9 overnight by a private crew and resealed with copied customs seals. It is \"found.\"",
+      "units": [
+        {
+          "label": "Private crew, copied seals",
+          "x": 332,
+          "y": 340
+        }
+      ]
     },
     {
       "day": 5,
       "trueHypothesis": "H2",
       "bestCall": "H2 at High",
-      "state": "It goes to Kalsa by rail. Elsin installs tomorrow unless told not to."
+      "state": "It goes to Kalsa by rail. Elsin installs tomorrow unless told not to.",
+      "units": [
+        {
+          "label": "On the train",
+          "x": 386,
+          "y": 356
+        }
+      ]
     }
   ],
   "adversaryPlan": [
@@ -454,7 +509,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The baseline: what was shipped (CX-4), when, and by whom."
+      "postmortemNote": "The baseline: what was shipped (CX-4), when, and by whom.",
+      "pin": {
+        "x": 278,
+        "y": 256,
+        "label": "Container not located"
+      }
     },
     {
       "id": "R-1-02",
@@ -468,7 +528,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The port reported its records honestly. The gate entry for shed 6 was written by Tessaly's clerk after the container had gone: the first of several honest people repeating a false thing."
+      "postmortemNote": "The port reported its records honestly. The gate entry for shed 6 was written by Tessaly's clerk after the container had gone: the first of several honest people repeating a false thing.",
+      "pin": {
+        "x": 278,
+        "y": 256,
+        "label": "Records say shed 6"
+      }
     },
     {
       "id": "R-1-03",
@@ -484,7 +549,12 @@
       "tells": [
         "agenda-aligned"
       ],
-      "postmortemNote": "Rhun's standing opinion of Halsk. It told you nothing about this container."
+      "postmortemNote": "Rhun's standing opinion of Halsk. It told you nothing about this container.",
+      "pin": {
+        "x": 512,
+        "y": 286,
+        "label": "Rhun: a thieves' market"
+      }
     },
     {
       "id": "R-1-04",
@@ -498,7 +568,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The best item of the day. The forwarder's own chartered ship left the same night with no manifest, toward Kordav's coast, and went dark."
+      "postmortemNote": "The best item of the day. The forwarder's own chartered ship left the same night with no manifest, toward Kordav's coast, and went dark.",
+      "pin": {
+        "x": 204,
+        "y": 262,
+        "label": "Maren Lys sails, no manifest"
+      }
     },
     {
       "id": "R-1-05",
@@ -538,6 +613,11 @@
           "text": "His own chartered coaster left the night the container vanished, with no manifest, and went dark (R-1-04)."
         },
         "motive": "To keep everyone waiting quietly for three days. Seventy-two hours was the round trip to Brask and a day and a half alongside."
+      },
+      "pin": {
+        "x": 208,
+        "y": 356,
+        "label": "\"72 hours\""
       }
     },
     {
@@ -565,6 +645,11 @@
           "text": "Corvane shipped CX-4 (R-1-01). Whoever wrote the listing had never seen the crates. For one point, the listing check (C-11) adds that CX-2 went out of production six years ago and the seller account was two days old."
         },
         "motive": "A theft for resale is an ordinary crime in Halsk, and an ordinary crime doesn't send anyone to look at Brask."
+      },
+      "pin": {
+        "x": 256,
+        "y": 318,
+        "label": "Listing: 40 units, CX-2"
       }
     },
     {
@@ -579,7 +664,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The political cost of the delay, which is what made everyone want it over."
+      "postmortemNote": "The political cost of the delay, which is what made everyone want it over.",
+      "pin": {
+        "x": 512,
+        "y": 286,
+        "label": "Ministry confirms delay"
+      }
     },
     {
       "id": "R-2-04",
@@ -593,7 +683,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The one to remember. Customs searched all nine sheds on the 3rd. On Day 4 the container was \"found\" in shed 9."
+      "postmortemNote": "The one to remember. Customs searched all nine sheds on the 3rd. On Day 4 the container was \"found\" in shed 9.",
+      "pin": {
+        "x": 278,
+        "y": 256,
+        "label": "All nine sheds searched"
+      }
     },
     {
       "id": "R-2-05",
@@ -621,7 +716,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "Three days dark, and back the way it went."
+      "postmortemNote": "Three days dark, and back the way it went.",
+      "pin": {
+        "x": 96,
+        "y": 214,
+        "label": "Maren Lys inbound"
+      }
     },
     {
       "id": "R-3-02",
@@ -649,7 +749,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "WREN was right, for a reason it gave. It looked like Day 1's sneer and wasn't."
+      "postmortemNote": "WREN was right, for a reason it gave. It looked like Day 1's sneer and wasn't.",
+      "pin": {
+        "x": 512,
+        "y": 286,
+        "label": "Rhun: owner has debts"
+      }
     },
     {
       "id": "R-3-04",
@@ -676,6 +781,11 @@
           "text": "Customs was in every shed on the 3rd (R-2-04), and the forwarder's coaster was at that moment on its way back (R-3-01)."
         },
         "motive": "To close the theft story before the container reappeared, so the two stories wouldn't have to share a day."
+      },
+      "pin": {
+        "x": 256,
+        "y": 318,
+        "label": "Listing: sold"
       }
     },
     {
@@ -704,7 +814,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "True reporting of a staged discovery. The tell was in what you already had: shed 9 was searched on the 3rd (R-2-04)."
+      "postmortemNote": "True reporting of a staged discovery. The tell was in what you already had: shed 9 was searched on the 3rd (R-2-04).",
+      "pin": {
+        "x": 332,
+        "y": 296,
+        "label": "Found in shed 9"
+      }
     },
     {
       "id": "R-4-02",
@@ -731,6 +846,11 @@
           "text": "Customs searched all nine sheds on the 3rd and found nothing (R-2-04). The container was found in shed 9 (R-4-01)."
         },
         "motive": "The last line of the cover story, delivered with an apology."
+      },
+      "pin": {
+        "x": 208,
+        "y": 356,
+        "label": "\"A labelling error\""
       }
     },
     {
@@ -745,7 +865,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "An honest inspection of the wrong thing. Seals and tape tell you about seals and tape."
+      "postmortemNote": "An honest inspection of the wrong thing. Seals and tape tell you about seals and tape.",
+      "pin": {
+        "x": 332,
+        "y": 296,
+        "label": "Seals and tape intact"
+      }
     },
     {
       "id": "R-4-04",
@@ -759,7 +884,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The deadline."
+      "postmortemNote": "The deadline.",
+      "pin": {
+        "x": 512,
+        "y": 286,
+        "label": "Install on the 8th"
+      }
     },
     {
       "id": "R-4-05",
@@ -787,7 +917,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "\"No offence disclosed\" was true: nobody disclosed one."
+      "postmortemNote": "\"No offence disclosed\" was true: nobody disclosed one.",
+      "pin": {
+        "x": 326,
+        "y": 364,
+        "label": "Loaded, 0600 rail"
+      }
     },
     {
       "id": "R-5-02",
@@ -801,7 +936,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "The last chance, and Rhun's patience."
+      "postmortemNote": "The last chance, and Rhun's patience.",
+      "pin": {
+        "x": 512,
+        "y": 286,
+        "label": "Installs tomorrow"
+      }
     },
     {
       "id": "R-5-03",
@@ -815,7 +955,12 @@
       "supports": [],
       "contradicts": [],
       "tells": [],
-      "postmortemNote": "An F-graded forum post that was exactly right: a night shift sent home, and a private crew in a bonded shed."
+      "postmortemNote": "An F-graded forum post that was exactly right: a night shift sent home, and a private crew in a bonded shed.",
+      "pin": {
+        "x": 332,
+        "y": 296,
+        "label": "Night shift sent home"
+      }
     },
     {
       "id": "R-5-04",
@@ -859,7 +1004,12 @@
       "tells": [],
       "postmortemNote": "The container, in Kordav, beside a guarded warehouse.",
       "via": "collection",
-      "diagnostic": true
+      "diagnostic": true,
+      "pin": {
+        "x": 262,
+        "y": 62,
+        "label": "Container on the quay"
+      }
     },
     {
       "id": "C-02",
@@ -874,7 +1024,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "Too late: it had been and gone.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 262,
+        "y": 62,
+        "label": "Quay empty"
+      }
     },
     {
       "id": "C-03",
@@ -889,7 +1044,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "Shed 9 was empty. This is what broke Day 4's good news.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 332,
+        "y": 296,
+        "label": "Shed 9 empty"
+      }
     },
     {
       "id": "C-04",
@@ -904,7 +1064,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "It was there by then.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 332,
+        "y": 296,
+        "label": "Container in shed 9"
+      }
     },
     {
       "id": "C-05",
@@ -919,7 +1084,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "The coaster's pattern, and its owner.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 96,
+        "y": 214,
+        "label": "Same run twice before"
+      }
     },
     {
       "id": "C-06",
@@ -934,7 +1104,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "The request went to Kalsa and on to Halsk, and Tessaly knew before the police did.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 208,
+        "y": 356,
+        "label": "Police visit: nothing"
+      }
     },
     {
       "id": "C-07",
@@ -950,7 +1125,12 @@
       "tells": [],
       "postmortemNote": "The whole operation in four lines.",
       "via": "collection",
-      "diagnostic": true
+      "diagnostic": true,
+      "pin": {
+        "x": 208,
+        "y": 356,
+        "label": "\"Thirty-six hours\""
+      }
     },
     {
       "id": "C-07T",
@@ -965,7 +1145,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "What you got after the port police called. They had been warned.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 208,
+        "y": 356,
+        "label": "Phones quiet"
+      }
     },
     {
       "id": "C-08",
@@ -980,7 +1165,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "How it left, and that the gate log was false.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 278,
+        "y": 256,
+        "label": "Left by truck, night of the 1st"
+      }
     },
     {
       "id": "C-09",
@@ -996,7 +1186,12 @@
       "tells": [],
       "postmortemNote": "How it came back, and who sealed it.",
       "via": "collection",
-      "diagnostic": true
+      "diagnostic": true,
+      "pin": {
+        "x": 332,
+        "y": 296,
+        "label": "Private crew, night of the 5th"
+      }
     },
     {
       "id": "C-10",
@@ -1011,7 +1206,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "The same forwarder, the same port and the same day and a half, four years ago.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 208,
+        "y": 356,
+        "label": "Same forwarder, 4 years ago"
+      }
     },
     {
       "id": "C-11",
@@ -1026,7 +1226,12 @@
       "contradicts": [],
       "tells": [],
       "postmortemNote": "The listing was bait.",
-      "via": "collection"
+      "via": "collection",
+      "pin": {
+        "x": 256,
+        "y": 318,
+        "label": "Seller account 2 days old"
+      }
     },
     {
       "id": "C-12",
@@ -1042,7 +1247,12 @@
       "tells": [],
       "postmortemNote": "Something was done to every unit.",
       "via": "collection",
-      "diagnostic": true
+      "diagnostic": true,
+      "pin": {
+        "x": 352,
+        "y": 88,
+        "label": "\"Forty of forty\""
+      }
     }
   ],
   "tellLabels": {
@@ -1217,21 +1427,33 @@
       "name": "Brask waterfront, in Kordav",
       "disciplines": [
         "IMINT"
-      ]
+      ],
+      "pin": {
+        "x": 262,
+        "y": 62
+      }
     },
     {
       "id": "halsk-sheds",
       "name": "Halsk bonded sheds",
       "disciplines": [
         "IMINT"
-      ]
+      ],
+      "pin": {
+        "x": 306,
+        "y": 276
+      }
     },
     {
       "id": "maren-lys",
       "name": "The coaster Maren Lys",
       "disciplines": [
         "OSINT"
-      ]
+      ],
+      "pin": {
+        "x": 96,
+        "y": 214
+      }
     },
     {
       "id": "port-police",
@@ -1239,14 +1461,22 @@
       "disciplines": [
         "Liaison"
       ],
-      "fallback": "Kalsa passed the request on. Halsk port police report nothing further."
+      "fallback": "Kalsa passed the request on. Halsk port police report nothing further.",
+      "pin": {
+        "x": 208,
+        "y": 356
+      }
     },
     {
       "id": "tessaly-office",
       "name": "Tessaly Freight's office",
       "disciplines": [
         "SIGINT"
-      ]
+      ],
+      "pin": {
+        "x": 208,
+        "y": 356
+      }
     },
     {
       "id": "gannet",
@@ -1254,14 +1484,22 @@
       "disciplines": [
         "HUMINT"
       ],
-      "fallback": "GANNET had nothing new."
+      "fallback": "GANNET had nothing new.",
+      "pin": {
+        "x": 278,
+        "y": 256
+      }
     },
     {
       "id": "tessaly-history",
       "name": "Tessaly's shipping history",
       "disciplines": [
         "OSINT"
-      ]
+      ],
+      "pin": {
+        "x": 208,
+        "y": 356
+      }
     },
     {
       "id": "listing",
@@ -1269,7 +1507,11 @@
       "disciplines": [
         "OSINT"
       ],
-      "from": 2
+      "from": 2,
+      "pin": {
+        "x": 256,
+        "y": 318
+      }
     },
     {
       "id": "brask-warehouse",
@@ -1277,7 +1519,11 @@
       "disciplines": [
         "SIGINT"
       ],
-      "from": 2
+      "from": 2,
+      "pin": {
+        "x": 352,
+        "y": 88
+      }
     }
   ],
   "collection": {
@@ -1638,5 +1884,151 @@
       "right": 1,
       "why": "It arrived on the morning of the last brief."
     }
-  ]
+  ],
+  "map": {
+    "viewBox": [
+      0,
+      0,
+      600,
+      420
+    ],
+    "title": "Schematic of Halsk, Brask and the line to Kalsa",
+    "caption": "Two ports and a railway, not to scale. Reporting will be plotted here as it arrives.",
+    "truthNote": "Red diamonds are where the consignment really was, and what was being done, on Day {day}.",
+    "reservoir": "M0,0 L204,0 L190,60 L158,118 L146,196 L168,262 L150,336 L160,420 L0,420 Z",
+    "border": "M158,118 L300,152 L430,128 L600,150",
+    "areas": [
+      {
+        "d": "M158,118 L300,152 L384,214 L372,330 L400,420 L160,420 L150,336 L168,262 L146,196 Z",
+        "label": "MARRAT",
+        "lx": 176,
+        "ly": 408
+      }
+    ],
+    "zones": [
+      {
+        "x": 216,
+        "y": 26,
+        "w": 190,
+        "h": 96,
+        "label": "Brask"
+      },
+      {
+        "x": 178,
+        "y": 232,
+        "w": 186,
+        "h": 152,
+        "label": "Halsk free port"
+      },
+      {
+        "x": 446,
+        "y": 240,
+        "w": 134,
+        "h": 96,
+        "label": "Kalsa"
+      }
+    ],
+    "regions": [
+      {
+        "name": "KORDAV",
+        "x": 440,
+        "y": 44
+      },
+      {
+        "name": "ELSIN",
+        "x": 470,
+        "y": 400
+      }
+    ],
+    "lines": [
+      {
+        "d": "M326,364 L404,352 L512,286",
+        "label": "Rail",
+        "lx": 404,
+        "ly": 372
+      }
+    ],
+    "places": [
+      {
+        "name": "Fenced quay",
+        "x": 262,
+        "y": 62,
+        "type": "town",
+        "lx": 232,
+        "ly": 50
+      },
+      {
+        "name": "Warehouse",
+        "x": 352,
+        "y": 88,
+        "type": "town",
+        "lx": 324,
+        "ly": 108
+      },
+      {
+        "name": "Coaster berth",
+        "x": 204,
+        "y": 262,
+        "type": "town",
+        "lx": 186,
+        "ly": 282
+      },
+      {
+        "name": "Shed 6",
+        "x": 278,
+        "y": 256,
+        "type": "town",
+        "lx": 234,
+        "ly": 244
+      },
+      {
+        "name": "Shed 9",
+        "x": 332,
+        "y": 296,
+        "type": "town",
+        "lx": 316,
+        "ly": 316
+      },
+      {
+        "name": "Town",
+        "x": 256,
+        "y": 318,
+        "type": "town",
+        "lx": 242,
+        "ly": 338
+      },
+      {
+        "name": "Tessaly Freight",
+        "x": 208,
+        "y": 356,
+        "type": "town",
+        "lx": 186,
+        "ly": 376
+      },
+      {
+        "name": "Rail siding",
+        "x": 326,
+        "y": 364,
+        "type": "town",
+        "lx": 300,
+        "ly": 384
+      },
+      {
+        "name": "Defence ministry",
+        "x": 512,
+        "y": 286,
+        "type": "town",
+        "lx": 450,
+        "ly": 272
+      }
+    ],
+    "offmap": [
+      {
+        "text": "Our port, 3 days by sea",
+        "x": 10,
+        "y": 404
+      }
+    ],
+    "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted. Dashed rings are today's taskings."
+  }
 }

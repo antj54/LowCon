@@ -274,6 +274,47 @@ crisis["notes"] = [
  NOTE("halden", "R-3-01", "Three days dark. Long enough to reach Brask, wait a day and a half, and come back.", 1, "Exactly what it did.", 1),
  NOTE("vasko", "R-5-03", "Night shift sent home, and a private crew in a bonded shed? In Halsk even the thieves work days. That's odd.", 1, "The one note where he looked at what was in front of him."),
  NOTE("halden", "R-4-03", "An intact seal tells you about the seal.", 1, "It arrived on the morning of the last brief.", 1)]
+# ---------- map: two ports and a railway, drawn as a schematic ----------
+QUAY, WH = (262, 62), (352, 88)                                                    # Brask, in Kordav
+BERTH, SHED6, SHED9, TOWN, TESS, SIDING = (204, 262), (278, 256), (332, 296), (256, 318), (208, 356), (326, 364)   # Halsk
+MIN = (512, 286)                                                                   # Kalsa
+SEA = (96, 214)
+PINS = {
+ "R-1-01": (SHED6, "Container not located"), "R-1-02": (SHED6, "Records say shed 6"), "R-1-03": (MIN, "Rhun: a thieves' market"), "R-1-04": (BERTH, "Maren Lys sails, no manifest"),
+ "R-2-01": (TESS, "\"72 hours\""), "R-2-02": (TOWN, "Listing: 40 units, CX-2"), "R-2-03": (MIN, "Ministry confirms delay"), "R-2-04": (SHED6, "All nine sheds searched"),
+ "R-3-01": (SEA, "Maren Lys inbound"), "R-3-03": (MIN, "Rhun: owner has debts"), "R-3-04": (TOWN, "Listing: sold"),
+ "R-4-01": (SHED9, "Found in shed 9"), "R-4-02": (TESS, "\"A labelling error\""), "R-4-03": (SHED9, "Seals and tape intact"), "R-4-04": (MIN, "Install on the 8th"),
+ "R-5-01": (SIDING, "Loaded, 0600 rail"), "R-5-02": (MIN, "Installs tomorrow"), "R-5-03": (SHED9, "Night shift sent home"),
+ "C-01": (QUAY, "Container on the quay"), "C-02": (QUAY, "Quay empty"), "C-03": (SHED9, "Shed 9 empty"), "C-04": (SHED9, "Container in shed 9"), "C-05": (SEA, "Same run twice before"),
+ "C-06": (TESS, "Police visit: nothing"), "C-07": (TESS, "\"Thirty-six hours\""), "C-07T": (TESS, "Phones quiet"), "C-08": (SHED6, "Left by truck, night of the 1st"),
+ "C-09": (SHED9, "Private crew, night of the 5th"), "C-10": (TESS, "Same forwarder, 4 years ago"), "C-11": (TOWN, "Seller account 2 days old"), "C-12": (WH, "\"Forty of forty\"")}
+for r in reports:
+    if r["id"] in PINS: (x, y), label = PINS[r["id"]]; r["pin"] = {"x": x, "y": y, "label": label}
+TPIN = {"brask": QUAY, "halsk-sheds": (306, 276), "maren-lys": SEA, "port-police": TESS, "tessaly-office": TESS, "gannet": SHED6, "tessaly-history": TESS, "listing": TOWN, "brask-warehouse": WH}
+for t in crisis["targets"]: t["pin"] = {"x": TPIN[t["id"]][0], "y": TPIN[t["id"]][1]}
+def site(name, xy, lx, ly): return {"name": name, "x": xy[0], "y": xy[1], "type": "town", "lx": xy[0] + lx, "ly": xy[1] + ly}
+crisis["map"] = {
+ "viewBox": [0, 0, 600, 420], "title": "Schematic of Halsk, Brask and the line to Kalsa",
+ "caption": "Two ports and a railway, not to scale. Reporting will be plotted here as it arrives.",
+ "truthNote": "Red diamonds are where the consignment really was, and what was being done, on Day {day}.",
+ "reservoir": "M0,0 L204,0 L190,60 L158,118 L146,196 L168,262 L150,336 L160,420 L0,420 Z",
+ "border": "M158,118 L300,152 L430,128 L600,150",
+ "areas": [{"d": "M158,118 L300,152 L384,214 L372,330 L400,420 L160,420 L150,336 L168,262 L146,196 Z", "label": "MARRAT", "lx": 176, "ly": 408}],
+ "zones": [{"x": 216, "y": 26, "w": 190, "h": 96, "label": "Brask"}, {"x": 178, "y": 232, "w": 186, "h": 152, "label": "Halsk free port"}, {"x": 446, "y": 240, "w": 134, "h": 96, "label": "Kalsa"}],
+ "regions": [{"name": "KORDAV", "x": 440, "y": 44}, {"name": "ELSIN", "x": 470, "y": 400}],
+ "lines": [{"d": "M%d,%d L404,352 L%d,%d" % (SIDING + MIN), "label": "Rail", "lx": 404, "ly": 372}],
+ "places": [site("Fenced quay", QUAY, -30, -12), site("Warehouse", WH, -28, 20), site("Coaster berth", BERTH, -18, 20), site("Shed 6", SHED6, -44, -12), site("Shed 9", SHED9, -16, 20),
+            site("Town", TOWN, -14, 20), site("Tessaly Freight", TESS, -22, 20), site("Rail siding", SIDING, -26, 20), site("Defence ministry", MIN, -62, -14)],
+ "offmap": [{"text": "Our port, 3 days by sea", "x": 10, "y": 404}],
+ "legend": "Plots reporting as it arrives, not confirmed fact. Dashed pins are items you doubted. Dashed rings are today's taskings."}
+U = lambda label, xy, dx=0, dy=-26: {"label": label, "x": xy[0] + dx, "y": xy[1] + dy}
+truth_units = {
+ 1: [U("The container", QUAY, -4, 26), U("Bureau team at work", WH, 0, -40)],
+ 2: [U("The container", QUAY, -4, 26), U("Bureau team at work", WH, 0, -40), U("Fake listing", TOWN, 40, 6)],
+ 3: [U("Forty of forty done", WH, 0, -40), U("Maren Lys, loaded", SEA, 0, 40)],
+ 4: [U("Private crew, copied seals", SHED9, 0, 44)],
+ 5: [U("On the train", SIDING, 60, -8)]}
+for g in crisis["groundTruth"]: g["units"] = truth_units[g["day"]]
 ids = {r["id"] for r in reports}
 assert all(cr["id"] in ids for cr in crisis["collectionResults"]) and all(n["item"] in ids for n in crisis["notes"])
 assert all(i in ids for r in reports if r.get("reveal") for i in r["reveal"]["crossCheck"]["ids"]) and all(r.get("reveal") for r in reports if r["kind"] == "planted")
