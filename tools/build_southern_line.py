@@ -239,8 +239,8 @@ crisis = {
    {"phase": "Never involved", "days": [4, 5], "wantsYouToBelieve": "H1", "summary": "Marrat denies everything, and on Day 5 tells the truth because it suits. Oro's people fake a stand-down.", "channels": [ROOK, FR]}],
  "endings": [
    {"id": "held", "tone": "good", "title": "Held", "points": 3, "if": {"assetAt": "sarn_c"}, "text": "Oro's column comes up the quarry road at first light and meets a company that has been waiting since dusk. It's over in ten minutes. Oro is taken alive, still asking about his fields."},
-   {"id": "damaged", "tone": "warn", "title": "Damaged", "points": 0, "if": {"assetAt": "sarn_p"}, "text": "The platoon holds the control building. The cooling plant burns. The line is down for three weeks."},
-   {"id": "burning", "tone": "bad", "title": "Burning", "points": -3, "default": True, "text": "The compressor station is alight by sunrise and the line is down for the summer. The task force goes onto trucked fuel."}],
+   {"id": "damaged", "tone": "warn", "title": "Damaged", "points": 0, "if": {"assetAt": "sarn_p"}, "text": "The platoon holds the control building. The cooling plant burns. The line is down for three weeks.", "changedBy": "The rest of the company. Your last brief sent a platoon to Sarn. The same call at High would have sent all of it."},
+   {"id": "burning", "tone": "bad", "title": "Burning", "points": -3, "default": True, "text": "The compressor station is alight by sunrise and the line is down for the summer. The task force goes onto trucked fuel.", "changedBy": "Where the guard force spent the last night. Each hypothesis points at a site, and the militia acting alone points at the Sarn compressor station. That call at High on the last brief puts the whole company there (Held); at Medium, a platoon (Damaged). The raid at Tolen was a separate night, earlier in the week."}],
  "dailyUpdates": [
    {"day": 1, "text": "Three nights ago an explosion damaged a valve housing in the Sarn valley. Pact talks between Elsin and Marrat open tomorrow."},
    {"day": 2, "text": "Pact talks open in Kalsa. No attacks overnight."},

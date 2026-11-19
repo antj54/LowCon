@@ -1105,11 +1105,18 @@ function boardView(d, done){
   if (!ids.length) return html + '<p class="small muted">Nothing pinned yet. Use <b>Pin to board</b> on any item in the Inbox.</p><div class="btnrow"><button class="btn ghost" data-act="tab" data-v="inbox">Back to the Inbox</button></div>';
   html += '<div class="legend small">' + C.hypotheses.map(h => '<span><b>' + h.id + '</b> ' + esc(h.short) + '</span>').join('') + '</div>'
     + boardTable(d, done)
-    + '<p class="small">' + (lead ? (lead.length === 1 ? '<b>' + lead[0] + '</b> is the least contradicted.' : '<b>' + leadText(lead) + '</b> tie as least contradicted.') : 'Mark items <b>I</b> where they don\'t fit a hypothesis to see which one survives.') + '</p>';
+    + '<p class="small">' + (lead ? (lead.length === 1 ? '<b>' + lead[0] + '</b> is the least contradicted.' : '<b>' + leadText(lead) + '</b> tie as least contradicted.') : '') + '</p>'
+    + (lead || done ? '' : '<div class="msg tip"><span class="from">No lead yet</span><p>The board only counts what <b>contradicts</b> a hypothesis, and nothing here is marked <b>I</b>. For each item, ask which hypothesis it makes harder to believe, and tap that cell until it shows <b>I</b>. An item marked C all the way across tells you nothing.</p></div>');
   if (done) return html;
   return html + '<div class="btnrow"><button class="btn" data-act="tab" data-v="brief">Write the brief</button></div>';
 }
 
+// What you've already asked of a target and what came back. Your own history only: it never says whether more is there.
+function taskHistory(tid, d){
+  const rows = (S.collected || []).filter(c => c.target === tid && c.task < d && !c.follow).sort((a, b) => a.task - b.task);
+  if (!rows.length) return '';
+  return '<p class="small muted thist">Asked before: ' + rows.map(c => 'Day ' + c.task + ' ' + esc(c.disc) + ' → ' + (c.arrive > d ? 'on its way' : (/^F-/.test(c.id) ? 'nothing new' : esc(c.id)))).join(' · ') + '</p>';
+}
 function collectView(d){
   const K = COLL(), left = budgetFor(d) - spentOn(d);
   const pending = (S.collected || []).filter(c => c.arrive > d && c.task < d);
@@ -1135,7 +1142,7 @@ function collectView(d){
         const dis = !on && (cost > left || burned || closed);
         const delay = tDelay(disc, tid);
         return '<button class="chip task" data-act="task" data-disc="' + disc + '" data-target="' + tid + '" aria-pressed="' + on + '"' + (dis ? ' disabled' : '') + ' title="' + (delay > 1 ? 'Arrives in ' + delay + ' days' : 'Arrives tomorrow') + '">' + disc + ' · ' + cost + (delay > 1 ? ' · ' + delay + 'd' : '') + (burned ? ' · gone' : (closed ? ' · closed' : '')) + '</button>';
-      }).join('') + '</div></div>';
+      }).join('') + '</div></div>' + taskHistory(tid, d);
     });
     html += '</div>';
   });
@@ -1203,7 +1210,7 @@ function postmortemView(){
   const sign = n => (n > 0 ? '+' : '') + n;
   const pd = ui.pmDay;
 
-  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">' + esc(C.endingEyebrow || 'The outcome') + '</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text + epilogue()) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
+  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">' + esc(C.endingEyebrow || 'The outcome') + '</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text + epilogue()) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p>' + (ending.changedBy ? '<p class="small"><b>What would have changed it:</b> ' + esc(ending.changedBy) + '</p>' : '') + '</div>'
     + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + (bTotal ? ' · burned sources ' + sign(bTotal) : '') + (S.eventPoints || []).map(x => ' · ' + esc(x.label) + ' ' + sign(x.points)).join('') + ' · ending ' + sign(ending.points) + '</span></div>'
     + (S.eventPoints || []).filter(x => x.title).map(x => '<p class="small"><b>' + esc(cap(x.label)) + ':</b> ' + esc(x.title) + ' (' + sign(x.points) + ')</p>').join('')
     + '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Your call</th><th>Truth</th><th class="num">Call</th><th class="num">Evid.</th><th class="num">Min</th></tr></thead><tbody>'
