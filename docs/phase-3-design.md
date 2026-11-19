@@ -122,7 +122,7 @@ Each step is playable on its own.
 2. **Carry-over** *(built, #61)*: starting credibility, burned sources and file grades applied in Scenarios 01 and 02 as they exist.
 3. **Analyst notes** *(built, #63)* written into Scenarios 01 and 02.
 4. **Scenario 03** on paper (#59) and as data *(built, #64)*, with its callback items.
-5. **Reassignment.**
+5. **Reassignment** *(built, #65)*.
 6. **Playtest** the full campaign, which also closes the Phase 2 gate.
 
 ## Parking lot (Phase 4 or later)

@@ -171,6 +171,7 @@ crisis = {
    "context": "He reasons from who to where. If the Front is acting alone, he expects it to hit the Sarn compressor station, the thing it resents. If Kordav is behind it, the Kessa pumping station, which feeds the task force. If Marrat, the Tolen bridge, where a cut is spectacular, easy to repair and right beside the guards Marrat wants to sell.",
    "tipLine": "High moves the whole company to the site that goes with your hypothesis. Medium sends one platoon there, quietly. Low changes nothing."},
  "opening": {"text": "One company, three places it might be needed, and a liaison officer from Marrat who keeps offering to help. Tell me whose militia this is.",
+   "reassigned": "New cell, same name on the door. I asked for a fresh pair of eyes and they sent me yours. One company, three places it might be needed. Tell me whose militia this is.",
    "byTone": {"good": "Last time you were right when it was hard to be. Don't make me regret remembering that.",
               "warn": "Last time you got there, and you got there late. I need you earlier.",
               "bad": "I lost a dam on your reading. I'm told you've improved. Show me."}},
@@ -331,7 +332,7 @@ crisis = {
  "analysts": [
    {"id": "vasko", "name": "Imre Vasko", "specialty": "Regional analyst", "reveal": "Anchors on his first theory. His first note was the best advice in the scenario: ask WREN for its sourcing. Then the detonator handed him a theory, Kordav, and he read everything after it that way, through two changes of the truth."},
    {"id": "halden", "name": "Noor Halden", "specialty": "Technical analyst (signals, imagery, forensics)", "reveal": "Slow but careful. Never wrong. Her note on the Tolen reconnaissance arrived the morning after the raid."},
-   {"id": "marrow", "name": "Tess Marrow", "specialty": "Open-source analyst", "reveal": "Overconfident. \"Home-grown, full stop\" was wrong for three days and right by accident on the fourth. She authenticated a fake on Day 3. Her last note was sharp."}],
+   {"id": "marrow", "name": "Tess Marrow", "specialty": "Open-source analyst", "extra": True, "reveal": "Overconfident. \"Home-grown, full stop\" was wrong for three days and right by accident on the fourth. She authenticated a fake on Day 3. Her last note was sharp."}],
 }
 def NOTE(a, item, text, right, why, after=0): return {"analyst": a, "item": item, "after": after, "text": text, "right": right, "why": why}
 crisis["notes"] = [

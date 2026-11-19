@@ -118,6 +118,7 @@ p{margin:0}
 .anote{border-left:3px solid var(--line);padding:2px 0 2px 10px;font-size:14px;color:var(--muted);font-style:italic}
 .anote .who{display:block;font:500 11.5px/1.4 var(--f-mono);font-style:normal;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .msg.notes{border-left-color:var(--line)}
+.msg.posting{border-left-color:var(--c-low)}
 .crednote{color:var(--ink)}
 .status-line b.cred-questioned,.cred-questioned{color:var(--c-med)}
 .status-line b.cred-discounted,.cred-discounted{color:var(--c-low)}
@@ -488,7 +489,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], flags:{}, carry:{fooled:carryFooled()}, cred:credStart(), credAt:{1:credStart()}, credStart:credStart(), offRecord:!!REC.runs[C.id], credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], flags:{}, carry:{fooled:carryFooled(), reassigned:sinceReassigned().fresh, lostExtras:sinceReassigned().lostExtras}, cred:credStart(), credAt:{1:credStart()}, credStart:credStart(), offRecord:!!REC.runs[C.id], credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -906,9 +907,11 @@ function readInCard(d){
 }
 
 /* ---------- Analyst notes: opinion, not evidence ---------- */
+const TEAM = () => (C.analysts || []).filter(a => !(a.extra && S && S.carry && S.carry.lostExtras));
+const onTeam = n => TEAM().some(a => a.id === n.analyst);
 const analyst = id => (C.analysts || []).find(a => a.id === id) || {name:id};
 // A note shows once its item has been in for `after` days. In the postmortem everything on a seen item shows.
-function notesOn(id, upToDay){ return (C.notes || []).filter(n => n.item === id && itemDay(id) + (n.after || 0) <= upToDay); }
+function notesOn(id, upToDay){ return (C.notes || []).filter(n => n.item === id && onTeam(n) && itemDay(id) + (n.after || 0) <= upToDay); }
 function noteLine(n, withItem){
   return '<p class="anote"><span class="who">' + esc(analyst(n.analyst).name) + (withItem ? ', on ' + esc(n.item) + ' (Day ' + itemDay(n.item) + ')' : (n.after ? ', a day later' : '')) + '</span>' + esc(n.text) + '</p>';
 }
@@ -918,13 +921,13 @@ function notesHtml(id, maxAfter){
 }
 function lateNotes(d){
   const seen = new Set(seenReports().map(r => r.id));
-  const late = (C.notes || []).filter(n => (n.after || 0) > 0 && seen.has(n.item) && itemDay(n.item) + n.after === d);
+  const late = (C.notes || []).filter(n => (n.after || 0) > 0 && onTeam(n) && seen.has(n.item) && itemDay(n.item) + n.after === d);
   return late.length ? '<div class="msg notes"><span class="from">Analyst notes on earlier items</span>' + late.map(n => noteLine(n, true)).join('') + '</div>' : '';
 }
 function analystsCard(){
-  if (!(C.analysts || []).length) return '';
+  if (!TEAM().length) return '';
   const seen = new Set(seenReports().map(r => r.id));
-  return '<div class="stack"><h3>Your analysts</h3>' + C.analysts.map(a => {
+  return '<div class="stack"><h3>Your analysts</h3>' + TEAM().map(a => {
     const ns = (C.notes || []).filter(n => n.analyst === a.id && seen.has(n.item));
     const score = ns.reduce((t, n) => t + (n.right || 0), 0);
     return '<div class="reveal"><div class="head"><b>' + esc(a.name) + '</b><span>' + esc(a.specialty) + '</span><span class="pill">Right ' + (Number.isInteger(score) ? score : score.toFixed(1).replace('.5', '½').replace('0½', '½')) + ' of ' + ns.length + '</span></div>'
@@ -969,9 +972,10 @@ function gradeSummary(g){
 }
 
 function openingCard(d){
-  const O = C.opening; if (!O || d !== 1) return '';
-  const run = earlierRuns().filter(r => r.customer === C.customer.name).pop();
-  const text = (run && (O.byTone || {})[run.tone]) || O.text;
+  const O = C.opening || {}; if (d !== 1) return '';
+  const re = S.carry && S.carry.reassigned;
+  const run = re ? null : sinceReassigned().same;
+  const text = re ? (O.reassigned || 'I\'m told this is a new cell. I\'ve read the file on the last one. Start again.') : ((run && (O.byTone || {})[run.tone]) || O.text);
   return text ? '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + (run ? ' · he remembers ' + esc(run.title) : '') + '</span><p><q>' + esc(text) + '</q></p></div>' : '';
 }
 function replyCard(d){
@@ -1154,7 +1158,7 @@ function filesView(){
   return '<div class="stack"><h2>Situation</h2><p class="mono small muted">' + esc(C.briefing.dateLine) + '</p>' + C.briefing.situation.map(p => '<p>' + esc(p) + '</p>').join('') + '</div>'
     + '<div class="stack"><h3>' + esc(CUST()) + '\'s habits</h3>' + policyTable() + '</div>'
     + '<div class="stack"><h3>Hypotheses</h3>' + C.hypotheses.map(h => '<p><span class="mono"><b>' + h.id + '</b></span> <b>' + esc(h.short) + '.</b> ' + esc(h.text) + '</p>').join('') + '</div>'
-    + ((C.analysts || []).length ? '<div class="stack"><h3>Your analysts</h3>' + C.analysts.map(a => '<p class="small"><b>' + esc(a.name) + '</b> · ' + esc(a.specialty) + '</p>').join('') + '<p class="small muted">Their notes appear under items. Notes are opinion: you can\'t cite or doubt them, and they don\'t score. The postmortem shows how often each of them was right.</p></div>' : '')
+    + (TEAM().length ? '<div class="stack"><h3>Your analysts</h3>' + TEAM().map(a => '<p class="small"><b>' + esc(a.name) + '</b> · ' + esc(a.specialty) + '</p>').join('') + '<p class="small muted">' + (S.carry && S.carry.lostExtras && (C.analysts || []).some(a => a.extra) ? 'You were reassigned, and the new cell is two analysts. ' : '') + 'Their notes appear under items. Notes are opinion: you can\'t cite or doubt them, and they don\'t score. The postmortem shows how often each of them was right.</p></div>' : '')
     + '<div class="stack"><h3>Sources on file</h3><div class="tablewrap"><table><thead><tr><th>Code name</th><th>Access</th><th>File</th></tr></thead><tbody>'
     + roster.map(s => '<tr><td><span class="mono"><b>' + esc(s.codeName) + '</b></span><br><span class="small muted">' + esc(s.discipline) + '</span></td><td class="small">' + esc(s.access) + '</td><td class="mono"><b>' + esc(fileGrade(s).g) + '</b>' + (goneBefore(s.id) ? '<br><span class="small muted">burned</span>' : '') + '</td></tr>').join('') + '</tbody></table></div></div>'
     + (roster.some(x => fileGrade(x).why || goneBefore(x.id)) ? '<p class="small muted">From your record: ' + roster.filter(x => fileGrade(x).why || goneBefore(x.id)).map(x => '<b>' + esc(x.codeName) + '</b> ' + (goneBefore(x.id) ? 'was burned in an earlier scenario and can\'t be used.' : 'is now graded ' + fileGrade(x).g + ': ' + esc(fileGrade(x).why))).join(' ') + '</p>' : '')
@@ -1205,6 +1209,7 @@ function postmortemView(){
     + '</tbody></table></div>'
     + '<p class="small">Planted items you doubted: <b>' + caught + ' of ' + planted.length + '</b>. True items you doubted: <b>' + falseAlarms + '</b>. Clutter you marked not relevant: <b>' + clutterSpotted + ' of ' + clutter.length + '</b>.</p>'
     + credCard()
+    + postingNotice()
     + (S.offRecord && REC.runs[C.id] ? '<p class="small muted">This run is off the record. Your first finish stands: ' + esc(REC.runs[C.id].endingTitle) + '.</p>' : '<p class="small muted">This finish is on your service record.</p>')
     + (CFG.playtest ? debriefCard() : '')
     + '<div class="btnrow"><button class="btn ghost" data-act="copylog">Copy playtest log</button></div>'
@@ -1241,6 +1246,13 @@ function postmortemView(){
     + '<div class="stack"><h3>Your sources, revealed</h3>' + C.sources.filter(s => !s.rosterHidden).map(s => '<p class="small"><span class="mono"><b>' + esc(s.codeName) + '</b></span> ' + (s.controlledByAdversary === true ? '<span class="pill k-planted">Adversary channel</span> ' : '') + esc(s.postmortemNote || '') + '</p>').join('') + '</div>'
     + '<div class="btnrow"><button class="btn" data-act="restart">Play again</button></div>';
   return html;
+}
+function postingNotice(){
+  const r = REC.runs[C.id];
+  if (S.offRecord || !r || !r.reassigned) return '';
+  return '<div class="msg posting"><span class="from">Posting notice</span>'
+    + '<p>With effect from today you are reassigned to lead a new analysis cell. ' + esc(C.customer.name) + ' has asked for "a fresh pair of eyes," which is the polite form.</p>'
+    + '<p class="small">You keep your record, and your burned sources stay burned. You do not keep any analyst beyond the first two, or any extra collection point. Every customer will start you at Questioned. They will be told you are new. They will not be told why, but they will ask around.</p></div>';
 }
 function credCard(){
   if (!CRED() || typeof S.credFinal !== 'number') return '';
@@ -1537,7 +1549,7 @@ function recordFrom(Cx, Sx){
   });
   return {id:Cx.id, number:Cx.crisisNumber, title:Cx.title, ending:Sx.ending, endingTitle:end.title || '', tone:end.tone || '', total:Sx.summary ? Sx.summary.total : null,
     customer:Cx.customer.name, cred, credLabel:lvl.label || '', burned:Object.keys(Sx.burned || {}).map(id => (Cx.sources.find(x => x.id === id) || {codeName:id}).codeName),
-    fooled, tested, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
+    fooled, tested, reassigned:cred === 0, grades:clone((Cx.record || {}).grades || []), at:Sx.savedAt || new Date().toISOString(), runKey:runKey(Cx, Sx)};
 }
 function commitRecord(){
   if (REC.runs[C.id] || S.offRecord || !S.done || isVoided(C, S)) return;
@@ -1589,10 +1601,17 @@ function condOk(w){
   return true;
 }
 function earlierRuns(){ const i = CUR ? INDEX.findIndex(x => x.id === CUR.id) : 0; return INDEX.slice(0, Math.max(i, 0)).map(x => REC.runs[x.id]).filter(Boolean); }
+// Reassignment (#32): a scenario finished on the record at zero credibility. Runs before it no longer set anyone's opinion of you.
+function sinceReassigned(){
+  const runs = earlierRuns(); let ri = -1; runs.forEach((r, i) => { if (r.reassigned) ri = i; });
+  const post = runs.slice(ri + 1), same = post.filter(r => r.customer === C.customer.name && typeof r.cred === 'number').pop();
+  return {was:ri >= 0, post, same, fresh:ri >= 0 && !same, lostExtras:ri >= 0 && !post.some(r => r.tone === 'good')};
+}
 function credStart(){
   const K = C.credibility; if (!K) return null;
-  const runs = earlierRuns(), same = runs.filter(r => r.customer === C.customer.name && typeof r.cred === 'number').pop();
+  const R0 = sinceReassigned(), runs = R0.post, same = R0.same;
   if (same) return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, same.cred));
+  if (R0.was) return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.reassignStart == null ? 2 : K.reassignStart));
   const last = runs[runs.length - 1], step = !last ? 0 : last.tone === 'good' ? 1 : last.tone === 'bad' ? -1 : 0;
   return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + step));
 }
@@ -1613,6 +1632,7 @@ function recordView(){
       + '<p class="small"><span class="muted">Outcome:</span> ' + esc(r.endingTitle || r.ending || '') + (r.total != null ? ' · score ' + sign(r.total) : '') + '</p>'
       + (r.cred != null ? '<p class="small"><span class="muted">' + esc(r.customer) + ':</span> left you at ' + esc(r.credLabel || '') + ' (' + r.cred + ')</p>' : '')
       + ((r.burned || []).length ? '<p class="small"><span class="muted">Sources burned:</span> ' + r.burned.map(esc).join(', ') + '. They stay gone.</p>' : '<p class="small"><span class="muted">Sources burned:</span> none</p>')
+      + (r.reassigned ? '<p class="small"><b>Reassigned after this scenario.</b> New cell, two analysts, and every customer starts you at Questioned.</p>' : '')
       + ((r.fooled || []).length ? '<p class="small"><span class="muted">What got past you:</span> ' + r.fooled.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
       + (caught.length ? '<p class="small"><span class="muted">What you caught:</span> ' + caught.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
       + ((r.grades || []).filter(g => !(r.burned || []).includes(g.codeName)).length ? '<p class="small"><span class="muted">Source files updated:</span> ' + r.grades.filter(g => !(r.burned || []).includes(g.codeName)).map(g => '<b>' + esc(g.codeName) + '</b> now ' + esc(g.to) + ' (' + esc(g.reason) + ')').join('; ') + '.</p>' : '')

@@ -71,6 +71,7 @@ async function run(plan, doubt, cfg, opts = {}) {
   const total = (out.match(/class="n">([^<]+)</) || [])[1];
   const parts = (out.match(/calls[^<]+/) || [])[0];
   const cred = ((out.match(/credline">Credibility: ([^<]+)</) || [])[1] || '').replace(/ after the outcome/, '').replace(/&gt;/g, '>');
+  snaps.record = storage['intel-cell-sim:record'] || '';
   return Object.assign({ line: `${ending} ${total} | ${parts}`, calls, total, html: out, cred }, snaps);
 }
 
@@ -221,6 +222,7 @@ const SETS = {
       ['Record: Seized, credibility 1', rec(1, 'bad'), r => r.cred.startsWith('Discounted (1)') && /lost a dam/.test(r.day1)],
       ['Record: KESTREL burned', rec(3, 'warn', { burned: ['KESTREL'] }), r => /data-target="kestrel"[^>]*disabled/.test(r.collect1)],
       ['Record: cited the snow photo', rec(3, 'warn', { fooled: ['recycled-photo'] }), r => /water tower/.test(r.html) && !/Marrat crowns\./.test(r.day3)],
+      ['Record: reassigned after Crisis 01', rec(0, 'bad', { reassigned: true }), r => r.cred.startsWith('Questioned (2)') && /fresh pair of eyes/.test(r.day1) && !/Tess Marrow/.test(r.html) && /Imre Vasko/.test(r.html)],
       ['Record: cited staged signals', rec(3, 'warn', { fooled: ['staged-signals'] }), r => !/Valley Truth/.test(r.day3)],
     ];
     for (const [name, seed, ok] of cases) {
@@ -229,6 +231,13 @@ const SETS = {
       console.log(name.padEnd(32), r.line, '| cred ' + r.cred, good ? '| as expected' : '| NOT AS EXPECTED');
       if (!good) process.exitCode = 1;
     }
+  }
+  if (crisis.id === 'border-buildup') {
+    const hedge = set.strategies.find(x => /Always hedge/.test(x[0]));
+    const r = await run(hedge[1], none);
+    const ok = /Posting notice/.test(r.html) && /"reassigned":true/.test(r.record);
+    console.log('Reassignment at zero credibility'.padEnd(32), r.line, ok ? '| posting notice shown, on the record' : '| NO REASSIGNMENT');
+    if (!ok) process.exitCode = 1;
   }
   const pt = await run(set.collect, none, { playtest: true });
   console.log('Playtest build'.padEnd(32), pt.line, /Playtest debrief/.test(lastHtml) ? '| debrief shown' : '| DEBRIEF MISSING');

@@ -6,7 +6,7 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 
 ## Status
 
-**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Crisis 02 (*The Walk-in*) is playable from the crisis picker. Phase 3 has started: a service record and carry-over between scenarios. Analyst notes are in every scenario, and Crisis 03 (*The Southern Line*) is playable. Next: reassignment.
+**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Crisis 02 (*The Walk-in*) is playable from the crisis picker. Phase 3 has started: a service record and carry-over between scenarios. Analyst notes are in every scenario, and Crisis 03 (*The Southern Line*) is playable. Reassignment is in. Next: a full campaign playtest.
 
 ## Layout
 

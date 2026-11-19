@@ -39,6 +39,7 @@
   },
   "opening": {
     "text": "One company, three places it might be needed, and a liaison officer from Marrat who keeps offering to help. Tell me whose militia this is.",
+    "reassigned": "New cell, same name on the door. I asked for a fresh pair of eyes and they sent me yours. One company, three places it might be needed. Tell me whose militia this is.",
     "byTone": {
       "good": "Last time you were right when it was hard to be. Don't make me regret remembering that.",
       "warn": "Last time you got there, and you got there late. I need you earlier.",
@@ -2168,6 +2169,7 @@
       "id": "marrow",
       "name": "Tess Marrow",
       "specialty": "Open-source analyst",
+      "extra": true,
       "reveal": "Overconfident. \"Home-grown, full stop\" was wrong for three days and right by accident on the fourth. She authenticated a fake on Day 3. Her last note was sharp."
     }
   ],
