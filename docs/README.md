@@ -17,6 +17,7 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | `crisis-04-player-packet.md`, `crisis-04-gm-key.md` | Crisis 04 (*The Missing Shipment*) on paper. **The key spoils the campaign.** Built (#70). |
 | `crisis-05-player-packet.md`, `crisis-05-gm-key.md` | Crisis 05 (*Lights Out*) on paper. **The key spoils the campaign.** Built (#70). |
 | `crisis-06-player-packet.md`, `crisis-06-gm-key.md` | Crisis 06 (*The Damage Assessment*) on paper. **The key spoils the campaign.** Built (#74). |
+| `crisis-07-player-packet.md`, `crisis-07-gm-key.md` | Crisis 07 (*The Vote in Kalsa*) on paper. **The key spoils the campaign.** Not built. |
 | `story-key.md` | **Spoilers for the whole campaign:** who the leak is and how the endings are decided. The author's working key. |
 | `story-plan.md` | The overarching story: ten scenarios, three acts and a finale. No spoilers about the leak. Paper only beyond Act 1. |
 | `phase-3-design.md` | Paper design for Phase 3: service record, carry-over, analysts, Scenario 03. Not built; decisions open. |
