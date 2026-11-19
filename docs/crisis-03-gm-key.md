@@ -284,7 +284,7 @@ Notes are authored. Each analyst goes wrong in the way their trait says.
 **Watch for:**
 
 - **"Believe WREN at once" is only 3 points behind best play.** That's by design, since trusting the right thing early should beat distrusting it, but the Displaced outcome is carrying the whole gap. If testers find Displaced unfair, the warning has to be louder: it's currently one line in Halvorsen's habits ("a company is not discreet").
-- **Confidence doubles as visibility.** A player who is honestly sure on Day 2 may want the quiet platoon anyway, and the brief has no way to say "High, but quietly." This strains #23 (the customer commits in proportion to confidence). If it grates in play, the fix is a posture choice on the brief, which is a new mechanic and belongs in a decision, not a patch.
+- **Confidence doubles as visibility.** A player who is honestly sure on Day 2 may want the quiet platoon anyway, and the brief has no way to say "High, but quietly." This strains #23 (the customer commits in proportion to confidence). Kept as is and to be watched in play (#60). The fix, if it grates, would be a posture choice on the brief, which is a new mechanic.
 - **Day 5's true warning from ROOK** will be doubted by almost everyone on a first run. That's the point, but it must not feel like a trick: R-4-02, R-5-04 and C-16 all support it without him.
 - **WREN going wrong on Day 4** right after being vindicated is the meanest beat in the scenario. R-4-02 contradicts it the same morning, in Oro's own words.
 - **Reading load.** Five push items plus up to three analyst notes a day, plus results. Time Day 2 and Day 3 before adding anything.
