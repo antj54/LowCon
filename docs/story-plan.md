@@ -1,6 +1,6 @@
 # Story plan · Low Confidence
 
-*Status: plan on paper, drafted 2026-11-18 (#66). No spoilers about who the leak is: that goes in a separate key if Anthony wants one written. Nothing here is built beyond Act 1.*
+*Status: plan on paper, drafted 2026-11-18 (#66, #67). No spoilers about who the leak is: that is in `claude/story-key.md`, which Anthony has asked not to read so he can play the campaign. Nothing here is built beyond Act 1. Act 2 is being scripted on paper.*
 
 ## The shape
 
@@ -50,7 +50,7 @@ The pattern becomes the subject. Each scenario is a crisis in its own right and 
 | # | Working title | Question | Why it plays differently | The thread |
 | --- | --- | --- | --- | --- |
 | 04 | The Missing Shipment | Dual-use components vanished between two ports. Where are they, and who has them? | Hypotheses are places. The most collection-driven scenario. | The smugglers reroute the morning after we task collection. Someone told them. |
-| 05 | Lights Out | A ransomware attack hits Elsin's grid and pipeline controls. Criminal crew, or a state behind a false flag? | Technical attribution, and a third customer: Elsin-alliance infrastructure coordination. | The attackers had a network diagram that only a short list of people held. |
+| 05 | Lights Out | A ransomware attack hits Elsin's grid and pipeline controls. Criminal crew, or a state behind a false flag? | Technical attribution, and a third customer: **Director Ilse Brandt**, who runs the alliance's Infrastructure Protection Cell in Kalsa. Technical, impatient with estimative language, and wants a yes or a no. | The attackers had a network diagram that only a short list of people held. |
 | 06 | The Damage Assessment | Who or what is the leak? | The hypotheses are suspects. Your own past reporting is the evidence, and your record is part of it: what you burned, what you cited, what you shared. | You name the source, at a confidence level, and the customer acts on it. |
 
 **Scenario 06 is the campaign's hinge.** Name the right source at High and the leak is closed before Act 3. Name the wrong one and an innocent career ends while the leak stays open. Hedge and nothing is done. Whatever happens carries into every Act 3 scenario.
@@ -112,8 +112,6 @@ Each pairing gets a short closing passage: sixteen in all, most of them two or t
 2. Premise: **both** the long game and the leak
 3. Length: **ten scenarios,** three acts of three and a finale
 
-## Decisions waiting
-
-1. **Who knows who the leak is?** A. Claude decides and writes it in a spoiler key Anthony doesn't open (recommended, so the author can also play it). B. Anthony picks from the suspect types. C. No secrets: Anthony reads everything.
-2. **When to build Act 2?** A. After a campaign playtest of Act 1 (recommended). B. Now, on paper only. C. Now, built.
-3. **A third customer in Act 2?** A. Yes, for Scenario 05 (recommended; #33 allows three). B. Keep to Halvorsen and Marlowe.
+4. The leak's identity: **Claude decides, in a spoiler key Anthony doesn't open** (#67)
+5. Act 2: **scripted now, on paper only** (#67)
+6. A third customer: **yes, Director Ilse Brandt, in Scenario 05** (#67)

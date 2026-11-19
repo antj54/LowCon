@@ -222,7 +222,7 @@ const SETS = {
       ['Record: Seized, credibility 1', rec(1, 'bad'), r => r.cred.startsWith('Discounted (1)') && /lost a dam/.test(r.day1)],
       ['Record: KESTREL burned', rec(3, 'warn', { burned: ['KESTREL'] }), r => /data-target="kestrel"[^>]*disabled/.test(r.collect1)],
       ['Record: cited the snow photo', rec(3, 'warn', { fooled: ['recycled-photo'] }), r => /water tower/.test(r.html) && !/Marrat crowns\./.test(r.day3)],
-      ['Record: reassigned after Crisis 01', rec(0, 'bad', { reassigned: true }), r => r.cred.startsWith('Questioned (2)') && /fresh pair of eyes/.test(r.day1) && !/Tess Marrow/.test(r.html) && /Imre Vasko/.test(r.html)],
+      ['Record: reassigned after Crisis 01', rec(0, 'bad', { reassigned: true }), r => r.cred.startsWith('Discounted (1)') && /fresh pair of eyes/.test(r.day1) && !/Tess Marrow/.test(r.html) && /Imre Vasko/.test(r.html)],
       ['Record: cited staged signals', rec(3, 'warn', { fooled: ['staged-signals'] }), r => !/Valley Truth/.test(r.day3)],
     ];
     for (const [name, seed, ok] of cases) {

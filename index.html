@@ -1252,7 +1252,7 @@ function postingNotice(){
   if (S.offRecord || !r || !r.reassigned) return '';
   return '<div class="msg posting"><span class="from">Posting notice</span>'
     + '<p>With effect from today you are reassigned to lead a new analysis cell. ' + esc(C.customer.name) + ' has asked for "a fresh pair of eyes," which is the polite form.</p>'
-    + '<p class="small">You keep your record, and your burned sources stay burned. You do not keep any analyst beyond the first two, or any extra collection point. Every customer will start you at Questioned. They will be told you are new. They will not be told why, but they will ask around.</p></div>';
+    + '<p class="small">You keep your record, and your burned sources stay burned. You do not keep any analyst beyond the first two, or any extra collection point. Every customer will start you at ' + esc(credLevel(CRED() && CRED().reassignStart != null ? CRED().reassignStart : 1).label || 'the bottom') + '. They will be told you are new. They will not be told why, but they will ask around.</p></div>';
 }
 function credCard(){
   if (!CRED() || typeof S.credFinal !== 'number') return '';
@@ -1611,7 +1611,7 @@ function credStart(){
   const K = C.credibility; if (!K) return null;
   const R0 = sinceReassigned(), runs = R0.post, same = R0.same;
   if (same) return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, same.cred));
-  if (R0.was) return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.reassignStart == null ? 2 : K.reassignStart));
+  if (R0.was) return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.reassignStart == null ? 1 : K.reassignStart));
   const last = runs[runs.length - 1], step = !last ? 0 : last.tone === 'good' ? 1 : last.tone === 'bad' ? -1 : 0;
   return Math.max(K.min || 0, Math.min(K.max == null ? 5 : K.max, K.start + step));
 }
@@ -1632,7 +1632,7 @@ function recordView(){
       + '<p class="small"><span class="muted">Outcome:</span> ' + esc(r.endingTitle || r.ending || '') + (r.total != null ? ' · score ' + sign(r.total) : '') + '</p>'
       + (r.cred != null ? '<p class="small"><span class="muted">' + esc(r.customer) + ':</span> left you at ' + esc(r.credLabel || '') + ' (' + r.cred + ')</p>' : '')
       + ((r.burned || []).length ? '<p class="small"><span class="muted">Sources burned:</span> ' + r.burned.map(esc).join(', ') + '. They stay gone.</p>' : '<p class="small"><span class="muted">Sources burned:</span> none</p>')
-      + (r.reassigned ? '<p class="small"><b>Reassigned after this scenario.</b> New cell, two analysts, and every customer starts you at Questioned.</p>' : '')
+      + (r.reassigned ? '<p class="small"><b>Reassigned after this scenario.</b> New cell, two analysts, and every customer starts you near the bottom.</p>' : '')
       + ((r.fooled || []).length ? '<p class="small"><span class="muted">What got past you:</span> ' + r.fooled.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
       + (caught.length ? '<p class="small"><span class="muted">What you caught:</span> ' + caught.map(t => esc(TAG_TEXT[t] || t)).join('; ') + '.</p>' : '')
       + ((r.grades || []).filter(g => !(r.burned || []).includes(g.codeName)).length ? '<p class="small"><span class="muted">Source files updated:</span> ' + r.grades.filter(g => !(r.burned || []).includes(g.codeName)).map(g => '<b>' + esc(g.codeName) + '</b> now ' + esc(g.to) + ' (' + esc(g.reason) + ')').join('; ') + '.</p>' : '')

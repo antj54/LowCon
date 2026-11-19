@@ -111,7 +111,7 @@ The design doc gives you 2 analysts to start and up to 4, each with a specialty 
 ## 6. Reassignment (#32)
 
 - **Trigger:** finishing a scenario on the record with credibility 0 with its customer.
-- **Effect:** you are reassigned to a new cell. You lose analysts beyond the starting two and the extra collection point, and credibility with every customer resets to 2 (Questioned). Burned sources stay burned and the record keeps everything.
+- **Effect:** you are reassigned to a new cell. You lose analysts beyond the starting two and the extra collection point, and credibility with every customer resets to 1 (Discounted; changed from 2 in #67). Burned sources stay burned and the record keeps everything.
 - **Tone:** dry, not punishing. A posting notice, not a game over.
 
 ## 7. Build order
