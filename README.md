@@ -6,7 +6,7 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 
 ## Status
 
-**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Crisis 02 (*The Walk-in*) is playable from the crisis picker. Phase 3 has started: a service record and carry-over between scenarios. Analyst notes are in both scenarios. Next: Crisis 03 as data.
+**Phase 2 · Core systems.** Crisis 01 (*Exercise or Operation?*) is playable with a morning read-in, a situation map, an inbox with doubting, collection tasking, a hypotheses board (ACH-lite, unscored), credibility with the customer, a daily brief (hypothesis plus Low/Medium/High confidence) and a postmortem with the real unit positions. Crisis 02 (*The Walk-in*) is playable from the crisis picker. Phase 3 has started: a service record and carry-over between scenarios. Analyst notes are in every scenario, and Crisis 03 (*The Southern Line*) is playable. Next: reassignment.
 
 ## Layout
 
@@ -43,6 +43,7 @@ Testers need write access to save: Contributor if they're in the owner's organiz
 ```sh
 node tools/simulate.js                        # Crisis 01
 node tools/simulate.js crises/walk-in.json    # Crisis 02
+node tools/simulate.js crises/southern-line.json  # Crisis 03
 python3 tools/build_walk_in.py                # regenerate crises/walk-in.json after editing its content
 ```
 

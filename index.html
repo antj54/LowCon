@@ -251,6 +251,7 @@ pre.log{white-space:pre-wrap;word-break:break-word;font:12px/1.5 var(--f-mono);b
 .m-area{fill:var(--card);stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:9 4 2 4}
 .m-zone{fill:var(--card);fill-opacity:.55;stroke:var(--m-ink);stroke-opacity:.5;stroke-width:1;stroke-dasharray:3 3}
 .m-zonelab{font:600 10.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;fill:var(--m-ink)}
+.m-pipe{fill:none;stroke:var(--m-ink);stroke-width:2.5;stroke-dasharray:1 5;stroke-linecap:round}
 .m-border{fill:none;stroke:var(--m-ink);stroke-width:1.6;stroke-dasharray:9 4 2 4}
 .m-place{fill:var(--card);stroke:var(--m-ink);stroke-width:1.5}
 .m-dam{stroke:var(--m-ink);stroke-width:4;stroke-linecap:square}
@@ -347,7 +348,7 @@ function keyJudgment(b){
 const callLabel = b => b.hyp + ', ' + confLabel(b.conf) + (b.confLost ? '?' : '');
 const burnedOn = sid => (S.burned || {})[sid] || (goneBefore(sid) ? 1 : undefined);
 const collectedFor = d => (S.collected || []).filter(c => c.arrive === d).map(c => c.fallback ? fallbackReport(c) : Object.assign({}, C.reports.find(r => r.id === c.id), {day:d, collected:true, task:c}));
-const reportsFor = d => C.reports.filter(r => !r.via && r.day === d && !(burnedOn(r.sourceId) && d >= burnedOn(r.sourceId))).concat(collectedFor(d));
+const reportsFor = d => C.reports.filter(r => !r.via && r.day === d && condOk(r.when) && !(burnedOn(r.sourceId) && d >= burnedOn(r.sourceId))).concat(collectedFor(d));
 const seenReports = () => { const out = []; for (let d = 1; d <= C.days; d++) out.push(...reportsFor(d)); return out; };
 const targetById = id => (C.targets || []).find(t => t.id === id) || {name:id};
 function fallbackReport(c){
@@ -390,7 +391,8 @@ function credTriggers(d, brief, firedEventIds){
   if (!CRED()) return;
   CRED().triggers.forEach(t => {
     if (t.on === 'reply' && brief.reply === t.reply) credApply(t, d + 1);
-    else if (t.on === 'leave' && brief.from === t.state && brief.to !== t.state && !(t.notTo || []).includes(brief.to)) credApply(t, d + 1);
+    else if (t.on === 'leave' && [].concat(t.state).includes(brief.from) && brief.to !== brief.from && (!t.days || t.days.includes(d)) && !(t.notTo || []).includes(brief.to)) credApply(t, d + 1);
+    else if (t.on === 'flag' && firedEventIds.includes(t.event + ':' + t.flag)) credApply(t, d + 1);
     else if (t.on === 'event' && firedEventIds.includes(t.eventId)) credApply(t, d + 1);
     else if (t.on === 'streak' && brief.conf === t.confidence){
       let run = 1; for (let x = d - 1; x >= 1 && S.briefs[x] && S.briefs[x].conf === t.confidence; x--) run++;
@@ -420,7 +422,7 @@ function resolveCollection(d){
     }
     const got = new Set(S.collected.map(c => c.id));
     const closed = tgt(t.target).closedWhen && everAt(tgt(t.target).closedWhen);
-    const hit = closed ? null : (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && !got.has(cr.id));
+    const hit = closed ? null : (C.collectionResults || []).find(cr => cr.discipline === t.disc && cr.target === t.target && d >= cr.from && d <= cr.to && condOk(cr.when) && !got.has(cr.id));
     if (hit) S.collected.push({id:hit.id, arrive, task:d, disc:t.disc, target:t.target});
     else S.collected.push({id:'F-' + d + '-' + i, arrive, task:d, disc:t.disc, target:t.target, fallback:true,
       text:(tgt(t.target).fallback || COLL().fallback || 'Nothing significant at {target}.').replace('{target}', targetById(t.target).name)});
@@ -486,7 +488,7 @@ const isOpen = d => !S.done && unlocked(d) && !S.briefs[d];
 
 function fresh(){
   return {v:2, crisisId:C.id, started:false, playAhead:!!CFG.playAheadDefault, grades:{}, drafts:{}, briefs:{}, replies:{},
-    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], cred:credStart(), credAt:{1:credStart()}, credStart:credStart(), offRecord:!!REC.runs[C.id], credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
+    asset:'home', assetSince:0, deployDays:[], frozenBriefDays:[], firedEvents:[], activeMs:{}, posture:{1:'home'}, feedback:{}, realism:{}, debrief:{}, tipsSeen:{}, tasks:{}, collected:[], burned:{}, board:{}, moves:[], eventPoints:[], flags:{}, carry:{fooled:carryFooled()}, cred:credStart(), credAt:{1:credStart()}, credStart:credStart(), offRecord:!!REC.runs[C.id], credLog:[], credFinal:null, done:false, ending:null, savedAt:null};
 }
 function normalize(st){
   if (!st || st.crisisId !== C.id) return null;
@@ -538,6 +540,11 @@ function policyFor(brief, asset, frozen){
 function eventFires(cond){
   if (cond.deployedOnAnyDay && !S.deployDays.some(d => cond.deployedOnAnyDay.includes(d))) return false;
   if (cond.movedTo && !(S.moves || []).some(m => m.to === cond.movedTo.state && cond.movedTo.days.includes(m.day))) return false;
+  return true;
+}
+function outcomeFits(c){
+  if (c.assetAt && ![].concat(c.assetAt).includes(S.asset)) return false;
+  if (c.since && !c.since.includes(S.assetSince)) return false;
   return true;
 }
 function applyEffect(eff, day){
@@ -594,12 +601,15 @@ function sendBrief(d){
   if (d < C.days){
     S.replies[d+1] = {key:res.reply};
     C.events.filter(e => e.atStartOfDay === d+1 && !S.firedEvents.includes(e.id)).forEach(e => {
-      if (eventFires(e.if || {})){
-        applyEffect(e.effect || {}, d+1);
-        S.firedEvents.push(e.id); fired.push(e.id);
-        if (e.points) S.eventPoints.push({day:d+1, id:e.id, points:e.points, label:e.pointsLabel || 'events'});
-        S.replies[d+1] = {key:e.replyId, note:e.note || ''};
-      }
+      if (!eventFires(e.if || {})) return;
+      // An event with outcomes reads where the customer's force is and takes the first outcome that fits.
+      const o = e.outcomes ? e.outcomes.find(x => outcomeFits(x.if || {})) : e;
+      if (!o) return;
+      applyEffect(o.effect || {}, d+1);
+      S.firedEvents.push(e.id); fired.push(e.id);
+      if (e.outcomes){ S.flags[e.id] = o.flag; fired.push(e.id + ':' + o.flag); }
+      if (o.points || e.outcomes) S.eventPoints.push({day:d+1, id:e.id, points:o.points || 0, label:o.pointsLabel || e.pointsLabel || 'events', title:o.title || ''});
+      S.replies[d+1] = {key:o.replyId, note:o.note || ''};
     });
     S.posture[d+1] = S.asset;
     if (CRED()){ credTriggers(d, brief, fired); S.credAt[d+1] = S.cred; }
@@ -610,7 +620,7 @@ function sendBrief(d){
     S.summary = {title:evalEnding().title, total:totalScore()};
     if (CRED()){
       credTriggers(d, brief, fired);
-      const o = (CRED().outcome || {})[S.ending] || 0;
+      const o = ((CRED().outcome || {})[S.ending] || 0) + (CRED().outcomeFlags || []).reduce((n, x) => n + (S.flags[x.event] === x.flag ? x.delta : 0), 0);
       S.credEnd = S.cred;
       if (o) credApply({id:'outcome', delta:o, note:''}, d + 1);
       S.credFinal = S.cred;
@@ -750,7 +760,8 @@ function mapSVG(opt){
   const t = M.training;
   if (t) g += '<ellipse class="m-train" cx="' + t.cx + '" cy="' + t.cy + '" rx="' + t.rx + '" ry="' + t.ry + '"/><text class="m-lab" x="' + (t.cx - t.rx) + '" y="' + (t.cy - t.ry - 6) + '">' + esc(t.label) + '</text>';
   if (M.reservoir) g += '<path class="m-res" d="' + M.reservoir + '"/>';
-  if (M.river) g += '<path class="m-river" d="' + M.river.d + '"/><text class="m-rivlab" x="470" y="324" transform="rotate(34 470 324)">' + esc(M.river.name) + '</text>';
+  if (M.river) g += '<path class="m-river" d="' + M.river.d + '"/><text class="m-rivlab" x="' + (M.river.lx || 470) + '" y="' + (M.river.ly || 324) + '" transform="rotate(' + (M.river.rot == null ? 34 : M.river.rot) + ' ' + (M.river.lx || 470) + ' ' + (M.river.ly || 324) + ')">' + esc(M.river.name) + '</text>';
+  (M.lines || []).forEach(l => { g += '<path class="m-pipe" d="' + l.d + '"/>' + (l.label ? '<text class="m-lab" x="' + l.lx + '" y="' + l.ly + '">' + esc(l.label) + '</text>' : ''); });
   if (M.border) g += '<path class="m-border" d="' + M.border + '"/>';
   (M.regions || []).forEach(r => { g += '<text class="m-region" x="' + r.x + '" y="' + r.y + '">' + esc(r.name) + '</text>'; });
   (M.places || []).forEach(p => {
@@ -771,7 +782,8 @@ function mapSVG(opt){
   }
   // Own forces
   const fr = M.friendly, a = opt.asset || 'home';
-  if (!fr) { /* no forces to plot in this crisis */ }
+  if (M.forces) (M.forces[a] || M.forces.home || []).forEach(f => { g += friendlySym(f.x, f.y, f.label, f.small); });
+  else if (!fr) { /* no forces to plot in this crisis */ }
   else if (a === 'battalion') g += friendlySym(fr.forward.x, fr.forward.y, '2 Bn');
   else if (a === 'company'){ g += friendlySym(fr.forward.x, fr.forward.y, 'A Coy (+)', true); g += friendlySym(fr.home.x, fr.home.y - 22, '2 Bn (-)'); }
   else g += friendlySym(fr.home.x, fr.home.y - 22, '2 Bn');
@@ -889,7 +901,7 @@ function readInCard(d){
   if (S.frozenBriefDays.includes(d)) facts.push(C.frozenText || 'Troop moves are frozen today.');
   if (CRED()){ const L = credLevel(credOn(d)); if (L.budgetDelta || L.caution) facts.push('Credibility with ' + C.customer.name + ': ' + L.label + '.' + (COLL() ? ' Collection budget ' + budgetFor(d) + ' today.' : '') + (L.caution ? ' ' + cap(PRON()[0]) + ' treats your confidence as one step lower.' : '')); }
   return '<section class="readin"><span class="from">Morning read-in · Day ' + d + ' · ' + esc(dayLabel(d)) + '</span>'
-    + (u ? '<p>' + esc(u.text) + '</p>' : '')
+    + (u ? '<p>' + esc(((u.byFlag && (u.byFlag.texts || {})[(S.flags || {})[u.byFlag.event]]) ? u.byFlag.texts[S.flags[u.byFlag.event]] + ' ' : '') + u.text) + '</p>' : '')
     + '<ul class="facts">' + facts.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul></section>';
 }
 
@@ -956,6 +968,12 @@ function gradeSummary(g){
   return parts.length ? parts.join(' · ') : 'Accepted as received';
 }
 
+function openingCard(d){
+  const O = C.opening; if (!O || d !== 1) return '';
+  const run = earlierRuns().filter(r => r.customer === C.customer.name).pop();
+  const text = (run && (O.byTone || {})[run.tone]) || O.text;
+  return text ? '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + (run ? ' · he remembers ' + esc(run.title) : '') + '</span><p><q>' + esc(text) + '</q></p></div>' : '';
+}
 function replyCard(d){
   const r = S.replies[d];
   if (!r) return '';
@@ -984,7 +1002,7 @@ function inboxView(d){
   const doubted = items.filter(r => (S.grades[r.id] || {}).f).length;
   return readInCard(d)
     + mapCard(d)
-    + replyCard(d)
+    + replyCard(d) + openingCard(d)
     + '<div class="section-h"><h2>Inbox</h2><span class="mono small muted">' + doubted + ' doubted</span></div>'
     + '<p class="small muted">Each item arrives graded by its collector: the letter is the source\'s track record, the number is how credible the information looks. A good source can still carry a bad report. If you think an item is false or deliberately misleading, doubt it. Doubts are scored in the postmortem.</p>'
     + '<div class="stack">' + items.map(r => itemCard(r, true)).join('') + '</div>'
@@ -1102,7 +1120,7 @@ function collectView(d){
     html += '<div class="card pir"><p class="mono small muted">' + esc(p.id) + '</p><p><b>' + esc(p.question) + '</b></p>';
     p.targets.forEach(tid => {
       const tg = targetById(tid);
-      if (tg.from && d < tg.from) return;
+      if ((tg.from && d < tg.from) || !condOk(tg.when)) return;
       const closed = tg.closedWhen && everAt(tg.closedWhen);
       html += '<div class="trow"><span class="tname">' + esc(tg.name) + '</span><div class="toggles">' + (tg.disciplines || []).map(disc => {
         const on = tasksFor(d).some(t => t.disc === disc && t.target === tid);
@@ -1179,8 +1197,9 @@ function postmortemView(){
   const sign = n => (n > 0 ? '+' : '') + n;
   const pd = ui.pmDay;
 
-  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">' + esc(C.endingEyebrow || 'The outcome') + '</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
+  let html = '<div class="ending ' + esc(ending.tone || '') + '"><span class="eyebrow">' + esc(C.endingEyebrow || 'The outcome') + '</span><h2>' + esc(ending.title) + '</h2><p>' + esc(ending.text + epilogue()) + '</p><p class="mono small">Ending ' + sign(ending.points) + '</p></div>'
     + '<div class="score"><span class="n">' + sign(total) + '</span><span class="mono small muted">calls ' + sign(callTotal) + ' · evidence ' + sign(evTotal) + ' · doubts ' + sign(dTotal) + (bTotal ? ' · burned sources ' + sign(bTotal) : '') + (S.eventPoints || []).map(x => ' · ' + esc(x.label) + ' ' + sign(x.points)).join('') + ' · ending ' + sign(ending.points) + '</span></div>'
+    + (S.eventPoints || []).filter(x => x.title).map(x => '<p class="small"><b>' + esc(cap(x.label)) + ':</b> ' + esc(x.title) + ' (' + sign(x.points) + ')</p>').join('')
     + '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Your call</th><th>Truth</th><th class="num">Call</th><th class="num">Evid.</th><th class="num">Min</th></tr></thead><tbody>'
     + rows.map(x => '<tr><td class="mono">' + x.d + '</td><td><span class="' + (x.sc.right ? 'right' : 'wrong') + '">' + x.b.hyp + '</span> ' + confLabel(x.b.conf) + '' + '</td><td>' + x.sc.truth.trueHypothesis + '</td><td class="num">' + sign(x.sc.call) + '</td><td class="num">' + sign(x.sc.ev) + '</td><td class="num">' + x.b.minutes + '</td></tr>').join('')
     + '</tbody></table></div>'
@@ -1233,6 +1252,7 @@ function credCard(){
     + (lines.length ? '<ul class="small">' + lines.join('') + '</ul>' : '<p class="small">Nothing ' + PRON()[0] + ' had to undo, and no run of Low calls.</p>')
     + '<p class="small muted">The outcome ' + (out ? (out.delta > 0 ? 'added ' : 'cost ') + Math.abs(out.delta) : 'changed nothing') + '. From Phase 3, credibility carries into your next crisis.</p></div>';
 }
+function epilogue(){ const E = C.epilogue; const t = E ? (E.texts || {})[(S.flags || {})[E.event]] : ''; return t ? ' ' + t : ''; }
 function totalScore(){
   let t = (C.endings.find(e => e.id === S.ending) || evalEnding()).points + doubtPoints() + burnPoints() + eventPts();
   for (let d = 1; d <= C.days; d++) if (S.briefs[d]){ const sc = scoreDay(d); t += sc.call + sc.ev; }
@@ -1494,7 +1514,7 @@ async function switchCrisis(id){
 }
 /* ---------- Service record: the first finish of each scenario, and what carries forward ---------- */
 let REC = {v:2, runs:{}, voided:{}}, recRef = null;
-const TAG_TEXT = {'recycled-photo':'an old photo passed off as new', 'staged-signals':'a message staged on a net the adversary knew was covered', 'prepared-detail':'a walk-in\'s prepared detail'};
+const TAG_TEXT = {'forged-document':'a forged document', 'recycled-photo':'an old photo passed off as new', 'staged-signals':'a message staged on a net the adversary knew was covered', 'prepared-detail':'a walk-in\'s prepared detail'};
 function loadRecord(){ try { const raw = localStorage.getItem(LS_PREFIX + 'record'); const r = raw ? JSON.parse(raw) : null; if (r && r.runs && r.v === 2){ REC = r; REC.voided = REC.voided || {}; } } catch(e) {} }
 function saveRecord(){
   REC.updatedAt = new Date().toISOString();
@@ -1555,6 +1575,18 @@ function carryChanged(){
   if (S && !S.started){ const pa = S.playAhead; S = fresh(); S.playAhead = pa; }
   if (S && S.done && !S.offRecord) commitRecord();
   render();
+}
+function carryFooled(){ const out = []; earlierRuns().forEach(r => (r.fooled || []).forEach(t => { if (!out.includes(t)) out.push(t); })); return out; }
+const recFooled = tag => ((S && S.carry && S.carry.fooled) || []).includes(tag);
+// Conditions on items, results, targets and notes: an earlier outcome in this scenario, or what the record says got past you.
+function condOk(w){
+  if (!w) return true;
+  const fl = (S && S.flags) || {};
+  if (w.flag && !(w.flag.in || []).includes(fl[w.flag.event])) return false;
+  if (w.flagNot && (w.flagNot.in || []).includes(fl[w.flagNot.event])) return false;
+  if (w.fooled && !recFooled(w.fooled)) return false;
+  if (w.notFooled && w.notFooled.some(recFooled)) return false;
+  return true;
 }
 function earlierRuns(){ const i = CUR ? INDEX.findIndex(x => x.id === CUR.id) : 0; return INDEX.slice(0, Math.max(i, 0)).map(x => REC.runs[x.id]).filter(Boolean); }
 function credStart(){

@@ -42,7 +42,7 @@ Built on #43 and #50. Inside a scenario nothing changes: it only drops, and only
 
 - **Same customer again:** you start where you ended with them last time, outcome adjustment included. Deterred with Halvorsen means starting his next scenario at 5; Seized means starting at 1, already Discounted.
 - **New customer:** they start at 3, moved one step by your overall record. "She's read your file."
-- **Gains** happen only between scenarios, through outcomes. That keeps "always High" from paying off mid-scenario.
+- **Gains** come between scenarios, through outcomes, and since #64 also inside a scenario on a visible success (a force placed on your word stops an attack). Confident calls alone never raise it, so "always High" still doesn't pay.
 - **A reason to care at the top:** at 5, the customer grants one extra collection point a day. This is the first unlock, and it's earned rather than given.
 
 ## 3. Sources and deception that carry
@@ -121,7 +121,7 @@ Each step is playable on its own.
 1. **Service record** *(built, #61)*: written at the end of Scenarios 01 and 02, shown on the main menu.
 2. **Carry-over** *(built, #61)*: starting credibility, burned sources and file grades applied in Scenarios 01 and 02 as they exist.
 3. **Analyst notes** *(built, #63)* written into Scenarios 01 and 02.
-4. **Scenario 03 on paper** (player packet and key; done, #59), then as data, with its callback items.
+4. **Scenario 03** on paper (#59) and as data *(built, #64)*, with its callback items.
 5. **Reassignment.**
 6. **Playtest** the full campaign, which also closes the Phase 2 gate.
 

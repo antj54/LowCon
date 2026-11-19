@@ -43,9 +43,11 @@ async function run(plan, doubt, cfg, opts = {}) {
   const storage = Object.assign({}, opts.seed || {});
   let { click, els } = await boot(cfg, storage);
   click('start'); click('playahead');
-  const calls = [];
+  const calls = [], snaps = {};
   for (let i = 0; i < plan.length; i++) {
     const [h, conf, ev, tasks] = plan[i];
+    if (opts.snap && i === 0) { snaps.day1 = els.app.innerHTML; click('tab', { v: 'collect' }); snaps.collect1 = els.app.innerHTML; click('tab', { v: 'inbox' }); }
+    if (opts.snap && i === 2) snaps.day3 = els.app.innerHTML;
     crisis.reports.filter(r => r.day === i + 1 && doubt(r)).forEach(r => click('flag', { id: r.id }));
     (tasks || []).forEach(([disc, target]) => click('task', { disc, target }));
     if (opts.board) opts.board(i + 1, click);
@@ -69,7 +71,7 @@ async function run(plan, doubt, cfg, opts = {}) {
   const total = (out.match(/class="n">([^<]+)</) || [])[1];
   const parts = (out.match(/calls[^<]+/) || [])[0];
   const cred = ((out.match(/credline">Credibility: ([^<]+)</) || [])[1] || '').replace(/ after the outcome/, '').replace(/&gt;/g, '>');
-  return { line: `${ending} ${total} | ${parts}`, calls, total, html: out, cred };
+  return Object.assign({ line: `${ending} ${total} | ${parts}`, calls, total, html: out, cred }, snaps);
 }
 
 const CYCLE = { c: 1, i: 2, n: 3 };
@@ -109,7 +111,39 @@ const W_PUSH = [
   ['H2', 'low', ['R-1-01', 'R-1-04']], ['H2', 'medium', ['R-2-01', 'R-2-03']], ['H2', 'high', ['R-3-03', 'R-3-04', 'R-2-01']],
   ['H2', 'high', ['R-4-02', 'R-4-04', 'R-3-03']], ['H2', 'high', ['R-5-02', 'R-3-03']],
 ];
+// ---------- Crisis 03: The Southern Line ----------
+const S_BEST = [
+  ['H3', 'low', ['R-1-01', 'R-1-03'], [['Liaison', 'wren-sourcing'], ['HUMINT', 'magpie'], ['IMINT', 'ford']]],
+  ['H3', 'medium', ['C-01', 'C-02', 'C-13'], [['OSINT', 'detonator'], ['IMINT', 'sarn-valley'], ['IMINT', 'kordav-crossings']]],
+  ['H3', 'high', ['C-01', 'C-07', 'R-3-01'], [['HUMINT', 'magpie'], ['IMINT', 'tolen-approaches']]],
+  ['H1', 'medium', ['R-4-02', 'C-03'], [['SIGINT', 'front-radios'], ['IMINT', 'sarn-valley']]],
+  ['H1', 'high', ['C-06', 'C-16', 'R-5-01']],
+];
+const S_PUSH = [['H3', 'low', ['R-1-01', 'R-1-02']], ['H3', 'medium', ['R-2-03', 'R-2-04']], ['H3', 'high', ['R-3-01', 'R-3-02']], ['H1', 'medium', ['R-4-02']], ['H1', 'high', ['R-5-01', 'R-5-04', 'R-4-02']]];
+const sCalls = calls => calls.map(([h, c]) => [h, c, []]);
 const SETS = {
+  'southern-line': {
+    collect: S_BEST,
+    marks: { 1: { 'R-1-02': 'iic', 'R-1-04': 'ici' }, 2: { 'C-01': 'iic' } },
+    nudge: {},
+    strategies: [
+      ['Best play, push only', S_PUSH, none],
+      ['Best play with collection', S_BEST, none],
+      ['Collection, doubt plants', S_BEST, plants],
+      ['Collection, doubt everything', S_BEST, all],
+      ['H1 High already on Day 4', [S_BEST[0], S_BEST[1], S_BEST[2], ['H1', 'high', ['R-4-02', 'C-03'], S_BEST[3][3]], S_BEST[4]], none],
+      ['Believe WREN at once', sCalls([['H3', 'high'], ['H3', 'high'], ['H3', 'high'], ['H1', 'medium'], ['H1', 'high']]), none],
+      ['Never above Medium', sCalls([['H3', 'medium'], ['H3', 'medium'], ['H3', 'medium'], ['H1', 'medium'], ['H1', 'medium']]), none],
+      ['Slow believer', sCalls([['H1', 'low'], ['H3', 'low'], ['H3', 'medium'], ['H1', 'low'], ['H1', 'high']]), none],
+      ['Distrust WREN, suspect Kordav', sCalls([['H1', 'medium'], ['H2', 'medium'], ['H2', 'medium'], ['H1', 'medium'], ['H1', 'high']]), none],
+      ['Burn MAGPIE (Days 1 and 2)', [S_BEST[0], ['H3', 'medium', ['C-01', 'C-02'], [['HUMINT', 'magpie']]], ['H3', 'high', ['C-01', 'R-3-01']], S_BEST[3], S_BEST[4]], none],
+      ['Always hedge (Low)', sCalls([['H3', 'low'], ['H3', 'low'], ['H3', 'low'], ['H1', 'low'], ['H1', 'low']]), none],
+      ['Always Marrat (H3 High)', rep5(['H3', 'high', []]), none],
+      ['Local all along (H1 Medium)', rep5(['H1', 'medium', []]), none],
+      ['Always Kordav (H2 Medium)', rep5(['H2', 'medium', ['R-2-01', 'R-2-02']]), none],
+      ['Always Kordav (H2 High)', rep5(['H2', 'high', ['R-2-01', 'R-2-02']]), none],
+    ],
+  },
   'border-buildup': {
     collect: COLLECT,
     marks: { 1: { 'R-1-01': 'ccc', 'R-1-02': 'ici' }, 2: { 'R-2-01': 'icc', 'C-01': 'ici' }, 3: { 'R-3-02': 'ici', 'C-05': 'ici' }, 4: { 'C-02': 'ici' }, 5: { 'C-03': 'ici' } },
@@ -178,6 +212,22 @@ const SETS = {
       const want = tone === 'good' ? 'Trusted (4)' : 'Questioned (2)';
       console.log(('Carry-in: Crisis 01 ended ' + tone).padEnd(32), r.line, '| cred ' + r.cred, r.cred.startsWith(want) ? '| starts as expected' : '| WRONG START, wanted ' + want);
       if (!r.cred.startsWith(want)) process.exitCode = 1;
+    }
+  }
+  if (crisis.id === 'southern-line') {
+    const rec = (cred, tone, extra) => ({ 'intel-cell-sim:record': JSON.stringify({ v: 2, voided: {}, runs: { 'border-buildup': Object.assign({ id: 'border-buildup', title: 'Exercise or Operation?', customer: 'Gen. R. Halvorsen', cred, tone, burned: [], fooled: [], tested: [], grades: [], at: '2026-01-01' }, extra || {}) } }) });
+    const cases = [
+      ['Record: Deterred, credibility 5', rec(5, 'good'), r => r.cred.startsWith('Trusted (5)') && /regret remembering/.test(r.day1) && /6 of 6 points/.test(r.collect1)],
+      ['Record: Seized, credibility 1', rec(1, 'bad'), r => r.cred.startsWith('Discounted (1)') && /lost a dam/.test(r.day1)],
+      ['Record: KESTREL burned', rec(3, 'warn', { burned: ['KESTREL'] }), r => /data-target="kestrel"[^>]*disabled/.test(r.collect1)],
+      ['Record: cited the snow photo', rec(3, 'warn', { fooled: ['recycled-photo'] }), r => /water tower/.test(r.html) && !/Marrat crowns\./.test(r.day3)],
+      ['Record: cited staged signals', rec(3, 'warn', { fooled: ['staged-signals'] }), r => !/Valley Truth/.test(r.day3)],
+    ];
+    for (const [name, seed, ok] of cases) {
+      const r = await run(set.collect, none, null, { seed, snap: true });
+      const good = ok(r);
+      console.log(name.padEnd(32), r.line, '| cred ' + r.cred, good ? '| as expected' : '| NOT AS EXPECTED');
+      if (!good) process.exitCode = 1;
     }
   }
   const pt = await run(set.collect, none, { playtest: true });

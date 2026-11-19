@@ -1,6 +1,6 @@
 # Crisis 03: The Southern Line · GM key and postmortem (paper)
 
-*SPOILERS. Open this only after you've sent your last brief from `claude/crisis-03-player-packet.md`. Written for Phase 3 (#57, #58): the service record, analyst notes, push/pull collection and credibility. Nothing here is built.*
+*SPOILERS. Open this only after you've sent your last brief. Written for Phase 3 (#57, #58) and built as `crises/southern-line.json` (#64). In the built game the two versions of R-4-01 are R-4-01 and R-4-01C, the photo version of the callback item is R-3-03P, and the staged call is C-18.*
 
 ---
 
@@ -214,7 +214,7 @@ Notes are authored. Each analyst goes wrong in the way their trait says.
 - *Driven off or Displaced:* "Elsin signs a thinner pact in the autumn. Marrat's guards get the southern third of the line."
 - *Cut:* "Elsin signs on the 20th. Marrat's guards are on the line within the month, protecting it from a militia Marrat built."
 
-**Credibility:** starts where Crisis 01 left it. Triggers: the company moved from one site to another on Days 1–3 (−1), Displaced (−1), Cut with the company at Kessa (−2), Low two days running (−1 each). Moving the company from Tolen to Sarn on Day 4 or 5 costs nothing: the facts changed, and Halvorsen can see that they did. Outcome adjustment: Held +1, Burning −1, and +1 more if Caught.
+**Credibility:** starts where Crisis 01 left it. Triggers: the company moved from one site to another on Days 1–3 (−1), Displaced (−1), Cut with the company at Kessa (−2), Low two days running (−1 each), and, new in #64, **+1 when the force he placed on your word drives off or catches the raid**. Moving the company from Tolen to Sarn on Day 4 or 5 costs nothing: the facts changed, and Halvorsen can see that they did. Outcome adjustment: Held +1, Burning −1.
 
 ---
 
@@ -266,20 +266,23 @@ Notes are authored. Each analyst goes wrong in the way their trait says.
 | The usual suspect | Guilty | Guilty | Innocent |
 | Consequences | One, at the end | One, at the end | Two: mid-scenario and at the end |
 
-**Dominant-strategy check** (paper estimate: calls, the Tolen night and the ending; before evidence, doubts and burned sources):
+**Dominant-strategy check** (built engine, `node tools/simulate.js crises/southern-line.json`; totals include evidence, doubts, burned sources, the Tolen night and the ending):
 
 | Strategy | Tolen | Sarn | Total |
 | --- | --- | --- | --- |
-| Best play: H3 Low, H3 Medium, H3 High, H1 Medium, H1 High | Caught | Held | **+18** |
-| The same, with H1 High on Day 4 | Caught | Held | **+19** |
-| Believe WREN at once: H3 High from Day 1, then H1 Medium, H1 High | Displaced | Held | **+15** |
-| Never above Medium, right hypothesis each day | Driven off | Damaged | **+11** |
-| Slow believer: H1 Low, H3 Low, H3 Medium, H1 Low, H1 High | Driven off | Held | **+10** |
-| Distrust WREN, suspect Kordav, catch up late: H1, H2, H2 at Medium, then H1 Medium, H1 High | Cut | Held | **−1** |
-| Always hedge (Low, right hypothesis) | Cut | Burning | **−1** |
+| Best play with collection | Caught | Held | **+31** (+36 doubting the plants; +32 with H1 High on Day 4) |
+| Best play on push alone | Caught | Held | **+28** |
+| Arriving Discounted from Crisis 01, then best play | Driven off | Held | **+28** (credibility recovers after the bridge holds) |
+| Burning MAGPIE on Days 1–2 | Caught | Held | **+27** |
+| Best calls, doubting everything | Caught | Held | **+24** |
+| Believe WREN at once (H3 High from Day 1), no evidence cited | Displaced | Held | **+15** |
+| Never above Medium, no evidence cited | Driven off | Damaged | **+11** |
+| Slow believer, no evidence cited | Driven off | Held | **+10** |
+| Distrust WREN, suspect Kordav, catch up late | Cut | Held | **−1** |
+| Always hedge (Low) | Cut | Burning | **−1** |
 | Always Marrat (H3 High every day) | Displaced | Burning | **−4** |
 | Local all along (H1 Medium every day) | Cut | Damaged | **−5** |
-| Always Kordav (H2 Medium every day) | Cut | Burning | **−16** |
+| Always Kordav, citing Marrat's plants (Medium / High) | Cut | Burning | **−36 / −46** |
 
 **Watch for:**
 
@@ -291,13 +294,4 @@ Notes are authored. Each analyst goes wrong in the way their trait says.
 - **Three states and a militia.** Marrat has one motive (guards on the line) and one voice (ROOK), and Kordav never speaks. Keep it that way.
 - **MAGPIE carries a lot.** A player who burns him on Day 2 loses the timing report and the break report. C-12, C-06 and C-14 cover the same ground through other disciplines, so the two-path rule holds.
 
-**Engine needs before building** (Phase 3):
-
-- **The service record:** read at the start (credibility, source availability, item variants), written at the end
-- **Item variants** chosen by a record flag (R-3-03) or by an earlier outcome (R-4-01)
-- **A mid-scenario outcome:** an event that reads where the force is, picks the first matching result, scores it, sets a flag, and changes the next morning's read-in and reply
-- **Endings with an epilogue line** chosen by that flag
-- **Analyst notes** on items, with a hit-rate table in the postmortem
-- **A source burned by consecutive tasking** (MAGPIE) already works as in Crisis 01
-- **States** are site and size (reserve, platoon or company at each of three sites): data only, on the v0.9 named-state policy
-- **Map:** the line from Kessa to Tolen, the Sarn valley and quarry, the ford, Dessa, and the borders with Kordav and Marrat
+**Built (#64):** everything in this key is in `crises/southern-line.json`, generated by `tools/build_southern_line.py`, including the three versions of the callback item, the map and the analysts' notes.

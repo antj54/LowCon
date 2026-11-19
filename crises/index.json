@@ -11,7 +11,13 @@
     "file": "crises/walk-in.json",
     "number": "02",
     "title": "The Walk-in",
-    "line": "A defector with a story that's almost too good.",
-    "note": "Set after Crisis 01, and it gives away how that one ends."
+    "line": "A defector with a story that's almost too good."
+  },
+  {
+    "id": "southern-line",
+    "file": "crises/southern-line.json",
+    "number": "03",
+    "title": "The Southern Line",
+    "line": "A militia, a pipeline, and a neighbour who keeps offering to help."
   }
 ]
