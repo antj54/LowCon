@@ -15,6 +15,7 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | `phase-2-design.md` | Design for Phase 2: collection tasking, hypotheses board, credibility, Crisis 02. Built. |
 | `crisis-03-player-packet.md`, `crisis-03-gm-key.md` | Crisis 03 (*The Southern Line*) on paper. The key has spoilers. Not built. |
 | `crisis-04-player-packet.md`, `crisis-04-gm-key.md` | Crisis 04 (*The Missing Shipment*) on paper. **The key spoils the campaign.** Not built. |
+| `crisis-05-player-packet.md`, `crisis-05-gm-key.md` | Crisis 05 (*Lights Out*) on paper. **The key spoils the campaign.** Not built. |
 | `story-key.md` | **Spoilers for the whole campaign:** who the leak is and how the endings are decided. The author's working key. |
 | `story-plan.md` | The overarching story: ten scenarios, three acts and a finale. No spoilers about the leak. Paper only beyond Act 1. |
 | `phase-3-design.md` | Paper design for Phase 3: service record, carry-over, analysts, Scenario 03. Not built; decisions open. |
