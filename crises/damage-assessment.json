@@ -2261,5 +2261,120 @@
       "right": 0,
       "why": "A career that was over either way."
     }
-  ]
+  ],
+  "ledger": {
+    "title": "The assessment so far",
+    "sub": "What leaked, and the road it took. Fills in as the parts arrive.",
+    "rows": [
+      {
+        "after": "R-1-01",
+        "tag": "01",
+        "what": "That we read 12th Brigade's net",
+        "road": "In the daily assessment, over LATTICE",
+        "leaked": "reached Kordav",
+        "yes": true
+      },
+      {
+        "after": "R-1-01",
+        "tag": "01",
+        "what": "KESTREL's identity",
+        "road": "Never left the cell",
+        "leaked": "didn't leak"
+      },
+      {
+        "after": "R-1-02",
+        "tag": "02",
+        "what": "That we read the Bureau's admin net",
+        "road": "In a product sent over LATTICE",
+        "leaked": "reached Kordav",
+        "yes": true
+      },
+      {
+        "after": "R-1-02",
+        "tag": "02",
+        "what": "FINCH",
+        "road": "Never left the cell",
+        "leaked": "found another way (the ministry was watched)"
+      },
+      {
+        "after": "R-1-03",
+        "tag": "03",
+        "what": "Where the guard company was",
+        "road": "Through Elsin's Southern Command",
+        "leaked": "reached Marrat (explained)",
+        "yes": true
+      },
+      {
+        "after": "R-1-10",
+        "tag": "04",
+        "what": "Your port-police request",
+        "road": "Through Kalsa, over LATTICE",
+        "leaked": "reached Tessaly",
+        "yes": true
+      },
+      {
+        "after": "R-2-04",
+        "tag": "05",
+        "what": "The network diagram, issue 7",
+        "road": "Five paper copies, one electronic copy over LATTICE",
+        "leaked": "reached the attackers: which copy not known",
+        "yes": true,
+        "leakedBy": [
+          {
+            "after": [
+              "R-1-08",
+              "R-4-02"
+            ],
+            "text": "reached the attackers: the electronic copy"
+          }
+        ]
+      },
+      {
+        "after": "R-1-09",
+        "tag": "05",
+        "what": "Your request to the registry",
+        "road": "Over LATTICE",
+        "leaked": "on Kordav's television next day",
+        "yes": true
+      },
+      {
+        "after": "C-10K",
+        "tag": "06",
+        "what": "Your request to vet Rhun",
+        "road": "Over LATTICE",
+        "leaked": "on Kordav's television next day",
+        "yes": true
+      }
+    ],
+    "testsTitle": "Your tests",
+    "tests": {
+      "test-hand-rhun": {
+        "road": "By hand",
+        "desk": "Rhun's desk"
+      },
+      "test-link-rhun": {
+        "road": "Over LATTICE",
+        "desk": "Rhun's desk"
+      },
+      "test-link-ipc": {
+        "road": "Over LATTICE",
+        "desk": "Brandt's office"
+      },
+      "test-arle": {
+        "road": "Our side only",
+        "desk": "Arle's distribution"
+      },
+      "test-cell": {
+        "road": "Inside the cell",
+        "desk": "your cell"
+      }
+    },
+    "results": {
+      "C-01": "silent",
+      "C-02": "surfaced",
+      "C-03": "surfaced",
+      "C-04": "silent",
+      "C-05": "silent"
+    }
+  }
 }

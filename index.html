@@ -261,6 +261,14 @@ ul{margin:0;padding-left:20px;display:grid;gap:4px}
 .cx{padding:0}
 .cx-h{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:none;border:0;padding:12px 14px;font:inherit;color:inherit;cursor:pointer}
 .opt.against[aria-pressed="true"]{background:#f6d6d0;border-color:#b0412e;color:#7a2416}
+.ledger .cx-b{padding-top:6px}
+.lg-row{padding:6px 0;border-bottom:1px dotted var(--line)}
+.lg-row p{margin:0}
+.lg-sub{color:var(--muted)}
+.lg-h{margin:12px 0 2px}
+.lg-res{font-weight:600}
+.lg-res.yes{color:#a5462b}
+.lg-res.wait{font-style:italic}
 .cx-bio{font-style:italic;margin-top:10px}
 .cx-b{padding:0 14px 10px;border-top:1px dashed var(--line)}
 .trow{display:grid;gap:6px;padding-top:8px;border-top:1px dashed var(--line)}
@@ -1051,12 +1059,44 @@ function earlierDays(upTo){
   return html ? '<div class="stack"><div class="section-h"><h3>Earlier days</h3></div>' + html + '</div>' : '';
 }
 
+// A running table built from what has arrived (C.ledger): what leaked and which road it took, and your tests.
+function itemArrived(id, d){
+  if ((S.collected || []).some(c => c.id === id && c.arrive <= d)) return true;
+  const r = rep(id);
+  return !!(r && !r.via && r.day <= d && condOk(r.when));
+}
+function ledgerCard(d){
+  const L = C.ledger; if (!L) return '';
+  const rows = (L.rows || []).filter(x => [].concat(x.after).some(id => itemArrived(id, d)));
+  const tests = [];
+  for (let x = 1; x < d + (S.briefs[d] ? 1 : 0); x++) (S.tasks[x] || []).forEach(t => { const m = (L.tests || {})[t.target]; if (m) tests.push({day:x, t, m}); });
+  if (!rows.length && !tests.length) return '';
+  const open = ui.ledgerOpen !== false;
+  let html = '<div class="card ledger"><button class="cx-h" data-act="ledger" aria-expanded="' + open + '"><b>' + esc(L.title) + '</b><span class="small muted">' + esc(L.sub || '') + '</span></button>';
+  if (!open) return html + '</div>';
+  html += '<div class="cx-b">';
+  if (rows.length) html += rows.map(x => {
+    const lk = (x.leakedBy || []).filter(v => [].concat(v.after).some(id => itemArrived(id, d))).pop();
+    const leaked = lk ? lk.text : x.leaked;
+    return '<div class="lg-row"><p class="small"><span class="mono muted">' + esc(x.tag) + '</span> <b>' + esc(x.what) + '</b></p>'
+      + '<p class="small lg-sub">' + esc(x.road) + ' · <span class="lg-res ' + (x.yes ? 'yes' : 'no') + '">' + esc(leaked) + '</span></p></div>';
+  }).join('');
+  if (tests.length){
+    html += '<p class="mono small muted lg-h">' + esc(L.testsTitle || 'Your tests') + '</p>' + tests.map(({day, t, m}) => {
+      const c = (S.collected || []).find(c => c.task === day && c.target === t.target && !c.follow);
+      let res = 'on its way, due Day ' + (c ? c.arrive : day + 2), cls = 'wait';
+      if (c && c.arrive <= d){ if (c.fallback){ res = 'not sent'; cls = 'no'; } else { res = (L.results || {})[c.id] || 'back'; cls = res === 'surfaced' ? 'yes' : 'no'; } }
+      return '<p class="small lg-sub">Day ' + day + ' · <b>' + esc(m.road) + '</b> → ' + esc(m.desk) + ' · <span class="lg-res ' + cls + '">' + esc(res) + '</span></p>';
+    }).join('');
+  }
+  return html + '</div></div>';
+}
 function inboxView(d){
   const items = reportsFor(d);
   const doubted = items.filter(r => (S.grades[r.id] || {}).f).length;
   return readInCard(d)
     + mapCard(d)
-    + replyCard(d) + openingCard(d)
+    + replyCard(d) + openingCard(d) + ledgerCard(d)
     + '<div class="section-h"><h2>Inbox</h2><span class="mono small muted">' + doubted + ' doubted</span></div>'
     + '<p class="small muted">Each item arrives graded by its collector: the letter is the source\'s track record, the number is how credible the information looks. A good source can still carry a bad report. If you think an item is false or deliberately misleading, doubt it. Doubts are scored in the postmortem.</p>'
     + '<div class="stack">' + items.map(r => itemCard(r, true)).join('') + '</div>'
@@ -1495,6 +1535,7 @@ function onClick(e){
     case 'record': ui.screen = 'record'; render(); window.scrollTo(0,0); break;
     case 'case': ui.screen = 'case'; render(); window.scrollTo(0,0); break;
     case 'codex': ui.screen = 'codex'; ui.codexOpen = null; render(); window.scrollTo(0,0); break;
+    case 'ledger': ui.ledgerOpen = ui.ledgerOpen === false; render(); break;
     case 'cxopen': ui.codexOpen = ui.codexOpen === el.dataset.id ? null : el.dataset.id; render(); break;
     case 'clearrec': ui.clearId = el.dataset.id; ui.sheet = 'clearrec'; renderLayer(); break;
     case 'confirmclearrec': {
