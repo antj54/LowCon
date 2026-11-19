@@ -8,6 +8,7 @@ Mirror of the claude.ai project "Low Confidence". **The project is the source of
 | `02-decisions-log.md` | Settled decisions and open questions. Wins over the design doc when they disagree. |
 | `01-design-doc.md` | Pillars, core loop, systems, roadmap |
 | `03-crisis-content.md` | Crisis seeds, authoring rules, data format |
+| `style-guide.md` | How the game's text is written: a format per channel and a voice per character (#82). |
 | `crisis-01-player-packet.md` | Phase 0 paper version of Crisis 01 (no spoilers). Its rules predate the Phase 1 changes. |
 | `crisis-01-collection-retrofit.md` | **Spoilers.** Phase 2 paper design adding collection tasking to Crisis 01 |
 | `crisis-02-player-packet.md` | Crisis 02 (The Walk-in) paper script, no spoilers |
