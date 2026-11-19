@@ -149,7 +149,32 @@ const D_BEST = [
   ['H3', 'high', ['C-05', 'C-03', 'C-06']],
 ];
 const D_PUSH = [['H3', 'low', ['R-1-01']], ['H3', 'medium', ['R-2-04', 'R-1-01']], ['H3', 'medium', ['R-3-01', 'R-2-04']], ['H3', 'high', ['R-4-02', 'R-3-01', 'R-2-04']], ['H3', 'high', ['R-4-02', 'R-3-01']]];
+// ---------- Crisis 07: The Vote in Kalsa ----------
+const V_BEST = [
+  ['H1', 'low', ['R-1-01', 'R-1-02'], [['HUMINT', 'heron'], ['OSINT', 'funding'], ['OSINT', 'whip-count']]],
+  ['H1', 'medium', ['C-01', 'C-03', 'R-2-04'], [['SIGINT', 'bureau-traffic'], ['OSINT', 'document']]],
+  ['H1', 'high', ['R-3-01', 'C-08', 'C-05'], [['HUMINT', 'heron']]],
+  ['H1', 'high', ['C-02', 'R-4-03', 'R-4-01']],
+  ['H1', 'high', ['R-5-01', 'C-02', 'R-4-03']],
+];
+const V_PUSH = [['H1', 'low', ['R-1-01']], ['H1', 'medium', ['R-2-04', 'R-1-01']], ['H1', 'high', ['R-3-01', 'R-2-04']], ['H1', 'high', ['R-4-03', 'R-4-01', 'R-3-01']], ['H1', 'high', ['R-5-01', 'R-4-03']]];
 const SETS = {
+  'vote-in-kalsa': {
+    collect: V_BEST, marks: { 1: { 'R-1-01': 'cci' }, 2: { 'C-01': 'cii' } }, nudge: {},
+    strategies: [
+      ['Best play with collection', V_BEST, none],
+      ['Collection, doubt plants', V_BEST, plants],
+      ['Collection, doubt everything', V_BEST, all],
+      ['Push only', V_PUSH, none],
+      ['H1 High from Day 1', rep5(['H1', 'high', ['R-1-01']]), none],
+      ['Never above Medium (H1)', rep5(['H1', 'medium', ['R-1-01']]), none],
+      ['Always hedge (Low)', rep5(['H1', 'low', []]), none],
+      ['The street: H2 Med, then High Day 3', [['H2', 'medium', ['R-1-02']], ['H2', 'medium', ['R-2-02']], ['H2', 'high', ['R-3-02']], ['H2', 'high', ['R-3-02']], ['H2', 'high', ['R-3-02']]], none],
+      ["Vasko's path: H3 Med Days 2-3, then H1 High", [['H1', 'low', ['R-1-01']], ['H3', 'medium', ['R-2-03']], ['H3', 'medium', ['R-3-04']], ['H1', 'high', ['R-4-03']], ['H1', 'high', ['R-5-01']]], none],
+      ['Always Kordav (H3 High)', rep5(['H3', 'high', ['R-2-03']]), none],
+      ['Burn HERON (Days 1 and 2)', [['H1', 'low', ['R-1-01'], [['HUMINT', 'heron']]], ['H1', 'medium', ['C-01'], [['HUMINT', 'heron']]], V_PUSH[2], V_PUSH[3], V_PUSH[4]], none],
+    ],
+  },
   'damage-assessment': {
     collect: D_BEST, marks: { 1: { 'R-1-01': 'icic' }, 2: { 'R-2-04': 'icic' } }, nudge: {},
     strategies: [
@@ -315,6 +340,14 @@ const SETS = {
       console.log(name.padEnd(32), r.line, '| cred ' + r.cred, good ? '| as expected' : '| NOT AS EXPECTED');
       if (!good) process.exitCode = 1;
     }
+  }
+  if (crisis.id === 'vote-in-kalsa') {
+    const seed = { 'intel-cell-sim:record': JSON.stringify({ v: 2, voided: {}, runs: { 'damage-assessment': { id: 'damage-assessment', title: 'The Damage Assessment', customer: 'Under Secretary H. Marlowe', cred: 4, tone: 'bad', ending: 'wrong-name', burned: [], fooled: [], tested: [], grades: [], at: '2026-01-06', story: { alliance: -2, pressure: 1, caseFile: [], flags: { leak: 'open', wrongName: 'rhun' } } } } }) };
+    const h3 = [['H3', 'medium', ['R-1-04']], ['H3', 'medium', ['R-2-06']], ['H3', 'high', ['R-3-06']], ['H3', 'high', []], ['H3', 'high', []]];
+    const r = await run(h3, none, null, { seed, snap: true });
+    const ok = /over LATTICE/.test(r.day3) && /tells our embassy, unprompted/.test(r.html + r.day3) && /Ahrend/.test(r.day1) && /quoting you/.test(r.html);
+    console.log('Leak open: echoes and route'.padEnd(32), r.line, ok ? '| as expected' : '| NOT AS EXPECTED');
+    if (!ok) process.exitCode = 1;
   }
   if (crisis.id === 'border-buildup') {
     const hedge = set.strategies.find(x => /Always hedge/.test(x[0]));

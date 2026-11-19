@@ -394,7 +394,7 @@ function keyJudgment(b){
 const callLabel = b => b.hyp + ', ' + confLabel(b.conf) + (b.confLost ? '?' : '');
 const burnedOn = sid => (S.burned || {})[sid] || (goneBefore(sid) ? 1 : undefined);
 const collectedFor = d => (S.collected || []).filter(c => c.arrive === d).map(c => c.fallback ? fallbackReport(c) : Object.assign({}, C.reports.find(r => r.id === c.id), {day:d, collected:true, task:c}));
-const reportsFor = d => C.reports.filter(r => !r.via && r.day === d && condOk(r.when) && !(burnedOn(r.sourceId) && d >= burnedOn(r.sourceId))).concat(collectedFor(d));
+const reportsFor = d => C.reports.filter(r => !r.via && r.day === d && condOk(r.when, d) && !(burnedOn(r.sourceId) && d >= burnedOn(r.sourceId))).concat(collectedFor(d));
 const seenReports = () => { const out = []; for (let d = 1; d <= C.days; d++) out.push(...reportsFor(d)); return out; };
 const targetById = id => (C.targets || []).find(t => t.id === id) || {name:id};
 function fallbackReport(c){
@@ -568,6 +568,7 @@ function matchCond(cond, brief, asset){
   if (cond.confidence && !cond.confidence.includes(brief.conf)) return false;
   if (cond.assetAt && ![].concat(cond.assetAt).includes(asset)) return false;
   if (cond.collected && !arrivedBy(cond.collected, brief.day)) return false;
+  if (cond.days && brief.day != null && !cond.days.includes(brief.day)) return false;
   return true;
 }
 function resolvePolicy(day, brief){ return policyFor(Object.assign({}, brief, {conf:effectiveConf(day, brief.conf), day}), S.asset, S.frozenBriefDays.includes(day)); }
@@ -590,6 +591,7 @@ function policyFor(brief, asset, frozen){
 function eventFires(cond){
   if (cond.deployedOnAnyDay && !S.deployDays.some(d => cond.deployedOnAnyDay.includes(d))) return false;
   if (cond.movedTo && !(S.moves || []).some(m => m.to === cond.movedTo.state && cond.movedTo.days.includes(m.day))) return false;
+  if (cond.when && !condOk(cond.when)) return false;
   return true;
 }
 function outcomeFits(c){
@@ -1041,8 +1043,8 @@ function replyCard(d){
   if (!r) return '';
   const prev = S.briefs[d-1];
   return '<div class="msg"><span class="from">From ' + esc(C.customer.callsign) + ' · re your Day ' + (d-1) + ' brief' + (prev ? ' (' + callLabel(prev) + ')' : '') + '</span>'
-    + '<p><q>' + esc(replyText(r.key, d - 1)) + '</q></p>'
-    + (r.note ? '<p class="note">' + esc(r.note) + '</p>' : '')
+    + '<p><q>' + esc(fillVars(replyText(r.key, d - 1), d)) + '</q></p>'
+    + (r.note ? '<p class="note">' + esc(fillVars(r.note, d)) + '</p>' : '')
     + credNotes(d).map(x => '<p class="note crednote">' + esc(x.note) + ' Now: <b>' + esc(credLevel(credOn(d)).label) + '</b>. ' + esc(credLevel(credOn(d)).text || '') + '</p>').join('')
     + '</div>';
 }
@@ -1663,6 +1665,8 @@ function storyOk(c, Cx, Sx){
   if (c.fired && !(Sx.firedEvents || []).includes(c.fired)) return false;
   if (c.collected && !(Sx.collected || []).some(x => x.id === c.collected && x.arrive <= Cx.days)) return false;
   if (c.doubted && !((Sx.grades || {})[c.doubted] || {}).f) return false;
+  if (c.cited && !Object.values(Sx.briefs || {}).some(b => (b.evidence || []).some(id => [].concat(c.cited).includes(id)))) return false;
+  if (c.recordStory){ const r = REC.runs[c.recordStory.crisis]; if (!r || !(c.recordStory.in || []).includes(((r.story || {}).flags || {})[c.recordStory.flag])) return false; }
   return true;
 }
 function storyFrom(Cx, Sx){
@@ -1756,8 +1760,19 @@ function condOk(w, d){
   if (w.onTeam && !onTeam(w.onTeam)) return false;
   if (w.assetAt && ![].concat(w.assetAt).includes(S.asset)) return false;
   if (w.notAssetAt && [].concat(w.notAssetAt).includes(S.asset)) return false;
+  if (w.recordStory){ const r = REC.runs[w.recordStory.crisis]; if (!r || !(w.recordStory.in || []).includes(((r.story || {}).flags || {})[w.recordStory.flag])) return false; }
+  if (w.notRecordStory){ const r = REC.runs[w.notRecordStory.crisis]; if (r && (w.notRecordStory.in || []).includes(((r.story || {}).flags || {})[w.notRecordStory.flag])) return false; }
+  if (w.recordFlag){ const r = REC.runs[w.recordFlag.crisis]; if (!r || !(w.recordFlag.in || []).includes((r.flags || {})[w.recordFlag.event])) return false; }
+  if (w.allianceAtLeast != null && recAlliance() < w.allianceAtLeast) return false;
+  if (w.allianceAtMost != null && recAlliance() > w.allianceAtMost) return false;
+  if (w.lastBrief){ const b = (S.briefs || {})[(d || curDay()) - 1]; if (!b || !(w.lastBrief.hyp || []).includes(b.hyp)) return false; }
+  if (w.fired && !(S.firedEvents || []).includes(w.fired)) return false;
   return true;
 }
+// Alliance on the record so far: the sum over earlier scenarios.
+function recAlliance(){ return earlierRuns().reduce((n, r) => n + (((r.story || {}).alliance) || 0), 0); }
+// The claim part of a brief's key judgment, for items that quote it back.
+function kjQuote(n){ const b = (S.briefs || {})[n]; return b ? keyJudgment({hyp:b.hyp, conf:b.conf, evidence:[]}).replace(/\.$/, '') : ''; }
 // A case-file entry earned in an earlier scenario on the record.
 function recNoticed(tag){ return earlierRuns().some(r => ((r.story || {}).caseFile || []).some(c => c.tag === tag)); }
 // An item's text can depend on the record or on a flag: the first variant that fits wins, then any additions.
@@ -1765,7 +1780,15 @@ function RT(r){
   if (!r) return '';
   let t = r.textBy ? ((r.textBy.find(v => condOk(v.when)) || {}).text || r.text) : r.text;
   (r.append || []).forEach(a => { if (condOk(a.when)) t += ' ' + a.text; });
-  return t;
+  return fillVars(t, r.day);
+}
+// {name} is a crisis variable (C.vars: first variant whose condition fits); {kj:N} quotes the player's Day N key judgment.
+function fillVars(t, day){
+  if (!t || t.indexOf('{') < 0) return t;
+  return t.replace(/\{kj:(\d+)\}/g, (_, n) => kjQuote(Number(n)) || 'nothing').replace(/\{claim:(\d+)\}/g, (_, n) => { const b = (S.briefs || {})[Number(n)], h = b && hyp(b.hyp); return h ? (h.claim || h.text) : 'nothing'; }).replace(/\{(\w+)\}/g, (m, k) => {
+    const v = (C.vars || {})[k]; if (!v) return m;
+    return ((v.find(x => condOk(x.when, day)) || {}).text) || '';
+  });
 }
 // Has a result arrived by this day? ("Something to show.")
 function arrivedBy(ids, day){

@@ -40,5 +40,12 @@
     "number": "06",
     "title": "The Damage Assessment",
     "line": "Somebody, or something, has been reading us for a year."
+  },
+  {
+    "id": "vote-in-kalsa",
+    "file": "crises/vote-in-kalsa.json",
+    "number": "07",
+    "title": "The Vote in Kalsa",
+    "line": "A coalition breaks, a crowd grows, and everyone has a theory."
   }
 ]

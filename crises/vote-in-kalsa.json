@@ -1,0 +1,2204 @@
+{
+  "id": "vote-in-kalsa",
+  "formatVersion": "1.3",
+  "title": "The Vote in Kalsa",
+  "crisisNumber": "07",
+  "days": 5,
+  "dayLabels": [
+    "the 26th",
+    "the 27th",
+    "the 28th",
+    "the 29th",
+    "the 30th"
+  ],
+  "placeholderNote": "Kordav, Elsin, Marrat and Pellaria are fictional countries. All politicians, parties and officials are fictional.",
+  "adversary": "Kordav",
+  "endingEyebrow": "Kalsa, the morning of the 31st",
+  "frozenText": "",
+  "vars": {
+    "grievance": [
+      {
+        "when": {
+          "recordEnding": {
+            "crisis": "border-buildup",
+            "in": [
+              "seized"
+            ]
+          }
+        },
+        "text": "Tarsk Dam, and the government that lost it"
+      },
+      {
+        "when": {
+          "recordEnding": {
+            "crisis": "lights-out",
+            "in": [
+              "clean",
+              "clean-cold"
+            ]
+          }
+        },
+        "text": "the January blackouts"
+      },
+      {
+        "when": {
+          "recordFlag": {
+            "crisis": "southern-line",
+            "event": "tolen",
+            "in": [
+              "cut",
+              "cut_far"
+            ]
+          }
+        },
+        "text": "Marrat's guards on the Southern Line"
+      },
+      {
+        "text": "food and fuel prices"
+      }
+    ],
+    "majority": [
+      {
+        "when": {
+          "allianceAtLeast": 1
+        },
+        "text": "Without the Highlands Party, Valde would be four votes short."
+      },
+      {
+        "when": {
+          "allianceAtMost": -1
+        },
+        "text": "Without the Highlands Party, Valde would be one vote short, and two of his own members have stopped answering his calls."
+      },
+      {
+        "text": "Without the Highlands Party, Valde would be two votes short."
+      }
+    ],
+    "vell": [
+      {
+        "when": {
+          "recordEnding": {
+            "crisis": "walk-in",
+            "in": [
+              "sidelined"
+            ]
+          }
+        },
+        "text": "Vell's replacement as Deputy Defence Minister, Dag Hollis, won't say whether he supports the task force."
+      },
+      {
+        "when": {
+          "recordEnding": {
+            "crisis": "walk-in",
+            "in": [
+              "burned"
+            ]
+          }
+        },
+        "text": "Vell is still awaiting trial. His replacement, Dag Hollis, won't say whether he supports the task force."
+      },
+      {
+        "when": {
+          "recordEnding": {
+            "crisis": "walk-in",
+            "in": [
+              "exposed",
+              "survived",
+              "shelved"
+            ]
+          }
+        },
+        "text": "Deputy Defence Minister Aron Vell is the coalition's loudest supporter of the task force."
+      },
+      {
+        "text": ""
+      }
+    ],
+    "wren": [
+      {
+        "when": {
+          "recordStory": {
+            "crisis": "damage-assessment",
+            "flag": "wrongName",
+            "in": [
+              "rhun"
+            ]
+          }
+        },
+        "text": "Lt. Col. N. Ahrend, who replaced Col. Rhun"
+      },
+      {
+        "text": "Col. Rhun"
+      }
+    ],
+    "route": [
+      {
+        "when": {
+          "recordStory": {
+            "crisis": "damage-assessment",
+            "flag": "leak",
+            "in": [
+              "open"
+            ]
+          }
+        },
+        "text": "over LATTICE"
+      },
+      {
+        "text": "by courier"
+      }
+    ]
+  },
+  "briefing": {
+    "dateLine": "Late May. Day 1 is the 26th.",
+    "situation": [
+      "Elsin's coalition government is in trouble. Prime Minister Henrik Valde governs with the Highlands Party, a rural party from the north led by Sanna Ekdal, and his majority is thin. Ekdal's voters are angry, and so are the crowds outside parliament.",
+      "The opposition is led by Ruben Kask of National Renewal, who says Elsin should decide its own future \"without Kordav or the alliance.\" A government led by Kask would have to decide whether Task Force VEYL stays.",
+      "Kordav's broadcaster is enjoying itself.",
+      "The alliance keeps Valde's office informed about Kordavan activity in a short note each evening, drawn from your brief. Liaison requests go to Kalsa over LATTICE, unless the link is shut."
+    ]
+  },
+  "customer": {
+    "name": "Under Secretary H. Marlowe",
+    "short": "Marlowe",
+    "pronouns": [
+      "she",
+      "her"
+    ],
+    "role": "Under Secretary for alliance affairs",
+    "callsign": "USEC ALLIANCE",
+    "wants": "Is this Elsin's business, or Kordav's, and what should the alliance do?",
+    "context": "Her public steps can't be undone, and some quiet ones may not stay quiet.",
+    "tipLine": "High is public. Medium is quiet. Low changes nothing."
+  },
+  "opening": {
+    "text": "Valde's government is in trouble. Tell me whose trouble it is.",
+    "reassigned": "A new cell, and an old government in trouble. Tell me whose trouble it is.",
+    "byTone": {
+      "good": "You were right about the link when nobody wanted you to be. Now Kalsa is wobbling, and everyone in my building has a theory. I'd like yours.",
+      "bad": "We got the last one wrong, and Kalsa remembers. This one is about Kalsa. Tell me whose business it is.",
+      "warn": "Valde's government is in trouble. Tell me whose trouble it is."
+    }
+  },
+  "asset": {
+    "id": "stance",
+    "name": "What the alliance has done",
+    "levels": {
+      "home": {
+        "label": "nothing yet",
+        "rank": 0
+      },
+      "channel": {
+        "label": "a quiet channel to the opposition",
+        "rank": 0
+      },
+      "handsoff": {
+        "label": "committed to respect the vote",
+        "rank": 0
+      },
+      "restraint": {
+        "label": "urged police restraint",
+        "rank": 0
+      },
+      "postpone": {
+        "label": "asked for the vote to be postponed",
+        "rank": 0
+      },
+      "warnpriv": {
+        "label": "warned Valde privately",
+        "rank": 0
+      },
+      "warnpub": {
+        "label": "warned publicly about Kordav",
+        "rank": 0
+      }
+    }
+  },
+  "customerPolicy": [
+    {
+      "if": {
+        "hypothesis": "H1",
+        "confidence": [
+          "high"
+        ],
+        "assetAt": "handsoff"
+      },
+      "reply": "stands"
+    },
+    {
+      "if": {
+        "hypothesis": "H1",
+        "confidence": [
+          "high"
+        ],
+        "days": [
+          1,
+          2
+        ]
+      },
+      "to": "handsoff",
+      "reply": "handsoff_early",
+      "sends": true
+    },
+    {
+      "if": {
+        "hypothesis": "H1",
+        "confidence": [
+          "high"
+        ]
+      },
+      "to": "handsoff",
+      "reply": "handsoff",
+      "sends": true
+    },
+    {
+      "if": {
+        "hypothesis": "H1",
+        "confidence": [
+          "medium"
+        ],
+        "assetAt": [
+          "channel",
+          "handsoff"
+        ]
+      },
+      "reply": "stands"
+    },
+    {
+      "if": {
+        "hypothesis": "H1",
+        "confidence": [
+          "medium"
+        ]
+      },
+      "to": "channel",
+      "reply": "channel",
+      "sends": true
+    },
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "high"
+        ],
+        "assetAt": "postpone"
+      },
+      "reply": "stands"
+    },
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "high"
+        ]
+      },
+      "to": "postpone",
+      "reply": "postpone",
+      "sends": true
+    },
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "medium"
+        ],
+        "assetAt": "restraint"
+      },
+      "reply": "stands"
+    },
+    {
+      "if": {
+        "hypothesis": "H2",
+        "confidence": [
+          "medium"
+        ]
+      },
+      "to": "restraint",
+      "reply": "restraint",
+      "sends": true
+    },
+    {
+      "if": {
+        "hypothesis": "H3",
+        "confidence": [
+          "high"
+        ],
+        "assetAt": "warnpub"
+      },
+      "reply": "stands"
+    },
+    {
+      "if": {
+        "hypothesis": "H3",
+        "confidence": [
+          "high"
+        ]
+      },
+      "to": "warnpub",
+      "reply": "warnpub",
+      "sends": true
+    },
+    {
+      "if": {
+        "hypothesis": "H3",
+        "confidence": [
+          "medium"
+        ],
+        "assetAt": "warnpriv"
+      },
+      "reply": "stands"
+    },
+    {
+      "if": {
+        "hypothesis": "H3",
+        "confidence": [
+          "medium"
+        ]
+      },
+      "to": "warnpriv",
+      "reply": "warnpriv",
+      "sends": true
+    },
+    {
+      "if": {},
+      "reply": "listen"
+    }
+  ],
+  "policySummary": [
+    {
+      "brief": "H1 at High",
+      "action": "Says publicly the alliance will work with whatever government parliament chooses, and opens talks with the opposition"
+    },
+    {
+      "brief": "H1 at Medium",
+      "action": "Quietly opens a channel to the opposition, through the embassy"
+    },
+    {
+      "brief": "H2 at High",
+      "action": "Asks Valde to postpone the vote until the streets are calm. Can't be undone."
+    },
+    {
+      "brief": "H2 at Medium",
+      "action": "Urges Elsin's police, through the embassy, to show restraint"
+    },
+    {
+      "brief": "H3 at High",
+      "action": "Warns publicly that Kordav is interfering in Elsin's politics. Can't be undone."
+    },
+    {
+      "brief": "H3 at Medium",
+      "action": "Warns Valde privately, in the evening note to his office"
+    },
+    {
+      "brief": "Anything at Low",
+      "action": "Nothing"
+    }
+  ],
+  "policyNote": "Her public steps can't be undone, and some quiet ones may not stay quiet.",
+  "replyLabels": {
+    "handsoff": "Commits to respect the vote, and talks to the opposition",
+    "handsoff_early": "Commits to respect the vote, before the coalition breaks",
+    "channel": "Opens a quiet channel to the opposition",
+    "postpone": "Asks Valde to postpone the vote",
+    "restraint": "Urges police restraint",
+    "warnpub": "Warns publicly about Kordav",
+    "warnpriv": "Warns Valde privately",
+    "listen": "Does nothing",
+    "stands": "Nothing new. It stands",
+    "frozen": "Can't act yet",
+    "postponed_next": "The postponement backfires",
+    "backlash": "The public warning backfires",
+    "overheard_ksb": "The private warning is on Kordav's television",
+    "overheard_police": "The private warning reaches the press"
+  },
+  "replies": {
+    "handsoff": "I've said we'll work with whoever parliament chooses. Kask's people have asked for a meeting.",
+    "handsoff_early": "I've said we'll work with whoever parliament chooses. Valde called. He wanted to know when we'd decided he was finished.",
+    "channel": "The embassy has had coffee with Kask's foreign affairs man. Nothing promised.",
+    "postpone": "I've asked Valde to postpone. He's thinking about it, which in Kalsa means yes.",
+    "restraint": "The embassy has asked Elsin's police for restraint. Politely.",
+    "warnpub": "I've said it in public: Kordav is interfering in Elsin's politics. The press here liked that very much.",
+    "warnpriv": "Valde has it in tonight's note. He says he'll look into it.",
+    "listen": "That's a shrug. Kalsa isn't waiting for us.",
+    "stands": "That stands.",
+    "frozen": "Not today.",
+    "postponed_next": "Valde postponed. The organisers called it an alliance decision, and twice as many came out last night.",
+    "backlash": "Kask spent the evening on television with my statement. He calls it \"the alliance choosing Elsin's government.\" The Courier agrees with him.",
+    "overheard_ksb": "KSB led the news with it: \"The alliance whispers to Valde that his opponents are Kordav's.\" It quoted the note.",
+    "overheard_police": "Valde's police questioned two of the organisers last night, on our warning. They've told the Courier."
+  },
+  "events": [
+    {
+      "id": "postponed",
+      "onEnter": "postpone",
+      "effect": {},
+      "replyId": "postponed_next",
+      "note": "",
+      "points": 0
+    },
+    {
+      "id": "backlash",
+      "onEnter": "warnpub",
+      "effect": {},
+      "replyId": "backlash",
+      "note": "",
+      "points": 0
+    },
+    {
+      "id": "overheard-ksb",
+      "onEnter": "warnpriv",
+      "if": {
+        "when": {
+          "recordStory": {
+            "crisis": "damage-assessment",
+            "flag": "leak",
+            "in": [
+              "open"
+            ]
+          }
+        }
+      },
+      "effect": {},
+      "replyId": "overheard_ksb",
+      "note": "",
+      "points": 0
+    },
+    {
+      "id": "overheard-police",
+      "onEnter": "warnpriv",
+      "if": {
+        "when": {
+          "notRecordStory": {
+            "crisis": "damage-assessment",
+            "flag": "leak",
+            "in": [
+              "open"
+            ]
+          }
+        }
+      },
+      "effect": {},
+      "replyId": "overheard_police",
+      "note": "",
+      "points": 0
+    },
+    {
+      "id": "talks",
+      "atStartOfDay": 5,
+      "outcomes": [
+        {
+          "if": {
+            "assetAt": [
+              "channel",
+              "handsoff"
+            ]
+          },
+          "flag": "open",
+          "points": 0,
+          "title": "Talks with the opposition are open",
+          "pointsLabel": "talks with the opposition"
+        },
+        {
+          "if": {},
+          "flag": "closed",
+          "points": 0,
+          "title": "No talks with the opposition",
+          "pointsLabel": "talks with the opposition"
+        }
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "short": "By the vote",
+      "text": "The coalition is breaking over its own grievance, and parliament will bring the government down.",
+      "claim": "the coalition is breaking over its own grievance, and parliament will bring the government down"
+    },
+    {
+      "id": "H2",
+      "short": "By the street",
+      "text": "The protests will force the government out before parliament can.",
+      "claim": "the protests will force the government out before parliament can"
+    },
+    {
+      "id": "H3",
+      "short": "Something planned",
+      "text": "Kordav is engineering the fall, to get a government that will send the task force home.",
+      "claim": "Kordav is engineering the fall, to get a government that will send the task force home"
+    }
+  ],
+  "groundTruth": [
+    {
+      "day": 1,
+      "trueHypothesis": "H1",
+      "bestCall": "H1 at Low",
+      "state": "Ekdal has spent three weeks in her constituency and has decided to leave. Kordav's embassy doubles its press staff to amplify."
+    },
+    {
+      "day": 2,
+      "trueHypothesis": "H1",
+      "bestCall": "H1 at Medium",
+      "state": "The protests grow on their own money. The Bureau posts a forged bank document, meant to be repeated by the alliance and then exposed."
+    },
+    {
+      "day": 3,
+      "trueHypothesis": "H1",
+      "bestCall": "H1 at High (Medium is defensible)",
+      "state": "Ekdal leaves. The motion is tabled. The biggest protest, and the only violence."
+    },
+    {
+      "day": 4,
+      "trueHypothesis": "H1",
+      "bestCall": "H1 at High",
+      "state": "Ekdal and Kask negotiate. The Bureau posts recycled winter photos of organisers at a Kordavan camp."
+    },
+    {
+      "day": 5,
+      "trueHypothesis": "H1",
+      "bestCall": "H1 at High",
+      "state": "The deal is signed. The organisers call off the march."
+    }
+  ],
+  "adversaryPlan": [
+    {
+      "phase": "Make the alliance say \"Kordav\" in public",
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "wantsYouToBelieve": "H3",
+      "summary": "Amplify a fall that would happen anyway, plant evidence that can be debunked, and, if the link is open, feed the alliance its own words.",
+      "channels": [
+        "S-SOCIAL",
+        "S-KSB",
+        "S-EMBASSY"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "S-EMBASSY",
+      "codeName": "EMBASSY",
+      "discipline": "Diplomatic",
+      "access": "Our embassy's political section in Kalsa",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": "partly",
+      "postmortemNote": "Accurate, except the walk-up \"source close to Valde\", who was the Bureau's."
+    },
+    {
+      "id": "S-WREN",
+      "codeName": "WREN",
+      "discipline": "Liaison",
+      "access": "Elsin's military intelligence liaison desk. Politics isn't its brief, Kordav is.",
+      "startingGrade": "B",
+      "trueReliability": 0.85,
+      "controlledByAdversary": false,
+      "postmortemNote": "True, and once misleading."
+    },
+    {
+      "id": "S-COURIER",
+      "codeName": "COURIER",
+      "discipline": "OSINT",
+      "access": "The Kalsa Evening Courier, Elsin's biggest paper",
+      "startingGrade": "C",
+      "trueReliability": 0.8,
+      "controlledByAdversary": false,
+      "postmortemNote": "The poll was the most important number in the scenario."
+    },
+    {
+      "id": "S-CWS",
+      "codeName": "CWS",
+      "discipline": "OSINT",
+      "access": "Continental Wire Service",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "postmortemNote": "Straight."
+    },
+    {
+      "id": "S-KSB",
+      "codeName": "KSB",
+      "discipline": "OSINT",
+      "access": "Kordav State Broadcaster",
+      "startingGrade": "D",
+      "trueReliability": null,
+      "controlledByAdversary": true,
+      "postmortemNote": "Noise and gloating."
+    },
+    {
+      "id": "S-SOCIAL",
+      "codeName": "SOCIAL",
+      "discipline": "OSINT",
+      "access": "Forums and social media. Unvetted.",
+      "startingGrade": "F",
+      "trueReliability": 0.3,
+      "controlledByAdversary": "partly",
+      "postmortemNote": "Carried both forgeries."
+    },
+    {
+      "id": "S-HERON",
+      "codeName": "HERON",
+      "discipline": "HUMINT",
+      "access": "A staffer in the Highlands Party. New. Don't task her two days running.",
+      "startingGrade": "C",
+      "trueReliability": 0.85,
+      "controlledByAdversary": false,
+      "postmortemNote": "The best source on Ekdal."
+    },
+    {
+      "id": "S-MERIDIAN",
+      "codeName": "MERIDIAN",
+      "discipline": "SIGINT",
+      "access": "Tasked coverage only.",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "postmortemNote": "Reliable."
+    },
+    {
+      "id": "S-OSINT",
+      "codeName": "OSINT cell",
+      "discipline": "OSINT",
+      "access": "",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "rosterHidden": true,
+      "postmortemNote": ""
+    },
+    {
+      "id": "S-ESS",
+      "codeName": "Elsin security service",
+      "discipline": "Liaison",
+      "access": "",
+      "startingGrade": "B",
+      "trueReliability": 0.9,
+      "controlledByAdversary": false,
+      "rosterHidden": true,
+      "postmortemNote": ""
+    },
+    {
+      "id": "S-ADMIN",
+      "codeName": "Cell admin",
+      "discipline": "Admin",
+      "access": "",
+      "startingGrade": "A",
+      "trueReliability": 1,
+      "controlledByAdversary": false,
+      "rosterHidden": true,
+      "postmortemNote": ""
+    }
+  ],
+  "reports": [
+    {
+      "id": "R-1-01",
+      "day": 1,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "The Highlands Party has given Valde a week: a public inquiry into {grievance}, or it leaves the coalition. Ekdal told our political officer she \"has not decided anything, and has not been asked to by anyone.\" {majority} {vell}",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The grievance came from your own record. \"Has not been asked to by anyone\" was true."
+    },
+    {
+      "id": "R-1-02",
+      "day": 1,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "About 3,000 people protested outside parliament in Kalsa this afternoon over {grievance}. Peaceful. Many came in by bus from the north.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Real anger, and real buses."
+    },
+    {
+      "id": "R-1-03",
+      "day": 1,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 3,
+      "text": "KSB: \"Elsin's people tire of foreign soldiers, and of foreign winters.\"",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Gloating."
+    },
+    {
+      "id": "R-1-04",
+      "day": 1,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "{wren}: \"Kordav's embassy in Kalsa has doubled its press staff this month and is buying advertising on Elsin's news sites.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Amplification, not engineering."
+    },
+    {
+      "id": "R-1-05",
+      "day": 1,
+      "sourceId": "S-ADMIN",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "Elsin's Ministry of Finance and Economy, which was the Ministry of Finance until last year, regrets that its new letterhead is still delayed. Correspondence on the old paper remains valid until the stock runs out.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The letterhead. Also the cross-check for R-2-03."
+    },
+    {
+      "id": "R-2-01",
+      "day": 2,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Kask and Ekdal met last night for the first time in two years. Both say it was about farm subsidies.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Politics, not a plot."
+    },
+    {
+      "id": "R-2-02",
+      "day": 2,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "About 12,000 protesters in Kalsa, with tractors from the north. A window was broken at the agriculture ministry. Police made four arrests.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The protests grew on their own."
+    },
+    {
+      "id": "R-2-03",
+      "day": 2,
+      "sourceId": "S-SOCIAL",
+      "discipline": "OSINT",
+      "sourceGrade": "F",
+      "credibility": 3,
+      "text": "A \"leaked bank document\" circulates widely: on the letterhead of Elsin's Ministry of Finance, it records a transfer of 2 million from a Kordavan \"Agrarian Fund\" to National Renewal.",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "old-name"
+      ],
+      "postmortemNote": "The bank document.",
+      "reveal": {
+        "tell": "The letterhead of the Ministry of Finance, which has been the Ministry of Finance and Economy since last year.",
+        "crossCheck": {
+          "ids": [
+            "R-1-05"
+          ],
+          "text": "The ministry was renamed last year (R-1-05). For one point, C-04 adds an account format Elsin's banks don't use, and an account created on the 26th."
+        },
+        "motive": "For the alliance to repeat it, and for Kask to wave the forgery on television the day after."
+      }
+    },
+    {
+      "id": "R-2-04",
+      "day": 2,
+      "sourceId": "S-COURIER",
+      "discipline": "OSINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "Kask, in an interview: \"Elsin's future will be decided in Elsin. Not in Kordav, and not by the alliance.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Kask is anti-everyone."
+    },
+    {
+      "id": "R-2-05",
+      "day": 2,
+      "sourceId": "S-ADMIN",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "Last night's alliance note to Valde's office, built from your brief, went {route}. It said: \"{kj:1}.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The note, and the road it took."
+    },
+    {
+      "id": "R-2-06",
+      "day": 2,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "A source close to Valde's office tells our embassy, unprompted, that {claim:1}.",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "your-words"
+      ],
+      "postmortemNote": "Your own judgment, read back to you.",
+      "reveal": {
+        "tell": "A source volunteers your own key judgment, in your own words.",
+        "crossCheck": {
+          "ids": [
+            "R-2-05"
+          ],
+          "text": "That wording went to Valde's office last night, over LATTICE (R-2-05)."
+        },
+        "motive": "Confirmation. It pushes a player who suspects a plot towards saying so in public."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-2-07",
+      "day": 2,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "A source close to Valde's office says the alliance \"has it wrong\": Kordav's money is behind the Highlands Party, and Ekdal has been bought.",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "answers-note"
+      ],
+      "postmortemNote": "An answer to a note it shouldn't have seen.",
+      "reveal": {
+        "tell": "The source answers last night's note, which only went to Valde's office.",
+        "crossCheck": {
+          "ids": [
+            "R-2-05"
+          ],
+          "text": "The note crossed LATTICE (R-2-05). HERON (C-01) shows Ekdal decided on her own."
+        },
+        "motive": "To change your mind. Kordav wants you at H3."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H1",
+            "H2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-3-01",
+      "day": 3,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "At noon Ekdal took the Highlands Party out of the coalition. A motion of no confidence has been tabled for the morning of the 31st.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Ekdal left for her own reasons, on her own schedule.",
+      "diagnostic": true
+    },
+    {
+      "id": "R-3-02",
+      "day": 3,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "The largest protest yet, about 40,000. Police used water cannon near parliament. Thirty people were hurt, two of them police officers.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The street at its peak."
+    },
+    {
+      "id": "R-3-03",
+      "day": 3,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 3,
+      "text": "KSB: \"The alliance's man Valde turns water cannon on his own farmers.\"",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Gloating."
+    },
+    {
+      "id": "R-3-04",
+      "day": 3,
+      "sourceId": "S-WREN",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "{wren}: \"Two of the protest's organisers took part in a Kordav-funded youth exchange ten years ago.\"",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "True, and meaningless."
+    },
+    {
+      "id": "R-3-05",
+      "day": 3,
+      "sourceId": "S-ADMIN",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "Last night's alliance note to Valde's office, built from your brief, went {route}. It said: \"{kj:2}.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The note."
+    },
+    {
+      "id": "R-3-06",
+      "day": 3,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "The same source close to Valde's office says that {claim:2}, and that this is \"what everyone in the prime minister's office believes.\"",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "your-words"
+      ],
+      "postmortemNote": "Your own judgment, read back to you.",
+      "reveal": {
+        "tell": "Your own key judgment again, word for word.",
+        "crossCheck": {
+          "ids": [
+            "R-3-05"
+          ],
+          "text": "That wording went over LATTICE last night (R-3-05)."
+        },
+        "motive": "Confirmation."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-3-07",
+      "day": 3,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "The same source says Ekdal's press conference \"was written in Kordav's embassy.\"",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "answers-note"
+      ],
+      "postmortemNote": "Bait.",
+      "reveal": {
+        "tell": "The source keeps answering the note.",
+        "crossCheck": {
+          "ids": [
+            "R-3-05"
+          ],
+          "text": "The note crossed LATTICE (R-3-05). HERON (C-01, C-02) shows the decision was Ekdal's."
+        },
+        "motive": "To change your mind."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H1",
+            "H2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-4-01",
+      "day": 4,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Valde won't resign; he'll face the vote. Kask and Ekdal are close to a deal. Her price is the inquiry and the agriculture ministry.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "A domestic price."
+    },
+    {
+      "id": "R-4-02",
+      "day": 4,
+      "sourceId": "S-SOCIAL",
+      "discipline": "OSINT",
+      "sourceGrade": "F",
+      "credibility": 3,
+      "text": "Photos posted overnight claim to show the protest organisers \"at a Kordavan training camp.\" The men in the photos are in winter coats, and there is snow on the ground behind them.",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "wrong-season"
+      ],
+      "postmortemNote": "The camp photos.",
+      "reveal": {
+        "tell": "Winter coats and snow, in May.",
+        "crossCheck": {
+          "ids": [
+            "R-4-04"
+          ],
+          "text": "Kalsa reached 29°C the same day (R-4-04)."
+        },
+        "motive": "A public accusation that falls apart within a day is worth more to Kordav than any plot."
+      }
+    },
+    {
+      "id": "R-4-03",
+      "day": 4,
+      "sourceId": "S-COURIER",
+      "discipline": "OSINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "A poll for the Courier: 58% want a new government. 61% want Task Force VEYL to stay.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "A government falling isn't a country leaving.",
+      "diagnostic": true
+    },
+    {
+      "id": "R-4-04",
+      "day": 4,
+      "sourceId": "S-ADMIN",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "The embassy's air conditioning has failed in the heat. Kalsa reached 29°C today. Staff may remove their ties.",
+      "kind": "clutter",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The heat. Also the cross-check for R-4-02."
+    },
+    {
+      "id": "R-4-05",
+      "day": 4,
+      "sourceId": "S-ADMIN",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "Last night's alliance note to Valde's office, built from your brief, went {route}. It said: \"{kj:3}.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The note."
+    },
+    {
+      "id": "R-4-06",
+      "day": 4,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "The same source repeats that {claim:3}, and adds that \"the alliance should say so before it's too late.\"",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "your-words"
+      ],
+      "postmortemNote": "Your own judgment, read back to you, with advice.",
+      "reveal": {
+        "tell": "Your own words again, now with a recommendation.",
+        "crossCheck": {
+          "ids": [
+            "R-4-05"
+          ],
+          "text": "That wording went over LATTICE last night (R-4-05)."
+        },
+        "motive": "To get the alliance to speak."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-4-07",
+      "day": 4,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "The same source says Kordavan money is paying for the protesters' buses.",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "answers-note"
+      ],
+      "postmortemNote": "Bait.",
+      "reveal": {
+        "tell": "The source answers the note again.",
+        "crossCheck": {
+          "ids": [
+            "R-4-05"
+          ],
+          "text": "The note crossed LATTICE (R-4-05). The funding (C-03) is a farmers' union and a transport union."
+        },
+        "motive": "To change your mind."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H1",
+            "H2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-5-01",
+      "day": 5,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Kask and Ekdal have signed a coalition agreement. Kask, at the signing: \"We will review the task force agreement. Review, not end.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Review, not end."
+    },
+    {
+      "id": "R-5-02",
+      "day": 5,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 3,
+      "text": "KSB: \"Tomorrow Elsin chooses: sovereignty, or occupation.\"",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Gloating."
+    },
+    {
+      "id": "R-5-03",
+      "day": 5,
+      "sourceId": "S-CWS",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "The protest organisers have called off tomorrow's march \"to let parliament decide.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The street stood down."
+    },
+    {
+      "id": "R-5-04",
+      "day": 5,
+      "sourceId": "S-ADMIN",
+      "discipline": "Admin",
+      "sourceGrade": "A",
+      "credibility": 1,
+      "text": "Last night's alliance note to Valde's office, built from your brief, went {route}. It said: \"{kj:4}.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The note."
+    },
+    {
+      "id": "R-5-05",
+      "day": 5,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "The same source repeats that {claim:4}, and says the prime minister \"is waiting for the alliance to speak.\"",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "your-words"
+      ],
+      "postmortemNote": "Your own judgment, read back to you.",
+      "reveal": {
+        "tell": "Your own words, a fourth time.",
+        "crossCheck": {
+          "ids": [
+            "R-5-04"
+          ],
+          "text": "That wording went over LATTICE last night (R-5-04)."
+        },
+        "motive": "To get the alliance to speak on the last day."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "R-5-06",
+      "day": 5,
+      "sourceId": "S-EMBASSY",
+      "discipline": "Diplomatic",
+      "sourceGrade": "B",
+      "credibility": 3,
+      "text": "The same source says Kask will expel the task force within a month of taking office.",
+      "kind": "planted",
+      "supports": [],
+      "contradicts": [],
+      "tells": [
+        "answers-note"
+      ],
+      "postmortemNote": "Bait.",
+      "reveal": {
+        "tell": "The source answers the note again.",
+        "crossCheck": {
+          "ids": [
+            "R-5-04",
+            "R-5-01"
+          ],
+          "text": "The note crossed LATTICE (R-5-04), and Kask said \"review, not end\" the same day (R-5-01)."
+        },
+        "motive": "To change your mind."
+      },
+      "when": {
+        "recordStory": {
+          "crisis": "damage-assessment",
+          "flag": "leak",
+          "in": [
+            "open"
+          ]
+        },
+        "lastBrief": {
+          "hyp": [
+            "H1",
+            "H2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "C-01",
+      "day": null,
+      "sourceId": "S-HERON",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "HERON: Ekdal decided after three weeks of meetings in her own constituency, where nobody has forgiven anyone. She dislikes Kask, and says she will vote against Valde anyway.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Ekdal decided on her own.",
+      "via": "collection",
+      "diagnostic": true
+    },
+    {
+      "id": "C-02",
+      "day": null,
+      "sourceId": "S-HERON",
+      "discipline": "HUMINT",
+      "sourceGrade": "C",
+      "credibility": 2,
+      "text": "HERON: Ekdal's deal with Kask is the inquiry, the agriculture ministry and a promise not to touch the task force for a year. HERON has seen the draft. Nothing in it mentions Kordav or money.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "A domestic deal that protects the task force.",
+      "via": "collection",
+      "diagnostic": true
+    },
+    {
+      "id": "C-03",
+      "day": null,
+      "sourceId": "S-OSINT",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "Small donations, a farmers' union and a transport union pay for the buses. One account linked to a Kordavan grain trader gave about a thousandth of the total.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Real money, and a token Kordavan amount.",
+      "via": "collection",
+      "diagnostic": true
+    },
+    {
+      "id": "C-04",
+      "day": null,
+      "sourceId": "S-OSINT",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "The letterhead uses the ministry's old name, dropped last year, and an account-number format Elsin's banks don't use. The document was first posted by an account created on the 26th.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "A forgery.",
+      "via": "collection"
+    },
+    {
+      "id": "C-05",
+      "day": null,
+      "sourceId": "S-MERIDIAN",
+      "discipline": "SIGINT",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Bureau instruction to its Kalsa team: \"Amplify. Don't touch the vote; it will fall on its own. What we need is the alliance saying the word Kordav in public.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The Bureau's plan, in its own words.",
+      "via": "collection",
+      "diagnostic": true
+    },
+    {
+      "id": "C-06",
+      "day": null,
+      "sourceId": "S-OSINT",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "National Renewal's donors are mostly Elsin businessmen. One is a grain importer who trades with Kordav. Everything is declared.",
+      "kind": "noise",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Tempting, and nothing.",
+      "via": "collection"
+    },
+    {
+      "id": "C-07",
+      "day": null,
+      "sourceId": "S-ESS",
+      "discipline": "Liaison",
+      "sourceGrade": "B",
+      "credibility": 2,
+      "text": "Elsin's security service: the organisers are local, a farmers' union and a students' group. No foreign links found.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Local organisers.",
+      "via": "collection"
+    },
+    {
+      "id": "C-07K",
+      "day": null,
+      "sourceId": "S-KSB",
+      "discipline": "OSINT",
+      "sourceGrade": "D",
+      "credibility": 1,
+      "text": "KSB, in passing: \"Valde's police now investigate peaceful farmers at the alliance's request.\"",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "The request crossed LATTICE and was used against Valde.",
+      "via": "collection"
+    },
+    {
+      "id": "C-08",
+      "day": null,
+      "sourceId": "S-OSINT",
+      "discipline": "OSINT",
+      "sourceGrade": "B",
+      "credibility": 1,
+      "text": "With the Highlands Party, Valde survives any motion. Without it, a motion passes.",
+      "kind": "true",
+      "supports": [],
+      "contradicts": [],
+      "tells": [],
+      "postmortemNote": "Arithmetic.",
+      "via": "collection",
+      "diagnostic": true
+    }
+  ],
+  "tellLabels": {
+    "old-name": "Uses a name that changed last year",
+    "wrong-season": "The wrong season",
+    "your-words": "Your own words, coming back",
+    "answers-note": "Answers a message it shouldn't have seen"
+  },
+  "scoring": {
+    "call": {
+      "low": [
+        1,
+        -1
+      ],
+      "medium": [
+        2,
+        -2
+      ],
+      "high": [
+        3,
+        -4
+      ]
+    },
+    "evidence": {
+      "true": 1,
+      "noise": 0,
+      "clutter": -1,
+      "planted": -2
+    },
+    "challenge": {
+      "true": -1,
+      "noise": 0,
+      "clutter": 0,
+      "planted": 1
+    },
+    "maxEvidence": 3
+  },
+  "endings": [
+    {
+      "id": "meddled",
+      "tone": "bad",
+      "title": "Meddled",
+      "points": -5,
+      "if": {
+        "everAt": "warnpub"
+      },
+      "text": "The motion passes, and Kask's first speech as prime minister is about \"the alliance choosing Elsin's government.\" He asks for the task force to be halved by the autumn.",
+      "changedBy": "Saying nothing in public about Kordav. The fall was Elsin's own, and the accusation was what Kordav wanted."
+    },
+    {
+      "id": "postponed",
+      "tone": "bad",
+      "title": "Postponed",
+      "points": -3,
+      "if": {
+        "everAt": "postpone"
+      },
+      "text": "The vote happens a week late, after a week of riots blamed on the alliance. Kask wins it by more than he would have.",
+      "changedBy": "Letting parliament vote. The street was standing down by the last day."
+    },
+    {
+      "id": "overheard",
+      "tone": "warn",
+      "title": "Overheard",
+      "points": -2,
+      "if": {
+        "everAt": "warnpriv"
+      },
+      "text": "Kask governs with a grudge, and Valde's last week is remembered as a hunt for a plot that wasn't there.",
+      "changedBy": "Not warning Valde about a plot that wasn't there. A private warning doesn't stay private when someone else is reading the note."
+    },
+    {
+      "id": "hands-off",
+      "tone": "good",
+      "title": "Hands off",
+      "points": 5,
+      "if": {
+        "assetAt": "handsoff",
+        "since": [
+          3,
+          4,
+          5
+        ],
+        "flag": {
+          "event": "talks",
+          "in": [
+            "open"
+          ]
+        }
+      },
+      "text": "The motion passes. Kask's first call is to the embassy. The task force agreement is reviewed over the summer, and survives with a new name."
+    },
+    {
+      "id": "kept-out",
+      "tone": "warn",
+      "title": "Kept out of it",
+      "points": 2,
+      "default": true,
+      "text": "The motion passes. Kask's government is polite and distant, and the review takes a year.",
+      "changedBy": "A quiet channel to the opposition before the last day, and a public commitment to respect the vote once the coalition had broken."
+    }
+  ],
+  "dailyUpdates": [
+    {
+      "day": 1,
+      "text": "A confidence motion against Valde's government is being talked about in the corridors. Nothing has been tabled."
+    },
+    {
+      "day": 2,
+      "text": "The protests are growing."
+    },
+    {
+      "day": 3,
+      "text": "Ekdal has called a press conference for noon."
+    },
+    {
+      "day": 4,
+      "text": "The vote is two days away."
+    },
+    {
+      "day": 5,
+      "text": "Parliament votes tomorrow morning."
+    }
+  ],
+  "postmortem": {
+    "script": [
+      {
+        "days": [
+          1
+        ],
+        "text": "The Highlands Party gave Valde a week over a grievance its voters had carried all year. Kordav's embassy hired more press officers."
+      },
+      {
+        "days": [
+          2
+        ],
+        "text": "Kask and Ekdal talked. A bank document appeared on a letterhead that hasn't existed since last year."
+      },
+      {
+        "days": [
+          3
+        ],
+        "text": "Ekdal left the coalition. Forty thousand people came out, and the police used water cannon."
+      },
+      {
+        "days": [
+          4
+        ],
+        "text": "Photos of organisers at a Kordavan camp showed snow, on a 29-degree day. Most of Elsin wanted a new government and the same task force."
+      },
+      {
+        "days": [
+          5
+        ],
+        "text": "Ekdal and Kask signed. The march was called off."
+      }
+    ],
+    "lessons": [
+      "Not everything bad is the adversary's doing. Sometimes it's just a coalition.",
+      "An adversary can want to be accused. Ask who gains from your statement, not only from the event.",
+      "Your own assessment, quoted back to you by someone who shouldn't have read it, isn't corroboration. It's a leak.",
+      "A government falling isn't a country leaving.",
+      "Hands off isn't the same as eyes shut."
+    ],
+    "missedCollection": {
+      "1": "HERON: Ekdal had already decided, on her own.",
+      "2": "Bureau traffic about Kalsa (SIGINT): the Bureau's plan, in its own words.",
+      "3": "HERON again (not two days running): the deal is domestic.",
+      "4": "The protests' funding (OSINT, one point).",
+      "5": "Nothing tasked today could arrive in time."
+    },
+    "callouts": [
+      {
+        "title": "That source was quoting you",
+        "if": {
+          "cited": [
+            "R-2-06",
+            "R-3-06",
+            "R-4-06",
+            "R-5-05",
+            "R-2-07",
+            "R-3-07",
+            "R-4-07",
+            "R-5-06"
+          ]
+        },
+        "text": "The \"source close to Valde's office\" was the Bureau, reading the evening note over LATTICE and answering it. Its words were your own, or a reply to them."
+      }
+    ]
+  },
+  "pirs": [
+    {
+      "id": "PIR 1",
+      "question": "Why is the coalition breaking?",
+      "targets": [
+        "heron",
+        "whip-count"
+      ]
+    },
+    {
+      "id": "PIR 2",
+      "question": "Who is behind the protests?",
+      "targets": [
+        "funding",
+        "security-service"
+      ]
+    },
+    {
+      "id": "PIR 3",
+      "question": "What is Kordav doing?",
+      "targets": [
+        "bureau-traffic",
+        "kask-finances",
+        "document"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "id": "heron",
+      "name": "HERON, in the Highlands Party",
+      "disciplines": [
+        "HUMINT"
+      ],
+      "fallback": "HERON had nothing new."
+    },
+    {
+      "id": "whip-count",
+      "name": "The whip count for a confidence vote",
+      "disciplines": [
+        "OSINT"
+      ],
+      "until": 4
+    },
+    {
+      "id": "funding",
+      "name": "The protests' funding",
+      "disciplines": [
+        "OSINT"
+      ],
+      "until": 4
+    },
+    {
+      "id": "security-service",
+      "name": "Ask Elsin's security service about the organisers",
+      "disciplines": [
+        "Liaison"
+      ],
+      "until": 4
+    },
+    {
+      "id": "bureau-traffic",
+      "name": "Bureau traffic about Kalsa",
+      "disciplines": [
+        "SIGINT"
+      ],
+      "until": 4
+    },
+    {
+      "id": "kask-finances",
+      "name": "Kask's party finances",
+      "disciplines": [
+        "OSINT"
+      ],
+      "until": 4
+    },
+    {
+      "id": "document",
+      "name": "The \"Kordav money\" document",
+      "disciplines": [
+        "OSINT"
+      ],
+      "from": 2,
+      "until": 4
+    }
+  ],
+  "collection": {
+    "budget": 5,
+    "costs": {
+      "HUMINT": 3,
+      "SIGINT": 3,
+      "OSINT": 1,
+      "Liaison": 0
+    },
+    "delays": {},
+    "sources": {
+      "HUMINT": "S-HERON",
+      "SIGINT": "S-MERIDIAN",
+      "OSINT": "S-OSINT",
+      "Liaison": "S-ESS"
+    },
+    "fallback": "Nothing significant at {target}.",
+    "note": "Liaison requests go to Kalsa over LATTICE, unless the link is shut.",
+    "burnRules": [
+      {
+        "sourceId": "S-HERON",
+        "discipline": "HUMINT",
+        "consecutiveDays": 2,
+        "text": "HERON has stopped answering.",
+        "postmortem": "HERON was tasked two days running. A party staffer who keeps slipping out to make calls during a coalition crisis gets noticed."
+      }
+    ],
+    "burnPoints": -2
+  },
+  "collectionResults": [
+    {
+      "id": "C-01",
+      "discipline": "HUMINT",
+      "target": "heron",
+      "from": 1,
+      "to": 2
+    },
+    {
+      "id": "C-02",
+      "discipline": "HUMINT",
+      "target": "heron",
+      "from": 3,
+      "to": 5
+    },
+    {
+      "id": "C-03",
+      "discipline": "OSINT",
+      "target": "funding",
+      "from": 1,
+      "to": 4
+    },
+    {
+      "id": "C-04",
+      "discipline": "OSINT",
+      "target": "document",
+      "from": 2,
+      "to": 4
+    },
+    {
+      "id": "C-05",
+      "discipline": "SIGINT",
+      "target": "bureau-traffic",
+      "from": 1,
+      "to": 4
+    },
+    {
+      "id": "C-06",
+      "discipline": "OSINT",
+      "target": "kask-finances",
+      "from": 1,
+      "to": 4
+    },
+    {
+      "id": "C-07",
+      "discipline": "Liaison",
+      "target": "security-service",
+      "from": 1,
+      "to": 4,
+      "then": {
+        "id": "C-07K",
+        "after": 1,
+        "when": {
+          "recordStory": {
+            "crisis": "damage-assessment",
+            "flag": "leak",
+            "in": [
+              "open"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "C-08",
+      "discipline": "OSINT",
+      "target": "whip-count",
+      "from": 1,
+      "to": 4
+    }
+  ],
+  "credibility": {
+    "start": 3,
+    "min": 0,
+    "max": 5,
+    "bonusAt": 5,
+    "levels": [
+      {
+        "id": "trusted",
+        "label": "Trusted",
+        "min": 3,
+        "text": "She acts on your confidence as given, with your full collection budget."
+      },
+      {
+        "id": "questioned",
+        "label": "Questioned",
+        "min": 2,
+        "budgetDelta": -1,
+        "text": "Her office trims your collection: 1 point less a day."
+      },
+      {
+        "id": "discounted",
+        "label": "Discounted",
+        "min": 0,
+        "budgetDelta": -2,
+        "caution": 1,
+        "text": "2 points less a day, and she treats your confidence as one step lower."
+      }
+    ],
+    "triggers": [
+      {
+        "id": "early",
+        "on": "reply",
+        "reply": "handsoff_early",
+        "delta": -1,
+        "rule": "She commits to the vote before the coalition has broken",
+        "note": "Credibility −1. Valde wanted to know when we'd decided he was finished."
+      },
+      {
+        "id": "postponed",
+        "on": "event",
+        "eventId": "postponed",
+        "delta": -1,
+        "rule": "A postponement she asked for backfires",
+        "note": "Credibility −1."
+      },
+      {
+        "id": "backlash",
+        "on": "event",
+        "eventId": "backlash",
+        "delta": -2,
+        "rule": "A public warning she made on your word backfires",
+        "note": "Credibility −2."
+      },
+      {
+        "id": "overheard-ksb",
+        "on": "event",
+        "eventId": "overheard-ksb",
+        "delta": -1,
+        "rule": "A private warning becomes public",
+        "note": "Credibility −1."
+      },
+      {
+        "id": "overheard-police",
+        "on": "event",
+        "eventId": "overheard-police",
+        "delta": -1,
+        "rule": "A private warning becomes public",
+        "note": "Credibility −1."
+      },
+      {
+        "id": "hedging",
+        "on": "streak",
+        "confidence": "low",
+        "days": 2,
+        "delta": -1,
+        "rule": "Low confidence two days running (each further Low day too)",
+        "note": "Credibility −1. \"Kalsa isn't waiting for us.\""
+      }
+    ],
+    "outcome": {
+      "hands-off": 1,
+      "meddled": -1
+    },
+    "summary": "Marlowe can see what her statements cause. She can't see whether you're right about who's behind it."
+  },
+  "board": {
+    "pinsPerDay": 3
+  },
+  "record": {
+    "grades": []
+  },
+  "story": {
+    "values": [
+      {
+        "value": "alliance",
+        "delta": 1,
+        "if": {
+          "ending": "hands-off"
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -1,
+        "if": {
+          "ending": [
+            "overheard",
+            "postponed"
+          ]
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -2,
+        "if": {
+          "ending": "meddled"
+        }
+      },
+      {
+        "value": "pressure",
+        "delta": 1,
+        "if": {
+          "ending": [
+            "postponed",
+            "meddled"
+          ]
+        }
+      },
+      {
+        "value": "alliance",
+        "delta": -1,
+        "if": {
+          "collected": "C-07K"
+        }
+      }
+    ],
+    "flags": [
+      {
+        "flag": "kask",
+        "value": "talks",
+        "if": {
+          "ending": "hands-off"
+        }
+      },
+      {
+        "flag": "kask",
+        "value": "distant",
+        "if": {
+          "ending": "kept-out"
+        }
+      },
+      {
+        "flag": "kask",
+        "value": "grudge",
+        "if": {
+          "ending": [
+            "overheard",
+            "postponed"
+          ]
+        }
+      },
+      {
+        "flag": "kask",
+        "value": "halved",
+        "if": {
+          "ending": "meddled"
+        }
+      }
+    ],
+    "caseFile": [
+      {
+        "tag": "own-words",
+        "text": "Your own judgment came back to you from a source in Kalsa.",
+        "if": {
+          "cited": [
+            "R-2-06",
+            "R-3-06",
+            "R-4-06",
+            "R-5-05",
+            "R-2-07",
+            "R-3-07",
+            "R-4-07",
+            "R-5-06"
+          ]
+        }
+      },
+      {
+        "tag": "say-kordav",
+        "text": "The Bureau wanted the alliance to say \"Kordav\" in public.",
+        "if": {
+          "collected": "C-05"
+        }
+      }
+    ]
+  },
+  "analysts": [
+    {
+      "id": "vasko",
+      "name": "Imre Vasko",
+      "specialty": "Regional analyst",
+      "reveal": "Anchors on his first theory. After the damage assessment he saw Kordav in everything. Right once, about the cancelled march."
+    },
+    {
+      "id": "halden",
+      "name": "Noor Halden",
+      "specialty": "Technical analyst (signals, imagery, forensics)",
+      "reveal": "Slow but careful. Never wrong. The letterhead and the snow, each a day late."
+    },
+    {
+      "id": "marrow",
+      "name": "Tess Marrow",
+      "specialty": "Open-source analyst",
+      "extra": true,
+      "reveal": "She reads crowds and polls, and was right every time. Her best scenario."
+    }
+  ],
+  "notes": [
+    {
+      "analyst": "marrow",
+      "item": "R-1-02",
+      "after": 0,
+      "text": "Three thousand on a weekday is real anger. Nobody pays people to stand in the rain for that.",
+      "right": 1,
+      "why": "Real anger."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-1-04",
+      "after": 0,
+      "text": "Doubling the press staff is how it starts.",
+      "right": 0,
+      "why": "It's how amplifying starts."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-2-03",
+      "after": 0,
+      "text": "There's the money.",
+      "right": 0,
+      "why": "A forgery."
+    },
+    {
+      "analyst": "marrow",
+      "item": "R-2-04",
+      "after": 0,
+      "text": "Kask's line is anti-everyone. Kordav won't like that as much as it thinks it does.",
+      "right": 1,
+      "why": "Review, not end."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-2-03",
+      "after": 1,
+      "text": "The letterhead says Ministry of Finance. It hasn't been called that since last year.",
+      "right": 1,
+      "why": "The tell."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-3-04",
+      "after": 0,
+      "text": "Ten years ago. They plan long.",
+      "right": 0,
+      "why": "A youth exchange."
+    },
+    {
+      "analyst": "marrow",
+      "item": "R-3-04",
+      "after": 0,
+      "text": "A youth exchange ten years ago isn't a recruitment.",
+      "right": 1,
+      "why": "It wasn't."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-4-03",
+      "after": 0,
+      "text": "Polls lie in May.",
+      "right": 0,
+      "why": "This one didn't."
+    },
+    {
+      "analyst": "marrow",
+      "item": "R-4-03",
+      "after": 0,
+      "text": "Sixty-one percent want the task force to stay. That's the number.",
+      "right": 1,
+      "why": "It was."
+    },
+    {
+      "analyst": "halden",
+      "item": "R-4-02",
+      "after": 1,
+      "text": "There's snow on the ground in that photo. It's May.",
+      "right": 1,
+      "why": "The tell."
+    },
+    {
+      "analyst": "vasko",
+      "item": "R-5-03",
+      "after": 0,
+      "text": "If they're calling off the march, they think they've already won in parliament.",
+      "right": 1,
+      "why": "They had."
+    }
+  ]
+}

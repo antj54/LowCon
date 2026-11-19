@@ -122,6 +122,14 @@
         {
           "seen": "lights-out",
           "text": "Its northern grid and the Southern Line's pumping controls run on control servers built by Corvane Systems."
+        },
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Prime Minister Henrik Valde governs in coalition with the Highlands Party, on a thin majority."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "text": "Valde's government fell to a confidence vote. Ruben Kask leads a new coalition with the Highlands Party."
         }
       ],
       "bio": "A small, landlocked parliamentary republic of highlands and river valleys. Its governments are coalitions and its votes are close. It looks west to the alliance for its security, south to Marrat's free port at Halsk for its trade, and north at Kordav with long suspicion."
@@ -493,6 +501,153 @@
       "bio": "Ran Elsin's grid control rooms for fifteen years before becoming the operator's deputy director. He has seen a lot of hard winters."
     },
     {
+      "id": "valde",
+      "group": "people",
+      "name": "Henrik Valde",
+      "role": "Prime Minister of Elsin",
+      "bio": "A careful centrist who has held a coalition together for three years by never quite deciding anything. Well liked abroad, and less so in the north.",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Governs with the Highlands Party. His majority is thin, and his partner is unhappy."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "text": "Lost a confidence vote on the 31st of May. He faced it rather than resign."
+        }
+      ]
+    },
+    {
+      "id": "ekdal",
+      "group": "people",
+      "name": "Sanna Ekdal",
+      "role": "Leader of the Highlands Party",
+      "bio": "A farmer's daughter from the north who speaks for voters who feel Kalsa forgets them. Blunt, local, and impossible to hurry.",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Gave Valde a week to meet her party's demand, or lose its votes."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "text": "Left the coalition for her own reasons, on her own schedule, and joined Kask's on her own terms."
+        }
+      ]
+    },
+    {
+      "id": "kask",
+      "group": "people",
+      "name": "Ruben Kask",
+      "role": "Leader of National Renewal",
+      "bio": "A former television journalist who built a party on the idea that Elsin should stop being anyone's project. He distrusts Kordav and the alliance in roughly equal measure.",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Says Elsin's future will be decided in Elsin, \"not in Kordav, and not by the alliance.\""
+        },
+        {
+          "after": "vote-in-kalsa",
+          "text": "Prime Minister of Elsin since the vote. He promised to review the task force agreement, not end it."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "if": {
+            "recordStory": {
+              "crisis": "vote-in-kalsa",
+              "flag": "kask",
+              "in": [
+                "talks"
+              ]
+            }
+          },
+          "text": "His first call as prime minister was to the alliance's embassy."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "if": {
+            "recordStory": {
+              "crisis": "vote-in-kalsa",
+              "flag": "kask",
+              "in": [
+                "distant"
+              ]
+            }
+          },
+          "text": "Polite and distant with the alliance."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "if": {
+            "recordStory": {
+              "crisis": "vote-in-kalsa",
+              "flag": "kask",
+              "in": [
+                "grudge"
+              ]
+            }
+          },
+          "text": "Governs with a grudge against the alliance."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "if": {
+            "recordStory": {
+              "crisis": "vote-in-kalsa",
+              "flag": "kask",
+              "in": [
+                "halved"
+              ]
+            }
+          },
+          "text": "Has asked for Task Force VEYL to be halved by the autumn."
+        }
+      ]
+    },
+    {
+      "id": "hollis",
+      "group": "people",
+      "name": "Dag Hollis",
+      "role": "Elsin's Deputy Defence Minister, after Vell",
+      "bio": "A party manager rather than a reformer. Took Vell's job and none of his causes.",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "if": {
+            "recordEnding": {
+              "crisis": "walk-in",
+              "in": [
+                "sidelined",
+                "burned"
+              ]
+            }
+          },
+          "text": "Won't say whether he supports the task force."
+        }
+      ]
+    },
+    {
+      "id": "ahrend",
+      "group": "people",
+      "name": "Lt. Col. N. Ahrend",
+      "role": "Head of the liaison desk, after Col. Rhun (WREN)",
+      "bio": "A careful staff officer, promoted into a job nobody wanted after the damage assessment. He reports what he's asked and very little else.",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "if": {
+            "recordStory": {
+              "crisis": "damage-assessment",
+              "flag": "wrongName",
+              "in": [
+                "rhun"
+              ]
+            }
+          },
+          "text": "Now signs WREN's reporting."
+        }
+      ]
+    },
+    {
       "id": "bureau",
       "group": "orgs",
       "name": "The Bureau",
@@ -695,6 +850,38 @@
       ]
     },
     {
+      "id": "highlands",
+      "group": "orgs",
+      "name": "The Highlands Party",
+      "role": "A rural party from Elsin's north",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Valde's coalition partner, led by Sanna Ekdal. Its voters are angry, and say so in Kalsa by the busload."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "text": "Left Valde's coalition, and holds the agriculture ministry in Kask's."
+        }
+      ]
+    },
+    {
+      "id": "renewal",
+      "group": "orgs",
+      "name": "National Renewal",
+      "role": "Elsin's main opposition party, now in government",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Ruben Kask's party. Its donors are mostly Elsin businessmen, and everything is declared."
+        },
+        {
+          "after": "vote-in-kalsa",
+          "text": "Leads Elsin's new government."
+        }
+      ]
+    },
+    {
       "id": "wren",
       "group": "sources",
       "name": "WREN",
@@ -781,6 +968,20 @@
         }
       ],
       "bio": "Brokers stolen data on criminal forums. Talks to us because we pay well and ask nothing about the rest of his business."
+    },
+    {
+      "id": "heron",
+      "group": "sources",
+      "name": "HERON",
+      "role": "A staffer in the Highlands Party",
+      "source": "HERON",
+      "bio": "Works in the Highlands Party's office in Kalsa, and has been talking to our embassy since the winter. Careful, and nervous.",
+      "stages": [
+        {
+          "seen": "vote-in-kalsa",
+          "text": "Sees the party's meetings and drafts. Don't task her two days running."
+        }
+      ]
     },
     {
       "id": "vasko",
