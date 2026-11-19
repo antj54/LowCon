@@ -142,3 +142,11 @@ Postmortem-only, so nothing in Act 1's balance changes. Each scenario's postmort
 - **Scenario 06 has an unusual inbox** (the player's own history). It needs the engine to read the record and build items from it, which is new.
 - **Act 3's tailored deception** needs plants generated from the player's previous brief. Authored variants per hypothesis will do it without anything generative: three sets of plants a day, one shown.
 - **Marrow as a suspect** uses a character the player has only just met and may like. That's intended, and it should be handled gently: she's cleared early if the player looks.
+
+## Changes from scripting (2026-11-19)
+
+- **Scenario 06 is scripted** (`claude/crisis-06-gm-key.md`). It's set in April, after the March lab report in Crisis 05's Clean ending. Its postmortem states the answer outright.
+- **Scenario 09's "second chance" changes meaning.** After 06 the player knows the answer even if the world doesn't. In 09 the envoy quoting your bottom line is the evidence that lets the *customer* act: a High call on the link then closes it for the finale. It's a chance to put things right, not a chance to realise.
+- **H2 at High in 06 also suspends Marrow** if she's on the team. She is lost for Act 3, the cost of naming our own side.
+- **06 adds two Act 3 flags:** `plan` (whether Halvorsen's revised Veyl contingency plan crossed the link on the 17th; used in 08 and 10) and `named` (link, rhun, arle or none).
+- **Crisis 04's actual truth** is H2 on all five days (the shipment was in Kordav's hands throughout and came back altered), not the shift described above. The pattern table still holds: the port-police request crossed the link and reached Tessaly.
