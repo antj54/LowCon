@@ -352,6 +352,7 @@ tids = {t["id"] for t in crisis["targets"]}
 assert tids == {t for p in crisis["pirs"] for t in p["targets"]} and all(cr["target"] in tids for cr in crisis["collectionResults"])
 keys = {r["reply"] for r in policy} | {"frozen"} | {e["replyId"] for e in crisis["events"] if e.get("replyId")}
 assert keys <= set(replies) and keys <= set(labels)
+import house_text; house_text.apply(crisis)
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "crises", "vote-in-kalsa.json")
 with open(out, "w") as f: json.dump(crisis, f, indent=2, ensure_ascii=False); f.write("\n")
 print("wrote", os.path.normpath(out), len(reports), "reports")

@@ -369,6 +369,7 @@ assert tids == {t for p in crisis["pirs"] for t in p["targets"]} and all(cr["tar
 assert all(r["reveal"] for r in reports if r["kind"] == "planted")
 keys = {r["reply"] for r in crisis["customerPolicy"]} | {"frozen", "rebuff"}
 assert keys <= set(crisis["replies"]) and keys <= set(crisis["replyLabels"]), keys - set(crisis["replies"])
+import house_text; house_text.apply(crisis)
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "crises", "walk-in.json")
 with open(out, "w") as f: json.dump(crisis, f, indent=2, ensure_ascii=False); f.write("\n")
 print("wrote", os.path.normpath(out), len(reports), "reports,", sum(r["kind"] == "planted" for r in reports), "planted")

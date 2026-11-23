@@ -17,6 +17,7 @@ A phone-first daily strategy game. You lead a small intelligence analysis cell: 
 | `codex.json` | The Codex: cast, nations and the region map, revealed as scenarios are played. **Spoils the campaign.** |
 | `config/playtest.json` | Published as `config.json` in the playtest build. Turns on playtest mode and opens each next day immediately (`playAheadDefault`): results sync to a shared `playtests/<tester>` record, plus one-tap reactions, a per-item realism flag, an end-of-crisis debrief and an owner-only Testers tab. With no `config.json`, the engine runs as the normal build. |
 | `docs/` | Design doc, decisions log, crisis content and the Crisis 01 packet and answer key (spoilers), mirrored from the claude.ai project. |
+| `tools/build_*.py`, `tools/text_*.py`, `tools/house_text.py` | Builders for Crises 02 onward and their house-style wording. **They spoil the campaign.** |
 | `tools/simulate.js` | Runs the real engine headlessly and prints the ending and score for a set of fixed strategies. Use it after any change to scoring, policy or content. **Its strategy sets for Crises 04 onward spoil the campaign.** |
 
 ## Run it

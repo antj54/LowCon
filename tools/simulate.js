@@ -323,7 +323,7 @@ const SETS = {
   if (crisis.id === 'southern-line') {
     const rec = (cred, tone, extra) => ({ 'intel-cell-sim:record': JSON.stringify({ v: 2, voided: {}, runs: { 'border-buildup': Object.assign({ id: 'border-buildup', title: 'Exercise or Operation?', customer: 'Gen. R. Halvorsen', cred, tone, burned: [], fooled: [], tested: [], grades: [], at: '2026-01-01' }, extra || {}) } }) });
     const cases = [
-      ['Record: Deterred, credibility 5', rec(5, 'good'), r => r.cred.startsWith('Trusted (5)') && /regret remembering/.test(r.day1) && /6 of 6 points/.test(r.collect1)],
+      ['Record: Deterred, credibility 5', rec(5, 'good'), r => r.cred.startsWith('Trusted (5)') && /counting on the same/.test(r.day1) && /6 of 6 points/.test(r.collect1)],
       ['Record: Seized, credibility 1', rec(1, 'bad'), r => r.cred.startsWith('Discounted (1)') && /lost a dam/.test(r.day1)],
       ['Record: KESTREL burned', rec(3, 'warn', { burned: ['KESTREL'] }), r => /data-target="kestrel"[^>]*disabled/.test(r.collect1)],
       ['Record: cited the snow photo', rec(3, 'warn', { fooled: ['recycled-photo'] }), r => /water tower/.test(r.html) && !/Marrat crowns\./.test(r.day3)],

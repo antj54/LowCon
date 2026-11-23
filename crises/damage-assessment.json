@@ -16,12 +16,12 @@
   "endingEyebrow": "Kalsa, the 18th",
   "frozenText": "",
   "briefing": {
-    "dateLine": "April. Day 1 is the 14th.",
+    "dateLine": "The 14th. April, a year and a half after IRON HARVEST.",
     "situation": [
-      "For a year Kordav has kept knowing things it shouldn't: which nets we read, what we'd shared with Kalsa, when. Under Secretary Marlowe has opened a damage assessment, and your cell is running it. Her security staff have pulled together what leaked and how each thing travelled. It reaches you a part at a time.",
-      "The alliance's traffic with Elsin goes on as usual while the assessment runs: most of it over LATTICE, the secure terminal link between the alliance and Elsin's ministries, maintained by Corvane Systems.",
-      "You can send marked items: a notice that Corvane engineers will visit a site on the 24th. Each version names a different site, and only that version names it. Then you watch for the site to turn up on the other side. A test's result takes two days.",
-      "A deadline you know about: General Halvorsen's revised Veyl contingency plan goes to Kalsa at 0900 on the 17th, by whatever channel is open to it that morning."
+      "For a year Kordav has kept knowing things it shouldn't: which nets we read, what we had shared with Kalsa, and when. Under Secretary Marlowe has opened a damage assessment, and your cell is running it. Her security staff have pulled together what leaked and how each thing travelled. It reaches you a part at a time.",
+      "The alliance's traffic with Elsin goes on as usual while the assessment runs. Most of it travels over LATTICE, the secure terminal link between the alliance and Elsin's ministries, maintained by Corvane Systems.",
+      "You can send marked items. Each is a notice that Corvane engineers will visit a site on the 24th, and each version names a different site. Then you watch for that site to turn up on the other side. A result takes two days.",
+      "One deadline is known. General Halvorsen's revised Veyl contingency plan goes to Kalsa at 0900 on the 17th, by whatever channel is open to it that morning."
     ]
   },
   "customer": {
@@ -38,12 +38,12 @@
     "tipLine": "High removes a person or shuts the link, and can't be undone. Medium restricts. Low changes nothing."
   },
   "opening": {
-    "text": "We'll do this properly. Somebody has been reading us for a year. Tell me who.",
-    "reassigned": "A new cell, on the oldest question in the building. Fine. Who has been reading us?",
+    "text": "We will do this properly. Somebody has been reading us for a year. Tell me who.",
+    "reassigned": "A new cell, on the oldest question in the building. Who has been reading us?",
     "byTone": {
-      "good": "You sent the terminals back when everyone else wanted them in. Now I'd like to know who has been reading us, and I'd like the same nerve.",
-      "warn": "We'll do this properly. Somebody has been reading us for a year. Tell me who.",
-      "bad": "I've signed things on your reading before. This one I'll read twice. Who is it?"
+      "good": "You sent the terminals back when everyone else wanted them installed. Now I want to know who has been reading us, and I would like the same nerve.",
+      "warn": "We will do this properly. Somebody has been reading us for a year. Tell me who.",
+      "bad": "I have signed things on your assessment before. This one I will read twice. Who is it?"
     }
   },
   "asset": {
@@ -360,21 +360,21 @@
     "frozen": "Can't act yet"
   },
   "replies": {
-    "remove_rhun": "Kalsa has agreed to move Col. Rhun. Their minister did not enjoy it, and nor did I.",
-    "remove_arle": "Arle is relieved, and your vetting case is suspended pending review. The general would like to discuss it with you.",
-    "shut": "The link is off. We're back to couriers and the telephone for a month at least. Kalsa's minister asked whether we've lost our minds. I showed him the test.",
-    "restrict_rhun": "Rhun's desk gets routine traffic only, as of tonight. She'll notice.",
-    "restrict_arle": "The general's lists are down to named readers.",
-    "couriers": "Sensitive traffic goes by courier from tonight. The link carries the weather and the canteen menu.",
-    "noleak": "Closed. No leak. I hope you're right, because I've said so in writing.",
-    "listen": "That's a shrug. I need more than a shrug.",
+    "remove_rhun": "Kalsa has agreed to move Col. Rhun. Their minister did not enjoy the conversation, and neither did I.",
+    "remove_arle": "Maj. Arle is relieved, and the open vetting case in your cell is suspended pending review. The general would like to discuss it with you.",
+    "shut": "The link is shut. We are back to couriers and the telephone for at least a month. Kalsa's minister asked whether we had lost our minds. I showed him the result.",
+    "restrict_rhun": "Col. Rhun's desk receives routine traffic only, as of tonight. She will notice.",
+    "restrict_arle": "The general's distribution is down to named readers.",
+    "couriers": "Sensitive traffic goes by courier from tonight. The link carries routine business only.",
+    "noleak": "The assessment is closed: no leak. I have said so in writing, so I hope you are right.",
+    "listen": "That gives me nothing to act on. I need a firmer judgment.",
     "stands": "That stands.",
-    "done": "The link is off. Whatever you think now, that's done.",
-    "shut_apology": "I've shut the link. I've also had to tell Kalsa that the person I asked them to remove was not the problem.",
+    "done": "The link is shut. Whatever your view now, that is done.",
+    "shut_apology": "I have shut the link. I have also had to tell Kalsa that the person I asked them to remove was not the problem.",
     "frozen": "Not today.",
-    "remove_rhun_bare": "Kalsa has agreed to move Col. Rhun. Their minister did not enjoy it, and nor did I. Kalsa asked what it rests on. I said your judgment.",
-    "remove_arle_bare": "Arle is relieved, and your vetting case is suspended pending review. The general would like to discuss it with you. Kalsa asked what it rests on. I said your judgment.",
-    "shut_bare": "The link is off. We're back to couriers and the telephone for a month at least. Kalsa's minister asked whether we've lost our minds. Kalsa asked what it rests on. I said your judgment."
+    "remove_rhun_bare": "Kalsa has agreed to move Col. Rhun. Their minister did not enjoy the conversation, and neither did I. Kalsa asked what it rests on. I said your judgment.",
+    "remove_arle_bare": "Maj. Arle is relieved, and the open vetting case in your cell is suspended pending review. The general would like to discuss it with you. Kalsa asked what it rests on. I said your judgment.",
+    "shut_bare": "The link is shut. We are back to couriers and the telephone for at least a month. Kalsa's minister asked whether we had lost our minds. Kalsa asked what it rests on. I said your judgment."
   },
   "events": [
     {
@@ -633,7 +633,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Part one: the Veyl, last spring. Kordav staged a radio call on 12th Brigade's net, the one net we were reading. Outside your cell, the fact that we read it appeared in one place: the daily assessments General Halvorsen shared with Kalsa, over LATTICE. KESTREL's identity was never written down outside the cell, and nobody has come near KESTREL.",
+      "text": "Assessment, part one: the Veyl, last spring.\nLeaked: that we were reading 12th Brigade's net. Kordav staged a radio call on it.\nRoad: outside your cell, that fact appeared in one place, the daily assessments General Halvorsen shared with Kalsa over LATTICE.\nDid not leak: KESTREL's identity. It was never written down outside the cell, and nobody has come near him.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -644,7 +644,7 @@
           "when": {
             "burnedOnRecord": "KESTREL"
           },
-          "text": "Part one: the Veyl, last spring. Kordav staged a radio call on 12th Brigade's net, the one net we were reading. Outside your cell, the fact that we read it appeared in one place: the daily assessments General Halvorsen shared with Kalsa, over LATTICE. KESTREL went quiet last spring after he was met on two days running. The assessment puts that down to how often he was met, not to anything written down."
+          "text": "Assessment, part one: the Veyl, last spring.\nLeaked: that we were reading 12th Brigade's net. Kordav staged a radio call on it.\nRoad: outside your cell, that fact appeared in one place, the daily assessments General Halvorsen shared with Kalsa over LATTICE.\nDid not leak by this road: KESTREL. He went quiet last spring after he was met on two days running. The assessment puts that down to how often he was met, and not to anything written down."
         }
       ]
     },
@@ -655,7 +655,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Part two: the Walk-in. The Bureau staged its recall on its headquarters admin net, the net it believed we read. Two weeks earlier, a product sourced from that net went to Kalsa over LATTICE. FINCH was found because the Bureau watched the ministry door, not because of anything we wrote.",
+      "text": "Assessment, part two: the walk-in.\nLeaked: that we were reading the Bureau's headquarters admin net. The Bureau staged its recall there.\nRoad: two weeks earlier, a product sourced from that net went to Kalsa over LATTICE.\nDid not leak by this road: FINCH. The Bureau found him by watching the ministry door.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -669,7 +669,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Part three: the Southern Line. Someone knew where the guard company was. Its movement order went through Elsin's Southern Command, where Marrat's advisers sit. The assessment treats this one as explained.",
+      "text": "Assessment, part three: the Southern Line.\nLeaked: where the guard company was.\nRoad: its movement order went through Elsin's Southern Command, where Marrat's advisers sit.\nThe assessment treats this one as explained.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -683,7 +683,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Col. Rhun: \"I know whose desk this assessment is circling. Send me something by hand. Anything. Then watch what Kordav does with it.\"",
+      "text": "Col. Rhun, liaison desk: \"I know whose desk this assessment is circling. Send me something by hand. Anything. Then watch what Kordav does with it.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -697,7 +697,7 @@
       "discipline": "OSINT",
       "sourceGrade": "C",
       "credibility": 3,
-      "text": "An essay in the Continental Policy Review: \"Kordav needs no spy in Kalsa. The alliance moves the same way every time, and announces it in press releases.\"",
+      "text": "Continental Policy Review, an essay: \"Kordav needs no spy in Kalsa. The alliance moves the same way every time, and announces it in press releases.\"",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -711,7 +711,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The security officer asks staff not to discuss the assessment in the canteen. The canteen has asked the security officer the same.",
+      "text": "Security officer's notice: staff are asked not to discuss the assessment in the canteen. The canteen has made the same request of the security officer.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -725,7 +725,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "LATTICE's original terminals were shipped to Kalsa four years ago through Halsk, by the forwarder Tessaly Freight. They arrived 36 hours late, seals intact, and were signed for without query.",
+      "text": "Corvane's delivery records: LATTICE's original terminals were shipped to Kalsa four years ago through Halsk, by the forwarder Tessaly Freight. They arrived 36 hours late, seals intact, and were signed for without query.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -743,7 +743,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Appendix to part five: the lab's last comparison. The attackers' list spells one server \"PCS-O6\", with a letter O. The five paper copies print a zero. Only the electronic copy, lodged over LATTICE, has the O.",
+      "text": "Assessment, appendix to part five: the lab's last comparison.\nThe attackers' list spells one server \"PCS-O6\", with a letter O.\nThe five paper copies print a zero.\nOnly the electronic copy, lodged over LATTICE, has the O.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -761,7 +761,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Your note from Lights Out stands: a request to Kalsa's registry, sent over LATTICE, was on Kordav's television the next day.",
+      "text": "Assessment, from your own file on Lights Out: a request to Kalsa's registry, sent over LATTICE, was on Kordav's television the next day.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -778,7 +778,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Your note from the Missing Shipment stands: a request to Halsk's port police, sent through Kalsa over LATTICE, reached Tessaly before the police did.",
+      "text": "Assessment, from your own file on the missing shipment: a request to Halsk's port police, sent through Kalsa over LATTICE, reached Tessaly before the police did.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -795,7 +795,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Your doubt about the Grey Ledger chat log is confirmed: it was a forgery.",
+      "text": "Assessment, from your own file on Lights Out: the Grey Ledger chat log you doubted was a forgery.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -812,7 +812,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Part four: the Missing Shipment. The forty replacement terminals for LATTICE's Kalsa end went missing in Halsk for three days last autumn.",
+      "text": "Assessment, part four: the missing shipment.\nThe forty replacement terminals for LATTICE's Kalsa end went missing in Halsk for three days last autumn.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -828,7 +828,7 @@
               ]
             }
           },
-          "text": "Corvane took them back. Six weeks later an independent lab opened one: inside was a component that isn't on Corvane's build list. It has found the same component in every unit it has opened since."
+          "text": "Corvane took them back. Six weeks later an independent lab opened one and found a component that isn't on Corvane's build list. It has found the same component in every unit it has opened since."
         },
         {
           "when": {
@@ -839,7 +839,7 @@
               ]
             }
           },
-          "text": "Corvane's engineers inspected them for three weeks, found nothing wrong, and they went in over the new year."
+          "text": "Corvane's engineers inspected them for three weeks and found nothing wrong. They went in over the new year."
         },
         {
           "when": {
@@ -861,7 +861,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Vetting has flagged unreported foreign travel by T. Marrow, your open-source analyst, in the week before she joined the cell.",
+      "text": "Vetting office: an open flag on T. Marrow, your open-source analyst. Unreported foreign travel in the week before she joined the cell.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -878,7 +878,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Kordav's broadcaster, citing \"reports in Elsin's own press\" (the Kalsa Evening Courier, 22 January): the alliance's leak is \"a colonel in Kalsa who has had enough of Elsin's foreign masters.\"",
+      "text": "Kordav's state broadcaster, citing \"reports in Elsin's own press\" (the Kalsa Evening Courier, 22 January): the alliance's leak is \"a colonel in Kalsa who has had enough of Elsin's foreign masters.\"",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -904,7 +904,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Part five: Lights Out. The attackers' target list was built from issue 7 of the network diagram: five paper copies and one electronic copy lodged over LATTICE. The \"leaked chat log\" naming the liaison office was a forgery: it matches no message Grey Ledger has ever sent. The Kalsa Evening Courier's story of 22 January, \"a traitor in the liaison office,\" gave Kordav's broadcaster as its source.",
+      "text": "Assessment, part five: Lights Out.\nLeaked: issue 7 of the network diagram. The attackers' target list was built from it.\nRoad: five paper copies, and one electronic copy lodged over LATTICE.\nThe \"leaked chat log\" naming the liaison office was a forgery: it matches no message Grey Ledger has ever sent. The Kalsa Evening Courier's story of 22 January, \"a traitor in the liaison office,\" gave Kordav's broadcaster as its source.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -921,7 +921,7 @@
               ]
             }
           },
-          "text": "In March the lab finished with Corvane's January images: they carried a remote-management component that isn't on Corvane's published build list."
+          "text": "In March the lab finished with Corvane's January images. They carried a remote-management component that isn't on Corvane's published build list."
         },
         {
           "when": {
@@ -943,7 +943,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Last week, within hours, Kordav's broadcaster reported that the alliance \"has announced\" a new signals team for Kalsa.",
+      "text": "Kordav's state broadcaster, last week: within hours, it reported that the alliance \"has announced\" a new signals team for Kalsa.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -957,7 +957,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The building's secure room has a new lock. Nobody has been issued the new key.",
+      "text": "Facilities: the secure room has a new lock. Nobody has been issued the new key.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -971,7 +971,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "LATTICE's original terminals were shipped to Kalsa four years ago through Halsk, by the forwarder Tessaly Freight. They arrived 36 hours late, seals intact, and were signed for without query.",
+      "text": "Corvane's delivery records: LATTICE's original terminals were shipped to Kalsa four years ago through Halsk, by the forwarder Tessaly Freight. They arrived 36 hours late, seals intact, and were signed for without query.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -989,7 +989,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Maj. T. Arle: \"My distribution lists were long because the general wants everyone to read you. They're down to eleven names. For the record, I was on leave for all of January.\"",
+      "text": "Maj. T. Arle, Halvorsen's staff: \"My distribution lists were long because the general wants everyone to read you. They're down to eleven names. For the record, I was on leave for all of January.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1003,7 +1003,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "A Kordavan defence forum posts \"a page of Task Force VEYL's internal distribution list, courtesy of a friend on the general's staff.\" The page lists the task force's press office, its public enquiries desk and its visitors' centre.",
+      "text": "A Kordavan defence forum posts \"a page of Task Force VEYL's internal distribution list, courtesy of a friend on the general's staff.\"\nThe page lists the task force's press office, its public enquiries desk and its visitors' centre.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -1029,7 +1029,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Col. Rhun: \"My service has gone back over everything that reached my desk this year. What came to me on paper never went anywhere that I can find. I can't say that about everything that came to me.\"",
+      "text": "Col. Rhun, liaison desk: \"My service has gone back over everything that reached my desk this year. What came to me on paper never went anywhere that I can find. I can't say that about everything that came to me.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1043,7 +1043,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Public affairs reminds staff that last summer's press pack is still on the task force's website, including the page of public contact addresses it was asked to take down.",
+      "text": "Public affairs: last summer's press pack is still on the task force's website, including the page of public contact addresses that was supposed to come down.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -1057,7 +1057,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The revised Veyl contingency plan went to Kalsa at 0900 over LATTICE.",
+      "text": "Halvorsen's staff: the revised Veyl contingency plan went to Kalsa at 0900 over LATTICE.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1073,7 +1073,7 @@
               ]
             }
           },
-          "text": "The revised Veyl contingency plan went to Kalsa at 0900, by courier."
+          "text": "Halvorsen's staff: the revised Veyl contingency plan went to Kalsa at 0900, by courier."
         }
       ]
     },
@@ -1084,7 +1084,7 @@
       "discipline": "Security",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Appendix to part five: the lab's last comparison. The attackers' list spells one server \"PCS-O6\", with a letter O. The five paper copies print a zero. Only the electronic copy, lodged over LATTICE, has the O.",
+      "text": "Assessment, appendix to part five: the lab's last comparison.\nThe attackers' list spells one server \"PCS-O6\", with a letter O.\nThe five paper copies print a zero.\nOnly the electronic copy, lodged over LATTICE, has the O.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1102,7 +1102,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Kordav's broadcaster: \"Our friends in Elsin's liaison service keep us better informed than the alliance knows.\"",
+      "text": "Kordav's state broadcaster: \"Our friends in Elsin's liaison service keep us better informed than the alliance knows.\"",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -1129,7 +1129,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Corvane asks, stiffly, whether the alliance means to keep using its terminals, and reminds everyone that its seals have never been broken.",
+      "text": "From Corvane: the company asks whether the alliance intends to go on using its terminals, and notes that its seals have never been broken.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -1143,7 +1143,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The new key to the secure room has been issued. The lock has been changed again.",
+      "text": "Facilities: the new key to the secure room has been issued. The lock has been changed again.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -1157,7 +1157,7 @@
       "discipline": "Security",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The assessment is due for signature today. Elsin's minister has asked to read it before the alliance acts.",
+      "text": "Assessment: due for signature today. Elsin's minister has asked to read it before the alliance acts.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1171,7 +1171,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Col. Rhun has asked for a transfer, \"effective on the alliance's decision, whichever it is.\"",
+      "text": "Liaison desk: Col. Rhun has asked for a transfer, \"effective on the alliance's decision, whichever it is.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1185,7 +1185,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Kordav's broadcaster: \"The alliance is hunting itself. We wish it luck.\"",
+      "text": "Kordav's state broadcaster: \"The alliance is hunting itself. We wish it luck.\"",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -1199,7 +1199,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The secure room is now open to anyone. Facilities say this is temporary.",
+      "text": "Facilities: the secure room is now open to anyone. This is described as temporary.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -1213,7 +1213,7 @@
       "discipline": "Test",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Nothing about the Brennick depot has turned up anywhere: no Kordavan broadcast, no Bureau traffic, no activity near the depot.",
+      "text": "Test result. Marked item sent by hand to Col. Rhun's desk, naming the Brennick depot.\nNothing about the Brennick depot has turned up anywhere: no Kordavan broadcast, no Bureau traffic, no activity near the depot.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1229,7 +1229,7 @@
       "discipline": "Test",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Kordav's broadcaster ran a piece on \"alliance engineers prowling the north signals annex, according to our friends in Elsin's liaison service.\" Only the version sent over LATTICE to Col. Rhun's desk named the annex.",
+      "text": "Test result. Marked item sent over LATTICE to Col. Rhun's desk, naming the north signals annex.\nKordav's broadcaster ran a piece on \"alliance engineers prowling the north signals annex, according to our friends in Elsin's liaison service.\"\nOnly this version named the annex.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1244,7 +1244,7 @@
       "discipline": "Test",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Bureau traffic refers to \"the engineers' visit to pumping station 4.\" Only the version sent over LATTICE to Director Brandt's office named pumping station 4. It went nowhere near Col. Rhun's desk.",
+      "text": "Test result. Marked item sent over LATTICE to Director Brandt's office, naming pumping station 4.\nBureau traffic refers to \"the engineers' visit to pumping station 4.\"\nOnly this version named pumping station 4. It went nowhere near Col. Rhun's desk.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1260,7 +1260,7 @@
       "discipline": "Test",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Nothing about the Mirren road bridge has turned up anywhere.",
+      "text": "Test result. Marked item sent to Maj. Arle's distribution, naming the Mirren road bridge.\nNothing about the Mirren road bridge has turned up anywhere.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1275,7 +1275,7 @@
       "discipline": "Test",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Nothing about the Saule ferry has turned up anywhere.",
+      "text": "Test result. Marked item kept inside your cell, naming the Saule ferry.\nNothing about the Saule ferry has turned up anywhere.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1290,7 +1290,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The lab has opened one of the ministry's LATTICE terminals. Inside is a component that isn't on Corvane's build list, fitted before the terminal was ever installed.",
+      "text": "Lab examination of one of the ministry's LATTICE terminals.\nInside is a component that isn't on Corvane's build list.\nIt was fitted before the terminal was ever installed.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1308,7 +1308,7 @@
               ]
             }
           },
-          "text": "The lab has opened one of the ministry's LATTICE terminals. Inside is a component that isn't on Corvane's build list: the same component the independent lab found in the terminals Elsin sent back."
+          "text": "Lab examination of one of the ministry's LATTICE terminals.\nInside is a component that isn't on Corvane's build list.\nIt is the same component the independent lab found in the terminals Elsin sent back."
         }
       ]
     },
@@ -1319,7 +1319,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Four days in her mother's town, the week before she joined. A death notice in the local paper. Her declaration was filed nine days late.",
+      "text": "Open sources, on T. Marrow's travel: four days in her mother's town, the week before she joined. A death notice in the local paper. Her declaration was filed nine days late.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1334,7 +1334,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "LATTICE's original terminals were shipped to Kalsa four years ago through Halsk, by the forwarder Tessaly Freight. They arrived 36 hours late, seals intact, and were signed for without query.",
+      "text": "Corvane's delivery records: LATTICE's original terminals were shipped to Kalsa four years ago through Halsk, by the forwarder Tessaly Freight. They arrived 36 hours late, seals intact, and were signed for without query.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1350,7 +1350,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau traffic calls its Kalsa reporting \"the long line.\" It arrives on a schedule, like a delivery. No officer, meeting, payment or cover name for a person is ever mentioned with it.",
+      "text": "Bureau traffic about Kalsa: the Bureau calls its Kalsa reporting \"the long line.\" It arrives on a schedule, like a delivery.\nNot seen: any officer, meeting, payment or cover name for a person in connection with it.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1366,7 +1366,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau traffic calls its Kalsa reporting \"the long line.\" No officer, meeting, payment or cover name for a person is ever mentioned with it. Since the alliance changed how it sends things: \"The long line has gone quiet.\"",
+      "text": "Bureau traffic about Kalsa: the Bureau calls its Kalsa reporting \"the long line.\"\nNot seen: any officer, meeting, payment or cover name for a person in connection with it.\nSince the alliance changed how it sends things: \"The long line has gone quiet.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1382,7 +1382,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Elsin's vetting office: Col. Rhun's contacts, finances and travel are clean. They would like to know why the alliance is asking.",
+      "text": "In answer to our request, Elsin's vetting office: Col. Rhun's contacts, finances and travel are clean. It would like to know why the alliance is asking.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1397,7 +1397,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "KSB, in passing: \"The alliance is now vetting its own friends in Kalsa.\"",
+      "text": "Kordav's state broadcaster, in passing: \"The alliance is now vetting its own friends in Kalsa.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1614,11 +1614,11 @@
       }
     ],
     "lessons": [
-      "Test the road separately from the person at the end of it.",
-      "A pattern with no motive is still a pattern.",
-      "An ally's paper quoting your adversary's broadcaster is still your adversary's broadcaster.",
-      "The suspect with the worst manner isn't, for that reason, the suspect.",
-      "Before you act against an ally, have something you can show them."
+      "Test the road separately from the person at the end of it. An item sent to Rhun by hand stayed silent. Items sent over the link did not.",
+      "A pattern needs no motive. Everything that leaked had crossed LATTICE, and LATTICE wanted nothing.",
+      "Trace a report to its origin. The Courier's story about a colonel came from Kordav's broadcaster.",
+      "Manner is not evidence. Rhun was abrasive, political and innocent.",
+      "Before acting against an ally, have something to show them. Kalsa asked Marlowe what her step rested on."
     ],
     "missedCollection": {
       "1": "A marked item over LATTICE to a desk Rhun never sees (Director Brandt's office): it would have come out the other side.",
@@ -1965,7 +1965,7 @@
         "days": 2,
         "delta": -1,
         "rule": "Low confidence two days running (each further Low day too)",
-        "note": "Credibility −1. \"That's a shrug again.\""
+        "note": "Credibility −1. Low again. \"I still have nothing to act on.\""
       }
     ],
     "outcome": {
@@ -2140,13 +2140,13 @@
       "id": "vasko",
       "name": "Imre Vasko",
       "specialty": "Regional analyst",
-      "reveal": "Anchors on his first theory. The mole hunter, sincerely: right once, about Arle."
+      "reveal": "He settles on a reading early. Here it was a person, and he was sincere about it. He was right once, about Arle."
     },
     {
       "id": "halden",
       "name": "Noor Halden",
       "specialty": "Technical analyst (signals, imagery, forensics)",
-      "reveal": "Slow but careful. Never wrong. Each note pointed at the test or tasking that settled it, a day after you could first have asked."
+      "reveal": "Careful, and slow. She wasn't wrong once. Each note pointed at the test or tasking that would settle it, a day after you could first have asked for it."
     },
     {
       "id": "marrow",
@@ -2161,7 +2161,7 @@
       "analyst": "vasko",
       "item": "R-1-04",
       "after": 0,
-      "text": "She would say that. A professional leaks around a test, not through it.",
+      "text": "She would say that. A professional leaks around a test, never through it.",
       "right": 0,
       "why": "She volunteered because she had nothing to hide."
     },
@@ -2169,7 +2169,7 @@
       "analyst": "marrow",
       "item": "R-1-05",
       "after": 0,
-      "text": "Predictable? We are. Predictable doesn't tell you which net to stage a call on.",
+      "text": "Predictable? Sure, we are. But predictable doesn't tell you which net to stage a call on.",
       "right": 1,
       "why": "Exactly the flaw in the no-leak case."
     },
@@ -2177,7 +2177,7 @@
       "analyst": "halden",
       "item": "R-1-01",
       "after": 1,
-      "text": "Both leaks in parts one and two travelled the same road to Kalsa. I'd like to know whether it's the person at the end of that road, or the road.",
+      "text": "Both leaks in parts one and two took the same road to Kalsa. I'd want to know whether the problem is the person at the end of that road, or the road.",
       "right": 1,
       "why": "The question the scenario turns on."
     },
@@ -2185,7 +2185,7 @@
       "analyst": "marrow",
       "item": "R-2-02",
       "after": 0,
-      "text": "It was my mother's funeral, and the form was late. Test me if you like. I'd test me.",
+      "text": "It was my mother's funeral, and I filed the form late. Test me if you like. In your place I would.",
       "right": 1,
       "why": "It was, and a test of the cell stays silent."
     },
@@ -2201,7 +2201,7 @@
       "analyst": "halden",
       "item": "R-2-04",
       "after": 1,
-      "text": "Five paper copies and one electronic one. Only one of those six is a channel rather than a person.",
+      "text": "Five paper copies and one electronic one. Five of those are held by people. The sixth is held by a channel.",
       "right": 1,
       "why": "The electronic one."
     },
@@ -2209,7 +2209,7 @@
       "analyst": "vasko",
       "item": "R-3-02",
       "after": 0,
-      "text": "Arle's lists were a disgrace. A sloppy man isn't a spy.",
+      "text": "Arle's lists were a disgrace. But a careless officer isn't a spy.",
       "right": 1,
       "why": "Right, for once."
     },
@@ -2217,7 +2217,7 @@
       "analyst": "marrow",
       "item": "R-3-04",
       "after": 0,
-      "text": "That's a careful sentence. She isn't saying what went over the link.",
+      "text": "That's a careful sentence. She's leaving out what came over the link.",
       "right": 1,
       "why": "She wasn't, and it was the point."
     },
@@ -2249,7 +2249,7 @@
       "analyst": "marrow",
       "item": "R-4-03",
       "after": 0,
-      "text": "That's the third time this year Kordav's television has pointed at the same office. They do like that office.",
+      "text": "That's the third time this year Kordav's television has pointed at the same office. They're very keen on that office.",
       "right": 1,
       "why": "They liked it because it wasn't the problem."
     },
@@ -2257,7 +2257,7 @@
       "analyst": "vasko",
       "item": "R-5-02",
       "after": 0,
-      "text": "A transfer request, before the decision. Interesting.",
+      "text": "A transfer request, before the decision. I find that interesting.",
       "right": 0,
       "why": "A career that was over either way."
     }

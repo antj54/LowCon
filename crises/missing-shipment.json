@@ -16,12 +16,12 @@
   "endingEyebrow": "Kalsa, the 8th",
   "frozenText": "Kalsa has asked her to keep this commercial. Nothing you brief today changes what she tells them.",
   "briefing": {
-    "dateLine": "Day 1 is the 3rd, the autumn after the Southern Line.",
+    "dateLine": "The 3rd. Autumn, after the Southern Line.",
     "situation": [
-      "Your cell is working for Under Secretary H. Marlowe again.",
+      "Your cell is working for Under Secretary Marlowe again.",
       "Elsin's defence ministry ordered forty crates of secure communications hardware, CX-4 terminals, from the alliance contractor Corvane Systems. They are replacements for the terminals the ministry uses to talk to the alliance.",
       "The consignment travelled by sea in one container to Halsk, Marrat's free port, where the forwarder Tessaly Freight was to put it on a train to Kalsa. It was due in Halsk on the 1st. Nobody can find it.",
-      "Public and commercial reporting, and whatever the port, the forwarder and Elsin's liaison desk choose to say, reach you every day. Everything else you task. Liaison requests go to Kalsa over LATTICE, the alliance's link to Elsin's ministry, and Kalsa passes them on."
+      "Public and commercial reporting reaches you every day, along with whatever the port, the forwarder and Elsin's liaison desk choose to say. Everything else has to be tasked. Liaison requests go to Kalsa over LATTICE, the alliance's link to Elsin's ministry, and Kalsa passes them on."
     ]
   },
   "customer": {
@@ -38,12 +38,12 @@
     "tipLine": "High on Kordav gets a refusal. Medium gets a hold for inspection. Low changes nothing."
   },
   "opening": {
-    "text": "I've a missing container, and a ministry in Kalsa that would like it back. Tell me where it's been.",
-    "reassigned": "They tell me this is a new cell. I've a missing container and no time to get acquainted. Tell me where it's been.",
+    "text": "A container is missing, and a ministry in Kalsa wants it back. Tell me where it has been.",
+    "reassigned": "I am told this is a new cell. A container is missing, and I have no time for introductions. Tell me where it has been.",
     "byTone": {
-      "good": "You were right about the walk-in when it would have been easier not to be. I've a missing container. Same standard, please.",
-      "warn": "Last time we got through it. I'd like to do better than get through it. I've a missing container.",
-      "bad": "I signed something on your reading once. I read more carefully now. I've a missing container."
+      "good": "You were right about the walk-in when it would have been easier not to be. A container is missing. I would like the same care.",
+      "warn": "We got through the last one. I would like to do better than that. A container is missing.",
+      "bad": "I signed something on your assessment once. I read more carefully now. A container is missing."
     }
   },
   "asset": {
@@ -203,14 +203,14 @@
     "rebuff": "Is rebuffed, and withdraws the accusation"
   },
   "replies": {
-    "refuse": "I've told Kalsa to send it back unopened. Their minister asked what I know that Corvane's engineers don't. I said: where it's been.",
-    "hold": "I've asked Kalsa to hold it for inspection. Corvane will send engineers. If you want it kept out of the building altogether, I need more than medium.",
-    "inquiry": "I've asked Kalsa to have Marrat look at Tessaly for theft. Marrat's customs were very polite about it.",
-    "install": "I've told Kalsa to wait for it and get on with the installation when it comes.",
-    "stands": "That stands. Keep at it.",
+    "refuse": "I have told Kalsa to send it back unopened. Their minister asked what I know that Corvane's engineers do not. I told him where it has been.",
+    "hold": "I have asked Kalsa to hold it for inspection, and Corvane will send engineers. If you want it kept out of the building altogether, I need high confidence.",
+    "inquiry": "I have asked Kalsa to have Marrat investigate Tessaly for theft. Marrat's customs service was courteous about it.",
+    "install": "I have told Kalsa to wait for it, and to go ahead with the installation when it arrives.",
+    "stands": "That stands. Keep working.",
     "listen": "Then we wait.",
-    "frozen": "Kalsa asked me to keep this commercial, and for now I am. Keep working.",
-    "rebuff": "You told me Kordav had it, on the first morning, with nothing in your hand. I asked Marrat to search the port for a consignment \"believed to be in hostile custody.\" They searched. It isn't there, and they'd like to know what we meant. Kalsa has asked me to keep this commercial. For two days, I will."
+    "frozen": "Kalsa has asked me to keep this commercial, and for now I will. Keep working.",
+    "rebuff": "On the first morning, with nothing to show for it, you told me Kordav had the consignment. I asked Marrat to search the port for goods \"believed to be in hostile custody.\" They searched and found nothing, and they would like to know what we meant. Kalsa has asked me to keep this commercial. For two days I will."
   },
   "events": [
     {
@@ -377,7 +377,7 @@
       "id": "S-CORVANE",
       "codeName": "CORVANE",
       "discipline": "Commercial",
-      "access": "Corvane Systems' account manager for Elsin. Honest about what he knows. Wants the contract to go smoothly.",
+      "access": "Corvane Systems' account manager for Elsin. Honest about what he knows. He wants the contract to go smoothly.",
       "startingGrade": "B",
       "trueReliability": 0.9,
       "controlledByAdversary": false,
@@ -387,7 +387,7 @@
       "id": "S-HARBOUR",
       "codeName": "HARBOUR",
       "discipline": "Liaison",
-      "access": "Halsk port authority and Marrat customs, reporting what their records say. Also answers requests passed on from Kalsa.",
+      "access": "Halsk port authority and Marrat customs. They report what their records say, and answer requests passed on from Kalsa.",
       "startingGrade": "C",
       "trueReliability": 0.7,
       "controlledByAdversary": false,
@@ -397,7 +397,7 @@
       "id": "S-WREN",
       "codeName": "WREN",
       "discipline": "Liaison",
-      "access": "Elsin's military intelligence liaison desk, run by Col. E. Rhun. Dislikes Marrat's free port and says so.",
+      "access": "Elsin's military intelligence liaison desk, run by Col. E. Rhun. She dislikes Marrat's free port and says so.",
       "startingGrade": "C",
       "trueReliability": 0.7,
       "controlledByAdversary": false,
@@ -427,7 +427,7 @@
       "id": "S-GANNET",
       "codeName": "GANNET",
       "discipline": "HUMINT",
-      "access": "A dock foreman at Halsk. Sees what moves through the bonded sheds at night. New. Don't task him two days running.",
+      "access": "A dock foreman at Halsk. He sees what moves through the bonded sheds at night. New. Don't task him two days running.",
       "startingGrade": "C",
       "trueReliability": 0.85,
       "controlledByAdversary": false,
@@ -504,7 +504,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Forty crates of CX-4 terminals, one container, left our port on the 28th and were due at Halsk free port on the 1st for rail to Kalsa. Our forwarder, Tessaly Freight, reports the container \"not located\" in the bonded area.",
+      "text": "From Corvane's account manager: forty crates of CX-4 terminals, in one container, left our port on the 28th. They were due at Halsk free port on the 1st for rail to Kalsa. Our forwarder, Tessaly Freight, reports the container \"not located\" in the bonded area.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -523,7 +523,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 3,
-      "text": "Port records show the container discharged from the feeder vessel on the 1st and gated into bonded shed 6. Shed 6 reports no such container. \"Discrepancies of this kind are usually resolved within the week.\"",
+      "text": "Halsk port authority, from its records: the container was discharged from the feeder vessel on the 1st and gated into bonded shed 6. Shed 6 reports no such container.\nThe port adds: \"Discrepancies of this kind are usually resolved within the week.\"",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -542,7 +542,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 3,
-      "text": "Col. Rhun: \"Our ministry wants its hardware. Halsk is a thieves' market with a customs house attached. We told procurement not to route through it.\"",
+      "text": "Col. Rhun, liaison desk: \"Our ministry wants its hardware. Halsk is a thieves' market with a customs house attached. We told procurement not to route through it.\"\nSourcing: none. Her own view.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -563,7 +563,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The coaster Maren Lys, on charter to Tessaly Freight, left Halsk on the night of the 1st with no cargo manifest filed, heading north-west. Its transponder went off at 0210.",
+      "text": "Ship tracking: the coaster Maren Lys, on charter to Tessaly Freight, left Halsk on the night of the 1st, heading north-west. No cargo manifest was filed.\nTransponder off at 0210.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -582,7 +582,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The embassy's own delivery of printer toner is also late. This is not thought to be related.",
+      "text": "Embassy admin: our own delivery of printer toner is also late. This is not thought to be related.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -627,7 +627,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "A grey-market trading board lists \"40 units, new, military-grade network encryptors, model CX-2, pickup Halsk.\" The photo carries Corvane's catalogue watermark.",
+      "text": "A grey-market trading board lists \"40 units, new, military-grade network encryptors, model CX-2, pickup Halsk.\"\nThe photo carries Corvane's catalogue watermark.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -659,7 +659,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin's defence ministry confirms a delay to \"a communications upgrade.\" The opposition asks why secure equipment was routed through a foreign free port.",
+      "text": "Kalsa: Elsin's defence ministry confirms a delay to \"a communications upgrade.\" The opposition asks why secure equipment was routed through a foreign free port.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -678,7 +678,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "Marrat customs has opened a routine discrepancy file. Officers searched all nine bonded sheds yesterday and did not find the container.",
+      "text": "Marrat customs has opened a routine discrepancy file. Its officers searched all nine bonded sheds yesterday and did not find the container.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -697,7 +697,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The toner has arrived. It is the wrong toner.",
+      "text": "Embassy admin: the toner has arrived. It is the wrong toner.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -711,7 +711,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Maren Lys reappeared on tracking at 0500 today, well offshore and inbound for Halsk. It was dark for three days.",
+      "text": "Ship tracking: Maren Lys reappeared at 0500 today, well offshore and inbound for Halsk. It had been dark for three days.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -730,7 +730,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "If the container isn't found by tomorrow, we invoice Elsin under the loss clause and manufacture again: twelve weeks. If it is found, our engineers can commission the units the day they arrive.",
+      "text": "From Corvane's account manager: if the container isn't found by tomorrow, we invoice Elsin under the loss clause and manufacture again. That takes twelve weeks. If it is found, our engineers can commission the units the day they arrive.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -744,7 +744,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 3,
-      "text": "Col. Rhun: \"Marrat customs tells us privately that Tessaly's owner has debts, and friends in Kordav who have paid them before. We would like this passed to your people.\"",
+      "text": "Col. Rhun, liaison desk: \"Marrat customs tells us privately that Tessaly's owner has debts, and friends in Kordav who have paid them before. We would like this passed to your people.\"\nSourcing: Marrat customs, in confidence.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -795,7 +795,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The correct toner has been ordered. Delivery is expected via Halsk.",
+      "text": "Embassy admin: the correct toner has been ordered. Delivery is expected via Halsk.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -809,7 +809,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "The container has been located in bonded shed 9, mis-stowed. Customs seals are intact and the numbers match. It is released for rail to Kalsa tomorrow morning.",
+      "text": "Halsk port authority: the container has been located in bonded shed 9, mis-stowed. Customs seals are intact and the numbers match. It is released for rail to Kalsa tomorrow morning.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -828,7 +828,7 @@
       "discipline": "Commercial",
       "sourceGrade": "E",
       "credibility": 3,
-      "text": "Statement: \"As we said, a labelling error. Tessaly Freight apologises for the inconvenience.\"",
+      "text": "Statement from Tessaly Freight: \"As we said, a labelling error. Tessaly Freight apologises for the inconvenience.\"",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -860,7 +860,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Our engineer has examined the crates at Halsk. Customs seals intact, our own tamper tape intact, crate count correct. We recommend installation on arrival.",
+      "text": "From Corvane's account manager: our engineer has examined the crates at Halsk. Customs seals intact, our own tamper tape intact, crate count correct. We recommend installation on arrival.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -879,7 +879,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin's defence minister says he is \"delighted\" and that the new terminals will be installed on the 8th.",
+      "text": "Kalsa: Elsin's defence minister says he is \"delighted,\" and that the new terminals will be installed on the 8th.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -898,7 +898,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "A container of toner has been found in bonded shed 9.",
+      "text": "Embassy admin: a container of toner has been found in bonded shed 9.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -912,7 +912,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "The container was loaded on the 0600 rail service. Marrat customs has closed its discrepancy file: \"no offence disclosed.\"",
+      "text": "Halsk port authority: the container was loaded on the 0600 rail service. Marrat customs has closed its discrepancy file: \"no offence disclosed.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -931,7 +931,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Col. Rhun: \"The ministry installs tomorrow unless your side objects in writing today. Our procurement people are tired of this, and so am I.\"",
+      "text": "Col. Rhun, liaison desk: \"The ministry installs tomorrow unless your side objects in writing today. Our procurement people are tired of this, and so am I.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -950,7 +950,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "A Halsk dockworkers' forum: the night shift at shed 9 was sent home early on the 5th, \"and some private crew did the stow. Since when?\"",
+      "text": "A Halsk dockworkers' forum: the night shift at shed 9 was sent home early on the 5th, \"and some private crew did the stow. Since when?\"\nUnverified.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -969,7 +969,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Our commissioning team is in Kalsa and ready. We would be grateful for confirmation that installation can proceed.",
+      "text": "From Corvane's account manager: our commissioning team is in Kalsa and ready. We would be grateful for confirmation that installation can proceed.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -983,7 +983,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The toner is the right toner. The printer has been condemned.",
+      "text": "Embassy admin: the toner is the right toner. The printer has been condemned.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -997,7 +997,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Maren Lys is alongside a fenced quay at Brask. One container stands on the quay under a tarpaulin, beside a windowless warehouse with a new roof. Two guards at the gate.",
+      "text": "Brask waterfront, tasked pass, clear skies.\nMaren Lys is alongside a fenced quay.\nOne container stands on the quay under a tarpaulin, beside a windowless warehouse with a new roof.\nTwo guards at the gate.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1018,7 +1018,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The fenced quay at Brask is empty. The warehouse doors are shut. Maren Lys is not in port.",
+      "text": "Brask waterfront, tasked pass, clear skies.\nThe fenced quay is empty. The warehouse doors are shut.\nMaren Lys is not in port.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1038,7 +1038,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Halsk bonded area: shed 9's doors stand open in every pass, pallets only. No container with the consignment's markings anywhere.",
+      "text": "Halsk bonded area, tasked passes.\nShed 9: doors open in every pass, pallets only.\nNot seen: any container with the consignment's markings.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1058,7 +1058,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Halsk bonded area: one container with the consignment's markings in shed 9.",
+      "text": "Halsk bonded area, tasked pass.\nOne container with the consignment's markings, in shed 9.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1078,7 +1078,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Maren Lys has made the same run twice before: Halsk to Brask and back with its transponder off, each time inside four days. Its owner of record is a holding company with an address in Kordav.",
+      "text": "Shipping records: Maren Lys has made the same run twice before, Halsk to Brask and back with its transponder off, each time inside four days. Its owner of record is a holding company with an address in Kordav.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1098,7 +1098,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "Halsk port police visited Tessaly's office and sheds 4 and 6 this morning at Kalsa's request. The staff had the paperwork laid out before the officers arrived. Nothing found.",
+      "text": "In answer to our request, passed on by Kalsa: Halsk port police visited Tessaly's office and sheds 4 and 6 this morning. The staff had the paperwork laid out before the officers arrived. Nothing found.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1118,7 +1118,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Tessaly's owner to an unidentified man: \"Thirty-six hours, same as before. It goes back the way it came, same shed fee.\" The other man: \"Seals?\" \"My man has the pliers and the numbers.\"",
+      "text": "Tessaly Freight's office line. The owner, to an unidentified man: \"Thirty-six hours, same as before. It goes back the way it came, same shed fee.\"\nThe other man: \"Seals?\"\nThe owner: \"My man has the pliers and the numbers.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1139,7 +1139,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Tessaly's office line is quiet. One call: staff are told to \"use the other phones this week.\"",
+      "text": "Tessaly Freight's office line: quiet. One call only. Staff are told to \"use the other phones this week.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1159,7 +1159,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "GANNET: a container left shed 6 on the night of the 1st on a Tessaly truck. It went to the coaster berth, not to the rail siding. The gate log was written up afterwards.",
+      "text": "Source reports: a container left shed 6 on the night of the 1st on a Tessaly truck. It went to the coaster berth, not to the rail siding. The gate log was written up afterwards.\nAccess: direct. He was on shift.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1179,7 +1179,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "GANNET: the container came back on the night of the 5th. A private crew stowed it in shed 9 and one of them was closing seals with a hand tool. He has never seen customs seals put on at night.",
+      "text": "Source reports: the container came back on the night of the 5th. A private crew stowed it in shed 9, and one of them was closing seals with a hand tool.\nSource comment: he has never seen customs seals put on at night.\nAccess: direct. He saw it.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1200,7 +1200,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Tessaly has handled one earlier consignment for Corvane Systems: four years ago, the original terminal hardware for Elsin's defence ministry. Port logs show it sat in Halsk a day and a half longer than booked.",
+      "text": "Shipping records: Tessaly has handled one earlier consignment for Corvane Systems. Four years ago it carried the original terminal hardware for Elsin's defence ministry. Port logs show that shipment sat in Halsk a day and a half longer than booked.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1220,7 +1220,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The grey-market seller account was created the day the loss became public. The model listed, CX-2, has been out of production for six years. Corvane shipped CX-4.",
+      "text": "The grey-market seller account was created the day the loss became public. The model it lists, CX-2, has been out of production for six years. Corvane shipped CX-4.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1240,7 +1240,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "A voice at the Brask warehouse, to an unidentified office: \"Forty of forty done. Closing up.\"",
+      "text": "Brask warehouse. A voice, to an unidentified office: \"Forty of forty done. Closing up.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1300,7 +1300,7 @@
       "if": {
         "assetAt": "refuse"
       },
-      "text": "The crates go back to Corvane unopened. Their engineers are offended. Six weeks later an independent lab opens one, and Corvane's chairman flies to Kalsa in person."
+      "text": "The crates go back to Corvane unopened, and its engineers take offence. Six weeks later an independent lab opens one. Corvane's chairman flies to Kalsa in person."
     },
     {
       "id": "passed",
@@ -1310,7 +1310,7 @@
       "if": {
         "assetAt": "hold"
       },
-      "text": "Corvane's engineers inspect seals, tape and serial numbers for three weeks and find nothing wrong, because nothing is wrong with the seals, the tape or the serial numbers. The terminals are installed in the new year."
+      "text": "Corvane's engineers spend three weeks on the seals, the tape and the serial numbers, and find nothing wrong with any of them. The terminals are installed in the new year."
     },
     {
       "id": "installed",
@@ -1349,39 +1349,39 @@
         "days": [
           1
         ],
-        "text": "A container vanished, and the forwarder's own ship left that night with its lights off. The port's records said shed 6. The records were written afterwards."
+        "text": "A container went missing, and the forwarder's own chartered ship left that night with its transponder off. The port's records put the container in shed 6. Those records were written after it had gone."
       },
       {
         "days": [
           2
         ],
-        "text": "Tessaly's owner said it would take 72 hours to find. A listing appeared offering the wrong model with a catalogue photo. Both were meant to keep you looking at Halsk."
+        "text": "Tessaly's owner said the search would take 72 hours. A listing offered the wrong model under a catalogue photo. Both kept attention on Halsk."
       },
       {
         "days": [
           3
         ],
-        "text": "Rhun, who had sneered on Day 1, passed on something true. The ship turned for home."
+        "text": "Rhun had sneered about Halsk on Day 1. On Day 3 she passed on something true, and said where it came from. The ship turned back towards Halsk."
       },
       {
         "days": [
           4
         ],
-        "text": "The container was found in a shed that customs had searched three days earlier. Its seals were perfect. Everyone who told you so was telling the truth as they knew it."
+        "text": "The container was found in shed 9, which customs had searched three days earlier. Its seals were intact. The port and Corvane's engineer both said so, and both believed it."
       },
       {
         "days": [
           5
         ],
-        "text": "A dockworkers' forum asked why the night shift had been sent home. Nobody else did."
+        "text": "A dockworkers' forum asked why the night shift at shed 9 had been sent home. It was the only source that asked."
       }
     ],
     "lessons": [
-      "When something lost comes back, ask where it has been, not whether it's all there.",
-      "A seal tells you about the seal.",
-      "Honest people can carry a false story further than a liar can.",
-      "A source that sneers and a source that reports can be the same source on different days. Read the item.",
-      "How you ask is part of what you learn. Some questions warn the people you're asking about."
+      "When something lost comes back, ask where it has been. The container was complete, and had spent a day and a half in Kordav.",
+      "A check tells you about the thing checked. Intact seals said nothing about the units inside.",
+      "Honest people can pass on a false story. The port, the customs file and Corvane's engineer all reported what they saw.",
+      "Read the item before the source's manner. Rhun's Day 1 remark was opinion. Her Day 3 report had a source.",
+      "How you ask is part of what you learn. Some questions warn the people you are asking about."
     ],
     "missedCollection": {
       "1": "Imagery of the Brask waterfront: the container was sitting on a quay in Kordav.",
@@ -1705,7 +1705,7 @@
         ],
         "delta": -1,
         "rule": "She has to take back what she told Kalsa on your word",
-        "note": "Credibility −1. \"I've withdrawn what I told Kalsa. Their minister is beginning to keep a list.\""
+        "note": "Credibility −1. \"I have withdrawn what I told Kalsa. Their minister has started keeping count.\""
       },
       {
         "id": "hedging",
@@ -1714,7 +1714,7 @@
         "days": 2,
         "delta": -1,
         "rule": "Low confidence two days running (each further Low day too)",
-        "note": "Credibility −1. Low again. \"If I wanted maybe, I'd read the newspapers.\""
+        "note": "Credibility −1. Low again. \"I can't take 'perhaps' to a minister twice.\""
       }
     ],
     "outcome": {
@@ -1779,20 +1779,20 @@
       "id": "vasko",
       "name": "Imre Vasko",
       "specialty": "Regional analyst",
-      "reveal": "Anchors on his first theory. His was that Halsk is Halsk: first a lost container, then a theft, then a lost container again. He dismissed Rhun when she was right. His last note was the only one that looked at what was in front of him."
+      "reveal": "He settles on a reading early. His was that Halsk is careless: first a lost container, then a theft, then a lost container again. He dismissed Rhun on the day she was right. His last note was the only one where he looked at the item in front of him."
     },
     {
       "id": "halden",
       "name": "Noor Halden",
       "specialty": "Technical analyst (signals, imagery, forensics)",
-      "reveal": "Slow but careful. Never wrong. Her note on the seals arrived on the morning of the last brief."
+      "reveal": "Careful, and slow. She wasn't wrong once. Her note on the seals arrived on the morning of the last brief."
     },
     {
       "id": "marrow",
       "name": "Tess Marrow",
       "specialty": "Open-source analyst",
       "extra": true,
-      "reveal": "Overconfident. Half right on Day 1, sharp on the listing and in open disagreement with Vasko, and flatly wrong on Day 4."
+      "reveal": "Quick, and sure of herself. Half right on Day 1. Sharp about the listing, where she disagreed with Vasko. Wrong on Day 4."
     }
   ],
   "notes": [
@@ -1800,7 +1800,7 @@
       "analyst": "vasko",
       "item": "R-1-02",
       "after": 0,
-      "text": "Halsk loses a container a week and finds most of them. I wouldn't panic yet.",
+      "text": "Halsk loses a container most weeks and finds most of them. I wouldn't raise the alarm yet.",
       "right": 0,
       "why": "This one hadn't been lost."
     },
@@ -1808,7 +1808,7 @@
       "analyst": "marrow",
       "item": "R-1-04",
       "after": 0,
-      "text": "No manifest and lights out is smuggling, plain and simple. Cigarettes, usually.",
+      "text": "No manifest and the transponder off? That's smuggling. Cigarettes, nine times out of ten.",
       "right": 0.5,
       "why": "Smuggling, yes. Not cigarettes."
     },
@@ -1816,7 +1816,7 @@
       "analyst": "vasko",
       "item": "R-2-02",
       "after": 0,
-      "text": "There it is, for sale. Tessaly moves anything for anyone. A grey-market job.",
+      "text": "And now it's for sale. Tessaly will move anything for anyone. This is a grey-market job.",
       "right": 0,
       "why": "He took the bait."
     },
@@ -1824,7 +1824,7 @@
       "analyst": "marrow",
       "item": "R-2-02",
       "after": 0,
-      "text": "Catalogue photo, and the account looks new. This listing is bait.",
+      "text": "That's a catalogue photo, and the account looks brand new. I think this listing is bait.",
       "right": 1,
       "why": "It was."
     },
@@ -1832,7 +1832,7 @@
       "analyst": "halden",
       "item": "R-1-04",
       "after": 1,
-      "text": "Transponders fail. They don't usually fail at ten past two in the morning, just outside the port limit.",
+      "text": "Transponders do fail. This one went off at ten past two in the morning, just outside the port limit. I'd say it was switched off.",
       "right": 1,
       "why": "Switched off, not failed."
     },
@@ -1840,7 +1840,7 @@
       "analyst": "vasko",
       "item": "R-3-03",
       "after": 0,
-      "text": "Rhun's desk again, with gossip about debts. She'd say the same about any firm in Marrat.",
+      "text": "Rhun's desk again, this time with gossip about debts. She'd say the same about any firm in Marrat.",
       "right": 0,
       "why": "This time she had a reason, and gave it."
     },
@@ -1848,7 +1848,7 @@
       "analyst": "vasko",
       "item": "R-4-01",
       "after": 0,
-      "text": "Found in the wrong shed. I did say: Halsk.",
+      "text": "Found in the wrong shed. As I said, it's Halsk.",
       "right": 0,
       "why": "Customs had searched that shed three days earlier."
     },
@@ -1856,7 +1856,7 @@
       "analyst": "marrow",
       "item": "R-4-03",
       "after": 0,
-      "text": "Seals intact, numbers match, customs happy. Case closed, I'd say.",
+      "text": "Seals intact, numbers match, customs satisfied. I'd call that closed.",
       "right": 0,
       "why": "Her flat wrong call of the scenario."
     },
@@ -1864,7 +1864,7 @@
       "analyst": "halden",
       "item": "R-3-01",
       "after": 1,
-      "text": "Three days dark. Long enough to reach Brask, wait a day and a half, and come back.",
+      "text": "Three days dark. I worked it through: that's long enough to reach Brask, lie alongside for a day and a half, and come back.",
       "right": 1,
       "why": "Exactly what it did."
     },
@@ -1872,7 +1872,7 @@
       "analyst": "vasko",
       "item": "R-5-03",
       "after": 0,
-      "text": "Night shift sent home, and a private crew in a bonded shed? In Halsk even the thieves work days. That's odd.",
+      "text": "A night shift sent home, and a private crew in a bonded shed? I've never heard of that at Halsk. That one bothers me.",
       "right": 1,
       "why": "The one note where he looked at what was in front of him."
     },
@@ -1880,7 +1880,7 @@
       "analyst": "halden",
       "item": "R-4-03",
       "after": 1,
-      "text": "An intact seal tells you about the seal.",
+      "text": "The engineer checked the seals and the tape. That tells us the seals and the tape are intact. It tells us nothing about the units.",
       "right": 1,
       "why": "It arrived on the morning of the last brief."
     }

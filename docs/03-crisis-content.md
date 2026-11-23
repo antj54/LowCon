@@ -25,7 +25,7 @@
 8. **Push the public, pull the secret (#51, new crises from Crisis 02).** Public channels and anything a source volunteers arrive every day (about 2–3 items). IMINT, SIGINT and HUMINT reporting arrives only through tasking.
 9. **Counterintelligence deception goes where the adversary could really do it** (#51): staged traffic on a net it knows is covered, a dangle or double agent passing chickenfeed, decoys for imagery, watching for who asks. Every pulled plant still needs a tell and a cross-check reachable through push or another tasking available by that day. The diagnostic must be reachable by at least two tasking paths, and the postmortem says how the adversary knew we were looking.
 
-**Writing style:** see `claude/style-guide.md` (#82). Item text may contain line breaks (`\n`).
+**Writing style:** see `claude/style-guide.md` (#82, #83). Item text may contain line breaks (`\n`). For Crises 02 to 07 the builders hold structure and the wording lives in `tools/text_<crisis>.py`, applied by `tools/house_text.py`; edit wording there and rerun the builder.
 
 ## Data format (v1.3)
 

@@ -1,6 +1,8 @@
 # Low Confidence · Writing style guide
 
-*Draft 1, 2026-11-19 (#82). Piloted on Crisis 01. Anthony marks it up; his corrections become the house style for the other scenarios. No spoilers beyond Crisis 01.*
+*Approved by Anthony 2026-11-23 and applied to Crises 01 to 07 (#82, #83). No spoilers.*
+
+**Where the wording lives:** Crisis 01 in `crises/border-buildup.json`. Crises 02 to 07 in `tools/text_<crisis>.py`, applied by `tools/house_text.py` when each builder runs. Those text files hold answers.
 
 ## The idea
 
@@ -28,7 +30,13 @@ Every piece of text should read as if the person or office it comes from wrote i
 | Wire service | Dateline, then the news in one or two sentences | None |
 | State media | Where and when it was said, then the quote | None |
 | Social media | What the post shows, how far it spread, what's known about the account | "Unverified." |
-| Admin, cables | An office memo. Clutter lives here | None |
+| Admin, cables | An office memo, opening with the office it comes from. Clutter lives here | None |
+| Station (a debriefing) | Which session, then "Asked X, he said Y" | `Debriefer comment:`. For what a walk-in volunteers: `Access claimed:` |
+| Lab and technical | "Lab finding." One finding per line | None |
+| Embassy political section | "Political section: …" who said what to whom | None |
+| Commercial | "From Corvane: …" in the company's own business voice | None |
+| An assessment | The part, then `Leaked:`, `Road:` and `Did not leak:` lines | Those three |
+| Test result | What was sent, by which road, then what turned up | None |
 
 ## Voices
 
@@ -37,9 +45,11 @@ Every piece of text should read as if the person or office it comes from wrote i
 | **Halvorsen** | Orders and consequences. Units, places, times. Short declaratives. Says what he needs from you next. | Jokes, metaphors |
 | **Vasko** | Confident, first person, leans on experience ("I've watched this minister for years"). Commits to a reading. | Hedging |
 | **Halden** | Says what she checked and what it showed. Draws the narrowest conclusion. | Opinions on intent |
+| **Marlowe** | A diplomat. Full sentences, no contractions. Precise about who said what to whom, and what can't be taken back. | Quips |
+| **Brandt** | An engineer. Hours, counts, yes or no. | Estimative language |
+| **Marrow** | Quick and informal. Questions, half-sentences, sure of herself. | Caution, unless she has earned it |
+| **Rhun** | Quoted directly, blunt, and always says whether she has a source. | Diplomacy |
 | **Narrator** (read-in, postmortem, endings) | Plain past tense. Says what happened and names the item. Lessons are one sentence of principle plus the instance from this scenario. | Maxims on their own |
-
-To be written when their scenarios are done: Marlowe (a diplomat: full sentences, precise about who said what to whom), Brandt (an engineer: numbers and hours), Marrow (quick and informal).
 
 ## Habits to cut
 
@@ -47,10 +57,3 @@ To be written when their scenarios are done: Marlowe (a diplomat: full sentences
 - "X, not Y" and groups of three
 - The same joke shape in each day's clutter
 - Every character being dry in the same way
-
-## Open questions for Anthony
-
-1. Do the `Access:` and `Sourcing:` lines read right, and are they the right labels?
-2. Liaison items now say when sourcing is absent or thin. That is more realistic and makes WREN slightly easier to judge. Keep?
-3. Is Halvorsen right for a task force commander talking to his intelligence lead?
-4. Should pushed HUMINT say how it arrived? It currently doesn't, because KESTREL reports on days when a meeting would break his own rule.

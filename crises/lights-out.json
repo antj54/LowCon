@@ -16,12 +16,12 @@
   "endingEyebrow": "Kalsa, 1800 on the 13th",
   "frozenText": "The minister has taken the recovery out of her hands. Nothing you brief today changes what is done to the grid.",
   "briefing": {
-    "dateLine": "January. Day 1 is the 9th, in the first hard cold of the winter.",
+    "dateLine": "The 9th. January, in the first hard cold of the winter.",
     "situation": [
-      "At 0312 this morning the control systems for Elsin's northern power grid, and for the pumping controls on the Southern Line, were encrypted. A criminal crew called Grey Ledger has claimed it and wants paying. Kalsa is on rolling blackouts.",
-      "Your cell has been lent to the alliance's Infrastructure Protection Cell in Kalsa for as long as this lasts. It is run by Director Ilse Brandt, an engineer.",
+      "At 0312 this morning the control systems for Elsin's northern power grid, and for the pumping controls on the Southern Line, were encrypted. A criminal crew called Grey Ledger has claimed the attack and wants paying. Kalsa is on rolling blackouts.",
+      "Your cell has been lent to the alliance's Infrastructure Protection Cell in Kalsa for as long as this lasts. Its director is Ilse Brandt, an engineer.",
       "She has three ways to get the lights back. Pay the ransom and use the crew's decryptor: a day, if the crew wants it to work. Restore the six control servers from the vendor's clean images: two days, trusting what the vendor's update server sends. Rebuild them by hand from parts and paper: nine more days of blackouts in January.",
-      "The lab's findings, the grid operator, the vendor, the crew's own messages and public reporting reach you every day. Everything else you task. Liaison requests go to Kalsa's ministries over LATTICE."
+      "The lab's findings, the grid operator, the vendor, the crew's own messages and public reporting reach you every day. Everything else has to be tasked. Liaison requests go to Kalsa's ministries over LATTICE."
     ]
   },
   "customer": {
@@ -38,10 +38,10 @@
     "tipLine": "She only moves on High. Medium and Low get nothing done."
   },
   "opening": {
-    "text": "I've read your file. I'd like a name and a level of certainty I can act on. I can act on one level.",
-    "reassigned": "They've sent me a new cell. Fine. The grid doesn't care who you used to be. Who did this?",
+    "text": "I've read your file. I need a name, and a level of certainty I can act on. I act on one level only.",
+    "reassigned": "They've sent me a new cell. The grid doesn't care who you were. Who did this?",
     "byLastTone": {
-      "good": "Your file says you get it right. I need it right and I need it in one word. Who?"
+      "good": "Your file says you get it right. I need it right, and in one word. Who?"
     }
   },
   "asset": {
@@ -155,14 +155,14 @@
     "decryptor": "Paid, and the decryptor failed"
   },
   "replies": {
-    "paid": "Paid. If the decryptor works, we're done by tomorrow night and I'll take the criticism.",
-    "rebuild": "Rebuild by hand, starting now. Nothing from outside goes near those servers. Nine days. The minister used a word I hadn't heard since I was an apprentice.",
-    "restore": "Vendor restore ordered, and I've told the minister who I think he should send home.",
-    "stands": "That's in hand. Tell me if it changes.",
+    "paid": "Paid. If the decryptor works, we're back by tomorrow night. If it doesn't, that is on me.",
+    "rebuild": "Rebuild by hand, starting now. Nothing from outside touches those servers. Nine days. The minister is not pleased.",
+    "restore": "Vendor restore ordered. I've also told the minister which advisers he should send home.",
+    "stands": "Already ordered. Tell me if anything changes.",
     "maybe": "That's a maybe. I can't run a grid on a maybe.",
-    "frozen": "It's the minister's decision now, not mine. Bring me something I can put in front of him.",
-    "overruled": "I told the minister it was Kordav, on your word, six hours in. He asked what we had. I said a judgment. He has informed me that the recovery is now his decision and not mine, and that he will take advice from people with evidence.",
-    "decryptor": "The decryptor works on the office machines. On all six control servers it fails and leaves them worse than before. They took the money and kept the part that mattered."
+    "frozen": "The decision is the minister's now. Bring me something I can put in front of him.",
+    "overruled": "Six hours in, on your call, I told the minister it was Kordav. He asked what we had. I said: an assessment. He has taken the recovery out of my hands, and says he will take advice from people with evidence.",
+    "decryptor": "The decryptor works on the office machines. On all six control servers it fails, and leaves them in a worse state than before. We paid for the part that didn't matter."
   },
   "events": [
     {
@@ -337,7 +337,7 @@
       "id": "S-PETREL",
       "codeName": "PETREL",
       "discipline": "HUMINT",
-      "access": "A broker on criminal forums who has dealt with Grey Ledger. Hears what the crew complains about. New. Don't task him two days running.",
+      "access": "A broker on criminal forums who has dealt with Grey Ledger. He hears what the crew complains about. New. Don't task him two days running.",
       "startingGrade": "C",
       "trueReliability": 0.8,
       "controlledByAdversary": false,
@@ -435,7 +435,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "At 0312 the six control servers for the northern grid and the Southern Line's pumping controls were encrypted. Both are being run by hand. The operator's office network is also down. Blackouts are scheduled district by district.",
+      "text": "Grid operator: at 0312 the six control servers for the northern grid and the Southern Line's pumping controls were encrypted. Both are now being run by hand. The operator's office network is also down.\nBlackouts are scheduled district by district.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -449,7 +449,7 @@
       "discipline": "OSINT",
       "sourceGrade": "E",
       "credibility": 3,
-      "text": "Ransom message: 4 million in cryptocurrency within 96 hours. \"Nothing personal. Pay, receive the decryptor, and we never meet again. Ask our previous customers.\"",
+      "text": "Ransom message from Grey Ledger: 4 million in cryptocurrency within 96 hours. \"Nothing personal. Pay, receive the decryptor, and we never meet again. Ask our previous customers.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -463,7 +463,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The malware is a known Grey Ledger strain. It came in through a contractor's remote-access account. It went straight to the six control servers by name and ignored some four hundred other machines until those six were done.",
+      "text": "Lab finding, first pass.\nMalware: a known Grey Ledger strain.\nEntry: a contractor's remote-access account.\nBehaviour: it went straight to the six control servers by name, and ignored some four hundred other machines until those six were done.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -477,7 +477,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "We can supply clean system images for all six control servers from our update server within 24 hours of a request. Standard recovery: two days to full operation.",
+      "text": "From Corvane: we can supply clean system images for all six control servers from our update server within 24 hours of a request. Standard recovery is two days to full operation.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -491,7 +491,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Our own building has power. It does not have heating. Facilities describe these as separate systems.",
+      "text": "Cell admin: our own building has power. It does not have heating. Facilities describe these as separate systems.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -505,7 +505,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The malware's loader contains text strings in Marrat's language, and its build times fall within office hours in Marrat. The strings sit in a section appended after the program was built.",
+      "text": "Lab finding.\nThe malware's loader contains text strings in Marrat's language, and its build times fall within office hours in Marrat.\nThe strings sit in a section appended after the program was built.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -532,7 +532,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 2,
-      "text": "Marrat's government \"categorically denies any involvement\" and offers to send engineers to help Elsin recover.",
+      "text": "Marrat News Agency: Marrat's government \"categorically denies any involvement,\" and offers to send engineers to help Elsin recover.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -546,7 +546,7 @@
       "discipline": "OSINT",
       "sourceGrade": "E",
       "credibility": 3,
-      "text": "Grey Ledger posts a sample of stolen office documents as proof, and, unasked, lowers its demand to 2.5 million \"for a quick close.\"",
+      "text": "Grey Ledger posts a sample of stolen office documents as proof. Unasked, it lowers its demand to 2.5 million \"for a quick close.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -560,7 +560,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin's energy minister says \"all options are open\" and that he expects power restored \"within days, not weeks.\"",
+      "text": "Kalsa: Elsin's energy minister says \"all options are open,\" and that he expects power restored \"within days, not weeks.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -574,7 +574,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Portable heaters have been issued. They may not be plugged in during a scheduled blackout, which is when they are needed.",
+      "text": "Cell admin: portable heaters have been issued. They may not be plugged in during a scheduled blackout, which is when they are needed.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -588,7 +588,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The minister has told Director Brandt that restoration from the vendor's images will begin at 1800 on the 13th unless she gives him a reason, in writing, to do something else.",
+      "text": "From the minister's office: restoration from the vendor's images will begin at 1800 on the 13th, unless Director Brandt gives the minister a reason, in writing, to do something else.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -602,7 +602,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The remote-access account belongs to a Corvane field engineer. His credentials were valid, and he says he was asleep. The malware carried a list of six server names matching the as-built network diagram, issue 7. Issue 7 went to five named holders on paper three weeks ago. One electronic copy was lodged with the alliance over LATTICE.",
+      "text": "Lab finding.\nThe remote-access account belongs to a Corvane field engineer. His credentials were valid. He says he was asleep.\nThe malware carried a list of six server names that matches the as-built network diagram, issue 7.\nIssue 7 went to five named holders on paper three weeks ago. One electronic copy was lodged with the alliance over LATTICE.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -616,7 +616,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Col. Rhun: \"My service has traced part of the ransom wallet's history. Grey Ledger received 1.1 million two weeks before the attack, from an exchange in Kordav's capital. Criminals are not usually paid in advance.\"",
+      "text": "Col. Rhun, liaison desk: \"My service has traced part of the ransom wallet's history. Grey Ledger received 1.1 million two weeks before the attack, from an exchange in Kordav's capital. Criminals are not usually paid in advance.\"\nSourcing: her service's own tracing.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -645,7 +645,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The heaters have been recalled. One of them was plugged in.",
+      "text": "Cell admin: the heaters have been recalled. One of them was plugged in.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -659,7 +659,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "An anonymous post on a criminal forum claims to be a leaked Grey Ledger chat log. The negotiator writes: \"We are obliged to our esteemed friend in the liaison office in Kalsa, who provided the diagram.\"",
+      "text": "An anonymous post on a criminal forum claims to be a leaked Grey Ledger chat log. In it the negotiator writes: \"We are obliged to our esteemed friend in the liaison office in Kalsa, who provided the diagram.\"\nUnverified.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -701,7 +701,7 @@
       "discipline": "Commercial",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The images are staged on our update server and our engineer is on site. We can have the first control server running six hours after the order.",
+      "text": "From Corvane: the images are staged on our update server and our engineer is on site. We can have the first control server running six hours after the order.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -715,7 +715,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Deputy Director O. Lind, in a memo to the minister copied to Brandt: \"A rebuild by hand means nine more days of blackouts in January. People will die of it. I recommend the vendor restore.\"",
+      "text": "Deputy Director O. Lind, in a memo to the minister, copied to Brandt: \"A rebuild by hand means nine more days of blackouts in January. People will die of it. I recommend the vendor restore.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -729,7 +729,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Staff are reminded that the building's fire alarm also depends on mains power.",
+      "text": "Cell admin: staff are reminded that the building's fire alarm also depends on mains power.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -743,7 +743,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Restoration from Corvane's images begins at 1800. Corvane's engineer is in the control room.",
+      "text": "Grid operator: restoration from Corvane's images begins at 1800. Corvane's engineer is in the control room.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -757,7 +757,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "Kordav's state broadcaster: \"Elsin hunts a traitor in its own liaison office as the capital freezes.\"",
+      "text": "Kordav's state broadcaster: \"Elsin hunts a traitor in its own liaison office as the capital freezes.\"\nIt first ran the line four hours after the forum post appeared.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -783,7 +783,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Col. Rhun: \"I know what is being said about my desk. My copy of issue 7 has been in my safe since the day it was handed to me. You are welcome to come and look.\"",
+      "text": "Col. Rhun, liaison desk: \"I know what is being said about my desk. My copy of issue 7 has been in my safe since the day it was handed to me. You are welcome to come and look.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -797,7 +797,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Corvane's update server holds a new image set for this model of control server dated the 7th: two days before the attack. Corvane's published schedule shows no release this winter.",
+      "text": "Lab finding.\nCorvane's update server holds a new image set for this model of control server, dated the 7th: two days before the attack.\nCorvane's published schedule shows no release this winter.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -812,7 +812,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Heating has been restored to the building. Power is now intermittent.",
+      "text": "Cell admin: heating has been restored to the building. Power is now intermittent.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -826,7 +826,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The wallet named in the ransom note received 1.1 million two weeks before the attack, in one payment, from an exchange in Kordav's capital. Nothing else came in until this week.",
+      "text": "Chain analysis of the wallet named in the ransom note: it received 1.1 million two weeks before the attack, in one payment, from an exchange in Kordav's capital. Nothing else came in until this week.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -842,7 +842,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "PETREL: Grey Ledger took a contract last month. \"Hit six boxes, leave the rest, paid up front.\" The crew thinks the client is another gang. They were told which six.",
+      "text": "Source reports: Grey Ledger took a contract last month. \"Hit six boxes, leave the rest, paid up front.\" The crew thinks the client is another gang. They were told which six.\nAccess: what crew members have told him.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -858,7 +858,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "PETREL: the crew is fed up. The client has told them to keep talking and not to close. \"The money doesn't matter. Keep them busy until the 13th.\"",
+      "text": "Source reports: the crew is fed up. The client has told them to keep talking and not to close. \"The money doesn't matter. Keep them busy until the 13th.\"\nAccess: what crew members have told him.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -873,7 +873,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The negotiator's instructions arrive through a relay that also carries traffic for a trading company in Kordav's capital. That company has fronted for the Bureau before.",
+      "text": "The negotiator's communications: his instructions arrive through a relay that also carries traffic for a trading company in Kordav's capital.\nComment: that company has fronted for the Bureau before.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -889,7 +889,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Marrat's officials are alarmed that their language is being found in the malware. The minister has ordered an inquiry of his own and asked who is trying to embarrass him.",
+      "text": "Marrat's energy ministry: officials are alarmed that their language is being found in the malware. The minister has ordered an inquiry of his own, and has asked who is trying to embarrass him.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -904,7 +904,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The malware's target list spells one server \"PCS-O6\", with a letter O. The five paper copies of issue 7 print \"PCS-06\", with a zero. The electronic copy lodged over LATTICE has the letter O.",
+      "text": "Lab comparison of the target list with the diagram.\nThe malware's list spells one server \"PCS-O6\", with a letter O.\nThe five paper copies of issue 7 print \"PCS-06\", with a zero.\nThe electronic copy lodged over LATTICE has the letter O.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -919,7 +919,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The registry lists five paper copies of issue 7: Director Brandt; Deputy Director O. Lind; Col. E. Rhun, liaison desk; Maj. T. Arle, Task Force VEYL; and Corvane's site engineer. Maj. Arle's copy was never collected. He has been on leave, and it is still sealed in the registry. One electronic copy was lodged over LATTICE.",
+      "text": "In answer to our request, Kalsa's registry lists five paper copies of issue 7: Director Brandt; Deputy Director O. Lind; Col. E. Rhun, liaison desk; Maj. T. Arle, Task Force VEYL; and Corvane's site engineer.\nMaj. Arle's copy was never collected. He has been on leave, and it is still sealed in the registry.\nOne electronic copy was lodged over LATTICE.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -934,7 +934,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "KSB, in passing: \"Officials in Kalsa spent yesterday searching their own registry for who holds which documents.\"",
+      "text": "Kordav's state broadcaster, in passing: \"Officials in Kalsa spent yesterday searching their own registry for who holds which documents.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -949,7 +949,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The Marrat-language strings contain two errors typical of machine translation, and one word that Marrat's speakers stopped using decades ago.",
+      "text": "Language check on the Marrat strings: two errors typical of machine translation, and one word that Marrat's speakers stopped using decades ago.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -980,7 +980,7 @@
       "discipline": "Technical",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The staged images were built on the 7th by an automated job that nobody at Corvane scheduled. They include a remote-management component that isn't on Corvane's published build list.",
+      "text": "Lab examination of the staged images.\nBuilt on the 7th by an automated job that nobody at Corvane scheduled.\nThey include a remote-management component that isn't on Corvane's published build list.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1038,7 +1038,7 @@
           3
         ]
       },
-      "text": "The control servers are rebuilt from parts and paper. The lights come back district by district over nine days. Nobody thanks Brandt in January. In March the lab finishes with Corvane's images, and the minister asks to see her."
+      "text": "The control servers are rebuilt from parts and paper. Power comes back district by district over nine days. Nobody thanks Brandt in January. In March the lab finishes with Corvane's images, and the minister asks to see her."
     },
     {
       "id": "clean-cold",
@@ -1048,7 +1048,7 @@
       "if": {
         "assetAt": "rebuild"
       },
-      "text": "The control servers are rebuilt from parts and paper, started late. The blackouts run into a third week. In March the lab finishes with Corvane's images, and the minister asks to see Brandt."
+      "text": "The control servers are rebuilt from parts and paper, starting late. The blackouts run into a third week. In March the lab finishes with Corvane's images, and the minister asks to see Brandt."
     },
     {
       "id": "lights-on",
@@ -1087,39 +1087,39 @@
         "days": [
           1
         ],
-        "text": "A real crew made a real demand. The malware walked past four hundred machines to reach six. The vendor offered clean images, in good faith."
+        "text": "A real crew made a real demand. The malware passed four hundred machines to reach six. The vendor offered clean images, in good faith."
       },
       {
         "days": [
           2
         ],
-        "text": "The lab found Marrat's language in the malware and told you it had been added afterwards. The crew cut its price without being asked."
+        "text": "The lab found Marrat's language in the malware, and reported that it had been added after the build. The crew cut its price without being asked."
       },
       {
         "days": [
           3
         ],
-        "text": "The minister set a deadline. Rhun told you the crew had been paid in advance, from Kordav."
+        "text": "The minister set a deadline. Rhun reported that the crew had been paid in advance, from Kordav's capital."
       },
       {
         "days": [
           4
         ],
-        "text": "A chat log appeared, in a voice the crew has never used, thanking a friend in the liaison office. Brandt's deputy wrote that a rebuild would kill people, and he wasn't wrong about the cold."
+        "text": "A chat log appeared in a voice the crew had never used, thanking a friend in the liaison office. Brandt's deputy wrote that a rebuild would cost lives. About the cold, he was right."
       },
       {
         "days": [
           5
         ],
-        "text": "Kordav's broadcaster had the forgery in a headline within four hours. The images that would fix everything had been built two days before anything broke."
+        "text": "Kordav's broadcaster had put the forgery in a headline within four hours. The images that were supposed to fix everything had been built two days before anything broke."
       }
     ],
     "lessons": [
-      "Ask what the attacker wants you to do next. Sometimes the damage is only there to make you fix it.",
-      "A crew that doesn't want to be paid isn't working for itself.",
-      "Evidence that points at a person in a voice that isn't the source's own was written by someone else.",
-      "A true cost can be attached to a wrong choice. Lind was right about the cold.",
-      "Some customers can't use a maybe. Know which kind you're briefing."
+      "Ask what the attacker needs you to do next. The damage here was a means. The aim was the repair.",
+      "A crew that keeps lowering its price isn't working for the ransom. Grey Ledger had already been paid.",
+      "Compare an item's voice with its supposed author. The chat log read like nothing Grey Ledger had ever sent.",
+      "A true cost can sit beside a wrong choice. Lind was right about nine days of cold, and wrong about the restore.",
+      "Know what your customer can act on. Brandt could use High, and nothing else."
     ],
     "missedCollection": {
       "1": "The ransom wallet's history (OSINT, one point): the crew was paid in advance from Kordav's capital.",
@@ -1391,7 +1391,7 @@
         "days": 3,
         "delta": -1,
         "rule": "Three days running without a High (each further day too)",
-        "note": "Credibility −1. Three days of maybe. \"I asked for one word.\""
+        "note": "Credibility −1. Three days without a High. \"I asked for one word.\""
       }
     ],
     "outcome": {
@@ -1477,20 +1477,20 @@
       "id": "vasko",
       "name": "Imre Vasko",
       "specialty": "Regional analyst",
-      "reveal": "Anchors on his first theory. Marrat on Day 1, confirmed by the plant on Day 2, and by Day 4 he had moved straight on to a person. Sincere throughout, and wrong three times."
+      "reveal": "He settles on a reading early. It was Marrat on Day 1, and the planted strings seemed to confirm it on Day 2. By Day 4 he had moved on to a person. He was sincere each time, and wrong each time."
     },
     {
       "id": "halden",
       "name": "Noor Halden",
       "specialty": "Technical analyst (signals, imagery, forensics)",
-      "reveal": "Slow but careful. Never wrong. This was her scenario: each note pointed at something you could have tasked the day before."
+      "reveal": "Careful, and slow. She wasn't wrong once. Each of her notes pointed at something you could have tasked the day before."
     },
     {
       "id": "marrow",
       "name": "Tess Marrow",
       "specialty": "Open-source analyst",
       "extra": true,
-      "reveal": "Overconfident, and wrong that it was about money. Then half right about the discount, properly careful about a liaison service's wallet tracing, and sharp about the broadcaster. Her best scenario so far."
+      "reveal": "Quick, and sure of herself. Wrong that it was about money. After that: half right about the discount, properly careful about wallet tracing from a liaison service, and sharp about the broadcaster. Her best scenario so far."
     }
   ],
   "notes": [
@@ -1498,7 +1498,7 @@
       "analyst": "marrow",
       "item": "R-1-02",
       "after": 0,
-      "text": "Grey Ledger: nineteen victims in three years, always money, always pay-and-walk. This is them, and it's about money.",
+      "text": "Grey Ledger: nineteen victims in three years, always for money, always pay and walk away. It's them, and it's about money.",
       "right": 0,
       "why": "It was them. It wasn't about money."
     },
@@ -1506,7 +1506,7 @@
       "analyst": "vasko",
       "item": "R-1-04",
       "after": 0,
-      "text": "Marrat lost a pact over that pipeline, and now its pumps are dark. Look at who's smiling.",
+      "text": "Marrat lost a pact over that pipeline, and now the pumps are dark. I'd look at who gains.",
       "right": 0,
       "why": "Marrat was as surprised as anyone."
     },
@@ -1514,7 +1514,7 @@
       "analyst": "vasko",
       "item": "R-2-01",
       "after": 0,
-      "text": "Marrat. I said so.",
+      "text": "Marrat's language in the code. That is what I expected.",
       "right": 0,
       "why": "Confirmed by a plant."
     },
@@ -1522,7 +1522,7 @@
       "analyst": "marrow",
       "item": "R-2-03",
       "after": 0,
-      "text": "They never discount this early. Odd. Perhaps they need the cash.",
+      "text": "They never discount this early. That's odd. Maybe they need the cash.",
       "right": 0.5,
       "why": "Odd, yes. They didn't need the cash."
     },
@@ -1530,7 +1530,7 @@
       "analyst": "halden",
       "item": "R-1-03",
       "after": 1,
-      "text": "Four hundred machines to choose from, and it walked straight to six. That isn't scanning. Somebody gave it a map.",
+      "text": "Four hundred machines to choose from, and it went straight to six. That isn't scanning. Something told it where to go.",
       "right": 1,
       "why": "Somebody did."
     },
@@ -1546,7 +1546,7 @@
       "analyst": "halden",
       "item": "R-2-01",
       "after": 1,
-      "text": "Those strings were stapled on afterwards. A programmer writes in his own language as he goes. He doesn't add a paragraph of it at the end.",
+      "text": "The lab says the strings were appended after the build. A programmer's own language runs all through the code. It doesn't arrive in one block at the end.",
       "right": 1,
       "why": "Appended, as the lab said."
     },
@@ -1554,7 +1554,7 @@
       "analyst": "vasko",
       "item": "R-4-01",
       "after": 0,
-      "text": "The liaison office. That's Rhun's shop. She's had it in for half of Kalsa for years.",
+      "text": "The liaison office. That's Rhun's desk. She has had it in for half of Kalsa for years.",
       "right": 0,
       "why": "He took a forgery at its word."
     },
@@ -1562,7 +1562,7 @@
       "analyst": "halden",
       "item": "R-3-02",
       "after": 1,
-      "text": "Six names on a target list. I'd like to see how they're spelled, next to the diagram.",
+      "text": "Six names on a target list. I'd like to see how each one is spelled, next to the diagram.",
       "right": 1,
       "why": "The spelling was the answer."
     },
@@ -1570,7 +1570,7 @@
       "analyst": "marrow",
       "item": "R-5-02",
       "after": 0,
-      "text": "State TV had \"liaison office\" in a headline four hours after an anonymous forum post. They read fast in Kordav.",
+      "text": "State TV had \"liaison office\" in a headline four hours after an anonymous forum post. That's quick, even for them.",
       "right": 1,
       "why": "Too fast."
     },
@@ -1578,7 +1578,7 @@
       "analyst": "halden",
       "item": "R-4-03",
       "after": 1,
-      "text": "Before anyone installs an image, I'd like to know when it was built, and who asked for it.",
+      "text": "Before anyone installs an image, I'd want to know when it was built and who asked for it.",
       "right": 1,
       "why": "The 7th, and nobody."
     }

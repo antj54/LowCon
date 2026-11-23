@@ -15,13 +15,13 @@
   "adversary": "Marrat",
   "endingEyebrow": "Dawn, the 19th",
   "briefing": {
-    "dateLine": "Day 1 is the 14th, the following spring.",
+    "dateLine": "The 14th. Spring, the year after IRON HARVEST.",
     "situation": [
-      "Your cell is back with Gen. R. Halvorsen and Task Force VEYL.",
+      "Your cell is back with General Halvorsen and Task Force VEYL.",
       "The Southern Line is Elsin's gas pipeline. It runs from the Kessa pumping station in the north, through the Sarn valley, to the Tolen bridge on the border with Marrat, Elsin's southern neighbour. The task force buys its fuel off the same network.",
       "Three nights ago a small explosion damaged a valve housing in the Sarn valley. A local militia, the Sarn Valley Front, has claimed it. Its commander is Davin Oro, a farmer whose land was taken for the Sarn compressor station.",
       "This week Elsin and Marrat open talks on a pipeline security pact. Marrat is offering its border guards to protect the line, and already has \"advisers\" at Elsin's Southern Command.",
-      "Public reporting, and whatever Elsin's services, Marrat's liaison officer and the Front choose to say, reach you every day. Everything else you task."
+      "Public reporting reaches you every day, along with whatever Elsin's services, Marrat's liaison officer and the Front choose to say. Everything else has to be tasked."
     ]
   },
   "customer": {
@@ -38,11 +38,11 @@
     "tipLine": "High moves the whole company to the site that goes with your hypothesis. Medium sends one platoon there, quietly. Low changes nothing."
   },
   "opening": {
-    "text": "One company, three places it might be needed, and a liaison officer from Marrat who keeps offering to help. Tell me whose militia this is.",
-    "reassigned": "New cell, same name on the door. I asked for a fresh pair of eyes and they sent me yours. One company, three places it might be needed. Tell me whose militia this is.",
+    "text": "I have one company and three places it might be needed. Marrat's liaison officer keeps offering to help. Tell me whose militia this is.",
+    "reassigned": "New cell, same name on the door. I asked for a fresh pair of eyes and they sent me yours. I have one company and three places it might be needed. Tell me whose militia this is.",
     "byTone": {
-      "good": "Last time you were right when it was hard to be. Don't make me regret remembering that.",
-      "warn": "Last time you got there, and you got there late. I need you earlier.",
+      "good": "You were right last time when it was hard to be. I'm counting on the same.",
+      "warn": "Last time you got there late. I need you earlier.",
       "bad": "I lost a dam on your reading. I'm told you've improved. Show me."
     }
   },
@@ -243,19 +243,19 @@
   ],
   "policyNote": "A platoon is discreet. A company is not.",
   "replies": {
-    "company_tolen": "The company's going to Tolen bridge. Southern Command will know by lunchtime, and so will everyone who drinks coffee there.",
-    "platoon_tolen": "One platoon to Tolen bridge, quietly. Nobody at Southern Command needs to know why. If you want the company there, give me more than medium.",
-    "company_kessa": "The company's going to the Kessa pumping station. Southern Command will know by lunchtime, and so will everyone who drinks coffee there.",
-    "platoon_kessa": "One platoon to the Kessa pumping station, quietly. Nobody at Southern Command needs to know why. If you want the company there, give me more than medium.",
-    "company_sarn": "The company's going to the Sarn compressor station. Southern Command will know by lunchtime, and so will everyone who drinks coffee there.",
-    "platoon_sarn": "One platoon to the Sarn compressor station, quietly. Nobody at Southern Command needs to know why. If you want the company there, give me more than medium.",
-    "already": "They're already there. Keep building the picture.",
+    "company_tolen": "The company moves to Tolen bridge today. A hundred and twenty soldiers can't move quietly. Southern Command will know within hours, and so will everyone in that building.",
+    "platoon_tolen": "One platoon goes to Tolen bridge tonight, quietly. Southern Command doesn't need to know why. The company follows when your confidence is high.",
+    "company_kessa": "The company moves to the Kessa pumping station today. A hundred and twenty soldiers can't move quietly. Southern Command will know within hours, and so will everyone in that building.",
+    "platoon_kessa": "One platoon goes to the Kessa pumping station tonight, quietly. Southern Command doesn't need to know why. The company follows when your confidence is high.",
+    "company_sarn": "The company moves to the Sarn compressor station today. A hundred and twenty soldiers can't move quietly. Southern Command will know within hours, and so will everyone in that building.",
+    "platoon_sarn": "One platoon goes to the Sarn compressor station tonight, quietly. Southern Command doesn't need to know why. The company follows when your confidence is high.",
+    "already": "They're already in place. Keep reporting.",
     "listen": "Noted. The company stays where it is.",
-    "tolen_caught": "Seven prisoners and a box of radios nobody in that valley could afford. Good.",
-    "tolen_displaced": "They went round us. I'd like to know who told them where we were.",
-    "tolen_held": "A platoon holds a bridge. It doesn't take prisoners.",
-    "tolen_cut_far": "I guarded the wrong end of the country.",
-    "tolen_cut": "Flow stops for four days. The pact talks won't."
+    "tolen_caught": "Seven prisoners, and radios nobody in that valley could afford. Good work.",
+    "tolen_displaced": "They went round us. I want to know who told them where we were.",
+    "tolen_held": "The platoon held the bridge. It was too small to take prisoners.",
+    "tolen_cut_far": "I had the company at the wrong end of the country.",
+    "tolen_cut": "The line is down for four days. The pact talks carry on."
   },
   "replyLabels": {
     "company_tolen": "Moves the full guard company to Tolen bridge",
@@ -367,7 +367,7 @@
       "id": "S-WREN",
       "codeName": "WREN",
       "discipline": "Liaison",
-      "access": "Elsin's military intelligence. Pushes what it wants us to see, and answers requests. It distrusts Marrat's advisers and says so often.",
+      "access": "Elsin's military intelligence. It passes what it wants us to see, and answers requests. It distrusts Marrat's advisers and says so often.",
       "startingGrade": "C",
       "trueReliability": 0.7,
       "controlledByAdversary": false,
@@ -397,7 +397,7 @@
       "id": "S-MAGPIE",
       "codeName": "MAGPIE",
       "discipline": "HUMINT",
-      "access": "A fuel trader in the Sarn valley who sells to the Front. Sees their money and their vehicles, not their plans. New. Every meeting is a risk: don't task him two days running.",
+      "access": "A fuel trader in the Sarn valley who sells to the Front. He sees their money and their vehicles. He doesn't see their plans. New. Meeting him is the risky part: don't task him two days running.",
       "startingGrade": "C",
       "trueReliability": 0.85,
       "controlledByAdversary": false,
@@ -514,7 +514,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Valve housing 22, Sarn valley: a small charge, placed by someone who knew which housing to pick. Flow was restored in nine hours. No sign of military explosive: it was a quarrying charge of the kind sold up and down the valley. Marrat's advisers have offered forensic help.",
+      "text": "Incident report, valve housing 22, Sarn valley.\nA small charge, placed by someone who knew which housing to pick. Flow was restored in nine hours.\nExplosive: a quarrying charge of the kind sold up and down the valley. No sign of military explosive.\nMarrat's advisers have offered forensic help.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -533,7 +533,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 3,
-      "text": "Elsin's service says Marrat's intelligence officers have met Commander Oro twice this month and are paying the Front. No sourcing is given. WREN adds that Southern Command \"should never have let Marrat's advisers through the door.\"",
+      "text": "Elsin's service says Marrat's intelligence officers have met Commander Oro twice this month and are paying the Front.\nSourcing: none given.\nThe liaison officer adds that Southern Command \"should never have let Marrat's advisers through the door.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -552,7 +552,7 @@
       "discipline": "OSINT",
       "sourceGrade": "E",
       "credibility": 3,
-      "text": "Communiqué, signed by Commander Davin Oro: the Front claims the valve \"for the fields taken for the compressor station, and for every promise made since.\" It says: \"We answer to the valley.\"",
+      "text": "Communiqué, signed by Commander Davin Oro. The Front claims the valve \"for the fields taken for the compressor station, and for every promise made since.\" It ends: \"We answer to the valley.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -603,7 +603,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The Southern Line outage did not affect task force fuel. The canteen's gas range is a separate fault and is being investigated with less urgency.",
+      "text": "Task force logistics: the Southern Line outage did not affect our fuel. The canteen's gas range is a separate fault and is being investigated with less urgency.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -617,7 +617,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "A second forensic sweep at valve housing 22, assisted by Marrat's advisers, recovered a detonator fragment with Kordavan factory markings. The first sweep, by Elsin's own engineers, found none.",
+      "text": "Forensic update, valve housing 22. A second sweep, assisted by Marrat's advisers, recovered a detonator fragment with Kordavan factory markings.\nThe first sweep, by Elsin's own engineers, found none.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -649,7 +649,7 @@
       "discipline": "Liaison",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Marrat's liaison officer shares a transcript of what he says is an intercepted call: a Kordavan officer tells \"our valley friends\" to \"take the river crossing next.\" Translated text only. No date, no audio.",
+      "text": "Marrat's liaison officer hands over a transcript of what he says is an intercepted call. A Kordavan officer tells \"our valley friends\" to \"take the river crossing next.\"\nProvided: translated text only. No date, no audio.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -682,7 +682,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "At the talks, Marrat offers border guard units to protect the Southern Line \"at no cost for the first year.\" Elsin's opposition calls it \"an occupation with the invoice to follow.\"",
+      "text": "Kalsa: at the pact talks, Marrat offers border guard units to protect the Southern Line \"at no cost for the first year.\" Elsin's opposition calls it \"an occupation with the invoice to follow.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -696,7 +696,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Valley residents post about the Front's new pickup trucks: \"the boys never had money for those before.\"",
+      "text": "Residents of the Sarn valley are posting about the Front's new pickup trucks. One writes: \"the boys never had money for those before.\"\nUnverified.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -715,7 +715,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Kalsa's hotels are full for the talks. The task force's visiting auditors are in a hostel and have asked that this be recorded.",
+      "text": "Kalsa's hotels are full for the talks. The task force's visiting auditors are in a hostel, and have asked that this be recorded.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -729,7 +729,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Marrat's advisers asked to inspect the guard post at Tolen bridge \"for the pact survey,\" spent an hour there, and have left for the holiday. The post is six border police.",
+      "text": "Southern Command reports: Marrat's advisers asked to inspect the guard post at Tolen bridge \"for the pact survey.\" They spent an hour there and have left for the holiday.\nThe post is six border police.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -748,7 +748,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 3,
-      "text": "\"Our people say something is planned in the south within two days. We asked Southern Command to reinforce Tolen. They say Marrat's advisers think it unnecessary.\"",
+      "text": "Elsin's service passes: \"Our people say something is planned in the south within two days. We asked Southern Command to reinforce Tolen. They say Marrat's advisers think it unnecessary.\"\nSourcing: \"our people.\" Nothing more.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -859,7 +859,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Because of the holiday in Marrat, the border market at Tolen is closed tomorrow. The welfare trip is cancelled. Refunds will take the usual six weeks.",
+      "text": "Welfare office: because of tomorrow's holiday in Marrat, the border market at Tolen is closed. The welfare trip is cancelled. Refunds will take the usual six weeks.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -873,7 +873,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin's government says it will sign the security pact with Marrat on the 20th. A minister says last night \"settled the argument.\"",
+      "text": "Kalsa: Elsin's government says it will sign the security pact with Marrat on the 20th. A minister says last night \"settled the argument.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -895,7 +895,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin has postponed the pact talks after \"equipment of foreign military origin\" was recovered at Tolen. Marrat says the radios were stolen from a depot last year.",
+      "text": "Kalsa: Elsin has postponed the pact talks after \"equipment of foreign military origin\" was recovered at Tolen. Marrat says the radios were stolen from a depot last year.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -936,7 +936,7 @@
       "discipline": "Liaison",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Marrat \"regrets the violence, has no contact with any armed group, and urges calm on all sides.\"",
+      "text": "Marrat's liaison officer, in a written statement: Marrat \"regrets the violence, has no contact with any armed group, and urges calm on all sides.\"",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -950,7 +950,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 3,
-      "text": "\"Marrat is still running them, and last night proves it. Expect a second attempt at Tolen.\"",
+      "text": "Elsin's service passes: \"Marrat is still running them, and last night proves it. Expect a second attempt at Tolen.\"\nSourcing: none given.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -971,7 +971,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The canteen's gas range has been fixed. It was the regulator.",
+      "text": "Task force logistics: the canteen's gas range is fixed. It was the regulator.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -985,7 +985,7 @@
       "discipline": "Liaison",
       "sourceGrade": "D",
       "credibility": 3,
-      "text": "Marrat's liaison officer warns Southern Command that \"the Oro faction\" will attack the Sarn compressor station at dawn tomorrow, coming up the quarry road. He repeats that Marrat's guards could be there by nightfall.",
+      "text": "Marrat's liaison officer warns Southern Command that \"the Oro faction\" will attack the Sarn compressor station at dawn tomorrow, coming up the quarry road.\nHe repeats that Marrat's guards could be there by nightfall.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1004,7 +1004,7 @@
       "discipline": "OSINT",
       "sourceGrade": "E",
       "credibility": 3,
-      "text": "Statement from \"the Front's political office\": the Front \"has suspended operations pending the outcome of talks.\"",
+      "text": "Statement from \"the Front's political office\": the Front \"has suspended operations pending the outcome of talks.\"\nNo signature.",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -1037,7 +1037,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 3,
-      "text": "\"ROOK's warning is a trick to get Marrat's guards into the valley. Ignore it.\"",
+      "text": "Elsin's service passes: \"ROOK's warning is a trick to get Marrat's guards into the valley. Ignore it.\"\nSourcing: none given.",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -1053,7 +1053,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The night shift at the Sarn compressor station reports strangers photographing the quarry road gate yesterday evening.",
+      "text": "Southern Command reports: the night shift at the Sarn compressor station saw strangers photographing the quarry road gate yesterday evening.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1072,7 +1072,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The auditors have left. Their report notes that the hostel was \"adequate.\"",
+      "text": "The auditors have left. Their report describes the hostel as \"adequate.\"",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -1086,7 +1086,7 @@
       "discipline": "Liaison",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "WREN sends a border police surveillance log: two meetings between Oro and three men at a roadside café near Tolen, on dated evenings this month. The men arrived in a car with Marrat diplomatic plates. Photographs attached.",
+      "text": "In answer to our request, Elsin's service sends a border police surveillance log.\nTwo meetings this month, on dated evenings, between Oro and three men at a roadside café near Tolen. The men arrived in a car with Marrat diplomatic plates.\nPhotographs attached.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1107,7 +1107,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "MAGPIE: the Front has started paying for fuel in new Marrat crown notes, in sequence. \"A cousin from across the river\" handles their money now.",
+      "text": "Source reports: the Front has started paying for fuel in new Marrat crown notes, in sequence. \"A cousin from across the river\" handles their money now.\nAccess: direct. He takes the payments.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1128,7 +1128,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "MAGPIE: the Front bought 400 litres of diesel this morning and paid in crowns. The driver said they are \"going south tonight or tomorrow.\"",
+      "text": "Source reports: the Front bought 400 litres of diesel this morning and paid in crowns. The driver said they are \"going south tonight or tomorrow.\"\nAccess: direct. He served the driver.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1148,7 +1148,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "C",
       "credibility": 2,
-      "text": "MAGPIE: the cousin from across the river is gone. The fighters say they haven't been paid, and that Oro smashed the new handset on the yard wall. The talk at the pumps is all about the compressor.",
+      "text": "Source reports: the cousin from across the river is gone. The fighters say they haven't been paid, and that Oro smashed the new handset on the yard wall. The talk at the pumps is all about the compressor.\nAccess: what the fighters say at his pumps.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1169,7 +1169,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The Front's radios: encrypted traffic on new handsets, as on other days. One call was made in the clear, in Kordavan-accented speech: \"Tell the valley friends. Kessa next.\"",
+      "text": "The Front's radios: encrypted traffic on new handsets, as on other days.\nOne call in the clear, in Kordavan-accented speech: \"Tell the valley friends. Kessa next.\"",
       "kind": "planted",
       "supports": [],
       "contradicts": [],
@@ -1207,7 +1207,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The Front has moved onto encrypted handsets of a model issued to Marrat's border guard. Traffic rises every evening.",
+      "text": "The Front's radios: the Front has moved onto encrypted handsets of a model issued to Marrat's border guard. Traffic rises every evening.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1227,7 +1227,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The encrypted handsets have been silent since last night. The Front is back on open citizens'-band sets. Words heard: \"quarry,\" \"before the signing.\"",
+      "text": "The Front's radios: the encrypted handsets have been silent since last night. The Front is back on open citizens'-band sets.\nWords heard: \"quarry,\" \"before the signing.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1247,7 +1247,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Trade registry: the lot number on the fragment belongs to a batch that Kordav's state factory exported to Marrat's mining ministry six years ago.",
+      "text": "Trade registry: the lot number on the detonator fragment belongs to a batch that Kordav's state factory exported to Marrat's mining ministry six years ago.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1262,7 +1262,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Two 4th Army staff officers discuss \"the southern pipeline problem\" and what \"our friends in the valley\" will charge to fix \"the Varn spur.\"",
+      "text": "4th Army staff net: two staff officers discuss \"the southern pipeline problem\" and what \"our friends in the valley\" will charge to fix \"the Varn spur.\"",
       "kind": "noise",
       "supports": [],
       "contradicts": [],
@@ -1277,7 +1277,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "KESTREL: no unusual issues from the depot and nothing drawn for special units. Half the staff are on leave. They are laughing about being blamed for a pipeline in someone else's country.",
+      "text": "At a meeting, source reports: no unusual issues from the depot, and nothing drawn for special units. Half the staff are on leave. They are laughing about being blamed for a pipeline in someone else's country.\nAccess: direct.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1292,7 +1292,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Kordav's southern border crossings: normal civilian traffic at both. No military vehicles south of the garrison line.",
+      "text": "Kordav's southern border crossings, tasked pass, clear skies.\nNormal civilian traffic at both.\nNot seen: military vehicles south of the garrison line.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1312,7 +1312,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "FINCH: the ministry is drafting a protest note to Elsin about the detonator story. Nobody there had heard of the Sarn Valley Front before last week.",
+      "text": "At a meeting, source reports: the ministry is drafting a protest note to Elsin about the detonator story. Nobody there had heard of the Sarn Valley Front before last week.\nAccess: direct.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1327,7 +1327,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Tolen bridge approaches: two pickup trucks under camouflage nets in an orchard 4 km south of the bridge. A boat is drawn up on the Marrat bank.",
+      "text": "Tolen bridge approaches, tasked pass, clear skies.\nTwo pickup trucks under camouflage nets in an orchard 4 km south of the bridge.\nA boat is drawn up on the Marrat bank.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1347,7 +1347,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Night passes show pickup trucks fording from the Marrat side at an unofficial ford 6 km from Tolen, and returning before dawn.",
+      "text": "Unofficial ford, 6 km from Tolen, night passes.\nPickup trucks ford from the Marrat side after dark and return before dawn.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1367,7 +1367,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The ford: no crossings for two nights. The track down to it hasn't been used.",
+      "text": "The ford, 6 km from Tolen, night passes.\nNo crossings for two nights. The track down to it hasn't been used.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1387,7 +1387,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The Front's camp at the upper farm: about 40 fighters and six vehicles, four of them new.",
+      "text": "The Front's camp at the upper farm, tasked pass.\nAbout 40 fighters and six vehicles. Four of the vehicles are new.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1407,7 +1407,7 @@
       "discipline": "IMINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The camp at the upper farm is empty. Eight vehicles are parked in the disused quarry, 3 km from the compressor station.",
+      "text": "The Front's camp at the upper farm, tasked pass.\nThe camp is empty.\nEight vehicles are parked in the disused quarry, 3 km from the compressor station.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1428,7 +1428,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The \"Valley Truth\" account was created ten days ago. It writes Elsin's language with Marrat spellings. Its first followers were Marrat News Agency staff accounts.",
+      "text": "The \"Valley Truth\" account was created ten days ago. It writes Elsin's language with Marrat spellings. Its first followers were staff accounts of Marrat News Agency.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1596,7 +1596,7 @@
       "if": {
         "assetAt": "sarn_c"
       },
-      "text": "Oro's column comes up the quarry road at first light and meets a company that has been waiting since dusk. It's over in ten minutes. Oro is taken alive, still asking about his fields."
+      "text": "Oro's column comes up the quarry road at first light and meets a company that has been in position since dusk. It is over in ten minutes. Oro is taken alive, and asks his captors about his fields."
     },
     {
       "id": "damaged",
@@ -1615,7 +1615,7 @@
       "title": "Burning",
       "points": -3,
       "default": true,
-      "text": "The compressor station is alight by sunrise and the line is down for the summer. The task force goes onto trucked fuel.",
+      "text": "The compressor station is on fire by sunrise, and the line is down for the summer. The task force goes onto trucked fuel.",
       "changedBy": "Where the guard force spent the last night. Each hypothesis points at a site, and the militia acting alone points at the Sarn compressor station. That call at High on the last brief puts the whole company there (Held); at Medium, a platoon (Damaged). The raid at Tolen was a separate night, earlier in the week."
     }
   ],
@@ -1657,41 +1657,41 @@
         "days": [
           1
         ],
-        "text": "WREN told you who was behind it, in one unsourced sentence with a grudge attached. It looked exactly like the alarm it raised over Tarsk, and that time it was guessing. This time it had a surveillance log, and all you had to do was ask. Marrat's news agency told you it was Kordav. It had nothing."
+        "text": "WREN told you who was behind it in one sentence, with no sourcing and a grudge attached. It looked like the alarm it raised over Tarsk, when it was guessing. This time it held a surveillance log, and would have sent it if asked. Marrat's news agency said it was Kordav, and had nothing."
       },
       {
         "days": [
           2
         ],
-        "text": "A detonator turned up on the second sweep, found by the people selling the pact. A transcript with no date and no audio named the next target. Everything that pointed at Kordav had passed through Marrat's hands first."
+        "text": "A detonator fragment turned up on the second sweep, the one Marrat's advisers joined. A transcript with no date and no audio named the next target. Everything that pointed at Kordav had passed through Marrat's hands first."
       },
       {
         "days": [
           3
         ],
-        "text": "The advisers looked over a six-man guard post and went on holiday. MAGPIE's diesel went south. A platoon could be there without anyone knowing. A company arriving that day was a surprise; a company sitting there since the 14th was an announcement."
+        "text": "The advisers spent an hour at a guard post of six and left for the holiday. MAGPIE's diesel went south. A platoon could be at Tolen without anyone knowing. A company that arrived that day was a surprise. A company that had been there since the 14th was known to everyone at Southern Command."
       },
       {
         "days": [
           4
         ],
-        "text": "The money stopped. Oro, who had been promised his fields, said so in public and named what he'd burn. WREN, right for three days, didn't notice the answer had changed."
+        "text": "The money stopped. Oro had been promised his fields, said so in public, and named what he would burn. WREN had been right for three days and didn't notice that the answer had changed."
       },
       {
         "days": [
           5
         ],
-        "text": "Marrat's liaison officer told the truth, because the truth had started to suit him. WREN called it a trick. The Front's \"political office\" said the fighting was over. Eight vehicles were already in the quarry."
+        "text": "Marrat's liaison officer told the truth, because by then it suited him. WREN called it a trick. A statement from the Front's \"political office\" said the fighting was over. Eight vehicles were already in the quarry."
       }
     ],
     "lessons": [
-      "A weakness is a reason to check, not a reason to doubt. Ask for the sourcing.",
-      "A tell is something you can point to in the item. A feeling about the source isn't one.",
-      "Ask whose hands each item passed through. Three items from one hand are one item.",
-      "A source that was right yesterday is not right today because of it.",
-      "An adversary can tell you the truth. Judge the content and the motive separately.",
-      "When a sponsor lets go of a proxy, the proxy doesn't stop. It goes after what it wanted in the first place.",
-      "Being right too visibly is a way of being wrong."
+      "A weakness is a reason to check. WREN's Day 1 claim had no sourcing, and the sourcing was there for the asking.",
+      "A tell is something you can point to in the item. WREN's manner wasn't one. A detonator found only on the second sweep was.",
+      "Ask whose hands an item passed through. The detonator, the transcript and the news agency story all came through Marrat.",
+      "A source that was right yesterday can be wrong today. WREN was right until Day 3 and wrong after it.",
+      "An adversary can tell you the truth. Marrat's officer did on Day 5, for his own reasons.",
+      "When a sponsor drops a proxy, the proxy carries on. Oro went after the compressor station, which was what he had wanted from the start.",
+      "A correct move made too visibly can fail. A company at Tolen from Day 1 sent the raid somewhere else."
     ],
     "missedCollection": {
       "1": "WREN's sourcing (free): the surveillance log behind its claim.",
@@ -2088,7 +2088,7 @@
         ],
         "delta": -1,
         "rule": "He has to move the company away from a site with nothing to show for it",
-        "note": "Credibility −1. \"So not there after all. I've turned a hundred and twenty people round on your word.\""
+        "note": "Credibility −1. \"So it isn't there after all. I've turned a hundred and twenty people round on your call.\""
       },
       {
         "id": "went-round",
@@ -2133,7 +2133,7 @@
         "days": 2,
         "delta": -1,
         "rule": "Low confidence two days running (each further Low day too)",
-        "note": "Credibility −1. Low again. \"I asked for a call, not a forecast.\""
+        "note": "Credibility −1. Low again. \"That's two days of 'possibly'. I can't plan on it.\""
       }
     ],
     "outcome": {
@@ -2160,20 +2160,20 @@
       "id": "vasko",
       "name": "Imre Vasko",
       "specialty": "Regional analyst",
-      "reveal": "Anchors on his first theory. His first note was the best advice in the scenario: ask WREN for its sourcing. Then the detonator handed him a theory, Kordav, and he read everything after it that way, through two changes of the truth."
+      "reveal": "He settles on a reading early. His first note was the best advice in the scenario: ask WREN where it came from. Then the detonator gave him Kordav, and he read everything after it that way, through two changes of the truth."
     },
     {
       "id": "halden",
       "name": "Noor Halden",
       "specialty": "Technical analyst (signals, imagery, forensics)",
-      "reveal": "Slow but careful. Never wrong. Her note on the Tolen reconnaissance arrived the morning after the raid."
+      "reveal": "Careful, and slow. She wasn't wrong once. Her note on the visit to Tolen arrived the morning after the raid."
     },
     {
       "id": "marrow",
       "name": "Tess Marrow",
       "specialty": "Open-source analyst",
       "extra": true,
-      "reveal": "Overconfident. \"Home-grown, full stop\" was wrong for three days and right by accident on the fourth. She authenticated a fake on Day 3. Her last note was sharp."
+      "reveal": "Quick, and sure of herself. \"Home-grown\" was wrong for three days and right on the fourth by accident. She passed a fake on Day 3. Her last note was the sharpest of the week."
     }
   ],
   "notes": [
@@ -2181,7 +2181,7 @@
       "analyst": "vasko",
       "item": "R-1-02",
       "after": 0,
-      "text": "WREN has cried wolf before. But the border police down there keep good logs. Worth asking where this came from.",
+      "text": "WREN raised the alarm over Tarsk with nothing behind it. But the border police down there keep good logs. I'd ask where this came from.",
       "right": 1,
       "why": "The best advice of the scenario."
     },
@@ -2189,7 +2189,7 @@
       "analyst": "marrow",
       "item": "R-1-03",
       "after": 0,
-      "text": "Classic local-grievance language. This is home-grown, full stop.",
+      "text": "This reads like every local land dispute I've ever followed online. It's home-grown. I'm sure of it.",
       "right": 0,
       "why": "The language was Oro's own. The money wasn't."
     },
@@ -2197,7 +2197,7 @@
       "analyst": "vasko",
       "item": "R-2-01",
       "after": 0,
-      "text": "There's your Kordav link.",
+      "text": "Kordavan markings. That's the link, and it fits everything I know about how they work.",
       "right": 0,
       "why": "The plant handed him a theory, and he kept it."
     },
@@ -2205,7 +2205,7 @@
       "analyst": "halden",
       "item": "R-1-01",
       "after": 1,
-      "text": "A quarrying charge and a nine-hour repair. Whoever did this wanted a headline, not an outage.",
+      "text": "A quarrying charge, and a repair done in nine hours. Whoever placed it wanted the attack reported more than they wanted the gas stopped.",
       "right": 1,
       "why": "An attack built to be noticed."
     },
@@ -2213,7 +2213,7 @@
       "analyst": "marrow",
       "item": "R-3-03",
       "after": 0,
-      "text": "Letterhead checks out against open sources. Genuine.",
+      "text": "I checked the letterhead against open sources and it matches. I'd call it genuine.",
       "right": 0,
       "why": "She checked the letterhead and missed the currency."
     },
@@ -2221,7 +2221,7 @@
       "analyst": "marrow",
       "item": "R-3-03P",
       "after": 0,
-      "text": "Uniforms and vehicle match Kordav's 4th Army. Genuine.",
+      "text": "The uniforms and the truck match Kordav's 4th Army. I'd call it genuine.",
       "right": 0,
       "why": "The uniforms were real. So was the water tower at Ostrel behind them."
     },
@@ -2229,7 +2229,7 @@
       "analyst": "halden",
       "item": "R-2-01",
       "after": 1,
-      "text": "Fragments don't turn up on a second sweep that the first one missed. Ask who was holding the bag.",
+      "text": "The first sweep found nothing and the second found a fragment. I'd want to know who was on the second sweep, and what they brought with them.",
       "right": 1,
       "why": "The detonator, a day after it arrived."
     },
@@ -2237,7 +2237,7 @@
       "analyst": "vasko",
       "item": "R-4-02",
       "after": 0,
-      "text": "Posturing. Kordav will have them back in line by the weekend.",
+      "text": "This is posturing. Kordav will have them back in line by the weekend.",
       "right": 0,
       "why": "Anchored. Kordav was never in it."
     },
@@ -2245,7 +2245,7 @@
       "analyst": "halden",
       "item": "R-3-01",
       "after": 1,
-      "text": "An hour at a six-man guard post is a reconnaissance, not a survey.",
+      "text": "An hour at a guard post of six. A survey doesn't take that long. A reconnaissance does.",
       "right": 1,
       "why": "Right, and it arrived the morning after the raid."
     },
@@ -2253,7 +2253,7 @@
       "analyst": "vasko",
       "item": "R-5-01",
       "after": 0,
-      "text": "Marrat is guessing. The real threat is still in the north.",
+      "text": "Marrat is guessing. The threat is still in the north.",
       "right": 0,
       "why": "Anchored to the end."
     },
@@ -2261,7 +2261,7 @@
       "analyst": "marrow",
       "item": "R-5-02",
       "after": 0,
-      "text": "First statement from a \"political office\" in the Front's history, and Oro didn't sign it. I wouldn't hang a hat on it.",
+      "text": "The Front has never had a \"political office\" before today, and Oro hasn't signed this. I wouldn't lean on it.",
       "right": 1,
       "why": "Sharp, and right."
     },
@@ -2269,7 +2269,7 @@
       "analyst": "halden",
       "item": "C-08",
       "after": 1,
-      "text": "\"The Varn spur.\" Varn is a Kordavan depot. They're talking about their own plumbing.",
+      "text": "\"The Varn spur.\" Varn is a Kordavan depot. I read this as two officers talking about their own pipework.",
       "right": 1,
       "why": "The tidy intercept, read properly."
     }

@@ -407,6 +407,7 @@ assert tids == {t for p in crisis["pirs"] for t in p["targets"]} and all(cr["tar
 keys = {r["reply"] for r in policy} | {o["replyId"] for e in crisis["events"] for o in e["outcomes"]}
 assert keys <= set(replies) and keys <= set(labels), keys - set(labels)
 assert all(n["item"] in ids for n in crisis["notes"]) and all(r["to"] in levels for r in policy if "to" in r)
+import house_text; house_text.apply(crisis)
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "crises", "southern-line.json")
 with open(out, "w") as f: json.dump(crisis, f, indent=2, ensure_ascii=False); f.write("\n")
 print("wrote", os.path.normpath(out), len(reports), "reports,", sum(r["kind"] == "planted" for r in reports), "planted incl. variants")

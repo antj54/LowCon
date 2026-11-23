@@ -16,12 +16,12 @@
   "endingEyebrow": "The vote",
   "frozenText": "Kalsa has asked us to stay out of it. Nothing can go to Elsin today.",
   "briefing": {
-    "dateLine": "Day 1 is the 5th, three months after IRON HARVEST.",
+    "dateLine": "The 5th. Winter, three months after IRON HARVEST.",
     "situation": [
-      "Your cell now supports Under Secretary H. Marlowe, who handles the alliance's relationship with Elsin.",
-      "At 0710 this morning, a man walked into our embassy in Aubrec, the capital of neutral Pellaria, and asked for asylum. He says he's a major on the planning directorate of Kordav's General Staff. He has been given the cryptonym LANTERN.",
-      "Elsin's parliament is about to vote on a no-confidence motion against Deputy Defence Minister Aron Vell, who negotiated the task force agreement and is Kordav's least favorite politician in Kalsa.",
-      "This crisis works differently. Public reporting, and whatever LANTERN chooses to volunteer, reach you every day. Everything secret arrives only if you task it: questioning him, signals intelligence, your own sources. And Kordav knows some of what you can collect."
+      "Your cell now works for Under Secretary H. Marlowe, who handles the alliance's relationship with Elsin.",
+      "At 0710 this morning a man walked into our embassy in Aubrec, the capital of neutral Pellaria, and asked for asylum. He says he is a major on the planning directorate of Kordav's General Staff. The station has given him the cryptonym LANTERN.",
+      "In Kalsa, Elsin's parliament is about to vote on a no-confidence motion against Deputy Defence Minister Aron Vell. Vell negotiated the task force agreement, and Kordav would be glad to see him go.",
+      "From here on, only public reporting and whatever LANTERN chooses to volunteer reach you unasked. Everything secret has to be tasked: questioning him, signals intelligence, your own sources. Assume Kordav knows some of what you can collect."
     ]
   },
   "customer": {
@@ -34,7 +34,7 @@
     "role": "Under Secretary for alliance affairs",
     "callsign": "USEC ALLIANCE",
     "wants": "What do we do with what LANTERN is telling us? She acts as far as your confidence supports.",
-    "context": "Careful, political and allergic to surprises. Anything she passes to Kalsa is hard to take back, and the full allegation can't be taken back at all.",
+    "context": "Careful and political, and she dislikes surprises. Anything she passes to Kalsa is hard to take back. The full allegation can't be taken back at all.",
     "tipLine": "High gets the full action. Medium gets a cautious one, and Low keeps everything in the building."
   },
   "asset": {
@@ -250,20 +250,20 @@
     "rebuff": "Withdraws the warning. Kalsa asks us to stay out of it"
   },
   "replies": {
-    "share_full": "I've passed it to Kalsa in full, ledger and all. If this is wrong, it's the most expensive thing I've ever signed. Make sure it isn't.",
-    "share_caveat": "I've told Elsin's minister we have single-source, unverified reporting about Vell. He asked what that means. I said it means be careful. He said nobody in politics has ever followed that advice.",
-    "caveat_stands": "The caveat stands. Kalsa keeps asking what's behind it, and I keep saying I'll know when you do.",
-    "shared_stands": "It's with Kalsa and it isn't coming back. Whatever you tell me now is for the file.",
-    "counter": "I've told Kalsa that Kordav is running a smear against Vell and that our walk-in is part of it. Their minister went very quiet, then thanked me. I've just called an ally's star witness a liar, so I hope you're right.",
-    "counter_stands": "The warning stands. Keep building the file; they'll want it after the vote.",
-    "restrict": "We stop sharing and keep him in the room. If he's a plant, I want to know what else he was sent to say. If you want me to say it to Kalsa, I need more than medium confidence.",
-    "restrict_stands": "Still nothing leaving the building, and he's still talking. Medium doesn't get a call to Kalsa.",
-    "end": "We've ended the debriefing. He's been told there will be no resettlement. He took it remarkably well, which I'm choosing not to think about.",
-    "end_stands": "The debriefing is over. He's someone else's paperwork now.",
-    "withdraw_warning": "I've withdrawn the warning I gave Kalsa. Their minister asked if we make a habit of this. I said not usually.",
+    "share_full": "I have passed it to Kalsa in full, the ledger included. It can't be recalled. If it is wrong, it is the most damaging thing I have signed.",
+    "share_caveat": "I have told Elsin's minister that we hold single-source, unverified reporting about Vell. He asked what he should do with that. I said he should treat it with care. I doubt that he will.",
+    "caveat_stands": "The caveat stands. Kalsa keeps asking what lies behind it. I have told them they will know when I do.",
+    "shared_stands": "It is with Kalsa and can't be taken back. Whatever you tell me now is for the record.",
+    "counter": "I have told Kalsa that Kordav is running a campaign against Vell, and that our walk-in is part of it. Their minister was silent for some time, and then thanked me. I have told an ally that its best witness was sent. I am relying on you.",
+    "counter_stands": "The warning stands. Keep building the file. Kalsa will ask for it after the vote.",
+    "restrict": "We stop sharing, and we keep him talking. If he was sent, I want to know what else he was sent to say. I will not say that to Kalsa on medium confidence.",
+    "restrict_stands": "Nothing is leaving the building, and he is still talking. I need high confidence before I call Kalsa.",
+    "end": "We have ended the debriefing. He has been told there will be no resettlement. He took it more calmly than I expected.",
+    "end_stands": "The debriefing is over. He is no longer our case.",
+    "withdraw_warning": "I have withdrawn the warning I gave Kalsa. Their minister asked whether this happens often. I said that it does not.",
     "listen": "We keep listening. Nothing leaves this building.",
-    "frozen": "Kalsa asked us to stay out of it, and for now we are. Nothing goes to them. Keep him talking.",
-    "rebuff": "You wanted me to call a defector a plant after one interview. I did. Kalsa thinks we're protecting Vell for our own reasons, and they've asked us to stay out of it. For three days, we will."
+    "frozen": "Kalsa has asked us to stay out of it, and for now we will. Nothing goes to them. Keep him talking.",
+    "rebuff": "On your assessment I told Kalsa, after one interview, that the walk-in was sent. Kalsa believes we are protecting Vell for reasons of our own, and has asked us to stay out of it. For three days we will."
   },
   "events": [
     {
@@ -439,7 +439,7 @@
       "id": "S-LANTERN",
       "codeName": "LANTERN",
       "discipline": "HUMINT (walk-in)",
-      "access": "Says he's a major on Kordav's General Staff planning directorate. No track record. What he volunteers reaches you every day; what you want to test, you have to ask.",
+      "access": "Says he is a major on Kordav's General Staff planning directorate. No track record. What he volunteers reaches you daily. Anything you want tested, you have to ask.",
       "startingGrade": "F",
       "trueReliability": null,
       "controlledByAdversary": true,
@@ -449,7 +449,7 @@
       "id": "S-STATION",
       "codeName": "STATION",
       "discipline": "HUMINT handling",
-      "access": "Our station in Aubrec. Runs the debriefing and reports what happens in the room.",
+      "access": "Our station in Aubrec. It runs the debriefing and reports what happens in the room.",
       "startingGrade": "A",
       "trueReliability": 1,
       "controlledByAdversary": false,
@@ -459,7 +459,7 @@
       "id": "S-FINCH",
       "codeName": "FINCH",
       "discipline": "HUMINT",
-      "access": "A source inside Kordav's defence ministry for six years. Reliable. A meeting takes two days to arrange, and the ministry is a dangerous place to be seen asking questions.",
+      "access": "Inside Kordav's defence ministry for six years, and reliable. A meeting takes two days to arrange. The ministry is a dangerous place to be seen asking questions.",
       "startingGrade": "B",
       "trueReliability": 0.9,
       "controlledByAdversary": false,
@@ -469,7 +469,7 @@
       "id": "S-WREN",
       "codeName": "WREN",
       "discipline": "Liaison",
-      "access": "Elsin's military intelligence. Pushes what it wants us to see, and answers requests. Some of its officers have long distrusted Vell.",
+      "access": "Elsin's military intelligence. It passes what it wants us to see, and answers requests. Some of its officers have long distrusted Vell.",
       "startingGrade": "B",
       "trueReliability": 0.6,
       "controlledByAdversary": false,
@@ -557,7 +557,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "A man walked into the embassy at 0710 and asked for asylum. His Kordavan passport matches the officer he says he is: a major on the General Staff's planning directorate. He asked for asylum for himself only and said his wife \"will be fine.\" He asked that his presence be kept secret \"for my safety.\"",
+      "text": "Walk-in at the embassy, 0710. He asked for asylum. His Kordavan passport matches the officer he says he is: a major on the General Staff's planning directorate.\nHe asked for asylum for himself only. Of his wife, he said she \"will be fine.\"\nHe asked that his presence be kept secret \"for my safety.\"",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -576,7 +576,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Volunteers that he served on the IRON HARVEST planning cell. Describes the \"northern option,\" the 0400 switch to contingency accounts and the staging area in Dolan forest.",
+      "text": "First session, volunteered: he served on the IRON HARVEST planning cell. He describes the \"northern option,\" the 0400 switch to contingency accounts and the staging area in Dolan forest.\nAccess claimed: direct, as a member of the cell.",
       "kind": "true",
       "supports": [
         "H1",
@@ -598,7 +598,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Volunteers that Deputy Defence Minister Vell has been a Kordavan agent for four years, and that he learned it from \"colleagues in the Bureau,\" Kordav's security service. Will give the details of Vell's meetings with his handler once his resettlement is guaranteed.",
+      "text": "First session, volunteered: Deputy Defence Minister Vell has been a Kordavan agent for four years.\nAccess claimed: he learned it from \"colleagues in the Bureau,\" Kordav's security service.\nHe will give the details of Vell's meetings with his handler once his resettlement is guaranteed.",
       "kind": "planted",
       "supports": [
         "H1"
@@ -633,7 +633,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin's parliament will vote on the 12th on a no-confidence motion against Vell, architect of the task force agreement. The opposition calls him \"too close to foreign militaries.\"",
+      "text": "Kalsa: Elsin's parliament will vote on the 12th on a no-confidence motion against Deputy Defence Minister Aron Vell, who negotiated the task force agreement. The opposition calls him \"too close to foreign militaries.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -654,7 +654,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The embassy's annual fire drill is on Thursday. The interview room is not a fire exit, whatever its current occupant may hope.",
+      "text": "Embassy notice: the annual fire drill is on Thursday. Staff are reminded that the interview room is not a fire exit.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -668,7 +668,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 2,
-      "text": "Second session. LANTERN's account of his career matches yesterday's almost word for word. The debriefers note he is \"unusually calm for a man who has just abandoned his country.\"",
+      "text": "Second session. His account of his career matches yesterday's almost word for word.\nDebriefer comment: \"unusually calm for a man who has just abandoned his country.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -689,7 +689,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Asks whether we have anyone in Kordav's defence ministry who could vouch for him, and offers the names of officers who \"know him well.\"",
+      "text": "Second session, volunteered: he asks whether we have anyone in Kordav's defence ministry who could vouch for him, and offers the names of officers who \"know him well.\"",
       "kind": "planted",
       "supports": [
         "H1"
@@ -722,7 +722,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "State TV runs a long segment on \"corruption\" in Elsin's defence ministry, naming Deputy Minister Vell. Nothing about any missing officer.",
+      "text": "State television, evening programme: a long segment on \"corruption\" in Elsin's defence ministry, naming Deputy Minister Vell.\nNothing about any missing officer.",
       "kind": "true",
       "supports": [
         "H2"
@@ -743,7 +743,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Aubrec's metro workers strike tomorrow, as they do most winters. Embassy staff are advised to work from home.",
+      "text": "Aubrec: the city's metro workers strike tomorrow, as they do most winters. Embassy staff are advised to work from home.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -757,7 +757,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 3,
-      "text": "Elsin's service has heard rumors that \"someone from Kordav\" is talking about \"a traitor in our ministry,\" and asks for details. WREN adds that \"some here have long doubted Vell.\"",
+      "text": "Elsin's service has heard talk that \"someone from Kordav\" is speaking about \"a traitor in our ministry,\" and asks us for details.\nSourcing: hearsay, not attributed.\nThe liaison officer adds that \"some here have long doubted Vell.\"",
       "kind": "noise",
       "supports": [
         "H1"
@@ -780,7 +780,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Produces his proof: a photocopy of a Bureau payment ledger listing an agent codenamed HERON, with payment dates that match Vell's trips abroad.",
+      "text": "Third session. He produces what he calls his proof: a photocopy of a Bureau payment ledger for an agent codenamed ORIOLE. The payment dates match Vell's trips abroad.",
       "kind": "planted",
       "supports": [
         "H1"
@@ -813,7 +813,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "Document analysis of the ledger: the paper and stamps are genuine Bureau stock. Every date on it matches a trip on Vell's public ministry schedule. None matches his private travel.",
+      "text": "Document examination of the ledger copy.\nPaper and stamps: genuine Bureau stock.\nDates: every one matches a trip on Vell's public ministry schedule. None matches his private travel.",
       "kind": "true",
       "supports": [
         "H2"
@@ -836,7 +836,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Elsin's parliament has moved the no-confidence vote up from the 12th to the 10th.",
+      "text": "Kalsa: parliament has moved the no-confidence vote up from the 12th to the 10th.",
       "kind": "true",
       "supports": [
         "H2"
@@ -857,7 +857,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "A viral video of a Kordavan general's wedding: forty minutes, three brass bands.",
+      "text": "Trending in Kordav: a video of a general's wedding. Forty minutes, three brass bands.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -871,7 +871,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Insists the allegation reach Elsin before the vote: \"After the vote it will be too late. He will purge the honest officers.\"",
+      "text": "Fourth session. He insists the allegation reach Elsin before the vote: \"After the vote it will be too late. He will purge the honest officers.\"",
       "kind": "planted",
       "supports": [
         "H1"
@@ -905,7 +905,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 2,
-      "text": "LANTERN asks for resettlement \"for my family too,\" the first time he has raised them himself since Day 1.",
+      "text": "Fourth session. He asks for resettlement \"for my family too.\"\nDebriefer comment: the first time he has raised his family himself since Day 1.",
       "kind": "true",
       "supports": [
         "H2"
@@ -926,7 +926,7 @@
       "discipline": "OSINT",
       "sourceGrade": "F",
       "credibility": 2,
-      "text": "An Elsin opposition MP posts that \"a Kordavan officer who has defected to an allied service\" has evidence against Vell.",
+      "text": "An Elsin opposition MP posts that \"a Kordavan officer who has defected to an allied service\" has evidence against Vell.\nThe MP names no source.",
       "kind": "planted",
       "supports": [
         "H1"
@@ -960,7 +960,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "State TV repeats its Vell segment, now with \"questions about his foreign contacts.\"",
+      "text": "State television repeats its segment on Vell, with a new section: \"questions about his foreign contacts.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -981,7 +981,7 @@
       "discipline": "Admin",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "The phishing campaign is back: \"Updated_Per_Diem_Rates_v2.xlsm\". The rates have still not gone up.",
+      "text": "Security office: the phishing campaign is back, now as \"Updated_Per_Diem_Rates_v2.xlsm\". The rates have still not gone up.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -995,7 +995,7 @@
       "discipline": "OSINT",
       "sourceGrade": "D",
       "credibility": 1,
-      "text": "State TV reports that a Kordavan officer was \"kidnapped by Western intelligence\" in Aubrec, and names LANTERN.",
+      "text": "State television, lead item: a Kordavan officer was \"kidnapped by Western intelligence\" in Aubrec. It gives LANTERN's true name.",
       "kind": "planted",
       "supports": [
         "H1"
@@ -1029,7 +1029,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 1,
-      "text": "LANTERN asks to record a statement for the press, to be released \"tomorrow morning.\"",
+      "text": "Fifth session. He asks to record a statement for the press, to be released \"tomorrow morning.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -1052,7 +1052,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "The opposition's motion now cites \"allied intelligence.\" Elsin's service asks whether we've shared anything with anyone.",
+      "text": "Elsin's service passes: the opposition's motion now cites \"allied intelligence.\"\nIt asks whether we have shared anything with anyone.",
       "kind": "true",
       "supports": [],
       "contradicts": [],
@@ -1071,7 +1071,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The metro strike is over.",
+      "text": "Aubrec: the metro strike is over.",
       "kind": "clutter",
       "supports": [],
       "contradicts": [],
@@ -1085,7 +1085,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 2,
-      "text": "Debrief, on his access. Asked what his directorate does day to day, LANTERN describes exercise planning, movement tables and fuel allocations, in detail and accurately. Asked how a planning officer comes to know the contents of Bureau agent files, he says: \"People talk. You hear things at dinners.\"",
+      "text": "Session on his access.\nAsked what his directorate does day to day, he describes exercise planning, movement tables and fuel allocations, in detail and accurately.\nAsked how a planning officer comes to know what is in Bureau agent files: \"People talk. You hear things at dinners.\"",
       "kind": "true",
       "supports": [
         "H2",
@@ -1110,7 +1110,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "F",
       "credibility": 3,
-      "text": "Debrief, on the Vell details. LANTERN says Vell met his Bureau handler at the Hotel Sorel in Kalsa, room 412, on 14 March. Asked how he knows the room number, he can't say. \"It was known.\"",
+      "text": "Session on the Vell details. He says Vell met his Bureau handler at the Hotel Sorel in Kalsa, room 412, on 14 March.\nAsked how he knows the room number, he can't say: \"It was known.\"",
       "kind": "planted",
       "supports": [
         "H1"
@@ -1147,7 +1147,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 2,
-      "text": "Debrief, on his family. Asked about his wife, LANTERN repeats that she \"will be fine\" because she \"knows nothing about my work.\" Asked whether the Bureau will question her, he says it \"doesn't bother the families of planning officers.\"",
+      "text": "Session on his family.\nAsked about his wife, he repeats that she \"will be fine\" because she \"knows nothing about my work.\"\nAsked whether the Bureau will question her: it \"doesn't bother the families of planning officers.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -1171,7 +1171,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "A",
       "credibility": 2,
-      "text": "Debrief, on the ledger. Asked how he got it out, LANTERN says he photographed it in the Bureau's central registry. Asked how a General Staff planner got into the registry, he says a friend signed him in. He won't name the friend.",
+      "text": "Session on the ledger.\nAsked how he got it out: he photographed it in the Bureau's central registry.\nAsked how a General Staff planner got into the registry: a friend signed him in. He won't name the friend.",
       "kind": "true",
       "supports": [
         "H2"
@@ -1195,7 +1195,7 @@
       "discipline": "HUMINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "FINCH: LANTERN is known in the ministry as a mid-level planning officer, \"nowhere near counterintelligence files.\" FINCH asks why we're asking, and mentions that someone else asked him about LANTERN's friends last week.",
+      "text": "At a meeting, source reports: LANTERN is known in the ministry as a mid-level planning officer, \"nowhere near counterintelligence files.\"\nSource asked why we wanted to know. He mentioned that someone else asked him about LANTERN's friends last week.\nAccess: direct. He knows the directorate.",
       "kind": "true",
       "supports": [
         "H2",
@@ -1220,7 +1220,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "The ministry's published staff directory lists LANTERN's name under the General Staff planning directorate, logistics branch. The Bureau is a separate service with its own directory; his name isn't in it.",
+      "text": "The defence ministry's published staff directory lists LANTERN's true name under the General Staff planning directorate, logistics branch.\nThe Bureau is a separate service with its own directory. His name is not in it.",
       "kind": "true",
       "supports": [
         "H2",
@@ -1245,7 +1245,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau headquarters to its office in Aubrec, administrative net, routine precedence: \"Suspend contact with all persons known to [LANTERN's true name]. Officers KARSA, DOVIN and TREL to return to the capital for consultations.\"",
+      "text": "Bureau headquarters to its office in Aubrec. Administrative net, routine precedence.\n\"Suspend contact with all persons known to [LANTERN's true name]. Officers KARSA, DOVIN and TREL to return to the capital for consultations.\"",
       "kind": "planted",
       "supports": [
         "H1"
@@ -1286,7 +1286,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau headquarters administrative net: routine traffic only. Nothing further about LANTERN. The recall of KARSA, DOVIN and TREL isn't mentioned again.",
+      "text": "Bureau headquarters administrative net: routine traffic only. Nothing further about LANTERN. The recall of KARSA, DOVIN and TREL is not mentioned again.",
       "kind": "true",
       "supports": [
         "H2"
@@ -1310,7 +1310,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Bureau office in Aubrec: its own traffic is routine. Every officer on its duty roster is still at post, and nobody has been called home. No change to codes or procedures since LANTERN walked in. One circular from headquarters reminds staff of \"media discipline this week.\"",
+      "text": "Bureau office in Aubrec, its own traffic: routine.\nEvery officer on the duty roster is still at post. Nobody has been called home.\nNo change to codes or procedures since LANTERN walked in.\nOne circular from headquarters reminds staff of \"media discipline this week.\"",
       "kind": "true",
       "supports": [
         "H2"
@@ -1336,7 +1336,7 @@
       "discipline": "SIGINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Kordav's embassy: routine traffic. Its security officer has been told to \"keep distance from the matter.\" No sign of any effort to find anyone.",
+      "text": "Kordav's embassy in Aubrec: routine traffic.\nIts security officer has been told to \"keep distance from the matter.\"\nNot seen: any effort to find a missing officer.",
       "kind": "true",
       "supports": [
         "H2"
@@ -1360,7 +1360,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "His wife's accounts are posting normally: a school concert on the 6th, a weekend at the lake being planned. No sign she's been questioned or stopped from traveling.",
+      "text": "His wife's accounts are posting normally: a school concert on the 6th, plans for a weekend at the lake.\nNot seen: any sign she has been questioned or stopped from travelling.",
       "kind": "true",
       "supports": [
         "H2"
@@ -1386,7 +1386,7 @@
       "discipline": "OSINT",
       "sourceGrade": "B",
       "credibility": 1,
-      "text": "Three weeks ago The Kalsa Courier, an opposition paper, ran an unsourced story: Vell met \"a foreign businessman\" at the Hotel Sorel, room 412, on 14 March.",
+      "text": "Three weeks ago The Kalsa Courier, a paper close to the opposition, ran an unsourced story: Vell met \"a foreign businessman\" at the Hotel Sorel, room 412, on 14 March.",
       "kind": "true",
       "supports": [
         "H2",
@@ -1411,7 +1411,7 @@
       "discipline": "Liaison",
       "sourceGrade": "B",
       "credibility": 2,
-      "text": "Elsin confirms Vell was at the Hotel Sorel on 14 March, at a meeting with a defence contractor logged by his own office. WREN adds that \"some here have long doubted him.\"",
+      "text": "In answer to our request: Elsin confirms Vell was at the Hotel Sorel on 14 March, at a meeting with a defence contractor logged by his own office.\nThe liaison officer adds that \"some here have long doubted him.\"",
       "kind": "true",
       "supports": [
         "H2",
@@ -1479,7 +1479,7 @@
       "if": {
         "everAt": "shared"
       },
-      "text": "Elsin arrests Vell on the morning of the vote. Six months later the ledger is exposed as a forgery built from his public schedule. Nobody in Kalsa trusts allied intelligence again. Kordav couldn't have bought a better outcome."
+      "text": "Elsin arrests Vell on the morning of the vote. Six months later the ledger is shown to be a forgery built from his public schedule. Kalsa stops taking allied intelligence at its word. Kordav got everything it sent LANTERN for."
     },
     {
       "id": "sidelined",
@@ -1489,7 +1489,7 @@
       "if": {
         "assetAt": "caveated"
       },
-      "text": "The caveat leaked within a day and is quoted in the opposition's speech. Vell resigns \"to clear his name.\" Elsin's reformers lose their best voice, and Kordav never fired a shot."
+      "text": "The caveated warning leaks within a day and is quoted in the opposition's speech. Vell resigns \"to clear his name.\" Elsin's reformers lose their strongest voice."
     },
     {
       "id": "exposed",
@@ -1505,7 +1505,7 @@
           4
         ]
       },
-      "text": "Elsin's defence minister stands up in parliament with your warning: Kordav is running a smear, and its \"defector\" was sent. The motion fails by forty votes. LANTERN's statement never airs. Two Bureau officers are quietly recalled from Aubrec, for real this time."
+      "text": "Elsin's defence minister stands up in parliament with your warning: Kordav is running a smear, and its \"defector\" was sent. The motion fails by forty votes. LANTERN's statement is never released. Two Bureau officers are recalled from Aubrec, and this time it is real."
     },
     {
       "id": "survived",
@@ -1515,7 +1515,7 @@
       "if": {
         "assetAt": "countered"
       },
-      "text": "Your warning reaches Kalsa the night before the vote. The motion fails by three. Vell keeps his job and loses his reputation."
+      "text": "Your warning reaches Kalsa the night before the vote. The motion fails by three. Vell keeps his job, and the allegation follows him."
     },
     {
       "id": "shelved",
@@ -1523,7 +1523,7 @@
       "title": "Shelved",
       "points": 0,
       "default": true,
-      "text": "You kept it to yourself. The opposition runs with the MP's claim anyway, and Vell survives by five votes without knowing how close it came or who was behind it."
+      "text": "Nothing left the building. The opposition runs with the MP's claim anyway, and Vell survives by five votes. He never learns how close it was, or who was behind it."
     }
   ],
   "dailyUpdates": [
@@ -1554,40 +1554,40 @@
         "days": [
           1
         ],
-        "text": "LANTERN walked in with a gift and a condition. He told you about IRON HARVEST, which was true and cost Kordav nothing: the operation had been blown for three months. The Vell allegation came from \"colleagues in the Bureau,\" and a planning officer doesn't see the Bureau's agent files."
+        "text": "LANTERN arrived with a gift and a condition. The gift was IRON HARVEST: all of it true, and worth nothing to Kordav, because the operation had been known for three months. The condition was resettlement before details. He said the Vell allegation came from \"colleagues in the Bureau.\" A planning officer doesn't see the Bureau's agent files."
       },
       {
         "days": [
           2
         ],
-        "text": "If you pressed him for details, room 412 came from a newspaper: The Kalsa Courier printed it three weeks before he walked in. His question about who could vouch for him was the second job he'd been sent to do: find out who we have in the ministry. And if you read the Bureau's headquarters net, you saw a recall that never happened. Kordav put it where it thought we were listening."
+        "text": "If you pressed him for details, he gave you room 412. The Kalsa Courier had printed it three weeks before he walked in. His question about who could vouch for him was his second task: to find out who we have in the ministry. And if you were reading the Bureau's headquarters net, you saw a recall that never happened. Kordav put it where it believed we were listening."
       },
       {
         "days": [
           3
         ],
-        "text": "The ledger was real paper telling a forged story. Every payment matched a trip anyone could look up. Real agents get paid on trips nobody announces."
+        "text": "The ledger was genuine paper carrying a forged story. Every payment fell on a trip anyone could look up, and none on a trip Vell hadn't announced."
       },
       {
         "days": [
           4
         ],
-        "text": "The deadline was Kordav's, not Elsin's. The MP heard about \"a defector\" from the only people who knew besides us."
+        "text": "The deadline he pressed was the vote, and only Kordav needed the allegation to land before it. The MP's word \"defected\" could only have come from LANTERN's side."
       },
       {
         "days": [
           5
         ],
-        "text": "A man kidnapped by Western intelligence asked to record a press statement for the morning of the vote. Kordav stayed silent for four days, then announced a kidnapping. The Bureau's office in Aubrec never so much as changed a code."
+        "text": "Kordav said nothing about a missing officer for four days, then announced a kidnapping on the eve of the vote. The same day, the kidnapped man asked to record a press statement. Through all of it the Bureau's office in Aubrec changed nothing."
       }
     ],
     "lessons": [
-      "A walk-in's verifiable details prove access, not intent. Ask what they cost the other side.",
-      "Check claims against access: what could he actually have seen?",
-      "Count origins. A detail that's already in print isn't corroboration.",
-      "Watch how the other side reacts, everywhere you can. Damage control is hard to fake on every channel at once.",
-      "The adversary knows some of what you collect. Ask what it expects you to hear.",
-      "Collection can be seen too. Asking the wrong source the wrong question can burn it."
+      "True details show access. They say nothing about intent. LANTERN's account of IRON HARVEST was accurate and cost Kordav nothing.",
+      "Check a claim against access. A General Staff planner had no way to see Bureau agent files.",
+      "Count where a detail comes from. Room 412 had been in a newspaper for three weeks.",
+      "Watch how the other side reacts, on every channel you can reach. A service that has really lost an officer changes its codes and questions his family. The Bureau did neither.",
+      "The adversary knows some of what you collect. The recall was sent on the net Kordav believed we read.",
+      "Asking can be seen. The Bureau was watching the ministry for anyone who asked about LANTERN."
     ],
     "missedCollection": {
       "1": "The Bureau's office in Aubrec (SIGINT) or LANTERN's family (OSINT): either shows that Kordav isn't doing any damage control.",
@@ -1805,7 +1805,7 @@
         "sourceId": "S-FINCH",
         "discipline": "HUMINT",
         "onFirstTasking": true,
-        "text": "FINCH didn't come to the meeting. His signal site hasn't been serviced.",
+        "text": "FINCH didn't come to the meeting. His signal site has not been serviced.",
         "readIn": "FINCH has reported, and has since missed his safety signal.",
         "postmortem": "The Bureau was watching the ministry for whoever came asking about LANTERN, which is what LANTERN's question on Day 2 was for. FINCH's meeting was seen. The ministry's public directory would have answered the same question for 1 point."
       }
@@ -1950,7 +1950,7 @@
         ],
         "delta": -1,
         "rule": "She has to withdraw a warning she passed on your word",
-        "note": "Credibility −1. She had to withdraw the caveated warning she passed on your word. \"Their minister asked if we make a habit of this.\""
+        "note": "Credibility −1. She had to withdraw the caveated warning she passed on your assessment."
       },
       {
         "id": "withdrew-warning",
@@ -1967,7 +1967,7 @@
         "days": 2,
         "delta": -1,
         "rule": "Low confidence two days running (each further Low day too)",
-        "note": "Credibility −1. Low again. \"If I wanted maybe, I'd read the newspapers.\""
+        "note": "Credibility −1. Low again. \"I can't take 'perhaps' to a minister twice.\""
       }
     ],
     "outcome": {
@@ -2137,13 +2137,13 @@
       "id": "vasko",
       "name": "Imre Vasko",
       "specialty": "Regional analyst",
-      "reveal": "Anchors on his first theory. He started well, with the vote. Then LANTERN's IRON HARVEST details convinced him the man was real, and nothing after that moved him."
+      "reveal": "He settles on a reading early. He began well, with the vote. Then LANTERN's IRON HARVEST details persuaded him the man was genuine, and nothing afterwards moved him."
     },
     {
       "id": "halden",
       "name": "Noor Halden",
       "specialty": "Technical analyst (signals, imagery, documents)",
-      "reveal": "Slow but careful. Her notes arrive a day after the item, and she was never wrong. The cost is the day."
+      "reveal": "Careful, and slow. Her notes come a day after the item. She wasn't wrong once, and each time you had already briefed without her."
     }
   ],
   "notes": [
@@ -2151,7 +2151,7 @@
       "analyst": "vasko",
       "item": "R-1-04",
       "after": 0,
-      "text": "The vote is the only story in Kalsa this week. Anything that lands before it lands on Vell.",
+      "text": "The vote is the only story in Kalsa this week. Whatever arrives before it will be used against Vell, whoever sent it.",
       "right": 1,
       "why": "Motive and timing, on Day 1."
     },
@@ -2159,7 +2159,7 @@
       "analyst": "vasko",
       "item": "R-2-01",
       "after": 0,
-      "text": "Calm isn't guilt. Staff officers rehearse everything. And his IRON HARVEST details checked out to the hour.",
+      "text": "Calm proves nothing. Staff officers rehearse everything. And what he gave us on IRON HARVEST was right to the hour. I think he's real.",
       "right": 0,
       "why": "The details were true and cost Kordav nothing. He anchored on them."
     },
@@ -2167,7 +2167,7 @@
       "analyst": "vasko",
       "item": "R-3-02",
       "after": 0,
-      "text": "That's real Bureau paper. A man making it up for a visa doesn't get hold of that.",
+      "text": "That is real Bureau paper. A man inventing a story for a visa doesn't get hold of it.",
       "right": 0.5,
       "why": "Right that he's no lone fabricator. Wrong about what follows: the Bureau gave it to him."
     },
@@ -2175,7 +2175,7 @@
       "analyst": "vasko",
       "item": "R-4-02",
       "after": 0,
-      "text": "Of course he's asking about his family now. It's sinking in that he isn't going home.",
+      "text": "He's asking about his family now because it has sunk in that he isn't going home. That's normal by the fourth day.",
       "right": 0,
       "why": "On Day 1 she would 'be fine.' The story changed when the pressure did."
     },
@@ -2183,7 +2183,7 @@
       "analyst": "vasko",
       "item": "R-5-01",
       "after": 0,
-      "text": "So they've finally noticed he's gone. That's what a real defection looks like from the other side.",
+      "text": "So Kordav has noticed he's gone. This is how a real defection looks from the other side: silence, then outrage.",
       "right": 0,
       "why": "Four days of silence, then a kidnapping story on the eve of the vote."
     },
@@ -2191,7 +2191,7 @@
       "analyst": "halden",
       "item": "R-1-02",
       "after": 1,
-      "text": "Everything he's told us about IRON HARVEST, we already had. Accurate isn't the same as new.",
+      "text": "I checked what he gave us on IRON HARVEST against our own file. We already held all of it. It's accurate, and none of it is new.",
       "right": 1,
       "why": "Chickenfeed, named as such."
     },
@@ -2199,7 +2199,7 @@
       "analyst": "halden",
       "item": "R-3-03",
       "after": 1,
-      "text": "Public trips only. If I were paying an agent, I'd pick the trips nobody could look up.",
+      "text": "The dates are all public trips. If I were paying an agent, I'd do it on the trips nobody could look up.",
       "right": 1,
       "why": "The ledger's flaw, a day after the analysis."
     },
@@ -2207,7 +2207,7 @@
       "analyst": "halden",
       "item": "R-4-03",
       "after": 1,
-      "text": "We told nobody. Elsin's service had a rumor, not a defector. So who gave the MP the word 'defected'?",
+      "text": "We told nobody. Elsin's service had talk of \"someone from Kordav,\" nothing about a defector. So where did the MP get the word \"defected\"?",
       "right": 1,
       "why": "The leak could only have come from LANTERN's side."
     },
@@ -2215,7 +2215,7 @@
       "analyst": "halden",
       "item": "C-06",
       "after": 1,
-      "text": "Recall orders go out on the operational channel at the highest precedence. This one went on the admin net, routine, with names. Someone wanted it read.",
+      "text": "A recall after a compromise goes out on the operational channel at the highest precedence. This went on the admin net, routine, with the officers named. I think it was meant to be read.",
       "right": 1,
       "why": "The staged recall, caught on procedure. A day late if you'd already briefed on it."
     },
@@ -2223,7 +2223,7 @@
       "analyst": "halden",
       "item": "C-10",
       "after": 1,
-      "text": "An exact room number and no idea how he knows it. Details like that come from a briefing or a newspaper.",
+      "text": "An exact room number, and he can't say how he knows it. That usually comes from a briefing or a newspaper.",
       "right": 1,
       "why": "It was a newspaper."
     }

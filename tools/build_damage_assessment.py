@@ -399,6 +399,7 @@ assert tids == {t for p in crisis["pirs"] for t in p["targets"]} and all(cr["tar
 keys = {r["reply"] for r in policy} | {"frozen"}
 assert keys <= set(replies) and keys <= set(labels)
 assert all(to in levels for to in [r.get("to") for r in policy if r.get("to")])
+import house_text; house_text.apply(crisis)
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "crises", "damage-assessment.json")
 with open(out, "w") as f: json.dump(crisis, f, indent=2, ensure_ascii=False); f.write("\n")
 print("wrote", os.path.normpath(out), len(reports), "reports")
