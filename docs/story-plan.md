@@ -1,6 +1,6 @@
 # Story plan · Low Confidence
 
-*Status: plan on paper, drafted 2026-11-18 (#66, #67). No spoilers about who the leak is: that is in `claude/story-key.md`, which Anthony has asked not to read so he can play the campaign. Built so far: Act 1, and Scenarios 04 and 05 of Act 2 (#70), with the Case file and the three story values recorded. Nothing reads the values yet. Scenario 06 is scripted (#73) and built (#74). Act 3 has begun: Scenario 07 is scripted (#80) and built (#81).*
+*Status: plan on paper, drafted 2026-11-18 (#66, #67). No spoilers about who the leak is: that is in `claude/story-key.md`, which Anthony has asked not to read so he can play the campaign. Built so far: Act 1, and Scenarios 04 and 05 of Act 2 (#70), with the Case file and the three story values recorded. Nothing reads the values yet. Scenario 06 is scripted (#73) and built (#74). Act 3: Scenario 07 is scripted (#80) and built (#81). Scenarios 08 to 10 are scripted on paper (#84), with a build plan in `claude/act3-build-plan.md`.*
 
 ## The shape
 
@@ -88,7 +88,7 @@ Two axes, so the ending is the sum of the campaign and not a last-minute choice.
 | The wrong name | You were certain, and wrong, about a colleague. |
 | A new cell | Reassigned, with a long record and nobody reading it. |
 
-Each pairing gets a short closing passage: sixteen in all, most of them two or three sentences that differ from their neighbours by a clause.
+The closing screen is assembled from parts (#84): the world passage, then the passage about you, with an extra line for a few pairings. The "you" endings gained two as scripted: **Vindicated, late** (you found the leak, but only near the end) and **Doubted, and blind** (the leak was never found, and your customers had stopped relying on you).
 
 ## What has to be true for this to work
 

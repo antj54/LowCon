@@ -100,3 +100,6 @@ Settled facts every scenario and Codex entry has to agree with. Spoiler-free: an
 | 05 | Lights Out | Ransomware group | `crises/lights-out.json` | Built (v1.2, #70; the data file has spoilers). Paper script (#69): `claude/crisis-05-player-packet.md`, and `claude/crisis-05-gm-key.md` (**spoilers for the campaign**). |
 | 06 | The Damage Assessment | (campaign) | `crises/damage-assessment.json` | Built (v1.3, #74; the data file has spoilers). Paper script (#73): `claude/crisis-06-player-packet.md`, and `claude/crisis-06-gm-key.md` (**spoilers for the campaign**). |
 | 07 | The Vote in Kalsa | (campaign) | `crises/vote-in-kalsa.json` | Built (#81; the data file has spoilers). Paper script (#80): `claude/crisis-07-player-packet.md`, and `claude/crisis-07-gm-key.md` (**spoilers for the campaign**). |
+| 08 | Mobilisation | (campaign) | Not built | Act 3 paper script (#84): `claude/crisis-08-player-packet.md`, and `claude/crisis-08-gm-key.md` (**spoilers for the campaign**). |
+| 09 | The Back Channel | (campaign) | Not built | Act 3 paper script (#84): `claude/crisis-09-player-packet.md`, and `claude/crisis-09-gm-key.md` (**spoilers for the campaign**). |
+| 10 | The Veyl | (campaign) | Not built | Act 3 paper script (#84): `claude/crisis-10-player-packet.md`, and `claude/crisis-10-gm-key.md` (**spoilers for the campaign**). |
